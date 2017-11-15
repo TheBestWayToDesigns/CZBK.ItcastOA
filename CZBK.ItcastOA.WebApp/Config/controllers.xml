@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+  <object type="CZBK.ItcastOA.WebApp.Controllers.UserInfoController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="UserInfoService" ref="UserInfoService" />
+    <property name="RoleInfoService" ref="RoleInfoService" />
+    <property name="ActionInfoService" ref="ActionInfoService" />    
+  </object>
+
+  <object type="CZBK.ItcastOA.WebApp.Controllers.LoginController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="UserInfoService" ref="UserInfoService" />
+    <property name="RoleInfoService" ref="RoleInfoService" />
+  </object>
+
+
+  <object type="CZBK.ItcastOA.WebApp.Controllers.RoleInfoController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="ActionInfoService" ref="ActionInfoService" />
+    <property name="RoleInfoService" ref="RoleInfoService" />
+  </object>
+  
+  <object type="CZBK.ItcastOA.WebApp.Controllers.ActionInfoController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="ActionInfoService" ref="ActionInfoService" />
+    <property name="RoleInfoService" ref="RoleInfoService" />
+  </object>
+
+  <object type="CZBK.ItcastOA.WebApp.Controllers.DepartmentController, CZBK.ItcastOA.WebApp" singleton="false" >    
+    <property name="DepartmentService" ref="DepartmentService" />
+  </object>
+
+  <object type="CZBK.ItcastOA.WebApp.Controllers.HomeController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="YXB_BaojiaService" ref="YXB_BaojiaService" />
+    <property name="UserInfoService" ref="UserInfoService" />
+    <property name="YXB_Kh_listService" ref="YXB_Kh_listService" />
+  </object>
+ <object type="CZBK.ItcastOA.WebApp.Controllers.YXBJController, CZBK.ItcastOA.WebApp" singleton="false" >
+  <property name="YXB_BaojiaService" ref="YXB_BaojiaService" />
+  <property name="YXB_Kh_listService" ref="YXB_Kh_listService" />
+   <property name="T_BaoJiaToPService" ref="T_BaoJiaToPService" />
+   <property name="SysFieldService" ref="SysFieldService" />
+   <property name="T_ChanPinNameService" ref="T_ChanPinNameService" />
+  </object>
+  <object type="CZBK.ItcastOA.WebApp.Controllers.MasterBaoJiaController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="YXB_BaojiaService" ref="YXB_BaojiaService" />
+    <property name="YXB_Kh_listService" ref="YXB_Kh_listService" />
+    <property name="SysFieldService" ref="SysFieldService" />
+    <property name="T_BaoJiaToPService" ref="T_BaoJiaToPService" />
+    <property name="T_YSItemsService" ref="T_YSItemsService" />
+    <property name="T_WinBakService" ref="T_WinBakService" />
+    <property name="UserInfoService" ref="UserInfoService" />
+    <property name="T_ChanPinNameService" ref="T_ChanPinNameService" />
+    <property name="T_WinBakFaHuoService" ref="T_WinBakFaHuoService" />
+    
+  </object>
+  <object type="CZBK.ItcastOA.WebApp.Controllers.GeRenController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="UserInfoService" ref="UserInfoService" />
+  </object>
+  <object type="CZBK.ItcastOA.WebApp.Controllers.NewChanPinController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="T_ChanPinNameService" ref="T_ChanPinNameService" />
+  </object>
+  <object type="CZBK.ItcastOA.WebApp.Controllers.ShengchanzhizaoController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="T_SczzDanjuService" ref="T_SczzDanjuService" />
+    <property name="T_ShengChanZhiZhaoTopNameService" ref="T_ShengChanZhiZhaoTopNameService" />
+    <property name="T_SczzItemService" ref="T_SczzItemService" />
+    <property name="T_CanPanService" ref="T_CanPanService" />
+  </object>
+  <object type="CZBK.ItcastOA.WebApp.Controllers.SczzAdminController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="T_SczzDanjuService" ref="T_SczzDanjuService" />
+    <property name="T_ShengChanZhiZhaoTopNameService" ref="T_ShengChanZhiZhaoTopNameService" />
+    <property name="T_SczzItemService" ref="T_SczzItemService" />
+    <property name="T_CanPanService" ref="T_CanPanService" />
+    <property name="UserInfoService" ref="UserInfoService" />
+  </object>
+
+
+
+
+
+  <!--intentionally do NOT register the AccountController or the ValuesController with the container; demonstrates that the underlying
+  default controller factory will properly (attempt to!) resolve all controllers not registered with Spring.NET
+  using its default controller resolution behavoir-->
+  <!--<object type="Spring.Mvc4QuickStart.Controllers.AccountController, Spring.Mvc4QuickStart" singleton="false" />-->
+  <!--<object type="Spring.Mvc4QuickStart.Controllers.ValuesController, Spring.Mvc4QuickStart" singleton="false" />-->
+</objects>

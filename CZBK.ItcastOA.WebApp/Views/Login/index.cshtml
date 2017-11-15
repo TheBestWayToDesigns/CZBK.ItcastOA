@@ -1,0 +1,332 @@
+﻿@{
+    ViewBag.Title = "衍水集团移动端";
+}
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" />
+    <title>衍水集团移动端</title>
+    <link href="~/bootsarp/css/bootstrap.css" rel="stylesheet" />
+
+    <script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="~/bootsarp/js/bootstrap.min.js"></script>     
+    <script src="~/Scripts/datapattern.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/MyAjaxForm.js"></script>
+    <style>
+      
+    </style>
+
+    <script type="text/javascript">
+      
+        $(function () {
+            $("#zhucheTABLE").css("display", "none");
+            $("#ZHpassDIV").css("display", "none");
+            //注册用户
+            $("#ZCYH").click(function () {
+                $("#zhucheTABLE").css("display", "");
+                $("#deful").css("display", "none");
+            });
+           //找回密码
+            $("#ZhPassDIV").click(
+               function () {
+                   $("#ZHpassDIV").css("display", "");
+                   $("#deful").css("display", "none");
+               });
+            $("#SQDL").click(function () {
+                var p1 = $("#zhpass1").val();
+                var p2 = $("#zhpass2").val();
+                if (p1.trim().length <= 0 || p2.trim().length <= 0) {
+                    alert("密码不可为空！");
+                    return;
+                }
+                if (p1 != p2) {
+                    alert("两次密码不同！");
+                    return;
+                }
+                else {
+                    $.post("/Login/zhaohui", { "Name": $("#editname").val(), "Pass": $("#zhpass1").val(), "Remark": $("#zh").val() }, function (serverData) {
+
+                        if (serverData == "OK") {
+                            alert("修改成功返回登陆！")
+                            closed_();
+                        } else if (serverData == "IsNotName")
+                        {
+                            alert("用户名称无效！");
+                        }
+                        else if (serverData == "IsZhNot") {
+                            alert("找回密码错误！")
+                        }
+                        else { alert("系统错误请联系系统管理员！") };
+                    });
+                }
+            })
+           
+        })
+        function closed_() {
+            try
+            { $("#zhucheTABLE").css("display", "none");}
+            catch(e)
+            { }
+            try
+            { $("#ZHpassDIV").css("display", "none"); }
+            catch (e)
+            { }
+            $("#deful").css("display", "");
+
+        }    
+        function adduser()
+        {
+            var p1 = $("#pwd").val();
+            var p2 = $("#rpwd").val();
+            if (p1.trim().length <= 0 || p2.trim().length <= 0) {
+                alert("密码不可为空！");
+                return;
+            }
+            if (p1 != p2) {
+                alert("两次密码不同！");
+                return;
+            }
+            else {
+                $.post("/Login/AddUserInfo", { "Name": $("#UName").val(), "Pass": $("#pwd").val(), "Remark": $("#Remark").val() }, function (serverData) {
+                    
+                    if (serverData == "OK") {
+                        alert("创建成功返回登陆！")
+                        closed_();
+                    }
+                    else if (serverData == "IsCongfu") {
+                        alert("已存在的用户名！")
+                    }
+                    else { alert("系统错误请联系系统管理员！") };
+                });              
+            }
+        }
+        function changeCheckCode() {
+            $("#img").attr("src", $("#img").attr("src") + 1);
+        }
+        function afterLogin(serverData) {
+            var data = serverData.split(':');
+            if (data[0] == "ok") {
+                window.location.href = "/Home/Index";
+            } else {
+
+                $.messager.alert("提醒", data[1], "error");
+                changeCheckCode();
+            }
+        }
+        function aft()
+        {
+            $.post("/Login/CheckLogin", { "LoginCode": $("#LoginCode").val(), "LoginPwd": $("#LoginPwd").val(), "vCode": $("#code").val(), "checkMe": $("#checkMe").val() }, function (serverData) {
+
+                if (serverData == "ok") {
+                    var browser = {
+                        versions: function () {
+                            var u = navigator.userAgent, app = navigator.appVersion;
+                            return {//移动终端浏览器版本信息
+                                trident: u.indexOf('Trident') > -1, //IE内核
+                                presto: u.indexOf('Presto') > -1, //opera内核
+                                webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                                gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                                mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                                ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                                android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                                iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者QQHD浏览器
+                                iPad: u.indexOf('iPad') > -1, //是否iPad
+                                webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+                            };
+                        }(),
+                        language: (navigator.browserLanguage || navigator.language).toLowerCase()
+                    }
+                   
+                    if (browser.versions.mobile == true || browser.versions.ios == true || browser.versions.android == true) {
+                        if (confirm("检测到您是移动终端！是否跳转至手机版？")) {
+                            window.location.href = "/Home/Index";
+                            return;
+                        }
+                        else {
+                            window.location.href = "/Home/master";
+                            return;
+                        }
+                    }
+                    else {
+                        window.location.href = "/Home/master";
+                        return;
+                    }
+                  
+                } else if (serverData == "master") {
+                    window.location.href = "/Home/master";
+                    return;
+                }
+                else if (serverData == "IsNotName") {
+                    alert("用户名称无效！");
+                    changeCheckCode();
+                    return;
+                }
+                else if (serverData == "IsNotPass") {
+                    alert("密码错误！")
+                    changeCheckCode();
+                    return;
+                } else if (serverData == "notyzm")
+                {
+                    alert("验证吗错误！")
+                    window.location.href = "/Login/Index";
+                    return;
+                }
+                else {
+                    alert("系统错误请联系系统管理员！")
+                    changeCheckCode();
+                };
+            });
+        }
+    </script>
+</head>
+<body class="bg-success">
+    <h1 class="text-center" style="margin-top:5%"><strong>衍水集团移动端 </strong></h1>
+    <div class="container" style="margin-top:10%" id="deful">        
+            <div class="form-group">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-addon ">用户名称</span>
+                    <input type="text" placeholder="请输入用户名" class="form-control" name="LoginCode" id="LoginCode" />
+                </div>
+            </div>
+            <div class="form-group ">
+                <div class="input-group  input-group-lg">
+                    <span class="input-group-addon">用户密码</span>
+                    <input placeholder="请输入用户密码" class="form-control" type="password" name="LoginPwd" id="LoginPwd" value="123" />
+                </div>
+            </div>
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <input class="form-control" type="text" id="code" name="vCode"
+                               placeholder="输入验证码" />
+                    </div>
+                    <div class="col-xs-4" >
+                        <img id="img" src="/Login/ShowValidateCode/?id=1"
+                             class="img-responsive center-block pull-left"
+                            />
+                        <a href="javascript:void(0)" class="center-block pull-left" id="sxyzm" onclick="changeCheckCode();return false;"><h4>刷新</h4></a>
+                    </div>
+                    <div class="checkbox  col-xs-4 ">
+                        <label>
+                            <input type="checkbox" name="checkMe" id="checkMe" value="1" />
+                            <span class="glyphicon glyphicon-check"></span>
+                            记住我<span id="errorMsg" style="font-size:14px;color:red"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4 ">
+                    <a class="btn btn-primary  center-block " id="ZCYH">
+                        注册用户
+                    </a>
+                </div>
+                <div class="col-xs-4 ">
+                    <a class="btn btn-primary   center-block " id="ZhPassDIV">
+                        密码找回
+                    </a>
+                </div>
+                <div class="col-xs-4 ">
+                    <a class="btn btn-primary   center-block " onclick="aft()">
+                        登陆系统
+                    </a>
+                </div>
+
+
+            </div>
+        
+    </div>
+    <div class="container" id="zhucheTABLE">
+        @using (Ajax.BeginForm("AddUserInfo", "Login", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAdd" }, new { id = "adduserForm" }))
+        {
+            <div class="form-group">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-addon ">用户名称</span>
+                    <input type="text" placeholder="请输入用户名" class="form-control" name="UName" id="UName" />
+                </div>
+            </div>
+            <div class="form-group ">
+                <div class="input-group  input-group-lg">
+                    <span class="input-group-addon">用户密码</span>
+                    <input placeholder="请输入用户密码" class="form-control" type="password" name="UPwd" id="pwd" />
+                </div>
+            </div>
+            <div class="form-group ">
+                <div class="input-group  input-group-lg">
+                    <span class="input-group-addon">重复密码</span>
+                    <input placeholder="重复密码" class="form-control" type="password" name="pass2" id="rpwd" />
+                </div>
+            </div>
+
+            <div class="form-group ">
+                <div class="input-group  input-group-lg">
+                    <span class="input-group-addon">找回密码</span>
+                    <input placeholder="用于找回密码使用" class="form-control" type="text" name="Remark" id="Remark" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6 ">
+                    <a class="btn btn-primary  center-block " onclick="adduser()">
+                        申请登陆
+                    </a>
+                </div>
+
+                <div class="col-xs-6 ">
+                    <a class="btn btn-primary   center-block " onclick="closed_()">
+                        返回登陆
+                    </a>
+                </div>
+
+
+            </div>
+        }
+    </div>
+    <div class="container" id="ZHpassDIV">
+        <div class="form-group">
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon ">用户名称</span>
+                <input type="text" placeholder="请输入用户名" class="form-control" name="editname" id="editname" />
+            </div>
+        </div>
+        <div class="form-group ">
+            <div class="input-group  input-group-lg">
+                <span class="input-group-addon">找回密码</span>
+                <input placeholder="用于找回密码使用" class="form-control" type="text" name="zh" id="zh" />
+            </div>
+        </div>
+        <div class="form-group ">
+            <div class="input-group  input-group-lg">
+                <span class="input-group-addon">修改密码</span>
+                <input placeholder="请输入用户密码" class="form-control" type="password" name="zhpass1" id="zhpass1" />
+            </div>
+        </div>
+        <div class="form-group ">
+            <div class="input-group  input-group-lg">
+                <span class="input-group-addon">重复密码</span>
+                <input placeholder="重复密码" class="form-control" type="password" name="zhpass2" id="zhpass2" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-6 ">
+                <a class="btn btn-primary  center-block " id="SQDL">
+                    申请修改
+                </a>
+            </div>
+
+            <div class="col-xs-6 ">
+                <a class="btn btn-primary   center-block " onclick="closed_()">
+                    返回登陆
+                </a>
+            </div>
+
+
+        </div>
+    </div>
+
+
+</body>
+
+</html>

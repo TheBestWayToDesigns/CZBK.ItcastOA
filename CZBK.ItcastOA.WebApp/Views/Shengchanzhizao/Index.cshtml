@@ -1,0 +1,891 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+@using CZBK.ItcastOA.Model
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <title>生产制造</title>
+    <link href="~/Content/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/dist/calendar.min.css">
+    <link href="~/bootsarp/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/mobile-calendar-master/src/calendar.css" rel="stylesheet" />
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="~/bootsarp/js/bootstrap.min.js"></script>
+    <script src="~/mobile-calendar-master/lib/sea.js"></script>
+    <script>
+        seajs.use('/mobile-calendar-master/src/calendar');
+    </script>
+    <style>
+        tr {
+            text-align: center;
+        }
+
+        thead tr {
+            text-align: center;
+        }
+        .divinpit  { 
+            margin-top:5px;
+        }
+        .table {
+            font-size:12px;
+        }
+    </style>
+    <script>
+        var Aconunt;
+        var MaxPage;
+        var Rows = 10;
+        var MyColums = "CPlist";
+        var Del;
+        var bol = true;
+        var showdel = true;
+        var overTimeID = 0;
+        var SeeZT = 0;
+        var Qx="@ViewBag.quanx"
+        $(function () {
+            //隐藏计划按钮
+            $("#hinli").hide();
+            $("#ShenHexx").hide();
+            $("#jhshperson").hide();
+            $("#eidtTimes").hide();
+            $("#OverTimesIn").hide();
+            $("#JhzdrShenHe").hide();
+            $("#A_ysh").hide();
+            
+            if (Qx == 1)
+            {
+                $("#OverTimesIn").show();
+                $("#JhzdrShenHe").show();
+            }
+            if (Qx > 1)
+            {
+                $("#panCaozuo").hide();
+                $("#GetNamelist").hide();
+                $("#GetXHlist").hide(); 
+                $("#Asqz").hide();
+                $("#A_ysh").show();
+                SeeZT = 1;
+            }
+           
+            //读取产品名称
+            loadSelect();
+            loadJHD();
+            //页面跳转
+            $("body").delegate('#Pageul li', 'click', function () {
+                //alert($(this).text().trim()); //弹出点击的li标签的value值
+                if ($(this).text().trim() == "首页") {
+                    if (bol)
+                    { loadJHD("1"); }
+                    else {
+                        loaddata('1', Rows);
+                    }
+                    
+                }
+                else if ($(this).text().trim() == "末页") {
+                    
+                    if (bol)
+                    { loadJHD(MaxPage); }
+                    else {
+                        loaddata(MaxPage, Rows);
+                    }
+                }
+                else {
+                    if (bol)
+                    { loadJHD($(this).text()); }
+                    else {
+                        loaddata($(this).text(), Rows)
+                    }
+                  
+                }
+
+            });
+            //点击名称列表
+            $("body").delegate("#GetNamelist", 'click', function () {
+                MyColums = "JiHuaName";
+                $("#TdText").html("计划名称");
+                bol = false;
+                loaddata();
+            })
+            //点击型号列表
+            $("body").delegate("#GetXHlist", 'click', function () {
+                MyColums = "CPxinghao";
+                $("#TdText").html("产品型号");
+                bol = false;
+                loaddata();
+            })
+            //点击产品信息
+            $("body").delegate(".SCdata", 'click', function () {
+                bol = true;
+                SeeZT = $(this).attr("id");                 
+              
+                if (SeeZT == "Asqz")
+                {
+                    $("#CPnameTop").html("申请中 <span class='caret'></span>");
+                    SeeZT = 0;
+                } else if (SeeZT == "Ashz")
+                {
+                    $("#CPnameTop").html("审核中  <span class='caret'></span>");
+                    SeeZT = 1;
+                }
+                else if (SeeZT == "Aywz") {
+                    $("#CPnameTop").html("已完结  <span class='caret'></span>");
+                   
+                    SeeZT = 2;
+                }
+                else if (SeeZT == "A_ysh") {
+                    $("#CPnameTop").html("已审核  <span class='caret'></span>");
+                    SeeZT = 3;
+                }
+                $("#Pageul").html("");
+                loadJHD();
+            })
+            //删除单据
+            $("body").delegate("#delt", 'click', function () {
+                showdel = false;
+                $("#thishi").click();
+            });
+            //返回产品信息
+            $("body").delegate("#fanhui", 'click', function () {
+                $("#ShenHexx").hide();
+                $("#jhshperson").hide();
+              
+                fanhui();
+            })
+            //删除添加的计划单产品信息
+            $("body").delegate("#listDjx a", 'click', function () {
+                var name = $(this).attr("name");
+                
+                if (name == "addtime")//修改时间
+                {
+                    overTimeID = $(this).attr("id");
+                   
+                    $("#HideTime_").val("");
+                    $("#eidtTimes").show();                            
+                }
+                else {
+                    var del_id = $(this).attr("id");
+                    var TextNameID = $("#TextNameID").val();
+                    $.post("/Shengchanzhizao/DelCPGG", { "id": del_id, "TextNameID": TextNameID }, function (data) {
+                        if (data.ret == "ok") {
+                            $("#listDjx").html("");
+                            IsEach(data.temp);
+                        }
+                        else if (data.ret == "on") {
+                            alertshow("添加错误1")
+                        }
+                        else {
+                            alertshow(data.mes)
+                        }
+                    });
+                }
+                
+            })
+            //修改完工时间
+            $("body").delegate("#OverTimeBtn", "click", function () {
+                var overtimeval = $("#HideTime_").val();
+                if (overtimeval.trim().length <= 0)
+                {
+                    alertshow("完工时间不可为空！");
+                    return;
+                }
+                $.post("/Shengchanzhizao/OverTimes", { "id": overTimeID, "OverTime": overtimeval }, function (data) {
+                    if (data.ret == "ok")
+                    {
+                        overTimeID = 0;
+                        $("#HideTime_").val("");
+                        $("#eidtTimes").hide();
+                        $("#listDjx").html("");
+                        IsEach(data.temp)
+                    }
+                    else {
+                        alertshow(data.ret);
+                    }
+                })
+                
+            })
+            $("body").delegate("#submits", "click", function () {
+               
+                if ($("#CpShuliang").val().trim().length <= 0) {
+                    alertshow("产品数量不可为空！");
+                    return;
+                }
+                if ($("#SczzItemID").val().trim().length <= 0) {
+                    alertshow("产品型号不可为空");
+                    return;
+                }
+                $.post("/Shengchanzhizao/AddTableone", {
+                    "TextNameID": $("#TextNameID").val(), "ID": $("#IsId").val(),
+                    "Cpname": $("#Cpname").val(), "ImageInt": $("#ImageInt").val(),
+                    "CpShuliang": $("#CpShuliang").val(), "SczzItemID": $("#SczzItemID").val(),
+                    "Bak": $("#Bak").val(), "overtime": $("#overtime").val()
+                }, function (data) {
+                   
+                    if (data.result=="false") {
+                        alertshow(data.ex);
+                    }
+                    else if (data.result == "ok") {
+                        $("#listDjx").html("");
+                        IsEach(data.temp)
+                    }
+                    else if (data.result == "no") {
+                        alertshow(data.msg)
+                    }
+                    else {
+                        alertshow(data)
+                    }
+
+                })
+            })
+            //-----------------删除信息-----操作---------------
+            $("body").delegate('#tb tr td a', 'click', function () {
+                Del = $(this).attr("id");
+                if (bol)
+                {
+                    $.post("/Shengchanzhizao/DanjuXiangXi", { "id": Del }, function (sdat) {
+                        if (sdat.ret == "ison")
+                        { }
+                        else if (sdat.ret == "ok")
+                        {
+                            $("#xx_xh").html(Del);
+                            $("#xx_top").val(sdat.fristtp[0].textname);
+                            $("#TextNameID").val(sdat.fristtp[0].ID)                          
+                            $("#jhtcr").html(sdat.fristtp[0].sccjr);
+                            $("#jhzdr").html(sdat.fristtp[0].jhzdr);
+                            $("#jhpzr").html(sdat.fristtp[0].jhpzr);
+                            $("#jgcj").html(sdat.fristtp[0].jgcj);
+                            $("#addperson").val(sdat.fristtp[0].jhtcr);
+                            $("#adAjax").show();
+                            var panduan = sdat.fristtp[0].panduan
+                            if (sdat.fristtp[0].zhuangtai == 1 || panduan || SeeZT==2)
+                            {
+                                $("#adAjax").hide();
+                                $("#ShenHexx").show();
+                                $("#jhshperson").show();
+                            }
+                            $("#listDjx").html("");
+                            IsEach(sdat.temp);
+                            $("#Tmads").click();
+                        }
+                    })
+                }
+                else {
+                    showdel = true;
+                    $("#thishi").click();
+                }
+                
+            })
+            
+            $("body").delegate('#Yesdel', 'click', function () {
+               
+                if (showdel)
+                {
+                    $.post("/Shengchanzhizao/Delitems", {
+                    "delID": Del, "MyColums": MyColums
+                      }, function (serverData) {
+                    if (serverData == "ok") {
+                        $("#TdText").html(MyColums == "JiHuaName" ? "计划名称" : MyColums == "CPxinghao" ? "产品型号" : "产品信息");
+                        loaddata();
+                    }
+                    else if (serverData == "noperson") {
+                        $("#alertShow").text("该产品不是由本人创建不可删除！")
+                        $('#Hiddenalert').click();
+                    }
+                    else {
+                    }
+                      }) 
+                }
+                else {
+                    var delid = $("#TextNameID").val();
+                    $.post("/Shengchanzhizao/DelDanjiu", { "delid": delid }, function (data) {
+                        if (data.ret == "ok")
+                        {
+                            fanhui();
+                        }
+                        else {
+                            alertshow(data.tmp)
+                        }
+
+                    })
+                }
+            })          
+            //---------------------------------------
+            //计划提出人审核操作
+            $("body").delegate("#ShenHeBTN", 'click', function () {
+                var shid = $("#TextNameID").val();
+                $.post("/Shengchanzhizao/ShenHe", { "shid": shid }, function (data) {
+                    if (data.ret == "ok")
+                    {
+                        $("#ShenHexx").hide();
+                        $("#jhshperson").hide();
+                        fanhui();
+                    }
+                    else {
+                        alertshow(data.tmp)
+                    }
+                })
+            })
+            $("body").delegate("#JhzdrShenHe", 'click', function () {
+                $("#Shenhe").click();
+            })
+            $("body").delegate("#YseSH", "click", function () {
+                var shid = $("#TextNameID").val();               
+                $.post("/Shengchanzhizao/ShenHe", { "shid": shid }, function (data) {
+                    if (data.ret == "ok") {
+                        $("#ShenHexx").hide();
+                        $("#jhshperson").hide();
+                        fanhui();
+                    }
+                    else {
+                        alertshow(data.tmp)
+                    }
+                })
+            })
+            $("#addName").click(function () {
+                var Topname = $("#Topname").val();
+                if (Topname.trim().length <= 0)
+                {
+                    $("#alertShow").text("产品名称不可为空！")
+                    $('#Hiddenalert').click();
+                    return;
+                }
+                AjaxLN(Topname, "0");
+            })
+            //重置
+            $("#qk").click(function () {
+                qingkong();
+            })
+
+            $("#addXH").click(function () {
+                var CPxh = $("#XingHao").val();
+                if (CPxh.trim().length <= 0) {
+                    $("#alertShow").text("材料型号不可为空！")
+                    $('#Hiddenalert').click();
+                    return;
+                }
+                AjaxLN(CPxh, "1");
+            })
+            $("#addDJtop").click(function () {
+                var topname = $("#CPdanju").val();
+                if (topname == -1)
+                {
+                    alertshow("单价项目不可为空！");
+                    return;
+                }
+                $.post("/Shengchanzhizao/AddTable", { "topnameid": topname }, function (sData) {
+                    if (sData.result)
+                    {
+                        fanhui();
+                        $("#closedaddjhd").click();
+                        selectdujiu( sData)
+                    }
+                });
+                
+            })
+        })
+
+     
+        function AjaxLN(obj,vl)
+        {
+            //obj 是值
+            $.ajax({
+                url: "/Shengchanzhizao/ADDitems",
+                data: { obj: obj, VL: vl },
+                type: "POST",
+                dataType: 'json',
+                beforeSend: function () {
+                },
+                success: function (serverData) {
+                    if (serverData == "ok") {
+                        alertshow("添加成功");
+                        loaddata();
+                        loadSelect();
+                    }
+                    else if (serverData == "Isdistict") {
+                        alertshow("重复的录入！");
+                    }
+                    else if (serverData == "errer") {
+                        alertshow("客户名称不可重复");
+                    }
+                    else {
+                        alertshow("系统错误联系管理员");
+                    };
+                },
+                complete: function () {
+                    //  $("#addKH").css("disabled", "")
+                },
+                error: function (er) {
+                    alertshow(er);
+                }
+            });
+        }
+        function alertshow(text) {
+            $("#alertShow").text(text);
+            $('#Hiddenalert').click();
+        }
+        //返回操作
+        function fanhui() {            
+            bol = true;           
+            if (SeeZT == 0)
+            {
+                $("#Asqz").click();
+            }
+            else if (SeeZT==1) {
+                $("#Ashz").click();
+            }
+            else if (SeeZT == 2) {
+                $("#Aywz").click();
+            }
+            else if (SeeZT == 3) {
+                $("#A_ysh").click();
+            }
+           
+        }
+        //获取产品名称列表
+        function loaddata(artPage) {
+            $("#tb tr:not(:first)").empty();
+            $('#Pageul').children().filter('li').remove(); //动态删除
+            $.post("/Shengchanzhizao/GetHref", { "page": artPage, "rows": Rows, "MyColums": MyColums }, function (serverData) {
+               
+                if (MyColums == "CPxinghao")
+                {
+                    for (var i = 0; i < serverData.rows.length; i++) {
+                        var trHTML = "<tr  ><td>" + serverData.rows[i].ID + "</td><td>" + serverData.rows[i].Text + "</td><td>" + ChangeDateFormat(serverData.rows[i].AddTime) + "</td><td><a  class='btn  btn-info btn-sm' role='button' href='#'  id='" + serverData.rows[i].ID + "' name=''>删除</a></td></tr>"
+                        $("#tb").append(trHTML);
+                    }
+                }
+                else if (MyColums == "JiHuaName") {
+                    for (var i = 0; i < serverData.rows.length; i++) {
+                        var trHTML = "<tr  ><td>" + serverData.rows[i].ID + "</td><td>" + serverData.rows[i].TopText + "</td><td>" + ChangeDateFormat(serverData.rows[i].addtime) + "</td><td><a  class='btn  btn-info btn-sm' role='button' href='#'  id='" + serverData.rows[i].ID + "' name=''>删除</a></td></tr>"
+                        $("#tb").append(trHTML);
+                    }
+                }
+                Aconunt = serverData.total;
+                MaxPage = Math.ceil(Aconunt / Rows);
+                artPage = artPage == null ? 0 : artPage.length <= 0 ? 0 : artPage;
+                for (var s = 0; s < 7; s++) {
+                    var hm;
+                    if (s == 0) {
+                        hm = "<li id='f' class='previous'><a href='#'  ><span aria-hidden='true'>首页</a> </li>";
+                    } else if (s == 6) {
+                        hm = "<li class='next'><a href='#' > <span aria-hidden='true'>末页</a> </li>";
+                    }
+                    else {
+                        var sx = s;
+                        if (artPage > 3) {
+                            sx = (artPage - 2) + (s - 1);
+                        }
+                        if (sx <= MaxPage) {
+                            hm = "<li><a href='#'> " + sx + " </a> </li>";
+                        }
+                        else {
+                            hm = "";
+                        }
+                    }
+                    $("#Pageul").append(hm);
+                }
+            });
+        }
+        function loadSelect() {
+            $("#CPdanju").html("");
+            $("#SczzItemID").html("");
+            var strDanj = "<option  value='-1'>==创建产品单据===</option>";
+            var strCaiz = "<option  value='-1'>==请选择材质===</option>";
+            $.post("/Shengchanzhizao/GetSelect", {}, function (TempD) {
+              
+                if (TempD.ret == "ok") {
+                    //从服务器获取数据进行绑定                    
+                    $.each(TempD.Top, function (i, item) {
+                        strDanj += "<option value=" + item.ID + ">" + item.TopText + "</option>";
+                    })
+                    //从服务器获取数据进行绑定                    
+                    $.each(TempD.Caiz, function (i, item) {
+                        strCaiz += "<option value=" + item.ID + ">" + item.Text + "</option>";
+                    })
+                }
+                else {
+                    alertshow("读取产品名称与型号失败！~请联系管理员！~")
+                }
+                $("#CPdanju").append(strDanj);
+                $("#SczzItemID").append(strCaiz);
+            })
+        }
+        //将序列化成json格式后日期(毫秒数)转成日期格式
+        function ChangeDateFormat(cellval) {
+            var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+            return date.getFullYear() + "-" + month + "-" + currentDate;
+        }
+        //循环信息列表each
+        function IsEach(temp)
+        {
+            $.each(temp, function (i, item) {
+                var trHTML = "<div class='row'  style='margin-top:2px;background-color:aliceblue;padding:5px' data-toggle='collapse' href='#cel" + item.ID + "' aria-expanded='false' aria-controls='collapseExample'><span class='col-xs-5'>" + item.Cpname +
+                 "</span><span class='col-xs-3'>" + item.Text +
+                 "</span><span class='col-xs-4'>" + ChangeDateFormat(item.AddTime) + "</span> <div  class='collapse col-xs-12' id='cel" + item.ID + "'><div class='well '>";
+                var strg = trHTML + "<div class='row'><span class='col-xs-5'>图纸编号：</span><span class='col-xs-7'>" + item.ImageInt + "</span></div>";
+                strg = strg + "<div class='row'><span class='col-xs-5'>产品数量：</span><span class='col-xs-7'>" + item.CpShuliang + "</span></div>";
+               
+                strg = strg + "<div class='row'><span class='col-xs-5'>完工时间：</span><span class='col-xs-7'>" +(item.OverTime==null?"": ChangeDateFormat(item.OverTime) )+ "</span></div>";
+                strg = strg + "<div class='row'><span class='col-xs-5'>备注：</span><span class='col-xs-7'>" + item.Bak + "</span></div>";
+                strg = strg + "<div class='row text-right'>";
+                if (Qx == 1)
+                { strg = strg + "<a  class='btn btn-primary' type='text'   name='addtime' id='" + item.ID + "'>添加时间</a>";}
+                strg = strg + "&nbsp&nbsp&nbsp<a  class='btn btn-primary' role=‘button’ id='" + item.ID + "'>删除</a></div>";
+                strg = strg + "</div></div><div>"
+                $("#listDjx").append(strg);
+            })
+
+        }
+        //动态添加时间
+        
+        //显示计划单详细信息
+        function loadJHD(artPage, ztobj) {
+          
+            var zt = SeeZT == null ? 0 : SeeZT;
+            $.post("/Shengchanzhizao/RetSczzDanju", { "page": artPage, "rows": Rows, "MyColums": MyColums, "zt": zt }, function (serverData) {
+                selectdujiu(serverData);
+            });
+        }
+        function selectdujiu(obj, artPage) {
+            $("#tb tr:not(:first)").empty();
+            $('#Pageul').children().filter('li').remove(); //动态删除
+            
+            for (var i = 0; i < obj.temp.length; i++) {
+                var trHTML = "<tr  ><td>" + obj.temp[i].ID + "</td><td>任务单</td><td>" + ChangeDateFormat(obj.temp[i].time) + "</td><td>" + zhuangtaiFANyi(obj.temp[i].Zhuangtai) + "</td>"
+                trHTML = trHTML + "<td><a class='btn btn-info  btn-sm' role='button' href='#'  id='" + obj.temp[i].ID + "' name=''>操作</a></td>";
+                $("#tb").append(trHTML + "</tr>");
+            }
+           
+            Aconunt = obj.total;
+            MaxPage = Math.ceil(Aconunt / Rows);
+           
+            artPage = artPage == null ? 0 : artPage.length <= 0 ? 0 : artPage;
+         
+            for (var s = 0; s < 7; s++) {
+                var hm;
+                if (s == 0) {
+                    hm = "<li id='f' class='previous'><a href='#'  ><span aria-hidden='true'>首页</a> </li>";
+                } else if (s == 6) {
+                    hm = "<li class='next'><a href='#' > <span aria-hidden='true'>末页</a> </li>";
+                }
+                else {
+                    var sx = s;
+                    if (artPage > 3) {
+                        sx = (artPage - 2) + (s - 1);
+                    }
+                    if (sx <= MaxPage) {
+                        hm = "<li><a href='#'> " + sx + " </a> </li>";
+                    }
+                    else {
+                        hm = "";
+                    }
+                }
+                $("#Pageul").append(hm);
+            }
+        }
+        //情况产品数据录入
+        function qingkong() {
+            $("#TextNameID").val("");
+            $("#IsId").val("");
+            $("#Cpname").val("");
+            $("#ImageInt").val("");
+            $("#CpShuliang").val("");
+            $("#SczzItemID").val("");
+            $("#Bak").val("");
+            $("#overtime").val("");
+
+        }
+        function zhuangtaiFANyi(obj)
+        {
+            return obj == 0 ? "申请中" : obj == 2 ? "已完结" : "审核中";
+        }
+    </script>
+</head>
+<body>    
+    <div>
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" id="panCaozuo">
+                    操作 <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-toggle="modal" data-target=".addCJJHD">创建计划单</a></li>
+                    <li><a href="#" data-toggle="modal" data-target=".CpName">添加名头</a></li>
+                    <li><a href="#" data-toggle="modal" data-target=".CpXingHao">添加规格</a></li>
+                </ul>
+            </li>
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" id="CPnameTop">
+                    产品信息 <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#home" aria-controls="home" role="tab" class="SCdata" id="Asqz" data-toggle="tab">申请中</a></li>
+                    <li><a href="#home" aria-controls="home" role="tab" class="SCdata" id="Ashz" data-toggle="tab">审核中</a></li>
+                    <li><a href="#home" aria-controls="home" role="tab" class="SCdata"  id="A_ysh" data-toggle="tab">已审核</a></li>
+                    <li><a href="#home" aria-controls="home" role="tab" class="SCdata" id="Aywz" data-toggle="tab">已完结</a></li>
+                </ul>
+            </li>
+            
+            <li role="presentation" ><a href="#home" aria-controls="home" role="tab" id="GetNamelist" data-toggle="tab">名称列表</a></li>
+            <li role="presentation"><a href="#home" aria-controls="home" role="tab" id="GetXHlist" data-toggle="tab">型号列表</a></li>
+            <li role="presentation" id="hinli"><a href="#AddJH" aria-controls="AddJH" role="tab" id="Tmads" data-toggle="tab">添加计划</a></li>
+
+
+        </ul>
+        <div class="tab-content ">
+            <div role="tabpanel" class="tab-pane active" id="home" >
+                <div class="collapse" id="collapseExample">
+                    <div class="well">
+                        <input class="input-group" id="wellinput" />
+                    </div>
+                </div>
+                <table id="tb" class="table  table-hover">
+                    <thead>
+                        <tr><td id="Tdt">序号</td><td id="TdText">产品名称</td><td>创建时间</td><td>操作</td></tr>
+                    </thead>
+                </table>
+                <nav aria-label="Page navigation">
+                    <ul class="pager" id="Pageul"></ul>
+                </nav>
+            </div>
+            <div id="AddJH" role="tabpanel" class="tab-pane">
+                <div class="modal-dialog " role="document" >
+                    @using (Ajax.BeginForm("AddTableone", "Shengchanzhizao", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAdd" }, new { id = "adAjax" }))
+                    {
+                        <input type="hidden" name="TextNameID" id="TextNameID" />
+                        <input type="hidden" name="ID" id="IsId" />
+                        <div class="input-group divinpit">                           
+                            <span class="input-group-addon" id="xx_xh"></span>                            
+                            <input type="text" class="form-control" id="xx_top"  readonly="readonly" aria-describedby="basic-addon1">
+                            
+                        </div>
+                        <div class="input-group divinpit" >
+                            <span class="input-group-addon" >计划提出人</span>
+                            <input type="text" class="form-control" id="addperson" readonly="readonly" aria-describedby="basic-addon1">
+
+                        </div>
+                        <div class="input-group divinpit">                           
+                            <span class="input-group-addon" >名称规格</span>
+                            <input  type="text" class="form-control"  name="Cpname" id="Cpname"    placeholder="名称规格" >
+                        </div>
+                        <div class="input-group divinpit">
+                            <span class="input-group-addon">图纸编号</span>
+                            <input placeholder="图纸编号" class="form-control" type="text" name="ImageInt" id="ImageInt" />
+                        </div>
+                        <div class="input-group divinpit">
+                            <span class="input-group-addon">产品数量</span>
+                            <input placeholder="产品数量" class="form-control" type="text" name="CpShuliang" id="CpShuliang" />
+                        </div>
+                        <div class="input-group divinpit">
+                            <span class="input-group-addon">产品材质</span>
+                            <select class="form-control" name="SczzItemID" id="SczzItemID">
+                                <option value="-1">==请选择材质===</option>
+                            </select>
+                        </div>
+                        <div class="input-group divinpit" id="OverTimesIn">
+                            <span class="input-group-addon">完工时间</span>
+                            <input type="text"  class="calendars form-control" format="yyyy-MM-dd" id="overtime" name="overtime" placeholder="" />
+                        </div>
+                        <div class="input-group divinpit">
+                            <span class="input-group-addon">备注</span>
+                            <textarea class="form-control" rows="3" placeholder="备注" name="Bak" id="Bak"></textarea>
+                        </div>
+                        <div class="modal-footer divinpit">
+                            <a   class="btn btn-primary " id="submits">新增</a>
+                            <a  class="btn btn-primary editdiv" id="qk">重置</a>
+                            <a  class="btn btn-primary editdiv" id="delt">删除</a>
+                            <a  class="btn btn-primary editdiv" id="fanhui">返回</a>
+                            <a  class="btn btn-primary" id="JhzdrShenHe">信息审核</a>
+                        </div>
+                        <div class="form-group ">
+
+                           
+                            
+                            @*<select class="form-control" name="TextNameID" id="CPdanju">
+                    <option value="-1">==创建产品单据===</option>
+                </select>*@
+                          
+                          
+                            @*<input type="text" class="calendars form-control" format="dd/MM/yyyy" placeholder="完工时间" id="GhTime" name="OverTime">*@
+                          
+                        </div>
+                    }
+                    <div class="modal-header row">                      
+
+                        <h4 class="modal-title col-xs-12">数据信息</h4> 
+                        <div class="col-xs-12 " id="ShenHexx">
+                            <div class="col-xs-4"></div>
+                                <button role="button" class="btn btn-primary" id="ShenHeBTN">信息审核</button>
+                                <button type="button" class="btn btn-primary editdiv text-right" id="fanhui">返回</button>
+                        </div>
+                        
+                    </div>
+                    <div class="modal-body" >                       
+                            <div class="row" style="margin-top:2px;background-color: lightsteelblue; padding:5px">
+                                <span class='col-xs-5'>名称规格</span>
+                                <span class='col-xs-3'>产品材质</span>
+                                <span class='col-xs-3'>创建日期</span>
+                            </div>
+                          <div class="well" id="eidtTimes">
+                              <div class="row">
+                                  <span class="col-xs-4">完工时间</span>
+                                  <span class="col-xs-6"><input class="calendars " style="width:150px;" type="text" id="HideTime_" format="yyyy-MM-dd" /></span>
+                                  <span class="col-xs-8"></span>
+                                  <a class="btn btn-primary col-xs-4 text-right" style="padding:0px; margin-top:3px;" role="button" id="OverTimeBtn" >确认</a>
+                              </div>
+                             
+                              
+                          </div>
+                        <div class="form-group " id="listDjx"></div>
+                    </div>
+                    <div class="modal-footer " id="jhshperson">
+                        <div class="row " style="margin-top:2px;background-color: lightsteelblue; padding:5px">
+                            <span class='col-xs-5'>计划提出人：</span>
+                            <span class='col-xs-7  text-left'  id="jhtcr"></span>                           
+                        </div>
+                        <div class="row" style="margin-top:2px;background-color: lightsteelblue; padding:5px">
+                            <span class='col-xs-5'>计划制定人：</span>
+                            <span class='col-xs-7  text-left' id="jhzdr"></span>
+                        </div>
+                        <div class="row" style="margin-top:2px;background-color: lightsteelblue; padding:5px">
+                            <span class='col-xs-5'>计划批准人：</span>
+                            <span class='col-xs-7  text-left' id="jhpzr"></span>
+                        </div>
+                        <div class="row" style="margin-top:2px;background-color: lightsteelblue; padding:5px">
+                            <span class='col-xs-5'>加工车间：</span>
+                            <span class='col-xs-7  text-left' id="jgcj"></span>
+                        </div>
+                    </div>
+                    </div>
+                
+                </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm addCJJHD" tabindex="1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">创建计划单</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group ">
+                        <select class="form-control" name="TextNameID" id="CPdanju">
+                            <option value="-1">==创建产品单据===</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="closedaddjhd" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="addDJtop">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm CpName" tabindex="1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加产品名称</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group ">
+                        <input placeholder="产品名称" class="form-control " type="text" name="MyTexts" id="Topname" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="addName">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm CpXingHao" tabindex="1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加材料规格</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group ">
+                        <input placeholder="材料规格" class="form-control " value="Q235" type="text" name="MyTexts" id="XingHao" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="addXH">确定</button>
+                </div>
+
+            </div><!-- /.modal-content -->
+
+        </div><!-- /.modal-dialog -->
+    </div>
+    <div class="modal fade bs-example-modal-sm Tbb" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document" style="padding-top:100px; width:200px; margin-right:auto; margin-left:auto;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body" id="alertShow">
+                    提示小心
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade bs-example-modal-sm ThiShi" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    是否删除所选信息
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="Yesdel">确定</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="Closed">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+
+    <div class="modal fade bs-example-modal-sm Shenhe" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    是否审核所选信息
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="YseSH">确定</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="Closed">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-primary " data-toggle="modal" data-target=".Tbb" style="visibility:hidden" id="Hiddenalert"></button>
+    <button type="button" class="btn btn-primary " data-toggle="modal" data-target=".ThiShi" style="visibility:hidden" id="thishi"></button>
+    <button type="button" class="btn btn-primary " data-toggle="modal" data-target=".Shenhe" style="visibility:hidden" id="Shenhe"></button>
+  
+   
+   
+</body>
+</html>

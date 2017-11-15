@@ -1,0 +1,298 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <title>营销报价界面</title>
+    <link href="~/Content/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="~/bootsarp/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/mobile-calendar-master/src/calendar.css" rel="stylesheet" />
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="~/bootsarp/js/bootstrap.min.js"></script>
+    <style>
+     
+
+        tr {
+          
+            text-align: center;
+        }
+
+        thead tr {
+           
+            text-align: center;
+        }
+    </style>
+    <script>
+        var Aconunt;
+        var MaxPage;
+        var Rows = 10;
+        var MyColums = "CPname";
+        var Del;
+        $(function () {
+            //读取产品名称
+            loaddata();
+            //页面跳转
+            $("body").delegate('#Pageul li', 'click', function () {
+                //alert($(this).text().trim()); //弹出点击的li标签的value值
+                if ($(this).text().trim() == "首页") {
+                    loaddata('1', Rows);
+                }
+                else if ($(this).text().trim() == "末页") {
+                    loaddata(MaxPage, Rows);
+                }
+                else {
+                    loaddata($(this).text(), Rows)
+                }
+
+            });
+            $("body").delegate("#GetNamelist", 'click', function () {
+                MyColums = "CPname";
+                $("#TdText").html("产品名称");
+               
+                loaddata();
+            })
+            $("body").delegate("#GetXHlist", 'click', function () {
+                MyColums = "CPxinghao";
+                $("#TdText").html("产品型号");
+                loaddata();
+            })
+            //删除信息
+            $("body").delegate('#tb tr td a', 'click', function () {
+                Del = $(this).attr("id");
+                $("#thishi").click();               
+            }) 
+            $("body").delegate('#Yesdel', 'click', function () {                    
+                $.post("/NewChanPin/DelChanPin", {
+                    "delID":Del
+                }, function (serverData) {
+                    if (serverData == "ok") {
+                        $("#TdText").html(MyColums == "CPname" ? "产品名称" : "产品型号");
+                        loaddata();
+                    }
+                    else if (serverData == "noperson") {
+                        $("#alertShow").text("该产品不是由本人创建不可删除！")
+                        $('#Hiddenalert').click();
+                    }
+                    else {
+
+                    }
+                })
+
+            })
+            $("#addName").click(function () {   
+                var CPName = $("#Cp_Name").val();
+                if (CPName.trim().length <= 0)
+                {
+                    $("#alertShow").text("产品名称不可为空！")                    
+                    $('#Hiddenalert').click();
+                    return;
+                }
+                AjaxLN(CPName, "CPname");
+            })
+
+            $("#addXH").click(function () {
+                var CPxh = $("#XingHao").val();
+                if (CPxh.trim().length <= 0) {
+                    $("#alertShow").text("产品型号不可为空！")
+                    $('#Hiddenalert').click();
+                    return;
+                }
+                AjaxLN(CPxh, "CPxinghao");
+            })           
+            
+        })
+        function AjaxLN(obj,vl)
+        {
+            $.ajax({
+                url: "/NewChanPin/ADDxinghaoName",
+                data: { Name: obj, MyColums: vl },
+                type: "POST",
+                dataType: 'json',
+                beforeSend: function () {                   
+                },
+                success: function (serverData) {
+                    if (serverData == "ok") {
+                        alertshow("添加成功");
+                        loaddata();
+                    }
+                    else if (serverData == "Isdistict") {
+                        alertshow("产品名称重复录入！");
+                    }
+                    else if (serverData == "errer") {
+                        alertshow("客户名称不可重复");
+                    }
+                    else {
+                        alertshow("系统错误联系管理员");
+                    };
+                },
+                complete: function () {
+                    //  $("#addKH").css("disabled", "")
+                },
+                error: function (er) {
+                    alertshow(er);
+                }
+            });
+        }
+        function alertshow(text) {
+            $("#alertShow").text(text);
+            $('#Hiddenalert').click();
+        }
+
+        //获取产品名称列表
+        function loaddata(artPage) {
+            $("#tb tr:not(:first)").empty();
+            $('#Pageul').children().filter('li').remove(); //动态删除
+            $.post("/NewChanPin/GetHref", { "page": artPage, "rows": Rows,"MyColums":MyColums }, function (serverData) {
+                for (var i = 0; i < serverData.rows.length; i++) {
+                    var trHTML = "<tr  ><td>" + serverData.rows[i].MyTexts + "</td><td><a  class='btn  btn-info btn-sm' role='button' href='#'  id='" + serverData.rows[i].ID + "' name=''>删除</a></td></tr>"
+                    $("#tb").append(trHTML);
+                }
+                Aconunt = serverData.total;
+                MaxPage = Math.ceil(Aconunt / Rows);
+                artPage = artPage == null ? 0 : artPage.length <= 0 ? 0 : artPage;
+                for (var s = 0; s < 7; s++) {
+                    var hm;
+                    if (s == 0) {
+                        hm = "<li id='f' class='previous'><a href='#'  ><span aria-hidden='true'>首页</a> </li>";
+                    } else if (s == 6) {
+                        hm = "<li class='next'><a href='#' > <span aria-hidden='true'>末页</a> </li>";
+                    }
+                    else {
+                        var sx = s;
+                        if (artPage > 3) {
+                            sx = (artPage - 2) + (s - 1);
+                        }
+                        if (sx <= MaxPage) {
+                            hm = "<li><a href='#'> " + sx + " </a> </li>";
+                        }
+                        else {
+                            hm = "";
+                        }
+                    }
+                    $("#Pageul").append(hm);
+                }
+            });
+        }
+        
+    </script>
+</head>
+<body>
+    <div>
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    操作 <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-toggle="modal" data-target=".CpName">添加名称</a></li>
+                    <li><a href="#" data-toggle="modal" data-target=".CpXingHao">添加规格</a></li>
+                </ul>
+            </li>
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" id="GetNamelist" data-toggle="tab">名称列表</a></li>
+            <li role="presentation"><a href="#home" aria-controls="home" role="tab" id="GetXHlist" data-toggle="tab">型号列表</a></li>
+            
+        </ul>
+        <div class="tab-content ">
+            <div role="tabpanel" class="tab-pane active" id="home">
+                <div class="collapse" id="collapseExample">
+                    <div class="well">
+                        <input class="input-group" id="wellinput" />
+                    </div>
+                </div>
+                <table id="tb" class="table  table-hover">
+                    <thead>
+                        <tr><td id="TdText">产品名称</td><td>操作</td></tr>
+                    </thead>
+                </table>
+                <nav aria-label="Page navigation">
+                    <ul class="pager" id="Pageul"></ul>
+                </nav>
+
+            </div>
+            </div>
+        </div>
+    
+    <div class="modal fade bs-example-modal-sm CpName" tabindex="1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加产品名称</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group ">
+                        <input placeholder="产品名称" class="form-control " type="text" name="MyTexts" id="Cp_Name" />                      
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="addName">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm CpXingHao" tabindex="1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加产品型号</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group ">
+                        <input placeholder="产品型号" class="form-control " value="Φ200*2000" type="text" name="MyTexts" id="XingHao" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="addXH">确定</button>
+                </div>
+
+            </div><!-- /.modal-content -->
+
+        </div><!-- /.modal-dialog -->
+    </div>
+    <div class="modal fade bs-example-modal-sm Tbb" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document" style="padding-top:100px; width:200px; margin-right:auto; margin-left:auto;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body" id="alertShow">
+                    提示小心
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade bs-example-modal-sm ThiShi" tabindex="-1"  role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title">提示</h4>
+               </div>
+                <div class="modal-body">
+                    是否删除所选信息
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="Yesdel">确定</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="Closed">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary " data-toggle="modal" data-target=".Tbb" style="visibility:hidden" id="Hiddenalert"></button>
+    <button type="button" class="btn btn-primary " data-toggle="modal" data-target=".ThiShi" style="visibility:hidden" id="thishi"></button>
+</body>
+</html>

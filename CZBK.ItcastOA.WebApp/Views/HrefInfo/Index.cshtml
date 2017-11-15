@@ -1,0 +1,386 @@
+﻿@{
+    Layout = null;
+}
+@using CZBK.ItcastOA.Model
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>网站信息</title>
+    <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
+    <link href="~/Content/themes/icon.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
+    <script src="~/Scripts/jquery.easyui.min.js"></script>
+    <script src="~/Scripts/easyui-lang-zh_CN.js"></script>
+    <script src="~/Scripts/datapattern.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/MyAjaxForm.js"></script>
+    <script src="~/Scripts/MyNewJS.js"></script>
+    <style>
+        .toolbar {
+            height: 30px;
+            padding: 5px;
+        }
+        html, body ,.f1_div {
+            margin:0px; padding:0px; height:100%;
+        }       
+        .f1_div {
+           
+        }
+        .f1_div_t {
+            padding:2px;background:#efefef;
+        }
+        span {
+            font-size:12px; 
+        }
+        a { color:deepskyblue }
+    </style>
+
+
+    <script type="text/javascript">
+        var strval;
+        var PageVal = 1, SazeVla = 35;
+      
+        function enable() {
+            $('a.easyui-linkbutton').linkbutton('enable');
+        }
+        function disable() {
+            $('a.easyui-linkbutton').linkbutton('disable');
+        }
+        function changetext() {
+            $('#add').linkbutton({ text: 'new add' });
+        }        
+        $.fn.extend({          
+            resizeDataGrid: function (heightMargin, widthMargin, minHeight, minWidth) {
+               
+                var height = $(document.body).height() - heightMargin;
+                var width = $(document.body).width() - widthMargin;               
+                height = height < minHeight ? minHeight : height;                
+                width = width < minWidth ? minWidth : width;                
+                $(this).datagrid('resize', {
+                    height: height,
+                    width: width
+                });
+            }
+        });
+
+        var thiswidth = 0,thisheight=0;
+        $(function () {
+            //datagrid数据表格ID 
+            var datagridId = 'tt';
+            // 当窗口大小发生变化时，调整DataGrid的大小  
+            DGbutton()
+            $(window).resize(function () {
+                $('#tt').resizeDataGrid(0, 0, 200, 500);
+            });
+            $('#cc').combo({
+                required: true,
+                editable: false
+            });          
+            //查看电话
+            $("#SeeImageDIV").css("display", "none");
+            $("#SeeMap").css("display", "none");           
+            $("#CSbtn").click(function () {
+                var page = $("#tt").datagrid("getPager");
+                var number = page.data("pagination").options.pageNumber;
+                var size = page.data("pagination").options.pageSize;               
+                page.pagination('refresh', {
+                    pageNumber: 4,
+                    pageSize: size
+                });
+                
+            });
+        });
+        
+        //DataGrid 完全加载
+        function DGbutton(pars)
+        {
+            loadData(pars);
+            var pager = $('#tt').datagrid().datagrid('getPager');	// get the pager of datagrid
+            pager.pagination({
+                buttons: [{
+                    text: '清空选中',
+                    iconCls: 'icon-reload',
+                    handler: function () {
+                        $('#tt').datagrid('clearChecked');
+                    }
+                    }               
+                ]
+                
+            });
+        }
+       
+        function saveInfo() {
+            var rows = $('#tt').datagrid('getSelections');
+           
+            if (!rows || rows.length == 0) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要保存的记录!", "error");
+                return;
+            }
+            $.messager.confirm("提示", "确定要保存记录?", function (r) {
+                if (r) {
+
+                    var strId = "";
+                    var pd = 0;
+                    for (var i = 0; i < rows.length; i++) {
+                        if (rows[i].photo.length<=0)
+                        {                           
+                            pd++;
+                        }
+                        strId = strId + rows[i].ID + ",";//1,2,3,
+                    }
+                    $('#tt').datagrid('clearChecked');
+                    if (pd > 0)
+                    {
+                        $.messager.alert("提醒", "保存信息中有未查看电话信息，请查看电话后保存", "error");
+                        return;
+                    }                    
+                    strId = strId.substr(0, strId.length - 1);
+                   
+                    $.post("/HrefInfo/SaveHref", { "strId": strId }, function (data) {
+                      
+                        if (data == "ok") {
+                            $.messager.alert("提醒","保存成功", "ok");
+                            $('#tt').datagrid('reload');
+                           
+                        } else {
+                            $.messager.alert("提醒", data, "error");
+                        }
+                    });
+                }
+            });
+          
+        }
+        //将序列化成json格式后日期(毫秒数)转成日期格式
+        function ChangeDateFormat(cellval) {
+            var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+            return date.getFullYear() + "-" + month + "-" + currentDate;
+        }
+        $('#f1_div_t').class.width = thiswidth - 40;
+        //搜索数据
+        function qq(value, name) {
+            var Tval = "";
+            var dssval = document.getElementById("XUANX").getElementsByTagName("select");
+            for (var v = 0; v < dssval.length; v++) {
+                var val = $("#str_" + v).combobox('getValue') + ">" + $("#str_" + v).combobox('getText');
+                Tval = v == 0 ? val : Tval + "," + val;
+            }            
+            var pars = {
+                Tval: Tval,
+                Str: value
+            };
+            DGbutton(pars);
+            $('#tt').resizeDataGrid(0, 0, 200, 500);
+        }
+        function loadData(pars) {
+          
+            $('#tt').datagrid({
+                url: '/HrefInfo/GetHref',
+                title: '出售二手房信息',
+                width: $(document.body).width(),
+                height: $(document).height(),
+                fitColumns: true, //列自适应
+                nowrap: true,//则把数据显示在一行里。                
+                idField: 'ID',//主键列的列明
+                fit:true,
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: SazeVla,//页大小，一页多少条数据
+                pageNumber: PageVal,//当前页，默认的
+                pageList: [15, 25, 35],
+                pagePosition: "bottom",//定义分页栏的位置。
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                    { field: 'ck', checkbox: true, align: 'left', width: 50 },
+                    { field: 'ID', title: '编号', width: 20, align: 'center', hidden:'True' },
+                    {
+                        field: 'Image_str', title: '图片', align: 'center', width: 30,
+                        formatter: function (value, row, index)
+                        {
+                            var bj = "";
+                            if (value =="有")
+                            { bj = "<img src='/Content/Images/nf/32px.png' height='25'  />"; }
+                            return bj;
+                        }
+                    },
+                    {
+                        field: 'FbTime', title: '发布时间', align: 'center', width: 80,
+                        formatter: function (value, row, index) {
+                            return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d hh:mm");
+                        }
+
+                    },
+                     { field: 'HLName', title: '信息名称', width: 200, align: 'left', halign: 'center' },
+                    { field: 'PersonName', title: '联系人', align: 'center' },
+                    { field: 'photo', title: '联系电话', align: 'center' },
+                    {
+                        field: 'Address', title: '地址', width: 100, halign: 'center'
+                    },
+                    { field: 'FwSumMoney', title: '金额', width: 80, align: 'center' },
+                      { field: 'FwMianji', title: '面积', width: 60, align: 'center' },
+                    { field: 'FwHuXing', title: '户型', width: 60, align: 'center' },
+                    { field: 'FwLoucheng', title: '楼层', width: 30, align: 'center' },
+                    { field: 'FwZhuangxiu', title: '装修', width: 30, align: 'center' },
+                    { field: 'FwChaoxiang', title: '朝向', width: 30, align: 'center' },
+                    { field: 'FwNianxian', title: '产权', width: 30, align: 'center' },
+                    {
+                        field: 'Operator', title: '操作', halign: 'center',
+                       formatter: function (value, row, index) {
+                           var str = "<a href='javascript: selectP()' ids='" + row.ID +
+                           "' class='deletes' >查看电话</a>";
+                           str = str + " &nbsp&nbsp<a href='javascript:saveInfo()' ids='" + row.id +
+                           "' class='edits' >保存信息</a>";
+                           str = str + " &nbsp&nbsp<a href='javascript:SeeImage()' ids='" + row.id +
+                       "' class='edits' >擦看图片</a>";
+                           str = str + " &nbsp&nbsp<a href='javascript:SeeMap()' ids='" + row.id +
+                      "' class='edits' >地图浏览</a>";
+                       return str;
+                   }
+            }
+
+                ]],
+                toolbar: '#tb',
+                onLoadSuccess: function () {
+                  
+                }
+            });
+        }
+        function selectP()
+        {
+            var rows = $('#tt').datagrid('getSelections');
+            if (!rows || rows.length == 0) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选中要查看的信息", "error");
+                return;
+            }
+            if (!rows || rows.length > 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.confirm("提示", "只可选中一条信息查看,是否清空重新选着？", function (r) {
+                    if (r) {
+                        $('#tt').datagrid('clearChecked');
+                    }
+                });
+                return;
+            }
+            $.messager.confirm("提示", "确认查看信息?", function (r) {
+                if (r) {
+                    var strId = "";
+                    for (var i = 0; i < rows.length; i++) {
+                        strId = strId + rows[i].ID + ",";//1,2,3,
+                    }
+                   
+                    strId = strId.substr(0, strId.length - 1);
+                    $.post("/HrefInfo/SeePhoto", { "strId": strId }, function (data) {                        
+                        var data = $.parseJSON(data);
+                        $('#tt').datagrid('clearChecked');
+                        if (data.msg == "ok") {
+                            var T_val = "";
+                            var dssval = document.getElementById("XUANX").getElementsByTagName("select");
+                            try
+                            {
+                                for (var i = 0; i < dssval.length; i++) {
+                                    var val = $("#str_" + i).combobox('getValue') + ">" + $("#str_" + i).combobox('getText');
+                                    T_val = i == 0 ? val : T_val + "," + val;
+                                  
+                                }
+                            }
+                            catch (e)
+                            {
+                                
+                            }
+                           
+                            var page = $("#tt").datagrid("getPager");
+                            
+                            PageVal = page.data("pagination").options.pageNumber;
+                           
+                            SazeVla = page.data("pagination").options.pageSize;
+                            
+                            var pars = {
+                                Tval: T_val,
+                                Str: strval
+                            };
+                           DGbutton(pars);
+                           $('#tt').resizeDataGrid(0, 0, 200, 500);                          
+                            $("#OnClic").text(data.Uclick);
+                            PageVal = 1;
+                            SazeVla = 15;
+                        }
+                        else if (data == "Bigerror") {
+                            $.messager.alert("提醒", "为找到该信息", "error");
+                        }
+                        else {
+                            $.messager.alert("提醒", data.msg, "tip");
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+
+</head>
+<body >
+    <div class="f1_div" id="ALLbaody" >     
+        <table id="tt"  style="overflow-x:hidden; overflow-y:hidden; margin:0px; padding:0px;"
+                title="出售二手房信息" iconcls="icon-edit" ></table>
+
+        <div id="tb" style="padding:5px;height:auto">
+            <div style="margin-bottom:5px;" id="XUANX">
+                <span>搜索项: </span>
+                @{
+
+                    for (int i = 0; i < ViewBag.ItemsCount; i++)
+                    {
+                        <select id="str_@i" class="easyui-combobox" name="dept" style="width:80px;">
+                            @{foreach (T_Items Item in ViewBag.Items)
+                                {
+                                    if (Item.Icons == i)
+                                    {
+                                        <option value="@Item.ID">@Item.Str</option>
+                                    }
+                                }
+                            }
+                        </select>
+                                }
+                }
+                <input id="ss"   class="easyui-searchbox" searcher="qq" prompt="输入你要查询的信息" menu="#mm" style="width:0px" />
+                <div id="mm" style="width:120px">
+                    <div name="all" iconCls="icon-ok">站内搜索</div>
+                    <div name="all">区域查询</div>
+                </div>
+                @*<span>区域查询: </span>
+                <select id="cc" class="easyui-combobox" name="dept" style="width:60px; margin-left:15px">
+                    <option value="999">所有</option>
+                    @{
+                        List<T_Quyu> quyu = ViewBag.City;
+                        foreach (T_Quyu ttq in quyu)
+                        {
+                            <option value="@ttq.ID">@ttq.QY_connet</option>
+                        }
+                    }
+                </select>
+                <a class="easyui-linkbutton" id="QySee"  iconCls="icon-search">查询</a>*@
+                <b style="float:right; margin-right:1%;height:100%;">
+                    用户点击量 &nbsp;&nbsp;
+                    <span><a style="color:coral" id="OnClic">@ViewBag.OnClic</a>/<a style="color:coral">@ViewBag.AllClick</a></span>
+                </b>
+            </div>
+           
+           
+        </div>
+
+        <div id="SeeImageDIV" >
+            <img id="Timage"   />            
+        </div>
+        <div id="SeeMap" style="background-color:aqua;">
+            <iframe id="SeeMapFrame" scrolling="no" frameborder="0"></iframe>
+        </div>
+    </div>
+    
+</body>
+</html>

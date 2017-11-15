@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "logindex";
+}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <title>系统首页</title>
+    <link href="~/Content/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="~/bootsarp/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/mobile-calendar-master/src/calendar.css" rel="stylesheet" />
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="~/bootsarp/js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            $("#banImage").height ( $("#banImage").height() > 300 ? 300 : $("#banImage").height());
+        })
+        
+
+    </script>
+    </head>
+<body>
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="margin:0px; padding:0px; margin-top:2px;">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" role="listbox" id="banImage" >
+            <div class="item active" >
+                <img src="~/Timage/123.jpg"  alt="...">
+                <div class="carousel-caption">
+                </div>
+            </div>
+            <div class="item" style="margin-left:auto">
+                <img src="~/Timage/222.jpg" alt="...">
+                <div class="carousel-caption">
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+   
+
+
+    
+</body>
+</html>

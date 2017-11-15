@@ -1,0 +1,101 @@
+﻿@{
+    ViewBag.Title = "index";
+}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>衍水集团移动端</title>
+    <link href="~/bootsarp/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="~/bootsarp/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background-color:gainsboro;
+        }
+    </style>
+    <script>
+        $(function () {
+            var topheight = $(".navbar").height();
+            var Bodyheight = $(window).height();
+           $(".main").css("margin-top", topheight + "px");
+           
+            $(".main").css("height", (Bodyheight- topheight )+ "px");         
+            $("#nav_ul").click(function () {
+                
+                $("#bar_XL").click();
+            })
+           
+            //专向营销页面
+           
+            //专向生产制造
+           
+            
+            $("li").click(function (e) {
+                $("li").removeClass();
+                var id_ = $(this).attr("id");
+                $("#" + id_).attr("class", "active")
+              
+            })
+            
+            $.getJSON("/Home/GetMenus", {}, function (data) {
+                var strg = "";
+                $.each(data, function (i, items)
+                {
+                    strg = strg + "<li " + (i == 0 ? "class='active'" : "" )+" ><a href='" + items.url + "'  target='myframe'>" + items.title + "</a></li> ";
+                   
+                });                
+                strg = strg+"<li><a href='/Login/Logout'>注销系统</a></li>"
+                $("#nav_ul").append(strg);
+            })
+        });
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-default  navbar-fixed-top">
+        <div class="container-fluid ">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header ">
+                <button type="button" id="bar_XL" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" id="login" href="/Login/Logout">                
+                衍水集团</a>
+                <p class="navbar-text navbar-right">当前用户 <a href="#" class="navbar-link">@ViewData["userName"]</a></p>
+               
+            </div>
+        
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav " id="nav_ul">
+                        
+                    </ul>
+                
+                
+                <form class="navbar-form  pull-right">
+                    <div class="form-group">    
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">Go!</button>
+                            </span>
+                        </div>     
+                    </div>
+                    
+                </form>
+   
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <!-- 16:9 aspect ratio -->
+    <div class="embed-responsive embed-responsive-16by9 main" >
+        <iframe id="frame" name="myframe" class="embed-responsive-item" src="/Home/logindex"></iframe>
+    </div>
+</body>
+</html>

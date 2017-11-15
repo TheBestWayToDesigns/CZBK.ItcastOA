@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="38639b506e3a4aa591ee5f325d6e102d" Name="关系图1" ZoomLevel="60" ShowGrid="false" SnapToGrid="false">
+        <EntityTypeShape EntityType="OAModel.UserInfo" Width="2" PointX="8.7894020303414866" PointY="0.76041666194256652" IsExpanded="true" />
+        <EntityTypeShape EntityType="OAModel.ActionInfo" Width="1.5" PointX="4.2151268643808839" PointY="0.68115941700352467" />
+        <EntityTypeShape EntityType="OAModel.Department" Width="1.5" PointX="6.268568933213146" PointY="0.771739125505287" />
+        <EntityTypeShape EntityType="OAModel.R_UserInfo_ActionInfo" Width="2.625" PointX="0.82653989676778039" PointY="3.4424818805662452" />
+        <EntityTypeShape EntityType="OAModel.RoleInfo" Width="1.5" PointX="0.97373192308314427" PointY="0.5" />
+        <EntityTypeShape EntityType="OAModel.BumenInfoSet" Width="1.5" PointX="6.0724639028554881" PointY="3.7178441558629474" />
+        <AssociationConnector Association="OAModel.FK_ActionInfoR_UserInfo_ActionInfo" />
+        <AssociationConnector Association="OAModel.FK_UserInfoR_UserInfo_ActionInfo" />
+        <AssociationConnector Association="OAModel.DepartmentActionInfo" />
+        <AssociationConnector Association="OAModel.RoleInfoActionInfo" />
+        <AssociationConnector Association="OAModel.UserInfoDepartment" />
+        <AssociationConnector Association="OAModel.UserInfoRoleInfo" />
+        <EntityTypeShape EntityType="OAModel.T_BoolItem" Width="1.5" PointX="12.839673963570808" PointY="0.84193841093199251" />
+        <EntityTypeShape EntityType="OAModel.YXB_Kh_list" Width="1.5" PointX="11.365941983798464" PointY="3.5534420121430643" />
+        <AssociationConnector Association="OAModel.FK_YXB_Kh_list_UserInfo" />
+        <EntityTypeShape EntityType="OAModel.Login_list" Width="1.5" PointX="0.5118371212762618" PointY="9.9071969786766623" />
+        <AssociationConnector Association="OAModel.FK_Login_list_UserInfo" />
+        <EntityTypeShape EntityType="OAModel.SysField" Width="1.5" PointX="13.711647797506764" PointY="3.4711174064754582" />
+        <EntityTypeShape EntityType="OAModel.T_ChanPinName" Width="1.5" PointX="17.080464668072096" PointY="9.9335747580403631" />
+        <EntityTypeShape EntityType="OAModel.T_YSItems" Width="1.5" PointX="4.7622283785612716" PointY="6.5928441558629478" />
+        <AssociationConnector Association="OAModel.FK_T_ChanPinName_T_ChanPinName" />
+        <EntityTypeShape EntityType="OAModel.T_CanPan" Width="1.5" PointX="3.9930558687558753" PointY="9.6840278350368667" />
+        <EntityTypeShape EntityType="OAModel.T_SczzItem" Width="1.5" PointX="6.4374998882412946" PointY="9.8715278226192336" />
+        <EntityTypeShape EntityType="OAModel.T_ShengChanZhiZhaoTopName" Width="1.5" PointX="1.454861197344679" PointY="14.475694485146688" />
+        <AssociationConnector Association="OAModel.FK_adduserid" />
+        <AssociationConnector Association="OAModel.FK_OverUserID" />
+        <AssociationConnector Association="OAModel.FK_SczzItemsID" />
+        <AssociationConnector Association="OAModel.FK_T_SczzItem_UserInfo" />
+        <AssociationConnector Association="OAModel.FK_T_ShengChanZhiZhaoTopName_UserInfo" />
+        <EntityTypeShape EntityType="OAModel.T_SczzDanju" Width="1.5" PointX="6.6909721897984" PointY="13.913194398223251" />
+        <AssociationConnector Association="OAModel.FK_SczzDanjuID" />
+        <AssociationConnector Association="OAModel.FK_AddUser" />
+        <AssociationConnector Association="OAModel.FK_CheJianShenHe" />
+        <AssociationConnector Association="OAModel.FK_Jhzdr" />
+        <AssociationConnector Association="OAModel.FK_ShenChanSheHe" />
+        <AssociationConnector Association="OAModel.FK_TopName" />
+        <AssociationConnector Association="OAModel.FK_UpShenHe" />
+        <AssociationConnector Association="OAModel.FK_Bumen" />
+        <EntityTypeShape EntityType="OAModel.T_WinBak" Width="1.5" PointX="14.971618223220464" PointY="9.8461653528695834" />
+        <EntityTypeShape EntityType="OAModel.T_WinBakFaHuo" Width="1.5" PointX="12.138284964212968" PointY="9.9136472863907343" />
+        <AssociationConnector Association="OAModel.FK_T_WinBak_T_WinBak_Items" />
+        <AssociationConnector Association="OAModel.FK_winbakid" />
+        <AssociationConnector Association="OAModel.FK_T_WinBakFaHuo_EditUser" />
+        <AssociationConnector Association="OAModel.FK_T_WinBakFaHuo_UserINfo" />
+        <EntityTypeShape EntityType="OAModel.T_BaoJiaToP" Width="1.5" PointX="16.06944501619077" PointY="1.4756469933523051" />
+        <EntityTypeShape EntityType="OAModel.YXB_Baojia" Width="1.5" PointX="19.083334374725442" PointY="3.7305466807274947" />
+        <AssociationConnector Association="OAModel.FK_T_BaoJiaToP_Hanshui" />
+        <AssociationConnector Association="OAModel.FK_T_BaoJiaToP_YXB_Kh_list" />
+        <AssociationConnector Association="OAModel.FK_T_WinBak_YXB_Baojia" />
+        <AssociationConnector Association="OAModel.FK_YXB_Baojia_T_BaoJiaToP1" />
+        <AssociationConnector Association="OAModel.FK_YXB_Baojia_T_ChanPinName" />
+        <AssociationConnector Association="OAModel.FK_YXB_Baojia_T_ChanPinName1" />
+        <AssociationConnector Association="OAModel.FK_YXBBaojia_Userinf" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
