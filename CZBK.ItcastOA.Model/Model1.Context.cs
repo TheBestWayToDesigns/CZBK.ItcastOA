@@ -25,25 +25,29 @@ namespace CZBK.ItcastOA.Model
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<UserInfo> UserInfo { get; set; }
         public DbSet<ActionInfo> ActionInfo { get; set; }
         public DbSet<Department> Department { get; set; }
         public DbSet<R_UserInfo_ActionInfo> R_UserInfo_ActionInfo { get; set; }
         public DbSet<RoleInfo> RoleInfo { get; set; }
         public DbSet<BumenInfoSet> BumenInfoSet { get; set; }
-        public DbSet<T_BoolItem> T_BoolItem { get; set; }
         public DbSet<YXB_Kh_list> YXB_Kh_list { get; set; }
         public DbSet<Login_list> Login_list { get; set; }
         public DbSet<SysField> SysFields { get; set; }
-        public DbSet<T_ChanPinName> T_ChanPinName { get; set; }
         public DbSet<T_YSItems> T_YSItems { get; set; }
         public DbSet<T_CanPan> T_CanPan { get; set; }
         public DbSet<T_SczzItem> T_SczzItem { get; set; }
         public DbSet<T_ShengChanZhiZhaoTopName> T_ShengChanZhiZhaoTopName { get; set; }
         public DbSet<T_SczzDanju> T_SczzDanju { get; set; }
         public DbSet<T_WinBak> T_WinBak { get; set; }
-        public DbSet<T_WinBakFaHuo> T_WinBakFaHuo { get; set; }
-        public DbSet<T_BaoJiaToP> T_BaoJiaToP { get; set; }
+        public DbSet<UserInfo> UserInfoes { get; set; }
+        public DbSet<T_ChanPinName> T_ChanPinName { get; set; }
         public DbSet<YXB_Baojia> YXB_Baojia { get; set; }
+        public DbSet<T_BaoJiaToP> T_BaoJiaToP { get; set; }
+        public DbSet<T_BoolItem> T_BoolItem { get; set; }
+        public DbSet<T_WinBakFaHuo> T_WinBakFaHuo { get; set; }
+        public DbSet<FileItem> FileItems { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<ScheduleType> ScheduleTypes { get; set; }
+        public DbSet<ScheduleUser> ScheduleUsers { get; set; }
     }
 }

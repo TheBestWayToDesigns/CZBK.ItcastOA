@@ -27,9 +27,9 @@ namespace CZBK.ItcastOA.Model
         public Nullable<int> OverUserID { get; set; }
         public string Bak { get; set; }
     
-        public virtual UserInfo UserInfo { get; set; }
-        public virtual UserInfo UserInfo1 { get; set; }
         public virtual T_SczzItem T_SczzItem { get; set; }
         public virtual T_SczzDanju T_SczzDanju { get; set; }
+        public virtual UserInfo UserInfo { get; set; }
+        public virtual UserInfo UserInfo1 { get; set; }
     }
 }

@@ -76,39 +76,9 @@
             }
         }
         //提交数据
-        function submitForm(index, row, changes) {
-            //  alert( row.resultId+"--"+changes.finalResult)daliyResultRate;
-            var resultId = row.ID;//信息ID
-            if (resultId == "") {
-                $.messager.alert('提醒', '错误没有选中修改信息');
-                $("#tt").datagrid('reload');
-                return;
-            }
-
-            //  var finalRate = row.BaoJiaMoney;//期末比例
-            var finalRusult = changes.BaoJiaMoney;//期末成绩
-            var r = /^-?[1-9]/;//判断输入的是正整数
-            if (!r.test(finalRusult)) {
-                $.messager.alert('提醒', '请输入正整数！');
-                return;
-            }
-            $.ajax({
-                type: "post",
-                async: false,
-                url: "/MasterBaojia/editMoney",
-                data: {
-                    "resultId": resultId,
-                    "finalRusult": finalRusult
-                },
-                success: function (data) {
-                    if (data.ret == true) {
-                        $("#tt").datagrid('reload');
-                    }
-                }
-            })
-        }
+      
         $(function () {
-
+            win = 0;
             $("#Province").combobox({
                 onChange: function (n, o) {
                     var val = $('#Province').combobox('getValue');
@@ -140,12 +110,16 @@
             $("#editDiv").css("display", "none");
             $("#FaHuoDIV").css("display", "none");
             $("#AddFaHuoOneDiv").css("display", "none");
-            
+            $("#mothdiv").css("display", "none");
+            $("#XiangXiDIV").css("display", "none");
+            $("#divZhList").css("display", "none");
+            $("#divMxList").css("display", "none");
+            $('#dlg').dialog('close');            
             bindActionTypeEnumChange();
             bindFileUpclick();
             //报价列表
             $("#Bjlb").click(function () {
-
+               
                 delflg = 0;
                 win = 0;
                 var pars = {
@@ -267,10 +241,9 @@
                 WinHeTong()
             })
             $("#divBtn a").click(function () {
+                $("#tt").datagrid("clearSelections");
                 $("#TTdiv").show();
                 $("#mothdiv").hide();
-               
-               
             })
             $("#MonthTable").click(function () {
                 $("#TTdiv").hide();
@@ -288,20 +261,75 @@
             })
             //查询月总汇
             $("#MonthBTN").click(function () {
+                $("#ZhList").click();
                 $("#GetMonThData").html("");
+                $("#GetmoneyThData").html("");               
+                $("#MoneyListDa").html("");
+                $("#DDpercent").html("");
                 $.post("/MasterBaoJia/GetMonthSumData", { "Utime": $('#Mutime').combobox('getValue'), "Dtime": $('#Mdtime').combobox('getValue') }, function (data) {
                     if (data.ret == "ok") {
+                        var Upmct = 0;
+                        var Dymct = 0;
                         var holdDate = new Date($('#Mutime').combobox('getValue').replace("-", "/").replace("-", "/"));
                         var twoDate = new Date($('#Mdtime').combobox('getValue').replace("-", "/").replace("-", "/"));
-                      
-                        $("#h1time").html(holdDate.getFullYear() + "年" + holdDate.getMonth() + 1 + "月" + holdDate.getDate() + "日—" + twoDate.getFullYear() + "年" + (twoDate.getMonth() + 1) + "月" + twoDate.getDate() + "日");
+                        var strTime = holdDate.getFullYear() + "年" + holdDate.getMonth() + 1 + "月" + holdDate.getDate() + "日—" + twoDate.getFullYear() + "年" + (twoDate.getMonth() + 1) + "月" + twoDate.getDate() + "日";
+                        $("#h1time").html(strTime);
+                        $("#h2time").html(strTime);
+                        $.each(data.temp, function (i, item) {
+                            if (i == 0) {
+                                Upmct = item["LostCount"];
+                            } else {
+                                Dymct = item["LostCount"];
+                            }
+                            var sp = i == 0 ? "上月创建信息" : i == 1 ? "当月创建信息" : "累计创建信息";
+                            var $tdName = $("<tr><td >" + sp + "</td><td >" + item["WinCount"] + "</td><td >" + item["DaiDingCount"] + "</td><td >" + item["LostCount"] + "</td><td >" + item["SumCount"] + "</td> </tr>");
+                            $("#GetMonThData").append($tdName);
+                        })
                         $.each(data.temp, function (i, item) {
                             var sp = i == 0 ? "上月创建信息" : i == 1 ? "当月创建信息" : "累计创建信息";
-                            var $tdName = $("<tr><td >" + sp + "</td><td >" + item["WinCount"] + "</td><td >" + item["LostCount"] + "</td><td >" + item["DaiDingCount"] + "</td><td >" + item["SumCount"] + "</td> </tr>");
-                            $("#GetMonThData").append($tdName);
+                            var $tdName = $("<tr><td >" + sp + "</td><td >" + item["WinDML"] + "元</td><td >" + item["DdDml"] + "元</td><td >" + item["lostDML"] + "元</td><td >" + item["SumDMLCount"] + "元</td> </tr>");
+                            $("#GetmoneyThData").append($tdName);
+                        })
+                        var pi = 0;
+                        $.each(data.LostItem, function(ui, item) {
+                          
+                            var divtext =  (ui == 0 ? "上月" : "当月") + "失败原因百分比";
+                            var tr_td = "<tr><td>" + divtext + "</td>";
+                            var trhread = "<tr><td>分类</td>";
+                          
+                            $.each(item, function (i, ite) {                                                       
+                                var thival = (ui == 0 ? ite["Count"] / Upmct : ite["Count"] / Dymct);
+                                thival = isNaN(thival) ? 0 : thival;
+                                if (pi == 0) {
+                                    trhread = trhread + "<td>" + ite["Text"] + "</td>";
+                                }
+                                tr_td = tr_td + "<td>" + (thival * 100).toFixed(0) + "%</td>";
+                               
+                            })
+                            tr_td = tr_td + "</tr>";
+                            if (pi == 0)
+                            {
+                                trhread = trhread + "</tr>";
+                                $("#DDpercent").append(trhread);
+                            }
+                            pi++;
+                            $("#DDpercent").append(tr_td);
+                        })
+                        $.each(data.XiangXi, function (xx, item) {
+                            var $tdName = $("<tr><td >" + item["PName"] + "</td><td >" + item["Wmoney"] + "元&nbsp&nbsp/&nbsp&nbsp" + item["WPercent"] + "%</td>" + "<td >" + item["Dmoney"] + "元&nbsp&nbsp/&nbsp&nbsp" + item["DPercent"] + "%</td><td >" + item["Lmoney"] + "元&nbsp&nbsp/&nbsp&nbsp" + item["LPercent"] + "%</td></tr>");
+                            $("#MoneyListDa").append($tdName);
                         })
                     }
                 })
+            })
+            //总汇查询点击
+            $("#ZhList").click(function () {
+                $("#divZhList").css("display", "block");
+                $("#divMxList").css("display", "none");
+            })
+            $("#MxList").click(function () {
+                $("#divZhList").css("display", "none");
+                $("#divMxList").css("display", "block");
             })
         });
         //给权限类别绑定Change事件
@@ -342,13 +370,13 @@
             $('#tt').datagrid({
                 url: '/MasterBaoJia/GetMoneyInfo',
                 title: '未报价信息',
-                width: $("#dgdiv").width() - 10,
-                height: $("#dgdiv").height() - 10,
+                width: $("#dgdiv").width() - 20,
+                height: $("#dgdiv").height() - 20,
                 fitColumns: true, //列自适应
                 nowrap: true,
                 rownumbers: true,
-                onClickCell: onClickCell,
-                onAfterEdit: onAfterEdit,
+                //onClickCell: onClickCell,
+                //onAfterEdit: onAfterEdit,
                 idField: 'ID',//主键列的列明
                 loadMsg: '正在加载权限的信息...',
                 pagination: true,//是否有分页
@@ -358,7 +386,32 @@
                 pageList: [15, 25, 35],
                 queryParams: pars,//往后台传递参数
                 columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
-
+                     {
+                         field: 'baojia', title: '报价',
+                         formatter: function (value, row, index) {
+                             var str = "<a href='javascript:BaoJia(" + row.ID + " )' class='l-btn deletes' style='padding:2px 5px 2px 5px' >报价</a>";
+                             return str;
+                         }
+                     },
+                    { field: 'CPname', title: '产品名称' },
+                    { field: 'CPXingHao', title: '产品型号' },
+                    { field: 'CPShuLiang', title: '产品数量' },
+                     { field: 'WinStr', title: '是否成功', hidden: win == 1 ? false : true },
+                     { field: 'bak', title: '备注信息', hidden: win == 1 ? false : true },
+                    
+                    { field: 'HanShui', title: '是否含税' },
+                      { field: 'CpJB', title: '产品级别' },
+                     { field: 'Denjiu', title: '产品单据' },
+                    { field: 'Remark', title: '备注' },
+                    { field: 'BaoJiaYunFei', title: '运费金额' },
+                     {
+                         field: 'summoney', title: '总金额',
+                         formatter: function (value, row, index) {
+                             var str = row.BaoJiaMoney + row.BaoJiaYunFei;
+                             return str;
+                         }
+                     },                   
+                     { field: 'WinMoney', title: '最终报价', hidden: win == 1 ? false : true },
                      { field: 'KHname', title: '客户名称' },
                       { field: 'KHperson', title: '客户联系人' },
                       { field: 'KHzhiwu', title: '联系人职务' },
@@ -369,11 +422,6 @@
                     { field: 'DaiBanYunShu', title: '代办运输' },
                     { field: 'JieShuanFanShi', title: '结算方式' },
                     { field: 'HeTongQianDing', title: '合同签订' },
-                    { field: 'CPname', title: '产品名称' },
-                    { field: 'CPXingHao', title: '产品型号' },
-                    { field: 'CPShuLiang', title: '产品数量' },
-                     { field: 'WinStr', title: '是否成功', hidden: win == 1 ? false : true },
-                     { field: 'bak', title: '备注信息', hidden: win == 1 ? false : true },
                     {
                         field: 'GhTime', title: '供货时间',
                         formatter: function (value, row, index) {
@@ -385,9 +433,7 @@
                         formatter: function (value, row, index) {
                             return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
                         }
-                    },
-                    { field: 'BaoJiaMoney', editor: { type: 'numberbox', options: { precision: 2 } }, title: '报价金额' },
-                     { field: 'WinMoney', title: '最终报价', hidden: win == 1 ? false : true }
+                    }
                 ]],
                 onLoadSuccess: function () {
 
@@ -415,25 +461,48 @@
                 }
             });
         }
+        function BaoJia(obj)
+        {
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+            $('#dlg').dialog('open');
+            $("#BaoJiaID").val(rows[0].ID);
+            $("#HanSHuiput").val(rows[0].HanShui);
+            
+        }
         function Chazuo(obj, bol) {
             var Moneystr = bol ? "BaoJiaMoney" : "CpMoney";
+            var Yunfeistr = bol ? "BaoJiaYunFei" : "WinYunFei";
             $.post("/MasterBaoJia/GetWinHeTongData", { "id": obj }, function (serverData) {
                 if (serverData.ret == "ok") {
                     $("#WinID").val(obj);
                     $("#editDiv").css("display", "block");
                     $("#XiangMuName").val(serverData.XiangMuName);
+                    $("#HanShuiTD").val(serverData.HanShuiStr);
                     $("#Selebody").html("");
                     $("#Bak").val(serverData.bak);
                     $.each(serverData.temp, function (key, val) {
-                        var $tdName = $("<tr><td  colspan='3'>产品名称:【" + val["CPname"] + "】&nbsp产品型号:【" + val["CpXingHao"] + "】&nbsp 产品数量：【" + val["CPShuLiang"] + "】&nbsp报价金额：【" + val[Moneystr] + "】</td>");
-                        var $td_input = $("<tr><td>成交金额</td><td><input type='text' onkeyup='num(this)' name='EidtMoney" + val["ID"] + "' value=\'" + val[Moneystr] + "\'/></td></tr>");
-                        $("#Selebody").append($tdName);
+                        var tr = "<tr><td >产品名称:</td><td>" + val["CPname"] + "</td><td >产品型号:</td><td>" + val["CpXingHao"] + "</td></tr>";
+                        $("#Selebody").append(tr);
+                        tr = "<tr><td >产品数量:</td><td>" + val["CPShuLiang"] + "</td><td >报价金额:</td><td>" + val["BaoJiaMoney"] + "</td></tr>";
+                        $("#Selebody").append(tr);
+                        tr = "<tr><td >运费金额:</td><td>" + val["BaoJiaYunFei"] + "</td><td >产品等级:</td><td>" + val["Cpdengji"] + "</td></tr>"
+                        $("#Selebody").append(tr);
+                        tr = "<tr><td>备注:</td><td  style='text-align:left'  colspan='2'>" + val["Remark"] + "</td></tr>"
+                        $("#Selebody").append(tr);
+                         var $td_input = $("<tr><td>成交金额</td><td ><input type='text' onkeyup='num(this)' name='EidtMoney" + val["ID"] + "' value=\'" + val[Moneystr] + "\'/></td></tr>");
+                         $("#Selebody").append($td_input);
+                          $td_input = $("<tr><td>运费金额</td><td ><input type='text' onkeyup='num(this)' name='EidtYunFei" + val["ID"] + "' value=\'" + val[Yunfeistr] + "\'/></td></tr>");
                         $("#Selebody").append($td_input);
                     })
                     $('#editDiv').dialog({
                         title: "信息处理",
                         width: 450,
-                        height: 400,
+                        height: 600,
                         collapsible: true,
                         resizable: true,
                         modal: true,
@@ -489,15 +558,13 @@
                             $('#FaHuoDIV').dialog('close');
                         }
                     }]
-            });
-            $("#H_FaHuoID").val(obj);
-         
+            });  
             var pars = {
                 ID: obj
             };
             $('#FaHuoTT').datagrid({
                 url: '/MasterBaoJia/FaHuoSelect',
-                title: '',
+                title: '发货信息表',
                 width: ($("#dgdiv").width() / 1.4) - 16,
                 height: ($("#dgdiv").height() / 1.6) - 100,
                 fitColumns: true, //列自适应
@@ -511,16 +578,55 @@
                 pageList: [10, 20, 30],
                 queryParams: pars,//往后台传递参数
                 columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
-                     { field: 'KHComname', title: '工程项目名称' },
-                     { field: 'KHname', title: '客户名称' },
-                     { field: 'Addess', title: '地址' },
+                     { field: 'CpName', title: '产品名称' },
+                     { field: 'CpXinghao', title: '产品规格' },
+                     { field: 'CPShuLiang', title: '产品数量' },
+                     { field: 'WinMoney', title: '产品价格' },
+                     { field: 'WinYunFei', title: '运费价格' },
                      {
-                         field: 'NewTime', title: '发货时间',
+                         field: 'Sum', title: '总金额',
+                         formatter: function (value, row, index) {
+                             return ((row.WinMoney + row.WinYunFei) * row.CPShuLiang).toFixed(2);
+                         }
+                     },
+                     {
+                         field: 'AddTime', title: '创建时间',
                          formatter: function (value, row, index) {
                              return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
                          }
                      },
-                     { field: 'WinMoney', title: '发货金额' },
+                    { field: 'Fahuoyint', title: '发货总数' },                   
+                    {
+                        field: 'FahMoney', title: '发货金额',
+                        formatter: function (value, row, index) {
+                            return (row.WinMoney + row.WinYunFei) * row.Fahuoyint;
+                        }
+                    },
+                     
+                     {
+                         field: 'WeiFahuo', title: '未发货数',
+                         formatter: function (value, row, index) {
+                             return row.CPShuLiang - row.Fahuoyint;
+                         }
+                     }, {
+                         field: 'wfhSumMoney', title: '未发货总额',
+                         formatter: function (value, row, index) {
+                             return (((row.WinMoney + row.WinYunFei) * row.CPShuLiang) - ((row.WinMoney + row.WinYunFei) * row.Fahuoyint)).toFixed(2);
+                         }
+                     },
+                    {
+                        field: 'FahuoTime', title: '最新发货时间',
+                        formatter: function (value, row, index) {
+                            return value==null?"":(eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                        }
+                    },
+                    {
+                        field: "edit", title: "操作", 
+                        formatter: function (value, row, index) {
+                            var str = "<a href='javascript:XiangXi(" + row.ID + ")' class='l-btn deletes' style='padding:2px 5px 2px 5px' >详细列表</a>";
+                            return str;
+                        }
+                    }
 
                 ]],
                 toolbar: [{
@@ -528,7 +634,13 @@
                     text: '发货',
                     iconCls: 'icon-add',
                     handler: function () {
-
+                        var rows = $('#FaHuoTT').datagrid('getSelections');
+                        if (rows.length != 1) {
+                            //alert("请选择要修改的商品！");
+                            $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                            return;
+                        }
+                        $("#BaoJia_ID").val(rows[0].ID);
                         $("#AddFaHuoOneDiv").css("display", "block");
                         $('#AddFaHuoOneDiv').dialog({
                             title: "信息处理",
@@ -545,7 +657,7 @@
                                              $.messager.alert("错误", "时间不可为空！", "errer");
                                              return;
                                          }
-                                         if ($("#FaHuoMoney").val().length <= 0)
+                                         if ($("#FahuoInt").val().length <= 0)
                                          {
                                              $.messager.alert("错误", "金额不可为空！", "errer");
                                              return;
@@ -567,6 +679,85 @@
                 onLoadSuccess: function () {
                 }
             });
+        }
+        //获取报价发货详细信息
+        function XiangXi(objID) {
+           
+            $("#XiangXiDIV").css("display", "block");
+            $('#XiangXiDIV').dialog({
+                title: "信息处理",
+                width: $("#FaHuoDIV").width() / 1.6,
+                height: $("#FaHuoDIV").height() / 1.4,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [
+                    {
+                        text: '关闭',
+                        handler: function () {
+                            $('#XiangXiDIV').dialog('close');
+                        }
+                    }]
+            });
+            var pars = {
+                ID: objID
+            };
+            $('#XiangXiTT').datagrid({
+                url: '/MasterBaoJia/FaHuoXiangXI',
+                title: '发货信息表',
+                fitColumns: true, //列自适应
+                nowrap: false,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 20,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [10, 20, 30],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                     {
+                         field: 'FaHuoTime', title: '发货时间',
+                         formatter: function (value, row, index) {
+                             return value==null?"":(eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                         }
+                     },
+                     { field: 'FahuoInt', title: '发货数量' },
+                     { field: 'FaHuoBak', title: '发货备注' },
+                     { field: 'PerSonName', title: '发货人员' },
+                     {
+                         field: 'AddTime', title: '创建时间',
+                             formatter: function (value, row, index) {
+                                 return value == null ? "" : (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                             }
+                        
+                     }, 
+                    {
+                        field: "edit", title: "操作",
+                        formatter: function (value, row, index) {
+                            var str = "<a href='javascript:DelXiangXi(" + row.ID + ")' class='l-btn deletes' style='padding:2px 5px 2px 5px' >删除</a>";
+                            return str;
+                        }
+                    }
+
+                ]],
+                toolbar: [
+                ],
+                onLoadSuccess: function () {
+                }
+            });
+        }
+        function DelXiangXi(objid) {
+            $.post("/MasterBaoJia/DelFahuoXiangXI", { "ID": objid }, function (Sdata) {
+                if (Sdata.ret == "ok") {
+                    $("#XiangXiTT").datagrid("reload");
+                    $("#FaHuoTT").datagrid("reload");
+                    $("#tt").datagrid("reload");
+                }
+                else {
+                    $.messager.alert("", Sdata.msg, "");
+                }
+            })
         }
         //将序列化成json格式后日期(毫秒数)转成日期格式
         function ChangeDateFormat(cellval) {
@@ -637,6 +828,52 @@
                 pageList: [15, 25, 35],
                 queryParams: pars,//往后台传递参数
                 columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                     { field: 'CPname', title: '产品名称' },
+                    { field: 'CPXingHao', title: '产品型号' },
+                    { field: 'CPShuLiang', title: '产品数量' },  
+                    { field: 'HanShui', title: '是否含税' },
+                    { field: 'BaoJiaMoney', title: '产品单价' },
+                     { field: 'PaoshuiMoney', title: '刨税单价' ,
+                     formatter: function (value, row, index) {
+                         var rtmoney = row.BaoJiaMoney == null ? 0 : row.BaoJiaMoney;                        
+                         if (row.HanShui == "含税")
+                         {
+                             rtmoney = (row.BaoJiaMoney / 1.17);                            
+                         }
+                         return rtmoney.toFixed(2);
+                     }
+                     },
+                    { field: 'BaoJiaYunFei', title: '运费单价' },
+                     {
+                         field: 'summoney', title: '单价总金额',
+                         formatter: function (value, row, index) {
+                             var str = row.BaoJiaMoney + row.BaoJiaYunFei;
+                             return str;
+                         }
+                     },
+                     { field: 'WinMoney', title: '最终报价', hidden: win == 1 ? false : true },
+                     { field: 'WinYunFei', title: '最终运费', hidden: win == 1 ? false : true },
+                     {
+                         field: 'Winsummoney', title: '最终总价', hidden: win == 1 ? false : true,
+                         formatter: function (value, row, index) {
+                             var str = row.WinMoney + row.WinYunFei;
+                             return str;
+                         }
+                     },
+                      { field: 'WinStr', title: '是否成功', hidden: win == 1 ? false : true },
+                     { field: 'bak', title: '备注信息', hidden: win == 1 ? false : true },
+                       {
+                           field: 'GhTime', title: '供货时间',
+                           formatter: function (value, row, index) {
+                               return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                           }
+                       },
+                    {
+                        field: 'AddTime', title: '申请时间', align: 'right',
+                        formatter: function (value, row, index) {
+                            return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                        }
+                    },
                      { field: 'KHname', title: '客户名称' },
                       { field: 'KHperson', title: '客户联系人' },
                       { field: 'KHzhiwu', title: '联系人职务' },
@@ -647,25 +884,7 @@
                     { field: 'DaiBanYunShu', title: '代办运输' },
                     { field: 'JieShuanFanShi', title: '结算方式' },
                     { field: 'HeTongQianDing', title: '合同签订' },
-                    { field: 'CPname', title: '产品名称' },
-                    { field: 'CPXingHao', title: '产品型号' },
-                    { field: 'CPShuLiang', title: '产品数量' },
-                     { field: 'WinStr', title: '是否成功', hidden: win == 1 ? false : true },
-                     { field: 'bak', title: '备注信息', hidden: win == 1 ? false : true },
-                    {
-                        field: 'GhTime', title: '供货时间',
-                        formatter: function (value, row, index) {
-                            return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
-                        }
-                    },
-                    {
-                        field: 'AddTime', title: '申请时间', align: 'right',
-                        formatter: function (value, row, index) {
-                            return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
-                        }
-                    },
-                    { field: 'BaoJiaMoney', editor: { type: 'numberbox', options: { precision: 2 } }, title: '报价金额' },
-                      { field: 'WinMoney', title: '最终报价', hidden: win == 1 ? false : true }
+                   
 
                 ]],
                 onLoadSuccess: function () {
@@ -685,8 +904,6 @@
                 fitColumns: true, //列自适应
                 nowrap: true,
                 rownumbers: true,
-                onClickCell: onClickCell,
-                onAfterEdit: onAfterEdit,
                 idField: 'ID',//主键列的列明
                 loadMsg: '正在加载权限的信息...',
                 pagination: true,//是否有分页
@@ -705,6 +922,7 @@
                     { field: 'Addess', title: '供货地点' },
                     { field: 'DaiBanYunShu', title: '代办运输' },
                     { field: 'JieShuanFanShi', title: '结算方式' },
+                    { field: 'Denjiu', title: '发票模式' },
                     { field: 'HeTongQianDing', title: '合同签订' },
                     {
                         field: 'TOPaddtime', title: '申请时间', align: 'right',
@@ -745,8 +963,6 @@
                 fitColumns: true, //列自适应
                 nowrap: true,
                 rownumbers: true,
-                onClickCell: onClickCell,
-                onAfterEdit: onAfterEdit,
                 idField: 'ID',//主键列的列明
                 loadMsg: '正在加载权限的信息...',
                 pagination: true,//是否有分页
@@ -799,7 +1015,7 @@
                         formatter: function (value, row, index) {
                             var str = "";
                             if (row.WinStr == "成交") {
-                                str = "<a href='javascript:FaHuo(" + row.ID + ")' class='l-btn deletes' style='padding:2px 5px 2px 5px' >发货</a>";
+                                str = "<a href='javascript:FaHuo(" + row.TopId + ")' class='l-btn deletes' style='padding:2px 5px 2px 5px' >发货</a>";
                             }
                             else {
                                 str = "";
@@ -812,8 +1028,41 @@
                     $('#tb').show();
                     $("#tb").css("height", "auto");
                     $("#Sousuo").hide();
-                    $("#Sousuo_win").show();
+                    $("#Sousuo_win").show();                    
                 }
+            });
+            var pager = $('#tt').datagrid().datagrid('getPager');
+            pager.pagination({
+                buttons: [{
+                    iconCls: 'icon-search',
+                    text: '导出报表',
+                    handler: function () {
+                        //查询参数直接添加在url中         
+
+                        /* var url =$('#test').datagrid('options').url;
+                 
+                        // url = 'http://127.0.0.1:8080/web/AppAndRemoveServer.server?state=' +stateVal;   
+                 
+                       //重新赋值url 属性
+                 
+                         $('#test').datagrid('options').url=url;
+                 
+                         $("#test").datagrid('reload'); 
+                 
+                         */
+                        $(location).attr('href', '/MasterBaoJia/DownLoadExcel');
+                       
+                        return;
+                        $('#tt').datagrid('options').url = "/MasterBaoJia/DownLoadExcel";
+                        var queryParams = $('#tt').datagrid('options').queryParams;
+                       
+                        queryParams.outexe = true;
+                     
+                        $('#tt').datagrid('options').queryParams = queryParams;
+                        alert($('#tt').datagrid('options').url)
+                        $("#tt").datagrid('reload');
+                    }
+                }]
             });
         }
         //情况选项
@@ -827,6 +1076,51 @@
             $('#CPxh').combobox('clear');
             $('#YyZt').combobox('clear');
         }
+
+        //报价操作
+        function suFm() {
+            var resultId = $("#BaoJiaID").val();//信息ID
+            if (resultId == "") {
+                $.messager.alert('提醒', '错误没有选中修改信息');
+                $("#tt").datagrid('reload');
+                return;
+            }            
+            var finalRusult = $("#moneyBJ").val();//
+            var finalRusult1 = $("#yunfeiBJ").val();
+            var r = /^-?[0-9]/;//判断输入的是正整数
+            if (!r.test(finalRusult)) {
+                $.messager.alert('提醒', '请输入正整数！');
+                return;
+            }
+            if (!r.test(finalRusult1)) {
+                $.messager.alert('提醒', '请输入正整数！');
+                return;
+            }
+            $.ajax({
+                type: "post",
+                async: false,
+                url: "/MasterBaojia/editMoney",
+                data: {
+                    "resultId": resultId,
+                    "finalRusult": finalRusult,
+                    "Yunfei": finalRusult1
+                },
+                success: function (data) {
+                    if (data.ret == true) {
+                        $("#tt").datagrid('reload');
+                        clearForm();
+                    }
+                }
+            })
+        }
+        function clearForm() {
+            $('#ff').form('clear');
+            $('#dlg').dialog('close');
+        }
+        function submitForm(index, row, changes) {
+            //  alert( row.resultId+"--"+changes.finalResult)daliyResultRate;
+           
+        }
     </script>
     <style>
         html, body {
@@ -839,6 +1133,12 @@
             width: 90%;
             margin-top: 3px;
         }
+        thead {
+           font-size:18px;
+           font-weight:bold;            
+           
+        }
+
     </style>
 </head>
 <body class="easyui-layout">
@@ -867,7 +1167,7 @@
 </table>
         </div>
         <div id="mothdiv" class="easyui-layout" style="height:100%;">
-            <div  data-options="region:'north',title:'查询选项',iconCls:'icon-search'" style="height:80px">
+            <div  data-options="region:'north',title:'查询选项',iconCls:'icon-search'" style="height:auto;">
             <div class="easyui-panel" style="padding:5px;">
                 <a class="">查询时间</a>
                 <input class="easyui-datebox" id="Mutime" value="2017-01-01" style="width:120px">
@@ -875,22 +1175,48 @@
                 <a href="#" id="MonthBTN" class="easyui-linkbutton">提交</a>
                 <a href="#" id="PrintMonth" class="easyui-linkbutton"  data-options="iconCls:'icon-print'" >打印</a>
             </div>
+             <div class="easyui-panel" style="padding:5px">
+                 <a href="#" class="easyui-linkbutton" id="ZhList">总汇列表</a>
+                 <a href="#" class="easyui-linkbutton" id="MxList">明细列表</a>
+             </div>
             </div>
             <div  data-options="region:'center',title:'Main Title',iconCls:'icon-ok'" style="padding:10px">
                 <div id="Print_div">
                     <div style="height:25px"></div>
-                    <div style="text-align:center;"><h1><span id="h1time">___________</span> 创 建 信 息 总 汇 表</h1></div>
-                    <div style="height:65px"></div>
-                    <table style="BORDER-COLLAPSE: collapse; width:80%; text-align:center;font-size:18px" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1">
-                        <thead><tr><td>分类</td><td>成功</td><td>待定</td><td>失败</td><td>合计</td></tr></thead>
-                        <tbody id="GetMonThData"></tbody>
-                    </table>
+                    <div id="divZhList">                       
+                        <div style="text-align:center;"><h1><span id="h1time">___________</span> 创 建 信 息 总 汇 表</h1></div>
+                        <div style="height:35px"></div>
+                        <table style="BORDER-COLLAPSE: collapse; width:80%; text-align:center;font-size:18px" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1">
+                            <thead><tr><td>分类</td><td>成功</td><td>待定</td><td>失败</td><td>合计</td></tr></thead>
+                            <tbody id="GetMonThData"></tbody>
+                        </table>
+                        <div style="height:25px"></div>
+                        <div style="text-align:center;"><h1><span id="h2time">___________</span>  信 息 金 额 总 汇 表</h1></div>
+                        <div style="height:35px"></div>
+                        <table style="BORDER-COLLAPSE: collapse; width:80%; text-align:center;font-size:18px" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1">
+                            <thead><tr><td>分类</td><td>成功</td><td>待定</td><td>失败</td><td>合计</td></tr></thead>
+                            <tbody id="GetmoneyThData"></tbody>
+                        </table>
+                        <div style="height:65px"></div>
+                        <table style="BORDER-COLLAPSE: collapse; width:80%; text-align:center;font-size:18px" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1" id="DDpercent">
+                          
+                        </table>
+                        <div id="LostItem0" style="width:90%;text-align:right;font-size:18px"></div>
+                        <div id="LostItem1" style="width:90%;text-align:right;font-size:18px"></div>
+
+                    </div>
+                    <div id="divMxList">
+                        <table style="BORDER-COLLAPSE: collapse; width:80%; text-align:center;font-size:18px" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1">
+                            <thead style=""><tr ><td>姓名</td><td>成功金额/百分比</td><td>待定金额/百分比</td><td>失败金额/百分比</td></tr></thead>
+                            <tbody id="MoneyListDa"></tbody>
+                        </table>
+
+                    </div>
+                    
                 </div>
               
             </div>
         </div>
-        
-
     </div>
     <div id="tb" style="padding:5px;height:auto">
         <div style="margin-bottom:5px">
@@ -997,6 +1323,7 @@
             <thead>
                 <tr><td>处理编号</td><td><input type="text" readonly="readonly" name="BaoJiaTOPID" id="WinID" /></td></tr>
                 <tr><td>项目名称</td><td><input type="text" readonly="readonly" name="XiangMuName" id="XiangMuName" /></td></tr>
+                <tr><td>是否含税</td><td><input type="text" readonly="readonly" name="HanShuiTD" id="HanShuiTD" /></td></tr>
                 <tr>
                     <td>处理方式</td>
                     <td>
@@ -1010,7 +1337,6 @@
                     </td>
                 </tr>
             </thead>
-            <tbody id="Selebody"></tbody>
             <tfoot>
                 <tr>
                     <td>处理备注</td>
@@ -1019,9 +1345,13 @@
                     </td>
                 </tr>
 
-            </tfoot>
+            </tfoot>  
         </table>
-        }
+        <table>
+            <tbody id="Selebody"></tbody>
+        </table>
+        
+         }
     </div>
     <div id="FaHuoDIV" style="height:100%; width:100%;">
         
@@ -1034,16 +1364,14 @@
             </thead>
         </table>
     </div>
-
-
     <div id="AddFaHuoOneDiv" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddFahuo", "MasterBaoJia", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "AddFahuoOne" }))
         {
-            <input type="hidden" id="H_FaHuoID" name="WinBakID" />
+            <input type="hidden" id="BaoJia_ID" name="BaoJia_ID" />
             <table>
                 <thead>
                     <tr><td>发货时间</td><td><input type="text" class="easyui-datebox"  name="FaHuoTime" id="FaHuoTime" /></td></tr>
-                    <tr><td>发货金额</td><td><input type="text" onkeyup='num(this)' name="FaHuoMoney" id="FaHuoMoney" /></td></tr>
+                    <tr><td>发货数量</td><td><input type="text" onkeyup='num(this)' name="FahuoInt" id="FahuoInt" /></td></tr>
                     <tr><td>备注</td><td><input type="text" name="FaHuoBak" id="FaHuoBak" /></td></tr>
                 </thead>
              
@@ -1051,5 +1379,49 @@
             </table>
          }
     </div>
+
+    <div id="dlg" class="easyui-dialog" title="Basic Dialog" data-options="iconCls:'icon-save'" style="width:400px;height:260px;padding:10px">      
+            <div style="padding:20px 30px 20px 30px">
+                <form id="ff" method="post">
+                    <table cellpadding="5">
+                        <tr>
+                            <td>ID号:</td>
+                            <td><input class="easyui-textbox" type="text" name="name" readonly="readonly" id="BaoJiaID" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>是否含税:</td>
+                            <td><input class="easyui-textbox" type="text" name="name" readonly="readonly" id="HanSHuiput" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>产品金额:</td>
+                            <td><input class="easyui-textbox" type="text" name="moneyBJ" id="moneyBJ" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>运费金额:</td>
+                            <td><input class="easyui-textbox" type="text" name="yunfeiBJ" id="yunfeiBJ" data-options="required:true" /></td>
+                        </tr>
+                     
+                    </table>
+                </form>
+                <div style="text-align:center;padding:5px">
+                    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="suFm()">提交</a>
+                    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">关闭</a>
+                </div>
+            </div>       
+    </div>
+
+
+   <div id="XiangXiDIV">
+       <table id="XiangXiTT" class="easyui-datagrid"  title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit">
+           <thead data-options="frozen:true">
+               <tr>
+                   <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
+                   <th data-options="field:'ID', width: 40">编号</th>
+               </tr>
+           </thead>
+       </table>
+   </div>
+       
+
 </body>
 </html>

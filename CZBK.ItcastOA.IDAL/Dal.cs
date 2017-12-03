@@ -25,6 +25,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IFileItemDal :IBaseDal<FileItem>
+    {
+      
+    }
+	
 	public partial interface ILogin_listDal :IBaseDal<Login_list>
     {
       
@@ -36,6 +41,21 @@ namespace CZBK.ItcastOA.IDAL
     }
 	
 	public partial interface IRoleInfoDal :IBaseDal<RoleInfo>
+    {
+      
+    }
+	
+	public partial interface IScheduleDal :IBaseDal<Schedule>
+    {
+      
+    }
+	
+	public partial interface IScheduleTypeDal :IBaseDal<ScheduleType>
+    {
+      
+    }
+	
+	public partial interface IScheduleUserDal :IBaseDal<ScheduleUser>
     {
       
     }

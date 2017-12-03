@@ -25,6 +25,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IFileItemService : IBaseService<FileItem>
+    {
+       
+    }   
+	
 	public partial interface ILogin_listService : IBaseService<Login_list>
     {
        
@@ -36,6 +41,21 @@ namespace CZBK.ItcastOA.IBLL
     }   
 	
 	public partial interface IRoleInfoService : IBaseService<RoleInfo>
+    {
+       
+    }   
+	
+	public partial interface IScheduleService : IBaseService<Schedule>
+    {
+       
+    }   
+	
+	public partial interface IScheduleTypeService : IBaseService<ScheduleType>
+    {
+       
+    }   
+	
+	public partial interface IScheduleUserService : IBaseService<ScheduleUser>
     {
        
     }   

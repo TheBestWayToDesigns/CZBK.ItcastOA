@@ -17,6 +17,7 @@ namespace CZBK.ItcastOA.Model
         public T_YSItems()
         {
             this.T_WinBak = new HashSet<T_WinBak>();
+            this.T_BaoJiaToP = new HashSet<T_BaoJiaToP>();
         }
     
         public long ID { get; set; }
@@ -26,5 +27,6 @@ namespace CZBK.ItcastOA.Model
         public string Remark { get; set; }
     
         public virtual ICollection<T_WinBak> T_WinBak { get; set; }
+        public virtual ICollection<T_BaoJiaToP> T_BaoJiaToP { get; set; }
     }
 }

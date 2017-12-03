@@ -35,6 +35,14 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class FileItemService :BaseService<FileItem>,IFileItemService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.FileItemDal;
+        }
+    }   
+	
 	public partial class Login_listService :BaseService<Login_list>,ILogin_listService
     {
         public override void SetCurretnDal()
@@ -56,6 +64,30 @@ namespace CZBK.ItcastOA.BLL
         public override void SetCurretnDal()
         {
             CurrentDal = this.GetCurrentDbSession.RoleInfoDal;
+        }
+    }   
+	
+	public partial class ScheduleService :BaseService<Schedule>,IScheduleService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.ScheduleDal;
+        }
+    }   
+	
+	public partial class ScheduleTypeService :BaseService<ScheduleType>,IScheduleTypeService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.ScheduleTypeDal;
+        }
+    }   
+	
+	public partial class ScheduleUserService :BaseService<ScheduleUser>,IScheduleUserService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.ScheduleUserDal;
         }
     }   
 	

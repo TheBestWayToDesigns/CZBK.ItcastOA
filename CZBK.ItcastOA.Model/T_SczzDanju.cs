@@ -37,11 +37,11 @@ namespace CZBK.ItcastOA.Model
         public Nullable<System.DateTime> JhzdrTime { get; set; }
     
         public virtual ICollection<T_CanPan> T_CanPan { get; set; }
-        public virtual UserInfo AddUserinfo { get; set; }
-        public virtual UserInfo CJSHuser { get; set; }
-        public virtual UserInfo jhzdruser { get; set; }
-        public virtual UserInfo Scshuser { get; set; }
         public virtual T_ShengChanZhiZhaoTopName T_ShengChanZhiZhaoTopName { get; set; }
-        public virtual UserInfo Upshuser { get; set; }
+        public virtual UserInfo UserInfo { get; set; }
+        public virtual UserInfo UserInfo1 { get; set; }
+        public virtual UserInfo UserInfo2 { get; set; }
+        public virtual UserInfo UserInfo3 { get; set; }
+        public virtual UserInfo UserInfo4 { get; set; }
     }
 }

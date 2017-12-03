@@ -19,7 +19,7 @@ namespace CZBK.ItcastOA.Model
             this.T_BaoJiaToP = new HashSet<T_BaoJiaToP>();
         }
     
-        public int ID { get; set; }
+        public long ID { get; set; }
         public string str { get; set; }
         public Nullable<bool> BOLL_ { get; set; }
         public Nullable<int> @int { get; set; }

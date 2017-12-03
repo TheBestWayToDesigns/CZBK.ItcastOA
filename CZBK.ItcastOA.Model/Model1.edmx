@@ -56,6 +56,15 @@
           <Property Name="ActionInfo_ID" Type="int" Nullable="false" />
           <Property Name="Department_ID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="FileItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Url" Type="nvarchar(max)" />
+          <Property Name="Del" Type="smallint" />
+          <Property Name="AddTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="Login_list">
           <Key>
             <PropertyRef Name="id" />
@@ -94,6 +103,39 @@
           <Property Name="ActionInfo_ID" Type="int" Nullable="false" />
           <Property Name="RoleInfo_ID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Schedule">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ScheduleTime" Type="datetime" Nullable="false" />
+          <Property Name="ScheduleAddTime" Type="datetime" Nullable="false" />
+          <Property Name="ScheduleUpdateTime" Type="datetime" />
+          <Property Name="ScheduleText" Type="text" />
+          <Property Name="ScheduleTypeID" Type="int" />
+          <Property Name="TextReadBak" Type="nvarchar(max)" />
+          <Property Name="TextReadUser" Type="int" />
+          <Property Name="TextReadTime" Type="datetime" />
+          <Property Name="FileItemID" Type="int" />
+        </EntityType>
+        <EntityType Name="ScheduleType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemText" Type="nvarchar" MaxLength="50" />
+          <Property Name="Del" Type="smallint" />
+        </EntityType>
+        <EntityType Name="ScheduleUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="UpID" Type="int" />
+          <Property Name="Del" Type="smallint" />
+        </EntityType>
         <EntityType Name="SysField">
           <Key>
             <PropertyRef Name="ID" />
@@ -125,13 +167,14 @@
           <Property Name="AddTime" Type="datetime" Nullable="false" />
           <Property Name="DelFlag" Type="smallint" Nullable="false" />
           <Property Name="KHComname" Type="nvarchar" MaxLength="350" />
-          <Property Name="HanShuiID" Type="int" />
+          <Property Name="HanShuiID" Type="bigint" />
+          <Property Name="PiaoJuID" Type="bigint" />
         </EntityType>
         <EntityType Name="T_BoolItem">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="str" Type="nvarchar" MaxLength="150" />
           <Property Name="BOLL_" Type="bit" />
           <Property Name="int" Type="int" />
@@ -223,18 +266,16 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="WinBakID" Type="bigint" />
           <Property Name="FaHuoTime" Type="datetime" />
-          <Property Name="FaHuoMoney" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="FaHuoID" Type="int" />
           <Property Name="AddUser" Type="int" />
           <Property Name="AddTime" Type="datetime" />
           <Property Name="FaHuoBak" Type="nvarchar(max)" />
           <Property Name="EditTime" Type="datetime" />
-          <Property Name="EditQianMoney" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="EditQianFahuoInt" Type="decimal" Precision="18" Scale="2" />
           <Property Name="EditUser" Type="int" />
           <Property Name="Del" Type="smallint" />
-          <Property Name="WinFH" Type="smallint" />
+          <Property Name="BaoJia_ID" Type="bigint" Nullable="false" />
+          <Property Name="FahuoInt" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="T_YSItems">
           <Key>
@@ -292,8 +333,8 @@
           </Key>
           <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BaoJiaTop_id" Type="bigint" Nullable="false" />
-          <Property Name="CPname" Type="bigint" Nullable="false" />
-          <Property Name="CPXingHao" Type="bigint" Nullable="false" />
+          <Property Name="CPname" Type="bigint" />
+          <Property Name="CPXingHao" Type="bigint" />
           <Property Name="CPGuiGe" Type="nvarchar" MaxLength="150" />
           <Property Name="CPShuLiang" Type="decimal" Precision="18" Scale="3" Nullable="false" />
           <Property Name="AddTime" Type="datetime" Nullable="false" />
@@ -310,6 +351,8 @@
           <Property Name="BaoJiaYunFei" Type="decimal" Precision="18" Scale="2" />
           <Property Name="EditQianYunFei" Type="decimal" Precision="18" Scale="2" />
           <Property Name="WinYunFei" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="550" />
+          <Property Name="CPDengJiID" Type="bigint" />
         </EntityType>
         <EntityType Name="YXB_Kh_list">
           <Key>
@@ -361,6 +404,18 @@
             </Principal>
             <Dependent Role="T_CanPan">
               <PropertyRef Name="AddUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_baojia_conameXinghao">
+          <End Role="T_ChanPinName" Type="Self.T_ChanPinName" Multiplicity="0..1" />
+          <End Role="YXB_Baojia" Type="Self.YXB_Baojia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_Baojia">
+              <PropertyRef Name="CPname" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -476,6 +531,54 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Schedule_ScheduleType">
+          <End Role="ScheduleType" Type="Self.ScheduleType" Multiplicity="0..1" />
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScheduleType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="ScheduleTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schedule_UserInfo">
+          <End Role="FileItem" Type="Self.FileItem" Multiplicity="0..1" />
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FileItem">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="FileItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schedule_UserInfo1">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ScheduleUser_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="0..1" />
+          <End Role="ScheduleUser" Type="Self.ScheduleUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ScheduleUser">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SczzDanjuID">
           <End Role="T_SczzDanju" Type="Self.T_SczzDanju" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -523,6 +626,18 @@
             </Principal>
             <Dependent Role="T_BaoJiaToP">
               <PropertyRef Name="HanShuiID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_BaoJiaToP_PiaoJue">
+          <End Role="T_YSItems" Type="Self.T_YSItems" Multiplicity="0..1" />
+          <End Role="T_BaoJiaToP" Type="Self.T_BaoJiaToP" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_YSItems">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_BaoJiaToP">
+              <PropertyRef Name="PiaoJuID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -599,6 +714,18 @@
             </Principal>
             <Dependent Role="T_WinBak">
               <PropertyRef Name="BaoJiaTOPID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_WinBakFaHuo_BaoJia">
+          <End Role="YXB_Baojia" Type="Self.YXB_Baojia" Multiplicity="1" />
+          <End Role="T_WinBakFaHuo" Type="Self.T_WinBakFaHuo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="YXB_Baojia">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="T_WinBakFaHuo">
+              <PropertyRef Name="BaoJia_ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -712,46 +839,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_winbakid">
-          <End Role="T_WinBak" Type="Self.T_WinBak" Multiplicity="0..1" />
-          <End Role="T_WinBakFaHuo" Type="Self.T_WinBakFaHuo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="T_WinBak">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="T_WinBakFaHuo">
-              <PropertyRef Name="WinBakID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_YXB_Baojia_T_BaoJiaToP1">
-          <End Role="T_BaoJiaToP" Type="Self.T_BaoJiaToP" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="YXB_Baojia" Type="Self.YXB_Baojia" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="T_BaoJiaToP">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="YXB_Baojia">
-              <PropertyRef Name="BaoJiaTop_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_YXB_Baojia_T_ChanPinName">
-          <End Role="T_ChanPinName" Type="Self.T_ChanPinName" Multiplicity="1" />
+        <Association Name="FK_YXB_Baojia_CanPinDengji">
+          <End Role="T_ChanPinName" Type="Self.T_ChanPinName" Multiplicity="0..1" />
           <End Role="YXB_Baojia" Type="Self.YXB_Baojia" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="T_ChanPinName">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="YXB_Baojia">
-              <PropertyRef Name="CPname" />
+              <PropertyRef Name="CPDengJiID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_YXB_Baojia_T_ChanPinName1">
-          <End Role="T_ChanPinName" Type="Self.T_ChanPinName" Multiplicity="1" />
+        <Association Name="FK_YXB_Baojia_CanPinXinghao">
+          <End Role="T_ChanPinName" Type="Self.T_ChanPinName" Multiplicity="0..1" />
           <End Role="YXB_Baojia" Type="Self.YXB_Baojia" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="T_ChanPinName">
@@ -762,8 +863,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_YXB_Baojia_T_BaoJiaToP1">
+          <End Role="T_BaoJiaToP" Type="Self.T_BaoJiaToP" Multiplicity="1" />
+          <End Role="YXB_Baojia" Type="Self.YXB_Baojia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_BaoJiaToP">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="YXB_Baojia">
+              <PropertyRef Name="BaoJiaTop_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_YXB_Kh_list_UserInfo">
-          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="YXB_Kh_list" Type="Self.YXB_Kh_list" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="UserInfo">
@@ -791,10 +906,14 @@
           <EntitySet Name="BumenInfoSet" EntityType="Self.BumenInfoSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DepartmentActionInfo" EntityType="Self.DepartmentActionInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FileItem" EntityType="Self.FileItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Login_list" EntityType="Self.Login_list" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="R_UserInfo_ActionInfo" EntityType="Self.R_UserInfo_ActionInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleInfo" EntityType="Self.RoleInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleInfoActionInfo" EntityType="Self.RoleInfoActionInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ScheduleType" EntityType="Self.ScheduleType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ScheduleUser" EntityType="Self.ScheduleUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SysField" EntityType="Self.SysField" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_BaoJiaToP" EntityType="Self.T_BaoJiaToP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_BoolItem" EntityType="Self.T_BoolItem" Schema="dbo" store:Type="Tables" />
@@ -822,6 +941,10 @@
           <AssociationSet Name="FK_adduserid" Association="Self.FK_adduserid">
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="T_CanPan" EntitySet="T_CanPan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_baojia_conameXinghao" Association="Self.FK_baojia_conameXinghao">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
           </AssociationSet>
           <AssociationSet Name="FK_Bumen" Association="Self.FK_Bumen">
             <End Role="BumenInfoSet" EntitySet="BumenInfoSet" />
@@ -859,6 +982,22 @@
             <End Role="RoleInfo" EntitySet="RoleInfo" />
             <End Role="RoleInfoActionInfo" EntitySet="RoleInfoActionInfo" />
           </AssociationSet>
+          <AssociationSet Name="FK_Schedule_ScheduleType" Association="Self.FK_Schedule_ScheduleType">
+            <End Role="ScheduleType" EntitySet="ScheduleType" />
+            <End Role="Schedule" EntitySet="Schedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schedule_UserInfo" Association="Self.FK_Schedule_UserInfo">
+            <End Role="FileItem" EntitySet="FileItem" />
+            <End Role="Schedule" EntitySet="Schedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schedule_UserInfo1" Association="Self.FK_Schedule_UserInfo1">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="Schedule" EntitySet="Schedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ScheduleUser_UserInfo" Association="Self.FK_ScheduleUser_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="ScheduleUser" EntitySet="ScheduleUser" />
+          </AssociationSet>
           <AssociationSet Name="FK_SczzDanjuID" Association="Self.FK_SczzDanjuID">
             <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
             <End Role="T_CanPan" EntitySet="T_CanPan" />
@@ -873,6 +1012,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_T_BaoJiaToP_Hanshui" Association="Self.FK_T_BaoJiaToP_Hanshui">
             <End Role="T_BoolItem" EntitySet="T_BoolItem" />
+            <End Role="T_BaoJiaToP" EntitySet="T_BaoJiaToP" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_BaoJiaToP_PiaoJue" Association="Self.FK_T_BaoJiaToP_PiaoJue">
+            <End Role="T_YSItems" EntitySet="T_YSItems" />
             <End Role="T_BaoJiaToP" EntitySet="T_BaoJiaToP" />
           </AssociationSet>
           <AssociationSet Name="FK_T_BaoJiaToP_YXB_Kh_list" Association="Self.FK_T_BaoJiaToP_YXB_Kh_list">
@@ -898,6 +1041,10 @@
           <AssociationSet Name="FK_T_WinBak_YXB_Baojia" Association="Self.FK_T_WinBak_YXB_Baojia">
             <End Role="T_BaoJiaToP" EntitySet="T_BaoJiaToP" />
             <End Role="T_WinBak" EntitySet="T_WinBak" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_WinBakFaHuo_BaoJia" Association="Self.FK_T_WinBakFaHuo_BaoJia">
+            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
+            <End Role="T_WinBakFaHuo" EntitySet="T_WinBakFaHuo" />
           </AssociationSet>
           <AssociationSet Name="FK_T_WinBakFaHuo_EditUser" Association="Self.FK_T_WinBakFaHuo_EditUser">
             <End Role="UserInfo" EntitySet="UserInfo" />
@@ -935,20 +1082,16 @@
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="UserInfoRoleInfo" EntitySet="UserInfoRoleInfo" />
           </AssociationSet>
-          <AssociationSet Name="FK_winbakid" Association="Self.FK_winbakid">
-            <End Role="T_WinBak" EntitySet="T_WinBak" />
-            <End Role="T_WinBakFaHuo" EntitySet="T_WinBakFaHuo" />
+          <AssociationSet Name="FK_YXB_Baojia_CanPinDengji" Association="Self.FK_YXB_Baojia_CanPinDengji">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YXB_Baojia_CanPinXinghao" Association="Self.FK_YXB_Baojia_CanPinXinghao">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
           </AssociationSet>
           <AssociationSet Name="FK_YXB_Baojia_T_BaoJiaToP1" Association="Self.FK_YXB_Baojia_T_BaoJiaToP1">
             <End Role="T_BaoJiaToP" EntitySet="T_BaoJiaToP" />
-            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_YXB_Baojia_T_ChanPinName" Association="Self.FK_YXB_Baojia_T_ChanPinName">
-            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
-            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_YXB_Baojia_T_ChanPinName1" Association="Self.FK_YXB_Baojia_T_ChanPinName1">
-            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
           </AssociationSet>
           <AssociationSet Name="FK_YXB_Kh_list_UserInfo" Association="Self.FK_YXB_Kh_list_UserInfo">
@@ -965,17 +1108,12 @@
     <edmx:ConceptualModels>
       <Schema Namespace="OAModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="OAEntities" p1:LazyLoadingEnabled="true">
-          <EntitySet Name="UserInfo" EntityType="OAModel.UserInfo" />
           <EntitySet Name="ActionInfo" EntityType="OAModel.ActionInfo" />
           <EntitySet Name="Department" EntityType="OAModel.Department" />
           <EntitySet Name="R_UserInfo_ActionInfo" EntityType="OAModel.R_UserInfo_ActionInfo" />
           <EntitySet Name="RoleInfo" EntityType="OAModel.RoleInfo" />
           <AssociationSet Name="FK_ActionInfoR_UserInfo_ActionInfo" Association="OAModel.FK_ActionInfoR_UserInfo_ActionInfo">
             <End Role="ActionInfo" EntitySet="ActionInfo" />
-            <End Role="R_UserInfo_ActionInfo" EntitySet="R_UserInfo_ActionInfo" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserInfoR_UserInfo_ActionInfo" Association="OAModel.FK_UserInfoR_UserInfo_ActionInfo">
-            <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="R_UserInfo_ActionInfo" EntitySet="R_UserInfo_ActionInfo" />
           </AssociationSet>
           <AssociationSet Name="DepartmentActionInfo" Association="OAModel.DepartmentActionInfo">
@@ -986,111 +1124,119 @@
             <End Role="ActionInfo" EntitySet="ActionInfo" />
             <End Role="RoleInfo" EntitySet="RoleInfo" />
           </AssociationSet>
-          <AssociationSet Name="UserInfoDepartment" Association="OAModel.UserInfoDepartment">
-            <End Role="Department" EntitySet="Department" />
-            <End Role="UserInfo" EntitySet="UserInfo" />
-          </AssociationSet>
-          <AssociationSet Name="UserInfoRoleInfo" Association="OAModel.UserInfoRoleInfo">
-            <End Role="RoleInfo" EntitySet="RoleInfo" />
-            <End Role="UserInfo" EntitySet="UserInfo" />
-          </AssociationSet>
           <EntitySet Name="BumenInfoSet" EntityType="OAModel.BumenInfoSet" />
-          <EntitySet Name="T_BoolItem" EntityType="OAModel.T_BoolItem" />
           <EntitySet Name="YXB_Kh_list" EntityType="OAModel.YXB_Kh_list" />
-          <AssociationSet Name="FK_YXB_Kh_list_UserInfo" Association="OAModel.FK_YXB_Kh_list_UserInfo">
-            <End Role="UserInfo" EntitySet="UserInfo" />
-            <End Role="YXB_Kh_list" EntitySet="YXB_Kh_list" />
-          </AssociationSet>
           <EntitySet Name="Login_list" EntityType="OAModel.Login_list" />
-          <AssociationSet Name="FK_Login_list_UserInfo" Association="OAModel.FK_Login_list_UserInfo">
-            <End Role="UserInfo" EntitySet="UserInfo" />
-            <End Role="Login_list" EntitySet="Login_list" />
-          </AssociationSet>
           <EntitySet Name="SysFields" EntityType="OAModel.SysField" />
-          <EntitySet Name="T_ChanPinName" EntityType="OAModel.T_ChanPinName" />
           <EntitySet Name="T_YSItems" EntityType="OAModel.T_YSItems" />
-          <AssociationSet Name="FK_T_ChanPinName_T_ChanPinName" Association="OAModel.FK_T_ChanPinName_T_ChanPinName">
-            <End Role="UserInfo" EntitySet="UserInfo" />
-            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
-          </AssociationSet>
           <EntitySet Name="T_CanPan" EntityType="OAModel.T_CanPan" />
           <EntitySet Name="T_SczzItem" EntityType="OAModel.T_SczzItem" />
           <EntitySet Name="T_ShengChanZhiZhaoTopName" EntityType="OAModel.T_ShengChanZhiZhaoTopName" />
-          <AssociationSet Name="FK_adduserid" Association="OAModel.FK_adduserid">
-            <End Role="UserInfo" EntitySet="UserInfo" />
-            <End Role="T_CanPan" EntitySet="T_CanPan" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OverUserID" Association="OAModel.FK_OverUserID">
-            <End Role="UserInfo" EntitySet="UserInfo" />
-            <End Role="T_CanPan" EntitySet="T_CanPan" />
-          </AssociationSet>
           <AssociationSet Name="FK_SczzItemsID" Association="OAModel.FK_SczzItemsID">
             <End Role="T_SczzItem" EntitySet="T_SczzItem" />
             <End Role="T_CanPan" EntitySet="T_CanPan" />
-          </AssociationSet>
-          <AssociationSet Name="FK_T_SczzItem_UserInfo" Association="OAModel.FK_T_SczzItem_UserInfo">
-            <End Role="UserInfo" EntitySet="UserInfo" />
-            <End Role="T_SczzItem" EntitySet="T_SczzItem" />
-          </AssociationSet>
-          <AssociationSet Name="FK_T_ShengChanZhiZhaoTopName_UserInfo" Association="OAModel.FK_T_ShengChanZhiZhaoTopName_UserInfo">
-            <End Role="UserInfo" EntitySet="UserInfo" />
-            <End Role="T_ShengChanZhiZhaoTopName" EntitySet="T_ShengChanZhiZhaoTopName" />
           </AssociationSet>
           <EntitySet Name="T_SczzDanju" EntityType="OAModel.T_SczzDanju" />
           <AssociationSet Name="FK_SczzDanjuID" Association="OAModel.FK_SczzDanjuID">
             <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
             <End Role="T_CanPan" EntitySet="T_CanPan" />
           </AssociationSet>
-          <AssociationSet Name="FK_AddUser" Association="OAModel.FK_AddUser">
-            <End Role="UserInfo" EntitySet="UserInfo" />
-            <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CheJianShenHe" Association="OAModel.FK_CheJianShenHe">
-            <End Role="UserInfo" EntitySet="UserInfo" />
-            <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Jhzdr" Association="OAModel.FK_Jhzdr">
-            <End Role="UserInfo" EntitySet="UserInfo" />
-            <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ShenChanSheHe" Association="OAModel.FK_ShenChanSheHe">
-            <End Role="UserInfo" EntitySet="UserInfo" />
-            <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
-          </AssociationSet>
           <AssociationSet Name="FK_TopName" Association="OAModel.FK_TopName">
             <End Role="T_ShengChanZhiZhaoTopName" EntitySet="T_ShengChanZhiZhaoTopName" />
             <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
           </AssociationSet>
-          <AssociationSet Name="FK_UpShenHe" Association="OAModel.FK_UpShenHe">
-            <End Role="UserInfo" EntitySet="UserInfo" />
-            <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Bumen" Association="OAModel.FK_Bumen">
-            <End Role="BumenInfoSet" EntitySet="BumenInfoSet" />
-            <End Role="UserInfo" EntitySet="UserInfo" />
-          </AssociationSet>
           <EntitySet Name="T_WinBak" EntityType="OAModel.T_WinBak" />
-          <EntitySet Name="T_WinBakFaHuo" EntityType="OAModel.T_WinBakFaHuo" />
           <AssociationSet Name="FK_T_WinBak_T_WinBak_Items" Association="OAModel.FK_T_WinBak_T_WinBak_Items">
             <End Role="T_YSItems" EntitySet="T_YSItems" />
             <End Role="T_WinBak" EntitySet="T_WinBak" />
           </AssociationSet>
-          <AssociationSet Name="FK_winbakid" Association="OAModel.FK_winbakid">
-            <End Role="T_WinBak" EntitySet="T_WinBak" />
-            <End Role="T_WinBakFaHuo" EntitySet="T_WinBakFaHuo" />
+          <EntitySet Name="UserInfoes" EntityType="OAModel.UserInfo" />
+          <AssociationSet Name="FK_Bumen" Association="OAModel.FK_Bumen">
+            <End Role="BumenInfoSet" EntitySet="BumenInfoSet" />
+            <End Role="UserInfo" EntitySet="UserInfoes" />
           </AssociationSet>
-          <AssociationSet Name="FK_T_WinBakFaHuo_EditUser" Association="OAModel.FK_T_WinBakFaHuo_EditUser">
-            <End Role="UserInfo" EntitySet="UserInfo" />
-            <End Role="T_WinBakFaHuo" EntitySet="T_WinBakFaHuo" />
+          <AssociationSet Name="FK_Login_list_UserInfo" Association="OAModel.FK_Login_list_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="Login_list" EntitySet="Login_list" />
           </AssociationSet>
-          <AssociationSet Name="FK_T_WinBakFaHuo_UserINfo" Association="OAModel.FK_T_WinBakFaHuo_UserINfo">
-            <End Role="UserInfo" EntitySet="UserInfo" />
-            <End Role="T_WinBakFaHuo" EntitySet="T_WinBakFaHuo" />
+          <AssociationSet Name="FK_UserInfoR_UserInfo_ActionInfo" Association="OAModel.FK_UserInfoR_UserInfo_ActionInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="R_UserInfo_ActionInfo" EntitySet="R_UserInfo_ActionInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_adduserid" Association="OAModel.FK_adduserid">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="T_CanPan" EntitySet="T_CanPan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OverUserID" Association="OAModel.FK_OverUserID">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="T_CanPan" EntitySet="T_CanPan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AddUser" Association="OAModel.FK_AddUser">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CheJianShenHe" Association="OAModel.FK_CheJianShenHe">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Jhzdr" Association="OAModel.FK_Jhzdr">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShenChanSheHe" Association="OAModel.FK_ShenChanSheHe">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UpShenHe" Association="OAModel.FK_UpShenHe">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_SczzItem_UserInfo" Association="OAModel.FK_T_SczzItem_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="T_SczzItem" EntitySet="T_SczzItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_ShengChanZhiZhaoTopName_UserInfo" Association="OAModel.FK_T_ShengChanZhiZhaoTopName_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="T_ShengChanZhiZhaoTopName" EntitySet="T_ShengChanZhiZhaoTopName" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YXB_Kh_list_UserInfo" Association="OAModel.FK_YXB_Kh_list_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="YXB_Kh_list" EntitySet="YXB_Kh_list" />
+          </AssociationSet>
+          <AssociationSet Name="UserInfoDepartment" Association="OAModel.UserInfoDepartment">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="UserInfoRoleInfo" Association="OAModel.UserInfoRoleInfo">
+            <End Role="RoleInfo" EntitySet="RoleInfo" />
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+          </AssociationSet>
+          <EntitySet Name="T_ChanPinName" EntityType="OAModel.T_ChanPinName" />
+          <EntitySet Name="YXB_Baojia" EntityType="OAModel.YXB_Baojia" />
+          <AssociationSet Name="FK_baojia_conameXinghao" Association="OAModel.FK_baojia_conameXinghao">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_ChanPinName_T_ChanPinName" Association="OAModel.FK_T_ChanPinName_T_ChanPinName">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YXB_Baojia_CanPinXinghao" Association="OAModel.FK_YXB_Baojia_CanPinXinghao">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YXBBaojia_Userinf" Association="OAModel.FK_YXBBaojia_Userinf">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
           </AssociationSet>
           <EntitySet Name="T_BaoJiaToP" EntityType="OAModel.T_BaoJiaToP" />
-          <EntitySet Name="YXB_Baojia" EntityType="OAModel.YXB_Baojia" />
+          <EntitySet Name="T_BoolItem" EntityType="OAModel.T_BoolItem" />
           <AssociationSet Name="FK_T_BaoJiaToP_Hanshui" Association="OAModel.FK_T_BaoJiaToP_Hanshui">
             <End Role="T_BoolItem" EntitySet="T_BoolItem" />
+            <End Role="T_BaoJiaToP" EntitySet="T_BaoJiaToP" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_BaoJiaToP_PiaoJue" Association="OAModel.FK_T_BaoJiaToP_PiaoJue">
+            <End Role="T_YSItems" EntitySet="T_YSItems" />
             <End Role="T_BaoJiaToP" EntitySet="T_BaoJiaToP" />
           </AssociationSet>
           <AssociationSet Name="FK_T_BaoJiaToP_YXB_Kh_list" Association="OAModel.FK_T_BaoJiaToP_YXB_Kh_list">
@@ -1105,62 +1251,44 @@
             <End Role="T_BaoJiaToP" EntitySet="T_BaoJiaToP" />
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
           </AssociationSet>
-          <AssociationSet Name="FK_YXB_Baojia_T_ChanPinName" Association="OAModel.FK_YXB_Baojia_T_ChanPinName">
+          <AssociationSet Name="FK_YXB_Baojia_CanPinDengji" Association="OAModel.FK_YXB_Baojia_CanPinDengji">
             <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
           </AssociationSet>
-          <AssociationSet Name="FK_YXB_Baojia_T_ChanPinName1" Association="OAModel.FK_YXB_Baojia_T_ChanPinName1">
-            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+          <EntitySet Name="T_WinBakFaHuo" EntityType="OAModel.T_WinBakFaHuo" />
+          <AssociationSet Name="FK_T_WinBakFaHuo_BaoJia" Association="OAModel.FK_T_WinBakFaHuo_BaoJia">
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
+            <End Role="T_WinBakFaHuo" EntitySet="T_WinBakFaHuo" />
           </AssociationSet>
-          <AssociationSet Name="FK_YXBBaojia_Userinf" Association="OAModel.FK_YXBBaojia_Userinf">
-            <End Role="UserInfo" EntitySet="UserInfo" />
-            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
+          <AssociationSet Name="FK_T_WinBakFaHuo_EditUser" Association="OAModel.FK_T_WinBakFaHuo_EditUser">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="T_WinBakFaHuo" EntitySet="T_WinBakFaHuo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_WinBakFaHuo_UserINfo" Association="OAModel.FK_T_WinBakFaHuo_UserINfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="T_WinBakFaHuo" EntitySet="T_WinBakFaHuo" />
+          </AssociationSet>
+          <EntitySet Name="FileItems" EntityType="OAModel.FileItem" />
+          <EntitySet Name="Schedules" EntityType="OAModel.Schedule" />
+          <EntitySet Name="ScheduleTypes" EntityType="OAModel.ScheduleType" />
+          <EntitySet Name="ScheduleUsers" EntityType="OAModel.ScheduleUser" />
+          <AssociationSet Name="FK_Schedule_UserInfo" Association="OAModel.FK_Schedule_UserInfo">
+            <End Role="FileItem" EntitySet="FileItems" />
+            <End Role="Schedule" EntitySet="Schedules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schedule_ScheduleType" Association="OAModel.FK_Schedule_ScheduleType">
+            <End Role="ScheduleType" EntitySet="ScheduleTypes" />
+            <End Role="Schedule" EntitySet="Schedules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schedule_UserInfo1" Association="OAModel.FK_Schedule_UserInfo1">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="Schedule" EntitySet="Schedules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ScheduleUser_UserInfo" Association="OAModel.FK_ScheduleUser_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="ScheduleUser" EntitySet="ScheduleUsers" />
           </AssociationSet>
           </EntityContainer>
-        <EntityType Name="UserInfo">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="UName" Type="String" MaxLength="32" Unicode="true" FixedLength="false" />
-          <Property Name="UPwd" Type="String" Nullable="false" Unicode="true" FixedLength="false" MaxLength="255" />
-          <Property Name="SubTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DelFlag" Type="Int16" Nullable="false" />
-          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Remark" Type="String" MaxLength="256" Unicode="true" FixedLength="false" />
-          <Property Name="Sort" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="R_UserInfo_ActionInfo" Relationship="OAModel.FK_UserInfoR_UserInfo_ActionInfo" FromRole="UserInfo" ToRole="R_UserInfo_ActionInfo" />
-          <NavigationProperty Name="Department" Relationship="OAModel.UserInfoDepartment" FromRole="UserInfo" ToRole="Department" />
-          <NavigationProperty Name="RoleInfo" Relationship="OAModel.UserInfoRoleInfo" FromRole="UserInfo" ToRole="RoleInfo" />
-          <Property Name="OverTime" Type="DateTime" Precision="3" />
-          <Property Name="UserXiaoHao" Type="Int32" />
-          <Property Name="Click" Type="Int32" />
-          <Property Name="ThisMastr" Type="Boolean" />
-          <Property Name="MasterID" Type="Int32" />
-          <Property Name="Login_now" Type="String" Unicode="true" FixedLength="false" MaxLength="255" />
-          <Property Name="CityID" Type="Int32" />
-          <Property Name="Umoney" Type="Decimal" Precision="18" Scale="3" />
-          <NavigationProperty Name="YXB_Kh_list" Relationship="OAModel.FK_YXB_Kh_list_UserInfo" FromRole="UserInfo" ToRole="YXB_Kh_list" />
-          <NavigationProperty Name="Login_list" Relationship="OAModel.FK_Login_list_UserInfo" FromRole="UserInfo" ToRole="Login_list" />
-          <NavigationProperty Name="T_ChanPinName" Relationship="OAModel.FK_T_ChanPinName_T_ChanPinName" FromRole="UserInfo" ToRole="T_ChanPinName" />
-          <NavigationProperty Name="T_CanPan" Relationship="OAModel.FK_adduserid" FromRole="UserInfo" ToRole="T_CanPan" />
-          <NavigationProperty Name="T_CanPan1" Relationship="OAModel.FK_OverUserID" FromRole="UserInfo" ToRole="T_CanPan" />
-          <NavigationProperty Name="T_SczzItem" Relationship="OAModel.FK_T_SczzItem_UserInfo" FromRole="UserInfo" ToRole="T_SczzItem" />
-          <NavigationProperty Name="T_ShengChanZhiZhaoTopName" Relationship="OAModel.FK_T_ShengChanZhiZhaoTopName_UserInfo" FromRole="UserInfo" ToRole="T_ShengChanZhiZhaoTopName" />
-          <NavigationProperty Name="T_SczzDanju" Relationship="OAModel.FK_AddUser" FromRole="UserInfo" ToRole="T_SczzDanju" />
-          <NavigationProperty Name="T_SczzDanju1" Relationship="OAModel.FK_CheJianShenHe" FromRole="UserInfo" ToRole="T_SczzDanju" />
-          <NavigationProperty Name="T_SczzDanju2" Relationship="OAModel.FK_Jhzdr" FromRole="UserInfo" ToRole="T_SczzDanju" />
-          <NavigationProperty Name="T_SczzDanju3" Relationship="OAModel.FK_ShenChanSheHe" FromRole="UserInfo" ToRole="T_SczzDanju" />
-          <NavigationProperty Name="T_SczzDanju4" Relationship="OAModel.FK_UpShenHe" FromRole="UserInfo" ToRole="T_SczzDanju" />
-          <Property Name="PerSonName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="QuXian" Type="Int32" />
-          <Property Name="BuMenID" Type="Int32" />
-          <NavigationProperty Name="BumenInfoSet" Relationship="OAModel.FK_Bumen" FromRole="UserInfo" ToRole="BumenInfoSet" />
-          <NavigationProperty Name="T_WinBakFaHuo" Relationship="OAModel.FK_T_WinBakFaHuo_EditUser" FromRole="UserInfo" ToRole="T_WinBakFaHuo" />
-          <NavigationProperty Name="T_WinBakFaHuo1" Relationship="OAModel.FK_T_WinBakFaHuo_UserINfo" FromRole="UserInfo" ToRole="T_WinBakFaHuo" />
-          <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_YXBBaojia_Userinf" FromRole="UserInfo" ToRole="YXB_Baojia" />
-          </EntityType>
         <EntityType Name="ActionInfo">
           <Key>
             <PropertyRef Name="ID" />
@@ -1195,8 +1323,8 @@
           <Property Type="Int32" Name="Level" Nullable="false" />
           <Property Type="Boolean" Name="IsLeaf" Nullable="false" />
           <NavigationProperty Name="ActionInfo" Relationship="OAModel.DepartmentActionInfo" FromRole="Department" ToRole="ActionInfo" />
-          <NavigationProperty Name="UserInfo" Relationship="OAModel.UserInfoDepartment" FromRole="Department" ToRole="UserInfo" />
           <Property Name="DelFlag" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="UserInfoes" Relationship="OAModel.UserInfoDepartment" FromRole="Department" ToRole="UserInfo" />
         </EntityType>
         <EntityType Name="R_UserInfo_ActionInfo">
           <Key>
@@ -1221,7 +1349,7 @@
           <Property Type="DateTime" Name="ModifiedOn" Nullable="false" Precision="3" />
           <Property Type="String" Name="Sort" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ActionInfo" Relationship="OAModel.RoleInfoActionInfo" FromRole="RoleInfo" ToRole="ActionInfo" />
-          <NavigationProperty Name="UserInfo" Relationship="OAModel.UserInfoRoleInfo" FromRole="RoleInfo" ToRole="UserInfo" />
+          <NavigationProperty Name="UserInfoes" Relationship="OAModel.UserInfoRoleInfo" FromRole="RoleInfo" ToRole="UserInfo" />
         </EntityType>
         <Association Name="FK_ActionInfoR_UserInfo_ActionInfo">
           <End Type="OAModel.ActionInfo" Role="ActionInfo" Multiplicity="1" />
@@ -1235,18 +1363,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserInfoR_UserInfo_ActionInfo">
-          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1" />
-          <End Type="OAModel.R_UserInfo_ActionInfo" Role="R_UserInfo_ActionInfo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserInfo">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="R_UserInfo_ActionInfo">
-              <PropertyRef Name="UserInfoID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="DepartmentActionInfo">
           <End Type="OAModel.ActionInfo" Role="ActionInfo" Multiplicity="*" />
           <End Type="OAModel.Department" Role="Department" Multiplicity="*" />
@@ -1254,14 +1370,6 @@
         <Association Name="RoleInfoActionInfo">
           <End Type="OAModel.ActionInfo" Role="ActionInfo" Multiplicity="*" />
           <End Type="OAModel.RoleInfo" Role="RoleInfo" Multiplicity="*" />
-        </Association>
-        <Association Name="UserInfoDepartment">
-          <End Type="OAModel.Department" Role="Department" Multiplicity="*" />
-          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="*" />
-        </Association>
-        <Association Name="UserInfoRoleInfo">
-          <End Type="OAModel.RoleInfo" Role="RoleInfo" Multiplicity="*" />
-          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="*" />
         </Association>
         <EntityType Name="BumenInfoSet">
           <Key>
@@ -1274,18 +1382,6 @@
           <Property Name="SubTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DelFlag" Type="Int16" Nullable="false" />
           <NavigationProperty Name="UserInfoes" Relationship="OAModel.FK_Bumen" FromRole="BumenInfoSet" ToRole="UserInfo" />
-        </EntityType>
-        <EntityType Name="T_BoolItem">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="str" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="BOLL_" Type="Boolean" />
-          <Property Name="int" Type="Int32" />
-          <Property Name="timener" Type="DateTime" Precision="3" />
-          <Property Name="ItemsID" Type="Int32" />
-          <NavigationProperty Name="T_BaoJiaToP" Relationship="OAModel.FK_T_BaoJiaToP_Hanshui" FromRole="T_BoolItem" ToRole="T_BaoJiaToP" />
         </EntityType>
         <EntityType Name="YXB_Kh_list">
           <Key>
@@ -1306,18 +1402,6 @@
           <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_YXB_Kh_list_UserInfo" FromRole="YXB_Kh_list" ToRole="UserInfo" />
           <NavigationProperty Name="T_BaoJiaToP" Relationship="OAModel.FK_T_BaoJiaToP_YXB_Kh_list" FromRole="YXB_Kh_list" ToRole="T_BaoJiaToP" />
         </EntityType>
-        <Association Name="FK_YXB_Kh_list_UserInfo">
-          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1" />
-          <End Type="OAModel.YXB_Kh_list" Role="YXB_Kh_list" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserInfo">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="YXB_Kh_list">
-              <PropertyRef Name="AddUser" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Login_list">
           <Key>
             <PropertyRef Name="id" />
@@ -1328,18 +1412,6 @@
           <Property Name="LoginTime" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_Login_list_UserInfo" FromRole="Login_list" ToRole="UserInfo" />
         </EntityType>
-        <Association Name="FK_Login_list_UserInfo">
-          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1" />
-          <End Type="OAModel.Login_list" Role="Login_list" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserInfo">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Login_list">
-              <PropertyRef Name="Userinfoid" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="SysField">
           <Key>
             <PropertyRef Name="ID" />
@@ -1356,20 +1428,6 @@
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
           <Property Name="UpdatePerson" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="T_ChanPinName">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MyTexts" Type="String" Nullable="false" MaxLength="350" FixedLength="false" Unicode="true" />
-          <Property Name="CreateTime" Type="DateTime" Precision="3" />
-          <Property Name="CreatePerson" Type="Int32" />
-          <Property Name="Del" Type="Int16" />
-          <Property Name="MyColums" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_T_ChanPinName_T_ChanPinName" FromRole="T_ChanPinName" ToRole="UserInfo" />
-          <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_YXB_Baojia_T_ChanPinName" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
-          <NavigationProperty Name="YXB_Baojia1" Relationship="OAModel.FK_YXB_Baojia_T_ChanPinName1" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
-          </EntityType>
         <EntityType Name="T_YSItems">
           <Key>
             <PropertyRef Name="ID" />
@@ -1380,19 +1438,8 @@
           <Property Name="DEL" Type="Int16" />
           <Property Name="Remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="T_WinBak" Relationship="OAModel.FK_T_WinBak_T_WinBak_Items" FromRole="T_YSItems" ToRole="T_WinBak" />
+          <NavigationProperty Name="T_BaoJiaToP" Relationship="OAModel.FK_T_BaoJiaToP_PiaoJue" FromRole="T_YSItems" ToRole="T_BaoJiaToP" />
         </EntityType>
-        <Association Name="FK_T_ChanPinName_T_ChanPinName">
-          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
-          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserInfo">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="T_ChanPinName">
-              <PropertyRef Name="CreatePerson" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="T_CanPan">
           <Key>
             <PropertyRef Name="ID" />
@@ -1409,10 +1456,10 @@
           <Property Name="ImageInt" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="OverUserID" Type="Int32" />
           <Property Name="Bak" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_adduserid" FromRole="T_CanPan" ToRole="UserInfo" />
-          <NavigationProperty Name="UserInfo1" Relationship="OAModel.FK_OverUserID" FromRole="T_CanPan" ToRole="UserInfo" />
           <NavigationProperty Name="T_SczzItem" Relationship="OAModel.FK_SczzItemsID" FromRole="T_CanPan" ToRole="T_SczzItem" />
           <NavigationProperty Name="T_SczzDanju" Relationship="OAModel.FK_SczzDanjuID" FromRole="T_CanPan" ToRole="T_SczzDanju" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_adduserid" FromRole="T_CanPan" ToRole="UserInfo" />
+          <NavigationProperty Name="UserInfo1" Relationship="OAModel.FK_OverUserID" FromRole="T_CanPan" ToRole="UserInfo" />
         </EntityType>
         <EntityType Name="T_SczzItem">
           <Key>
@@ -1435,33 +1482,9 @@
           <Property Name="Del" Type="Int16" Nullable="false" />
           <Property Name="addtime" Type="DateTime" Precision="3" />
           <Property Name="adduser" Type="Int32" />
-          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_T_ShengChanZhiZhaoTopName_UserInfo" FromRole="T_ShengChanZhiZhaoTopName" ToRole="UserInfo" />
           <NavigationProperty Name="T_SczzDanju" Relationship="OAModel.FK_TopName" FromRole="T_ShengChanZhiZhaoTopName" ToRole="T_SczzDanju" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_T_ShengChanZhiZhaoTopName_UserInfo" FromRole="T_ShengChanZhiZhaoTopName" ToRole="UserInfo" />
         </EntityType>
-        <Association Name="FK_adduserid">
-          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
-          <End Type="OAModel.T_CanPan" Role="T_CanPan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserInfo">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="T_CanPan">
-              <PropertyRef Name="AddUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_OverUserID">
-          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
-          <End Type="OAModel.T_CanPan" Role="T_CanPan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserInfo">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="T_CanPan">
-              <PropertyRef Name="OverUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SczzItemsID">
           <End Type="OAModel.T_SczzItem" Role="T_SczzItem" Multiplicity="0..1" />
           <End Type="OAModel.T_CanPan" Role="T_CanPan" Multiplicity="*" />
@@ -1471,30 +1494,6 @@
             </Principal>
             <Dependent Role="T_CanPan">
               <PropertyRef Name="SczzItemID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_T_SczzItem_UserInfo">
-          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
-          <End Type="OAModel.T_SczzItem" Role="T_SczzItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserInfo">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="T_SczzItem">
-              <PropertyRef Name="AddUser" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_T_ShengChanZhiZhaoTopName_UserInfo">
-          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
-          <End Type="OAModel.T_ShengChanZhiZhaoTopName" Role="T_ShengChanZhiZhaoTopName" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserInfo">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="T_ShengChanZhiZhaoTopName">
-              <PropertyRef Name="adduser" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1519,12 +1518,12 @@
           <Property Name="Jhzdr" Type="Int32" />
           <Property Name="JhzdrTime" Type="DateTime" Precision="3" />
           <NavigationProperty Name="T_CanPan" Relationship="OAModel.FK_SczzDanjuID" FromRole="T_SczzDanju" ToRole="T_CanPan" />
-          <NavigationProperty Name="AddUserinfo" Relationship="OAModel.FK_AddUser" FromRole="T_SczzDanju" ToRole="UserInfo" />
-          <NavigationProperty Name="CJSHuser" Relationship="OAModel.FK_CheJianShenHe" FromRole="T_SczzDanju" ToRole="UserInfo" />
-          <NavigationProperty Name="jhzdruser" Relationship="OAModel.FK_Jhzdr" FromRole="T_SczzDanju" ToRole="UserInfo" />
-          <NavigationProperty Name="Scshuser" Relationship="OAModel.FK_ShenChanSheHe" FromRole="T_SczzDanju" ToRole="UserInfo" />
           <NavigationProperty Name="T_ShengChanZhiZhaoTopName" Relationship="OAModel.FK_TopName" FromRole="T_SczzDanju" ToRole="T_ShengChanZhiZhaoTopName" />
-          <NavigationProperty Name="Upshuser" Relationship="OAModel.FK_UpShenHe" FromRole="T_SczzDanju" ToRole="UserInfo" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_AddUser" FromRole="T_SczzDanju" ToRole="UserInfo" />
+          <NavigationProperty Name="UserInfo1" Relationship="OAModel.FK_CheJianShenHe" FromRole="T_SczzDanju" ToRole="UserInfo" />
+          <NavigationProperty Name="UserInfo2" Relationship="OAModel.FK_Jhzdr" FromRole="T_SczzDanju" ToRole="UserInfo" />
+          <NavigationProperty Name="UserInfo3" Relationship="OAModel.FK_ShenChanSheHe" FromRole="T_SczzDanju" ToRole="UserInfo" />
+          <NavigationProperty Name="UserInfo4" Relationship="OAModel.FK_UpShenHe" FromRole="T_SczzDanju" ToRole="UserInfo" />
         </EntityType>
         <Association Name="FK_SczzDanjuID">
           <End Type="OAModel.T_SczzDanju" Role="T_SczzDanju" Multiplicity="0..1" />
@@ -1535,6 +1534,148 @@
             </Principal>
             <Dependent Role="T_CanPan">
               <PropertyRef Name="SczzDanjuID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TopName">
+          <End Type="OAModel.T_ShengChanZhiZhaoTopName" Role="T_ShengChanZhiZhaoTopName" Multiplicity="1" />
+          <End Type="OAModel.T_SczzDanju" Role="T_SczzDanju" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ShengChanZhiZhaoTopName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_SczzDanju">
+              <PropertyRef Name="TextNameID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="T_WinBak">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BaoJiaTOPID" Type="Int64" Nullable="false" />
+          <Property Name="YuanYin" Type="Int64" />
+          <Property Name="Bak" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AddTime" Type="DateTime" Precision="3" />
+          <Property Name="AddPerson" Type="Int32" />
+          <NavigationProperty Name="T_YSItems" Relationship="OAModel.FK_T_WinBak_T_WinBak_Items" FromRole="T_WinBak" ToRole="T_YSItems" />
+          <NavigationProperty Name="T_BaoJiaToP" Relationship="OAModel.FK_T_WinBak_YXB_Baojia" FromRole="T_WinBak" ToRole="T_BaoJiaToP" />
+        </EntityType>
+        <Association Name="FK_T_WinBak_T_WinBak_Items">
+          <End Type="OAModel.T_YSItems" Role="T_YSItems" Multiplicity="0..1" />
+          <End Type="OAModel.T_WinBak" Role="T_WinBak" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_YSItems">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_WinBak">
+              <PropertyRef Name="YuanYin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="UserInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UName" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="UPwd" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SubTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DelFlag" Type="Int16" Nullable="false" />
+          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Remark" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Sort" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OverTime" Type="DateTime" Precision="3" />
+          <Property Name="UserXiaoHao" Type="Int32" />
+          <Property Name="Click" Type="Int32" />
+          <Property Name="ThisMastr" Type="Boolean" />
+          <Property Name="MasterID" Type="Int32" />
+          <Property Name="Login_now" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CityID" Type="Int32" />
+          <Property Name="Umoney" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="PerSonName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="QuXian" Type="Int32" />
+          <Property Name="BuMenID" Type="Int32" />
+          <NavigationProperty Name="BumenInfoSet" Relationship="OAModel.FK_Bumen" FromRole="UserInfo" ToRole="BumenInfoSet" />
+          <NavigationProperty Name="Login_list" Relationship="OAModel.FK_Login_list_UserInfo" FromRole="UserInfo" ToRole="Login_list" />
+          <NavigationProperty Name="R_UserInfo_ActionInfo" Relationship="OAModel.FK_UserInfoR_UserInfo_ActionInfo" FromRole="UserInfo" ToRole="R_UserInfo_ActionInfo" />
+          <NavigationProperty Name="T_CanPan" Relationship="OAModel.FK_adduserid" FromRole="UserInfo" ToRole="T_CanPan" />
+          <NavigationProperty Name="T_CanPan1" Relationship="OAModel.FK_OverUserID" FromRole="UserInfo" ToRole="T_CanPan" />
+          <NavigationProperty Name="T_SczzDanju" Relationship="OAModel.FK_AddUser" FromRole="UserInfo" ToRole="T_SczzDanju" />
+          <NavigationProperty Name="T_SczzDanju1" Relationship="OAModel.FK_CheJianShenHe" FromRole="UserInfo" ToRole="T_SczzDanju" />
+          <NavigationProperty Name="T_SczzDanju2" Relationship="OAModel.FK_Jhzdr" FromRole="UserInfo" ToRole="T_SczzDanju" />
+          <NavigationProperty Name="T_SczzDanju3" Relationship="OAModel.FK_ShenChanSheHe" FromRole="UserInfo" ToRole="T_SczzDanju" />
+          <NavigationProperty Name="T_SczzDanju4" Relationship="OAModel.FK_UpShenHe" FromRole="UserInfo" ToRole="T_SczzDanju" />
+          <NavigationProperty Name="T_SczzItem" Relationship="OAModel.FK_T_SczzItem_UserInfo" FromRole="UserInfo" ToRole="T_SczzItem" />
+          <NavigationProperty Name="T_ShengChanZhiZhaoTopName" Relationship="OAModel.FK_T_ShengChanZhiZhaoTopName_UserInfo" FromRole="UserInfo" ToRole="T_ShengChanZhiZhaoTopName" />
+          <NavigationProperty Name="YXB_Kh_list" Relationship="OAModel.FK_YXB_Kh_list_UserInfo" FromRole="UserInfo" ToRole="YXB_Kh_list" />
+          <NavigationProperty Name="Departments" Relationship="OAModel.UserInfoDepartment" FromRole="UserInfo" ToRole="Department" />
+          <NavigationProperty Name="RoleInfoes" Relationship="OAModel.UserInfoRoleInfo" FromRole="UserInfo" ToRole="RoleInfo" />
+          <NavigationProperty Name="T_ChanPinName" Relationship="OAModel.FK_T_ChanPinName_T_ChanPinName" FromRole="UserInfo" ToRole="T_ChanPinName" />
+          <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_YXBBaojia_Userinf" FromRole="UserInfo" ToRole="YXB_Baojia" />
+          <NavigationProperty Name="T_WinBakFaHuo" Relationship="OAModel.FK_T_WinBakFaHuo_EditUser" FromRole="UserInfo" ToRole="T_WinBakFaHuo" />
+          <NavigationProperty Name="T_WinBakFaHuo1" Relationship="OAModel.FK_T_WinBakFaHuo_UserINfo" FromRole="UserInfo" ToRole="T_WinBakFaHuo" />
+          <NavigationProperty Name="Schedules" Relationship="OAModel.FK_Schedule_UserInfo1" FromRole="UserInfo" ToRole="Schedule" />
+          <NavigationProperty Name="ScheduleUsers" Relationship="OAModel.FK_ScheduleUser_UserInfo" FromRole="UserInfo" ToRole="ScheduleUser" />
+        </EntityType>
+        <Association Name="FK_Bumen">
+          <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BumenInfoSet">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserInfo">
+              <PropertyRef Name="BuMenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Login_list_UserInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+          <End Type="OAModel.Login_list" Role="Login_list" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Login_list">
+              <PropertyRef Name="Userinfoid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInfoR_UserInfo_ActionInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+          <End Type="OAModel.R_UserInfo_ActionInfo" Role="R_UserInfo_ActionInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_UserInfo_ActionInfo">
+              <PropertyRef Name="UserInfoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_adduserid">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
+          <End Type="OAModel.T_CanPan" Role="T_CanPan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_CanPan">
+              <PropertyRef Name="AddUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OverUserID">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
+          <End Type="OAModel.T_CanPan" Role="T_CanPan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_CanPan">
+              <PropertyRef Name="OverUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1586,18 +1727,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TopName">
-          <End Type="OAModel.T_ShengChanZhiZhaoTopName" Role="T_ShengChanZhiZhaoTopName" Multiplicity="1" />
-          <End Type="OAModel.T_SczzDanju" Role="T_SczzDanju" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="T_ShengChanZhiZhaoTopName">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="T_SczzDanju">
-              <PropertyRef Name="TextNameID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_UpShenHe">
           <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
           <End Type="OAModel.T_SczzDanju" Role="T_SczzDanju" Multiplicity="*" />
@@ -1610,98 +1739,145 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Bumen">
-          <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
-          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BumenInfoSet">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserInfo">
-              <PropertyRef Name="BuMenID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="T_WinBak">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BaoJiaTOPID" Type="Int64" Nullable="false" />
-          <Property Name="YuanYin" Type="Int64" />
-          <Property Name="Bak" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AddTime" Type="DateTime" Precision="3" />
-          <Property Name="AddPerson" Type="Int32" />
-          <NavigationProperty Name="T_YSItems" Relationship="OAModel.FK_T_WinBak_T_WinBak_Items" FromRole="T_WinBak" ToRole="T_YSItems" />
-          <NavigationProperty Name="T_WinBakFaHuo" Relationship="OAModel.FK_winbakid" FromRole="T_WinBak" ToRole="T_WinBakFaHuo" />
-          <NavigationProperty Name="T_BaoJiaToP" Relationship="OAModel.FK_T_WinBak_YXB_Baojia" FromRole="T_WinBak" ToRole="T_BaoJiaToP" />
-        </EntityType>
-        <EntityType Name="T_WinBakFaHuo">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="WinBakID" Type="Int64" />
-          <Property Name="FaHuoTime" Type="DateTime" Precision="3" />
-          <Property Name="FaHuoMoney" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="FaHuoID" Type="Int32" />
-          <Property Name="AddUser" Type="Int32" />
-          <Property Name="AddTime" Type="DateTime" Precision="3" />
-          <Property Name="FaHuoBak" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="EditTime" Type="DateTime" Precision="3" />
-          <Property Name="EditQianMoney" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="EditUser" Type="Int32" />
-          <Property Name="Del" Type="Int16" />
-          <Property Name="WinFH" Type="Int16" />
-          <NavigationProperty Name="T_WinBak" Relationship="OAModel.FK_winbakid" FromRole="T_WinBakFaHuo" ToRole="T_WinBak" />
-          <NavigationProperty Name="eidtuserinfo" Relationship="OAModel.FK_T_WinBakFaHuo_EditUser" FromRole="T_WinBakFaHuo" ToRole="UserInfo" />
-          <NavigationProperty Name="adduserinfo" Relationship="OAModel.FK_T_WinBakFaHuo_UserINfo" FromRole="T_WinBakFaHuo" ToRole="UserInfo" />
-        </EntityType>
-        <Association Name="FK_T_WinBak_T_WinBak_Items">
-          <End Type="OAModel.T_YSItems" Role="T_YSItems" Multiplicity="0..1" />
-          <End Type="OAModel.T_WinBak" Role="T_WinBak" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="T_YSItems">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="T_WinBak">
-              <PropertyRef Name="YuanYin" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_winbakid">
-          <End Type="OAModel.T_WinBak" Role="T_WinBak" Multiplicity="0..1" />
-          <End Type="OAModel.T_WinBakFaHuo" Role="T_WinBakFaHuo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="T_WinBak">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="T_WinBakFaHuo">
-              <PropertyRef Name="WinBakID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_T_WinBakFaHuo_EditUser">
+        <Association Name="FK_T_SczzItem_UserInfo">
           <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
-          <End Type="OAModel.T_WinBakFaHuo" Role="T_WinBakFaHuo" Multiplicity="*" />
+          <End Type="OAModel.T_SczzItem" Role="T_SczzItem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="UserInfo">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="T_WinBakFaHuo">
-              <PropertyRef Name="EditUser" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_T_WinBakFaHuo_UserINfo">
-          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
-          <End Type="OAModel.T_WinBakFaHuo" Role="T_WinBakFaHuo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserInfo">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="T_WinBakFaHuo">
+            <Dependent Role="T_SczzItem">
               <PropertyRef Name="AddUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_ShengChanZhiZhaoTopName_UserInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
+          <End Type="OAModel.T_ShengChanZhiZhaoTopName" Role="T_ShengChanZhiZhaoTopName" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_ShengChanZhiZhaoTopName">
+              <PropertyRef Name="adduser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YXB_Kh_list_UserInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="OAModel.YXB_Kh_list" Role="YXB_Kh_list" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_Kh_list">
+              <PropertyRef Name="AddUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserInfoDepartment">
+          <End Type="OAModel.Department" Role="Department" Multiplicity="*" />
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="*" />
+        </Association>
+        <Association Name="UserInfoRoleInfo">
+          <End Type="OAModel.RoleInfo" Role="RoleInfo" Multiplicity="*" />
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="*" />
+        </Association>
+        <EntityType Name="T_ChanPinName">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MyTexts" Type="String" Nullable="false" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="CreateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatePerson" Type="Int32" />
+          <Property Name="Del" Type="Int16" />
+          <Property Name="MyColums" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_baojia_conameXinghao" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_T_ChanPinName_T_ChanPinName" FromRole="T_ChanPinName" ToRole="UserInfo" />
+          <NavigationProperty Name="YXB_Baojia1" Relationship="OAModel.FK_YXB_Baojia_CanPinXinghao" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
+          <NavigationProperty Name="YXB_Baojia11" Relationship="OAModel.FK_YXB_Baojia_CanPinDengji" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
+        </EntityType>
+        <EntityType Name="YXB_Baojia">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BaoJiaTop_id" Type="Int64" Nullable="false" />
+          <Property Name="CPname" Type="Int64" />
+          <Property Name="CPXingHao" Type="Int64" />
+          <Property Name="CPGuiGe" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="CPShuLiang" Type="Decimal" Nullable="false" Precision="18" Scale="3" />
+          <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ZhuangTai" Type="Int32" Nullable="false" />
+          <Property Name="BaoJiaMoney" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="BaoJiaPerson" Type="Int32" />
+          <Property Name="BaoJiaTime" Type="DateTime" Precision="3" />
+          <Property Name="WIN" Type="Double" />
+          <Property Name="DelFlag" Type="Int16" Nullable="false" />
+          <Property Name="EditQianMoney" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="UpdataTime" Type="DateTime" Precision="3" />
+          <Property Name="UpdataUserID" Type="Int32" />
+          <Property Name="WinMoney" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="BaoJiaYunFei" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="EditQianYunFei" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="WinYunFei" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Remark" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="T_ChanPinName" Relationship="OAModel.FK_baojia_conameXinghao" FromRole="YXB_Baojia" ToRole="T_ChanPinName" />
+          <NavigationProperty Name="T_ChanPinName1" Relationship="OAModel.FK_YXB_Baojia_CanPinXinghao" FromRole="YXB_Baojia" ToRole="T_ChanPinName" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_YXBBaojia_Userinf" FromRole="YXB_Baojia" ToRole="UserInfo" />
+          <NavigationProperty Name="T_BaoJiaToP" Relationship="OAModel.FK_YXB_Baojia_T_BaoJiaToP1" FromRole="YXB_Baojia" ToRole="T_BaoJiaToP" />
+          <Property Name="CPDengJiID" Type="Int64" />
+          <NavigationProperty Name="T_ChanPinName11" Relationship="OAModel.FK_YXB_Baojia_CanPinDengji" FromRole="YXB_Baojia" ToRole="T_ChanPinName" />
+          <NavigationProperty Name="T_WinBakFaHuo" Relationship="OAModel.FK_T_WinBakFaHuo_BaoJia" FromRole="YXB_Baojia" ToRole="T_WinBakFaHuo" />
+        </EntityType>
+        <Association Name="FK_baojia_conameXinghao">
+          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="0..1" />
+          <End Type="OAModel.YXB_Baojia" Role="YXB_Baojia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_Baojia">
+              <PropertyRef Name="CPname" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_ChanPinName_T_ChanPinName">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
+          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_ChanPinName">
+              <PropertyRef Name="CreatePerson" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YXB_Baojia_CanPinXinghao">
+          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="0..1" />
+          <End Type="OAModel.YXB_Baojia" Role="YXB_Baojia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_Baojia">
+              <PropertyRef Name="CPXingHao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YXBBaojia_Userinf">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
+          <End Type="OAModel.YXB_Baojia" Role="YXB_Baojia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_Baojia">
+              <PropertyRef Name="UpdataUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1720,40 +1896,25 @@
           <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DelFlag" Type="Int16" Nullable="false" />
           <Property Name="KHComname" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
-          <Property Name="HanShuiID" Type="Int32" />
+          <Property Name="HanShuiID" Type="Int64" />
+          <Property Name="PiaoJuID" Type="Int64" />
           <NavigationProperty Name="T_BoolItem" Relationship="OAModel.FK_T_BaoJiaToP_Hanshui" FromRole="T_BaoJiaToP" ToRole="T_BoolItem" />
+          <NavigationProperty Name="T_YSItems" Relationship="OAModel.FK_T_BaoJiaToP_PiaoJue" FromRole="T_BaoJiaToP" ToRole="T_YSItems" />
           <NavigationProperty Name="YXB_Kh_list" Relationship="OAModel.FK_T_BaoJiaToP_YXB_Kh_list" FromRole="T_BaoJiaToP" ToRole="YXB_Kh_list" />
           <NavigationProperty Name="T_WinBak" Relationship="OAModel.FK_T_WinBak_YXB_Baojia" FromRole="T_BaoJiaToP" ToRole="T_WinBak" />
           <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_YXB_Baojia_T_BaoJiaToP1" FromRole="T_BaoJiaToP" ToRole="YXB_Baojia" />
         </EntityType>
-        <EntityType Name="YXB_Baojia">
+        <EntityType Name="T_BoolItem">
           <Key>
-            <PropertyRef Name="id" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BaoJiaTop_id" Type="Int64" Nullable="false" />
-          <Property Name="CPname" Type="Int64" Nullable="false" />
-          <Property Name="CPXingHao" Type="Int64" Nullable="false" />
-          <Property Name="CPGuiGe" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="CPShuLiang" Type="Decimal" Nullable="false" Precision="18" Scale="3" />
-          <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ZhuangTai" Type="Int32" Nullable="false" />
-          <Property Name="BaoJiaMoney" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="BaoJiaPerson" Type="Int32" />
-          <Property Name="BaoJiaTime" Type="DateTime" Precision="3" />
-          <Property Name="WIN" Type="Double" />
-          <Property Name="DelFlag" Type="Int16" Nullable="false" />
-          <Property Name="EditQianMoney" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="UpdataTime" Type="DateTime" Precision="3" />
-          <Property Name="UpdataUserID" Type="Int32" />
-          <Property Name="WinMoney" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="BaoJiaYunFei" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="EditQianYunFei" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="WinYunFei" Type="Decimal" Precision="18" Scale="2" />
-          <NavigationProperty Name="T_BaoJiaToP" Relationship="OAModel.FK_YXB_Baojia_T_BaoJiaToP1" FromRole="YXB_Baojia" ToRole="T_BaoJiaToP" />
-          <NavigationProperty Name="T_ChanPinName" Relationship="OAModel.FK_YXB_Baojia_T_ChanPinName" FromRole="YXB_Baojia" ToRole="T_ChanPinName" />
-          <NavigationProperty Name="T_ChanPinName1" Relationship="OAModel.FK_YXB_Baojia_T_ChanPinName1" FromRole="YXB_Baojia" ToRole="T_ChanPinName" />
-          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_YXBBaojia_Userinf" FromRole="YXB_Baojia" ToRole="UserInfo" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="str" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="BOLL_" Type="Boolean" />
+          <Property Name="int" Type="Int32" />
+          <Property Name="timener" Type="DateTime" Precision="3" />
+          <Property Name="ItemsID" Type="Int32" />
+          <NavigationProperty Name="T_BaoJiaToP" Relationship="OAModel.FK_T_BaoJiaToP_Hanshui" FromRole="T_BoolItem" ToRole="T_BaoJiaToP" />
         </EntityType>
         <Association Name="FK_T_BaoJiaToP_Hanshui">
           <End Type="OAModel.T_BoolItem" Role="T_BoolItem" Multiplicity="0..1" />
@@ -1764,6 +1925,18 @@
             </Principal>
             <Dependent Role="T_BaoJiaToP">
               <PropertyRef Name="HanShuiID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_BaoJiaToP_PiaoJue">
+          <End Type="OAModel.T_YSItems" Role="T_YSItems" Multiplicity="0..1" />
+          <End Type="OAModel.T_BaoJiaToP" Role="T_BaoJiaToP" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_YSItems">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_BaoJiaToP">
+              <PropertyRef Name="PiaoJuID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1796,9 +1969,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_YXB_Baojia_T_BaoJiaToP1">
-          <End Type="OAModel.T_BaoJiaToP" Role="T_BaoJiaToP" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Type="OAModel.T_BaoJiaToP" Role="T_BaoJiaToP" Multiplicity="1" />
           <End Type="OAModel.YXB_Baojia" Role="YXB_Baojia" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="T_BaoJiaToP">
@@ -1809,39 +1980,166 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_YXB_Baojia_T_ChanPinName">
-          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
+        <Association Name="FK_YXB_Baojia_CanPinDengji">
+          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="0..1" />
           <End Type="OAModel.YXB_Baojia" Role="YXB_Baojia" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="T_ChanPinName">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="YXB_Baojia">
-              <PropertyRef Name="CPname" />
+              <PropertyRef Name="CPDengJiID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_YXB_Baojia_T_ChanPinName1">
-          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
-          <End Type="OAModel.YXB_Baojia" Role="YXB_Baojia" Multiplicity="*" />
+        <EntityType Name="T_WinBakFaHuo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FaHuoTime" Type="DateTime" Precision="3" />
+          <Property Name="AddUser" Type="Int32" />
+          <Property Name="AddTime" Type="DateTime" Precision="3" />
+          <Property Name="FaHuoBak" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EditTime" Type="DateTime" Precision="3" />
+          <Property Name="EditQianFahuoInt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="EditUser" Type="Int32" />
+          <Property Name="Del" Type="Int16" />
+          <Property Name="BaoJia_ID" Type="Int64" Nullable="false" />
+          <Property Name="FahuoInt" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_T_WinBakFaHuo_BaoJia" FromRole="T_WinBakFaHuo" ToRole="YXB_Baojia" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_T_WinBakFaHuo_EditUser" FromRole="T_WinBakFaHuo" ToRole="UserInfo" />
+          <NavigationProperty Name="UserInfo1" Relationship="OAModel.FK_T_WinBakFaHuo_UserINfo" FromRole="T_WinBakFaHuo" ToRole="UserInfo" />
+        </EntityType>
+        <Association Name="FK_T_WinBakFaHuo_BaoJia">
+          <End Type="OAModel.YXB_Baojia" Role="YXB_Baojia" Multiplicity="1" />
+          <End Type="OAModel.T_WinBakFaHuo" Role="T_WinBakFaHuo" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="T_ChanPinName">
-              <PropertyRef Name="ID" />
+            <Principal Role="YXB_Baojia">
+              <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="YXB_Baojia">
-              <PropertyRef Name="CPXingHao" />
+            <Dependent Role="T_WinBakFaHuo">
+              <PropertyRef Name="BaoJia_ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_YXBBaojia_Userinf">
+        <Association Name="FK_T_WinBakFaHuo_EditUser">
           <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
-          <End Type="OAModel.YXB_Baojia" Role="YXB_Baojia" Multiplicity="*" />
+          <End Type="OAModel.T_WinBakFaHuo" Role="T_WinBakFaHuo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="UserInfo">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="YXB_Baojia">
-              <PropertyRef Name="UpdataUserID" />
+            <Dependent Role="T_WinBakFaHuo">
+              <PropertyRef Name="EditUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_WinBakFaHuo_UserINfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
+          <End Type="OAModel.T_WinBakFaHuo" Role="T_WinBakFaHuo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_WinBakFaHuo">
+              <PropertyRef Name="AddUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FileItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Del" Type="Int16" />
+          <Property Name="AddTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Schedules" Relationship="OAModel.FK_Schedule_UserInfo" FromRole="FileItem" ToRole="Schedule" />
+        </EntityType>
+        <EntityType Name="Schedule">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ScheduleTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ScheduleAddTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ScheduleUpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="ScheduleText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ScheduleTypeID" Type="Int32" />
+          <Property Name="TextReadBak" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TextReadUser" Type="Int32" />
+          <Property Name="TextReadTime" Type="DateTime" Precision="3" />
+          <Property Name="FileItemID" Type="Int32" />
+          <NavigationProperty Name="FileItem" Relationship="OAModel.FK_Schedule_UserInfo" FromRole="Schedule" ToRole="FileItem" />
+          <NavigationProperty Name="ScheduleType" Relationship="OAModel.FK_Schedule_ScheduleType" FromRole="Schedule" ToRole="ScheduleType" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_Schedule_UserInfo1" FromRole="Schedule" ToRole="UserInfo" />
+        </EntityType>
+        <EntityType Name="ScheduleType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemText" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Del" Type="Int16" />
+          <NavigationProperty Name="Schedules" Relationship="OAModel.FK_Schedule_ScheduleType" FromRole="ScheduleType" ToRole="Schedule" />
+        </EntityType>
+        <EntityType Name="ScheduleUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="UpID" Type="Int32" />
+          <Property Name="Del" Type="Int16" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_ScheduleUser_UserInfo" FromRole="ScheduleUser" ToRole="UserInfo" />
+        </EntityType>
+        <Association Name="FK_Schedule_UserInfo">
+          <End Type="OAModel.FileItem" Role="FileItem" Multiplicity="0..1" />
+          <End Type="OAModel.Schedule" Role="Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FileItem">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="FileItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schedule_ScheduleType">
+          <End Type="OAModel.ScheduleType" Role="ScheduleType" Multiplicity="0..1" />
+          <End Type="OAModel.Schedule" Role="Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScheduleType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="ScheduleTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schedule_UserInfo1">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+          <End Type="OAModel.Schedule" Role="Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ScheduleUser_UserInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
+          <End Type="OAModel.ScheduleUser" Role="ScheduleUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ScheduleUser">
+              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1851,31 +2149,6 @@
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="OAModelStoreContainer" CdmEntityContainer="OAEntities">
-    <EntitySetMapping Name="UserInfo">
-      <EntityTypeMapping TypeName="IsTypeOf(OAModel.UserInfo)">
-        <MappingFragment StoreEntitySet="UserInfo">
-          <ScalarProperty Name="BuMenID" ColumnName="BuMenID" />
-                <ScalarProperty Name="QuXian" ColumnName="QuXian" />
-                <ScalarProperty Name="PerSonName" ColumnName="PerSonName" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="UName" ColumnName="UName" />
-          <ScalarProperty Name="UPwd" ColumnName="UPwd" />
-          <ScalarProperty Name="SubTime" ColumnName="SubTime" />
-          <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
-          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
-          <ScalarProperty Name="Remark" ColumnName="Remark" />
-          <ScalarProperty Name="Sort" ColumnName="Sort" />
-          <ScalarProperty Name="OverTime" ColumnName="OverTime" />
-          <ScalarProperty Name="UserXiaoHao" ColumnName="UserXiaoHao" />
-          <ScalarProperty Name="Click" ColumnName="Click" />
-          <ScalarProperty Name="ThisMastr" ColumnName="ThisMastr" />
-          <ScalarProperty Name="MasterID" ColumnName="MasterID" />
-          <ScalarProperty Name="Login_now" ColumnName="Login_now" />
-          <ScalarProperty Name="CityID" ColumnName="CityID" />
-          <ScalarProperty Name="Umoney" ColumnName="Umoney" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="ActionInfo">
       <EntityTypeMapping TypeName="IsTypeOf(OAModel.ActionInfo)">
         <MappingFragment StoreEntitySet="ActionInfo">
@@ -1945,18 +2218,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="T_BoolItem">
-      <EntityTypeMapping TypeName="IsTypeOf(OAModel.T_BoolItem)">
-        <MappingFragment StoreEntitySet="T_BoolItem">
-          <ScalarProperty Name="ItemsID" ColumnName="ItemsID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="str" ColumnName="str" />
-          <ScalarProperty Name="BOLL_" ColumnName="BOLL_" />
-          <ScalarProperty Name="int" ColumnName="int" />
-          <ScalarProperty Name="timener" ColumnName="timener" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <AssociationSetMapping Name="DepartmentActionInfo" TypeName="OAModel.DepartmentActionInfo" StoreEntitySet="DepartmentActionInfo">
       <EndProperty Name="ActionInfo">
         <ScalarProperty Name="ID" ColumnName="ActionInfo_ID" />
@@ -1973,23 +2234,7 @@
         <ScalarProperty Name="ID" ColumnName="RoleInfo_ID" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="UserInfoDepartment" TypeName="OAModel.UserInfoDepartment" StoreEntitySet="UserInfoDepartment">
-      <EndProperty Name="Department">
-        <ScalarProperty Name="ID" ColumnName="Department_ID" />
-      </EndProperty>
-      <EndProperty Name="UserInfo">
-        <ScalarProperty Name="ID" ColumnName="UserInfo_ID" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="UserInfoRoleInfo" TypeName="OAModel.UserInfoRoleInfo" StoreEntitySet="UserInfoRoleInfo">
-      <EndProperty Name="RoleInfo">
-        <ScalarProperty Name="ID" ColumnName="RoleInfo_ID" />
-      </EndProperty>
-      <EndProperty Name="UserInfo">
-        <ScalarProperty Name="ID" ColumnName="UserInfo_ID" />
-      </EndProperty>
-    </AssociationSetMapping>
-          <EntitySetMapping Name="YXB_Kh_list">
+    <EntitySetMapping Name="YXB_Kh_list">
             <EntityTypeMapping TypeName="OAModel.YXB_Kh_list">
               <MappingFragment StoreEntitySet="YXB_Kh_list">
                 <ScalarProperty Name="All_I" ColumnName="All_I" />
@@ -2029,18 +2274,6 @@
                 <ScalarProperty Name="MyColums" ColumnName="MyColums" />
                 <ScalarProperty Name="MyTables" ColumnName="MyTables" />
                 <ScalarProperty Name="ParentId" ColumnName="ParentId" />
-                <ScalarProperty Name="MyTexts" ColumnName="MyTexts" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="T_ChanPinName">
-            <EntityTypeMapping TypeName="OAModel.T_ChanPinName">
-              <MappingFragment StoreEntitySet="T_ChanPinName">
-                <ScalarProperty Name="MyColums" ColumnName="MyColums" />
-                <ScalarProperty Name="Del" ColumnName="Del" />
-                <ScalarProperty Name="CreatePerson" ColumnName="CreatePerson" />
-                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
                 <ScalarProperty Name="MyTexts" ColumnName="MyTexts" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
@@ -2131,46 +2364,64 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="T_WinBakFaHuo">
-            <EntityTypeMapping TypeName="OAModel.T_WinBakFaHuo">
-              <MappingFragment StoreEntitySet="T_WinBakFaHuo">
-                <ScalarProperty Name="WinFH" ColumnName="WinFH" />
-                <ScalarProperty Name="Del" ColumnName="Del" />
-                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
-                <ScalarProperty Name="EditQianMoney" ColumnName="EditQianMoney" />
-                <ScalarProperty Name="EditTime" ColumnName="EditTime" />
-                <ScalarProperty Name="FaHuoBak" ColumnName="FaHuoBak" />
-                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
-                <ScalarProperty Name="AddUser" ColumnName="AddUser" />
-                <ScalarProperty Name="FaHuoID" ColumnName="FaHuoID" />
-                <ScalarProperty Name="FaHuoMoney" ColumnName="FaHuoMoney" />
-                <ScalarProperty Name="FaHuoTime" ColumnName="FaHuoTime" />
-                <ScalarProperty Name="WinBakID" ColumnName="WinBakID" />
+          <EntitySetMapping Name="UserInfoes">
+            <EntityTypeMapping TypeName="OAModel.UserInfo">
+              <MappingFragment StoreEntitySet="UserInfo">
+                <ScalarProperty Name="BuMenID" ColumnName="BuMenID" />
+                <ScalarProperty Name="QuXian" ColumnName="QuXian" />
+                <ScalarProperty Name="PerSonName" ColumnName="PerSonName" />
+                <ScalarProperty Name="Umoney" ColumnName="Umoney" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="Login_now" ColumnName="Login_now" />
+                <ScalarProperty Name="MasterID" ColumnName="MasterID" />
+                <ScalarProperty Name="ThisMastr" ColumnName="ThisMastr" />
+                <ScalarProperty Name="Click" ColumnName="Click" />
+                <ScalarProperty Name="UserXiaoHao" ColumnName="UserXiaoHao" />
+                <ScalarProperty Name="OverTime" ColumnName="OverTime" />
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="SubTime" ColumnName="SubTime" />
+                <ScalarProperty Name="UPwd" ColumnName="UPwd" />
+                <ScalarProperty Name="UName" ColumnName="UName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="T_BaoJiaToP">
-            <EntityTypeMapping TypeName="OAModel.T_BaoJiaToP">
-              <MappingFragment StoreEntitySet="T_BaoJiaToP">
-                <ScalarProperty Name="HanShuiID" ColumnName="HanShuiID" />
-                <ScalarProperty Name="KHComname" ColumnName="KHComname" />
-                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
-                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
-                <ScalarProperty Name="HeTongQianDing" ColumnName="HeTongQianDing" />
-                <ScalarProperty Name="JieShuanFanShi" ColumnName="JieShuanFanShi" />
-                <ScalarProperty Name="DaiBanYunShu" ColumnName="DaiBanYunShu" />
-                <ScalarProperty Name="Addess" ColumnName="Addess" />
-                <ScalarProperty Name="JiShuYaoQiu" ColumnName="JiShuYaoQiu" />
-                <ScalarProperty Name="GhTime" ColumnName="GhTime" />
-                <ScalarProperty Name="Kh_List_id" ColumnName="Kh_List_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
+          <AssociationSetMapping Name="UserInfoDepartment" TypeName="OAModel.UserInfoDepartment" StoreEntitySet="UserInfoDepartment">
+            <EndProperty Name="UserInfo">
+              <ScalarProperty Name="ID" ColumnName="UserInfo_ID" />
+            </EndProperty>
+            <EndProperty Name="Department">
+              <ScalarProperty Name="ID" ColumnName="Department_ID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="UserInfoRoleInfo" TypeName="OAModel.UserInfoRoleInfo" StoreEntitySet="UserInfoRoleInfo">
+            <EndProperty Name="UserInfo">
+              <ScalarProperty Name="ID" ColumnName="UserInfo_ID" />
+            </EndProperty>
+            <EndProperty Name="RoleInfo">
+              <ScalarProperty Name="ID" ColumnName="RoleInfo_ID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="T_ChanPinName">
+            <EntityTypeMapping TypeName="OAModel.T_ChanPinName">
+              <MappingFragment StoreEntitySet="T_ChanPinName">
+                <ScalarProperty Name="MyColums" ColumnName="MyColums" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="CreatePerson" ColumnName="CreatePerson" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="MyTexts" ColumnName="MyTexts" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="YXB_Baojia">
             <EntityTypeMapping TypeName="OAModel.YXB_Baojia">
               <MappingFragment StoreEntitySet="YXB_Baojia">
+                <ScalarProperty Name="CPDengJiID" ColumnName="CPDengJiID" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="WinYunFei" ColumnName="WinYunFei" />
                 <ScalarProperty Name="EditQianYunFei" ColumnName="EditQianYunFei" />
                 <ScalarProperty Name="BaoJiaYunFei" ColumnName="BaoJiaYunFei" />
@@ -2191,6 +2442,100 @@
                 <ScalarProperty Name="CPname" ColumnName="CPname" />
                 <ScalarProperty Name="BaoJiaTop_id" ColumnName="BaoJiaTop_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_BaoJiaToP">
+            <EntityTypeMapping TypeName="OAModel.T_BaoJiaToP">
+              <MappingFragment StoreEntitySet="T_BaoJiaToP">
+                <ScalarProperty Name="PiaoJuID" ColumnName="PiaoJuID" />
+                <ScalarProperty Name="HanShuiID" ColumnName="HanShuiID" />
+                <ScalarProperty Name="KHComname" ColumnName="KHComname" />
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="HeTongQianDing" ColumnName="HeTongQianDing" />
+                <ScalarProperty Name="JieShuanFanShi" ColumnName="JieShuanFanShi" />
+                <ScalarProperty Name="DaiBanYunShu" ColumnName="DaiBanYunShu" />
+                <ScalarProperty Name="Addess" ColumnName="Addess" />
+                <ScalarProperty Name="JiShuYaoQiu" ColumnName="JiShuYaoQiu" />
+                <ScalarProperty Name="GhTime" ColumnName="GhTime" />
+                <ScalarProperty Name="Kh_List_id" ColumnName="Kh_List_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_BoolItem">
+            <EntityTypeMapping TypeName="OAModel.T_BoolItem">
+              <MappingFragment StoreEntitySet="T_BoolItem">
+                <ScalarProperty Name="ItemsID" ColumnName="ItemsID" />
+                <ScalarProperty Name="timener" ColumnName="timener" />
+                <ScalarProperty Name="int" ColumnName="int" />
+                <ScalarProperty Name="BOLL_" ColumnName="BOLL_" />
+                <ScalarProperty Name="str" ColumnName="str" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_WinBakFaHuo">
+            <EntityTypeMapping TypeName="OAModel.T_WinBakFaHuo">
+              <MappingFragment StoreEntitySet="T_WinBakFaHuo">
+                <ScalarProperty Name="FahuoInt" ColumnName="FahuoInt" />
+                <ScalarProperty Name="BaoJia_ID" ColumnName="BaoJia_ID" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditQianFahuoInt" ColumnName="EditQianFahuoInt" />
+                <ScalarProperty Name="EditTime" ColumnName="EditTime" />
+                <ScalarProperty Name="FaHuoBak" ColumnName="FaHuoBak" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="AddUser" ColumnName="AddUser" />
+                <ScalarProperty Name="FaHuoTime" ColumnName="FaHuoTime" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FileItems">
+            <EntityTypeMapping TypeName="OAModel.FileItem">
+              <MappingFragment StoreEntitySet="FileItem">
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Schedules">
+            <EntityTypeMapping TypeName="OAModel.Schedule">
+              <MappingFragment StoreEntitySet="Schedule">
+                <ScalarProperty Name="FileItemID" ColumnName="FileItemID" />
+                <ScalarProperty Name="TextReadTime" ColumnName="TextReadTime" />
+                <ScalarProperty Name="TextReadUser" ColumnName="TextReadUser" />
+                <ScalarProperty Name="TextReadBak" ColumnName="TextReadBak" />
+                <ScalarProperty Name="ScheduleTypeID" ColumnName="ScheduleTypeID" />
+                <ScalarProperty Name="ScheduleText" ColumnName="ScheduleText" />
+                <ScalarProperty Name="ScheduleUpdateTime" ColumnName="ScheduleUpdateTime" />
+                <ScalarProperty Name="ScheduleAddTime" ColumnName="ScheduleAddTime" />
+                <ScalarProperty Name="ScheduleTime" ColumnName="ScheduleTime" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScheduleTypes">
+            <EntityTypeMapping TypeName="OAModel.ScheduleType">
+              <MappingFragment StoreEntitySet="ScheduleType">
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="ItemText" ColumnName="ItemText" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScheduleUsers">
+            <EntityTypeMapping TypeName="OAModel.ScheduleUser">
+              <MappingFragment StoreEntitySet="ScheduleUser">
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="UpID" ColumnName="UpID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

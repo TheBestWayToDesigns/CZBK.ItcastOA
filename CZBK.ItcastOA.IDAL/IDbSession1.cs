@@ -18,11 +18,19 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IDepartmentDal DepartmentDal{get;set;}
 	
+		IFileItemDal FileItemDal{get;set;}
+	
 		ILogin_listDal Login_listDal{get;set;}
 	
 		IR_UserInfo_ActionInfoDal R_UserInfo_ActionInfoDal{get;set;}
 	
 		IRoleInfoDal RoleInfoDal{get;set;}
+	
+		IScheduleDal ScheduleDal{get;set;}
+	
+		IScheduleTypeDal ScheduleTypeDal{get;set;}
+	
+		IScheduleUserDal ScheduleUserDal{get;set;}
 	
 		ISysFieldDal SysFieldDal{get;set;}
 	

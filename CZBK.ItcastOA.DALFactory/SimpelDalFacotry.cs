@@ -55,6 +55,19 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IDepartmentDal;
         }
 		
+	    public static IFileItemDal CreateFileItemDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".FileItemDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IFileItemDal;
+        }
+		
 	    public static ILogin_listDal CreateLogin_listDal()
         {
 
@@ -92,6 +105,45 @@ namespace CZBK.ItcastOA.DALFactory
 
 
             return obj as IRoleInfoDal;
+        }
+		
+	    public static IScheduleDal CreateScheduleDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".ScheduleDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IScheduleDal;
+        }
+		
+	    public static IScheduleTypeDal CreateScheduleTypeDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".ScheduleTypeDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IScheduleTypeDal;
+        }
+		
+	    public static IScheduleUserDal CreateScheduleUserDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".ScheduleUserDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IScheduleUserDal;
         }
 		
 	    public static ISysFieldDal CreateSysFieldDal()

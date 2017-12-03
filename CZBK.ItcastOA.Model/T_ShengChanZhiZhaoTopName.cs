@@ -25,7 +25,7 @@ namespace CZBK.ItcastOA.Model
         public Nullable<System.DateTime> addtime { get; set; }
         public Nullable<int> adduser { get; set; }
     
-        public virtual UserInfo UserInfo { get; set; }
         public virtual ICollection<T_SczzDanju> T_SczzDanju { get; set; }
+        public virtual UserInfo UserInfo { get; set; }
     }
 }

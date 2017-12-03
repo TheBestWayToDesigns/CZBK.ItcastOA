@@ -56,7 +56,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             //1：根据用户 ——角色——权限 将登陆用户具有的菜单权限查询出来放在一个集合中
             var loginUserInfo = UserInfoService.LoadEntities(u => u.ID == LoginUser.ID).FirstOrDefault();
 
-            var loginUserRoleInfo = loginUserInfo.RoleInfo;//获取登陆用户的角色信息
+            var loginUserRoleInfo = loginUserInfo.RoleInfoes;//获取登陆用户的角色信息
             short actionTypeEnum = (short)ActionInfoTypeEnum.MenuActionTypeEnum;//表示菜单权限
             //查询出角色对应的菜单权限
             var loginUserActionInfo = (from r in loginUserRoleInfo

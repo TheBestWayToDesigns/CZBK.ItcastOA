@@ -82,7 +82,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             }
                         }
                         //安装第一条线进行过滤（用户——角色——权限）
-                        var loginUserRoleInfo = loginuserInfo.RoleInfo;
+                        var loginUserRoleInfo = loginuserInfo.RoleInfoes;
                         var loginuserisAction = (from r in loginUserRoleInfo
                                                  from a in r.ActionInfo
                                                  where a.ID == actioninfo.ID

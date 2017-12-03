@@ -60,6 +60,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _DepartmentDal = value; }
         }
 	
+		private IFileItemDal _FileItemDal;
+        public IFileItemDal FileItemDal
+        {
+            get
+            {
+                if(_FileItemDal == null)
+                {
+                   // _FileItemDal = new FileItemDal();
+				    _FileItemDal =AbstractFactory.CreateFileItemDal();
+                }
+                return _FileItemDal;
+            }
+            set { _FileItemDal = value; }
+        }
+	
 		private ILogin_listDal _Login_listDal;
         public ILogin_listDal Login_listDal
         {
@@ -103,6 +118,51 @@ namespace CZBK.ItcastOA.DALFactory
                 return _RoleInfoDal;
             }
             set { _RoleInfoDal = value; }
+        }
+	
+		private IScheduleDal _ScheduleDal;
+        public IScheduleDal ScheduleDal
+        {
+            get
+            {
+                if(_ScheduleDal == null)
+                {
+                   // _ScheduleDal = new ScheduleDal();
+				    _ScheduleDal =AbstractFactory.CreateScheduleDal();
+                }
+                return _ScheduleDal;
+            }
+            set { _ScheduleDal = value; }
+        }
+	
+		private IScheduleTypeDal _ScheduleTypeDal;
+        public IScheduleTypeDal ScheduleTypeDal
+        {
+            get
+            {
+                if(_ScheduleTypeDal == null)
+                {
+                   // _ScheduleTypeDal = new ScheduleTypeDal();
+				    _ScheduleTypeDal =AbstractFactory.CreateScheduleTypeDal();
+                }
+                return _ScheduleTypeDal;
+            }
+            set { _ScheduleTypeDal = value; }
+        }
+	
+		private IScheduleUserDal _ScheduleUserDal;
+        public IScheduleUserDal ScheduleUserDal
+        {
+            get
+            {
+                if(_ScheduleUserDal == null)
+                {
+                   // _ScheduleUserDal = new ScheduleUserDal();
+				    _ScheduleUserDal =AbstractFactory.CreateScheduleUserDal();
+                }
+                return _ScheduleUserDal;
+            }
+            set { _ScheduleUserDal = value; }
         }
 	
 		private ISysFieldDal _SysFieldDal;

@@ -250,7 +250,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
            short delFlag = (short)DelFlagEnum.Normarl;
            var roleInfoList = RoleInfoService.LoadEntities(r=>r.DelFlag==delFlag).ToList();
             //找出用户已经有的角色的编号
-           var userRoleIdList = (from r in userInfo.RoleInfo
+           var userRoleIdList = (from r in userInfo.RoleInfoes
                                  select r.ID).ToList();
            ViewBag.AllRoleInfo = roleInfoList;
            ViewBag.AllExtRoleId = userRoleIdList;

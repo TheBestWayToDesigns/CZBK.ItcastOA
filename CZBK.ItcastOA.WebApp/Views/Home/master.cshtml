@@ -124,21 +124,21 @@
         margin-left:30px;
         }
         .body{  
-    background:url(/Content/lib/images/applebg.jpg)no-repeat;  
-    width:100%;  
-    height:100%;  
-    background-size:100% 100%;  
-    position:absolute;  
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/Content/lib/images/applebg.jpg',sizingMethod='scale');  
-}  
+       background:url(/Content/lib/images/applebg.jpg)no-repeat;  
+       width:100%;  
+       height:100%;  
+       background-size:100% 100%;  
+       position:absolute;  
+       filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/Content/lib/images/applebg.jpg',sizingMethod='scale');  
+       }  
+        .l-dialog-content{overflow-y:hidden}
     </style>
 </head>
 <body style="overflow: hidden; ">
     <div id="layout1">
-
         <div position="center" title="标题" class="body" >
             <div id="winlinks">
-                <ul>                </ul>
+                <ul></ul>
             </div>
         </div>
 
@@ -162,7 +162,7 @@
        
         var win = $.ligerDialog.open(
         {
-            height:  $(window).height() / 1.5, url: url, width: $(window).width() / 1.2, showMax: true, showToggle: true, showMin: true, isResize: true, modal: false, title: title, slide: false, buttons: [
+            height: $(window).height() / 1.5, width: $(window).width() / 1.2, url: url, showMax: true, showToggle: false, showMin: true, isResize: true, modal: true, title: title, slide: true, buttons: [
               {
                   text: '确定', onclick: function (item, Dialog, index) {
                       win.hide();
@@ -177,19 +177,7 @@
         }
         return win;
     }
-    var links = [
-            //{ icon: '/Content/lib/images/3DSMAX.png', title: '用户管理', url: '/UserInfo/Index' },
-            //{ icon: '/Content/lib/images/3DSMAX.png', title: '角色管理', url: '/RoleInfo/Index' },
-            //{ icon: '/Content/lib/images/3DSMAX.png', title: '权限管理', url: '/ActionInfo/Index' },
-            //{ icon: '/Content/lib/images/Program Files Folder.png', title: '固定列', url: '../grid/frozen/frozengrid.htm' },
-            //{ icon: '/Content/lib/images/Program Files Folder.png', title: '可拖动', url: '../base/drag.htm' },
-            //{ icon: '/Content/lib/images/Alien Folder.png', title: '树', url: '../tree/draggable.htm' },
-            //{ icon: '/Content/lib/images/Xp-G5 006.png', title: '下拉框', url: '../comboBox/comboBoxGrid.htm' },
-            //{ icon: '/Content/lib/images/Xp-G5 006.png', title: '下拉框', url: '../comboBox/comboBoxGrid.htm' },
-            //{ icon: '/Content/lib/images/Alien Folder.png', title: 'layout', url: '../layout/layoutFullHeight.htm' },
-            // { icon: '/Content/lib/images/Alien Folder.png', title: 'menu', url: '../menu/menubar.htm' },
-            // { icon: '/Content/lib/images/Xp-G5 006.png', title: 'tab', url: '../tab/tabHtml.htm' },
-            // { icon: '/Content/lib/images/3DSMAX.png', title: '分组', url: '../grid/groupable/checkbox.htm' }
+    var links = [          
     ];
 
     function onResize() {
@@ -278,8 +266,7 @@
         var manager;
         
         function tus() {
-            $.post("/Home/GetBaojidan", { "edittus": edittus }, function (serverData) {
-                
+            $.post("/Home/GetBaojidan", { "edittus": edittus }, function (serverData) {                
                 if (serverData.ret == "ok") {
                     if (manager != undefined)
                     { manager.close();}
@@ -288,10 +275,10 @@
                 }
             });
         }
-       // window.setInterval(tus, 6000);
-        $(document).click(function () {
-            manager.close();
-        });
+        //window.setInterval(tus, 6000);
+        //$(document).click(function () {
+        //    manager.close();
+        //});
         
     })
     //$.ligerTip({

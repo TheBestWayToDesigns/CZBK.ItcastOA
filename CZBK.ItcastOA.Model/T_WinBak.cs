@@ -14,11 +14,6 @@ namespace CZBK.ItcastOA.Model
     
     public partial class T_WinBak
     {
-        public T_WinBak()
-        {
-            this.T_WinBakFaHuo = new HashSet<T_WinBakFaHuo>();
-        }
-    
         public long ID { get; set; }
         public long BaoJiaTOPID { get; set; }
         public Nullable<long> YuanYin { get; set; }
@@ -27,7 +22,6 @@ namespace CZBK.ItcastOA.Model
         public Nullable<int> AddPerson { get; set; }
     
         public virtual T_YSItems T_YSItems { get; set; }
-        public virtual ICollection<T_WinBakFaHuo> T_WinBakFaHuo { get; set; }
         public virtual T_BaoJiaToP T_BaoJiaToP { get; set; }
     }
 }

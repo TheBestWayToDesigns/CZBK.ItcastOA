@@ -6,6 +6,8 @@ using System.Web;
 using System.Web.Mvc;
 using CZBK.ItcastOA.Model;
 using CZBK.ItcastOA.Model.SearchParam;
+using System.IO;
+using System.Data;
 
 namespace CZBK.ItcastOA.WebApp.Controllers
 {
@@ -22,6 +24,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IUserInfoService UserInfoService { get; set; }
         IBLL.IT_ChanPinNameService T_ChanPinNameService { get; set; }
         IBLL.IT_WinBakFaHuoService T_WinBakFaHuoService { get; set; }
+        
 
         short delFlag = (short)DelFlagEnum.Normarl;
         public ActionResult Index()
@@ -77,6 +80,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                KHphoto = a.T_BaoJiaToP.YXB_Kh_list.KHphoto,
                                NewTime = a.T_BaoJiaToP.YXB_Kh_list.NewTime,
                                UName = a.T_BaoJiaToP.YXB_Kh_list.UserInfo.UName,
+                               HanShui=a.T_BaoJiaToP.T_BoolItem.str,
+                               BaoJiaYunFei= a.BaoJiaYunFei,
+                               Remark=a.Remark,
+                               CpJB = a.T_ChanPinName11.MyTexts,
+                               Denjiu= a.T_BaoJiaToP.T_YSItems.MyText
+                               
                            };
                 var templist = temp.ToList();
                 for (int i = 0; i < templist.Count; i++)
@@ -94,12 +103,13 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             var rID =Convert.ToInt64( Request["resultId"]);
             var eMoney = Request["finalRusult"];
-           var baojia= YXB_BaojiaService.LoadEntities(x => x.id == rID).FirstOrDefault();
-            
+            var eYunfei = Request["Yunfei"];
+            var baojia= YXB_BaojiaService.LoadEntities(x => x.id == rID).FirstOrDefault();            
             //检查更改金额之前是否存在值
             if (baojia.BaoJiaMoney == null)
             {
                 baojia.BaoJiaMoney = Convert.ToDecimal(eMoney);
+                baojia.BaoJiaYunFei= Convert.ToDecimal(eYunfei);
                 baojia.BaoJiaPerson = LoginUser.ID;
                 baojia.BaoJiaTime = MvcApplication.GetT_time();
                 baojia.ZhuangTai = 1;
@@ -108,9 +118,11 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             else
             {
                 baojia.EditQianMoney=baojia.BaoJiaMoney;
+                baojia.EditQianYunFei = baojia.BaoJiaYunFei;
                 baojia.UpdataTime= MvcApplication.GetT_time();
                 baojia.UpdataUserID = LoginUser.ID;
-                baojia.BaoJiaMoney = Convert.ToDecimal(eMoney);               
+                baojia.BaoJiaMoney = Convert.ToDecimal(eMoney);  
+                baojia.BaoJiaYunFei = Convert.ToDecimal(eYunfei);
                 baojia.ZhuangTai = 1;
                 YXB_BaojiaService.EditEntity(baojia);
             }
@@ -128,6 +140,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             foreach (var it in Baojia)
             {
                 it.WinMoney = Convert.ToDecimal(Request["EidtMoney" + it.id]);
+                it.WinYunFei= Convert.ToDecimal(Request["EidtYunFei" + it.id]);
                 it.WIN = 1;
                 //修改完成报价信息
                 ybj.Add(it);
@@ -228,8 +241,11 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            NewTime = a.T_BaoJiaToP.YXB_Kh_list.NewTime,
                            UName = a.T_BaoJiaToP.YXB_Kh_list.UserInfo.UName,
                            WinMoney = a.WinMoney,
-                           WinStr = a.T_BaoJiaToP.T_WinBak.FirstOrDefault() == null ? null : a.T_BaoJiaToP.T_WinBak.FirstOrDefault().T_YSItems.MyText
-                           
+                           WinYunFei=a.WinYunFei,
+                           WinStr = a.T_BaoJiaToP.T_WinBak.FirstOrDefault() == null ? null : a.T_BaoJiaToP.T_WinBak.FirstOrDefault().T_YSItems.MyText,
+                           HanShui=a.T_BaoJiaToP.T_BoolItem.str,
+                           BaoJiaYunFei=a.BaoJiaYunFei
+
                        };
             var templist = temp.ToList();
             for (int i = 0; i < templist.Count; i++)
@@ -277,7 +293,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            KHzhiwu = a.YXB_Kh_list.KHzhiwu,
                            KHphoto = a.YXB_Kh_list.KHphoto,
                            NewTime = a.YXB_Kh_list.NewTime,
-                           UName = a.YXB_Kh_list.UserInfo.UName
+                           UName = a.YXB_Kh_list.UserInfo.UName,
+                           Denjiu=a.T_YSItems.MyText
                        };
             var templist = temp.ToList();
             for (int i = 0; i < templist.Count; i++)
@@ -295,6 +312,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             var temp = T_BaoJiaToPService.LoadEntities(x => x.id == id).FirstOrDefault();
             string XiangMuName = temp.KHComname;
+            string HanShuiStr = temp.HanShuiID == null ? "" : temp.T_BoolItem.str;
             string bak = temp.T_WinBak.FirstOrDefault()==null?"":temp.T_WinBak.FirstOrDefault().Bak;
             var mmp = from a in temp.YXB_Baojia
                       select new
@@ -303,23 +321,35 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                           CPname = a.T_ChanPinName.MyTexts,
                           CpXingHao = a.T_ChanPinName1.MyTexts,
                           CpMoney = a.WinMoney,
+                          WinYunFei=a.WinYunFei,
                           BaoJiaMoney=a.BaoJiaMoney,
-                          CPShuLiang = a.CPShuLiang
+                          CPShuLiang = a.CPShuLiang,
+                          BaoJiaYunFei= a.BaoJiaYunFei,
+                          Remark=a.Remark,
+                          Cpdengji= a.T_ChanPinName11.MyTexts
                          
                       };
-            return Json(new {ret="ok",temp=mmp,XiangMuName=XiangMuName, bak= bak }, JsonRequestBehavior.AllowGet);
+            return Json(new {ret="ok",temp=mmp,XiangMuName=XiangMuName,HanShuiStr= HanShuiStr,bak = bak }, JsonRequestBehavior.AllowGet);
         }
 
         //获取合同进行完成后操作的数据查询
         public ActionResult GetWinHeTongWinData() {
+            int TotalCount = 0;
+            var rtt = GeteSS(out TotalCount);
+            return Json(new { rows = rtt, total = TotalCount }, JsonRequestBehavior.AllowGet);
+        }
+        private List<SlcClass> GeteSS(out int intcount)
+        {
 
+            bool OutBool = Request["outexe"] == null ? false : Convert.ToBoolean(Request["outexe"]);
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
+            pageSize = OutBool ? pageSize : pageSize;
             int win = Request["win"] == null ? 0 : int.Parse(Request["win"]);
             UserInfoParam uim = new UserInfoParam();
             uim.Uptime = Convert.ToDateTime(Request["UpTime"]);
             uim.Dwtime = Convert.ToDateTime(Request["DwTime"]);
-            uim.zt = Request["YyZt"] == null ? 0 : Request["YyZt"].Length <= 0 ? 0:int.Parse(Request["YyZt"]);
+            uim.zt = Request["YyZt"] == null ? 0 : Request["YyZt"].Length <= 0 ? 0 : int.Parse(Request["YyZt"]);
             uim.addess = Request["addess"];
             uim.Person = Request["Person"] == null ? 0 : Request["Person"].Length <= 0 ? 0 : int.Parse(Request["Person"]);
             uim.KHname = Request["KHname"] == null ? 0 : Request["KHname"].Length <= 0 ? 0 : int.Parse(Request["KHname"]);
@@ -333,14 +363,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                        select new SlcClass
                        {
                            ID = a.ID,
-                           //CPname = a.T_BaoJiaToP.YXB_Baojia.FirstOrDefault().T_ChanPinName.MyTexts,
-                           //CPXingHao = a.T_BaoJiaToP.YXB_Baojia.FirstOrDefault().T_ChanPinName1.MyTexts,
-                           //CPShuLiang = a.T_BaoJiaToP.YXB_Baojia.FirstOrDefault().CPShuLiang,
-                           //BaoJiaMoney = a.T_BaoJiaToP.YXB_Baojia.FirstOrDefault().BaoJiaMoney,
-                           //WinMoney = a.T_BaoJiaToP.YXB_Baojia.FirstOrDefault().WinMoney,
-                           //WIN = a.T_BaoJiaToP.YXB_Baojia.FirstOrDefault().WIN,
-
-                           TopId=a.T_BaoJiaToP.id,
+                           TopId = a.T_BaoJiaToP.id,
                            BaoJiaPerson = a.T_BaoJiaToP.YXB_Baojia.FirstOrDefault().BaoJiaPerson,
                            JiShuYaoQiu = a.T_BaoJiaToP.JiShuYaoQiu,
                            Addess = a.T_BaoJiaToP.Addess,
@@ -354,26 +377,30 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            KHzhiwu = a.T_BaoJiaToP.YXB_Kh_list.KHzhiwu,
                            KHphoto = a.T_BaoJiaToP.YXB_Kh_list.KHphoto,
                            UName = a.T_BaoJiaToP.YXB_Kh_list.UserInfo.UName,
-                           WinMoney = a.T_BaoJiaToP.YXB_Baojia.DefaultIfEmpty().Sum(s => s.CPShuLiang * s.WinMoney),
-                          
+                           WinMoney = a.T_BaoJiaToP.YXB_Baojia.DefaultIfEmpty().Sum(s => s.CPShuLiang * (s.WinMoney + s.WinYunFei)),
                            AddTime = a.T_BaoJiaToP.YXB_Baojia.FirstOrDefault().AddTime,
                            TOPaddtime = a.T_BaoJiaToP.AddTime,
                            BaoJiaTime = a.T_BaoJiaToP.YXB_Baojia.FirstOrDefault().BaoJiaTime,
                            GhTime = a.T_BaoJiaToP.GhTime,
                            NewTime = a.T_BaoJiaToP.YXB_Kh_list.NewTime,
                            WinStr = a.T_BaoJiaToP.T_WinBak.FirstOrDefault() == null ? null : a.T_BaoJiaToP.T_WinBak.FirstOrDefault().T_YSItems.MyText,
-                           Winbak= a.T_BaoJiaToP.T_WinBak.FirstOrDefault() == null ? null : a.T_BaoJiaToP.T_WinBak.FirstOrDefault().Bak,
-                           FahuoMoney=  a.T_WinBakFaHuo.Where(x=>x.WinBakID==a.ID).Sum(x=>x.FaHuoMoney)
+                           Winbak = a.T_BaoJiaToP.T_WinBak.FirstOrDefault() == null ? null : a.T_BaoJiaToP.T_WinBak.FirstOrDefault().Bak,
+
 
                        };
             var templist = temp.ToList();
             for (int i = 0; i < templist.Count; i++)
             {
                 templist[i].Addess = ArrF(templist[i].Addess);
-            }
-            return Json(new { rows = templist, total = uim.TotalCount }, JsonRequestBehavior.AllowGet);
-        }
+                long tid = templist[i].TopId;
+                var topbj = YXB_BaojiaService.LoadEntities(x => x.BaoJiaTop_id == tid).DefaultIfEmpty();
+                templist[i].FahuoMoney = topbj.Sum(x => x.T_WinBakFaHuo.Sum(m => m.FahuoInt) * (x.WinMoney + x.WinYunFei));
 
+            }
+            intcount = uim.TotalCount;
+            return templist;
+
+        }
         //获取发货信息
         public ActionResult FaHuoSelect()
         {
@@ -385,65 +412,49 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //追加发货信息
         public ActionResult AddFahuo(T_WinBakFaHuo wbf)
         {
-           var winbakfh=  T_WinBakFaHuoService.LoadEntities(x => x.WinBakID == wbf.WinBakID).DefaultIfEmpty();
-            var fahuoid = winbakfh == null ? 0 : winbakfh.Max(x => x.FaHuoID);            
-            wbf.AddTime = MvcApplication.GetT_time();
-            wbf.AddUser = LoginUser.ID;
-            wbf.FaHuoID = fahuoid==null?1: fahuoid++;
-            wbf.Del = 0;
-            wbf.WinFH = 0;
-            var SumMoney = winbakfh.Sum(x => x.FaHuoMoney)+wbf.FaHuoMoney;
-
-            var Tmoney = T_WinBakService.LoadEntities(x => x.ID == wbf.WinBakID).FirstOrDefault();
-            if(Tmoney == null)
+            var mmp = YXB_BaojiaService.LoadEntities(x => x.id == wbf.BaoJia_ID).FirstOrDefault();
+            if (mmp == null)
             {
-                return Json(new { ret = "no", msg = "数据库中为找到要发货的总金额！" }, JsonRequestBehavior.AllowGet);
+                return Json(new { ret = "no", msg = "报价单中没有要修改的报价数据！请联系管理员！" }, JsonRequestBehavior.AllowGet);
+
             }
             else
             {
-               decimal? money=  Tmoney.T_BaoJiaToP.YXB_Baojia.Sum(x => x.CPShuLiang * x.WinMoney);
-                if (SumMoney > money)
+                int fhint= T_WinBakFaHuoService.LoadEntities(x => x.BaoJia_ID == wbf.BaoJia_ID)==null?0:Convert.ToInt32( T_WinBakFaHuoService.LoadEntities(x => x.BaoJia_ID == wbf.BaoJia_ID).Sum(x => x.FahuoInt));
+                if (fhint + wbf.FahuoInt > mmp.CPShuLiang)
                 {
-                    return Json(new { ret = "no", msg = "超出供货金额！" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { ret = "no", msg = "发货总数不可大于发货量！" }, JsonRequestBehavior.AllowGet);
                 }
             }
-
-            
-
+            wbf.AddTime = MvcApplication.GetT_time();
+            wbf.AddUser = LoginUser.ID;
+            wbf.Del = 0;
             T_WinBakFaHuoService.AddEntity(wbf);
 
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
-        private List<SlcClass> GetListWINfAHUO(long id,out int TotalCount) {
-            int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
-            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
-            if (T_WinBakFaHuoService.LoadEntities(x => x.WinBakID == id).FirstOrDefault() == null)
-            {
-                List<SlcClass> ms = new List<SlcClass>();
-                TotalCount = 0;
-                return  ms;
-            }
-            var temp = T_WinBakFaHuoService.LoadPageEntities(pageIndex, pageSize,out TotalCount, x => x.WinBakID == id, x => x.AddTime, true);
-            var rtemp = from a in temp
-                        select new SlcClass
-                        {
-                            ID = a.ID,
-                            WinMoney = a.FaHuoMoney,
-                            NewTime = a.FaHuoTime,
-                            AddTime = a.AddTime,
-                            KHComname = a.T_WinBak.T_BaoJiaToP.YXB_Kh_list.KHComname,
-                            KHperson = a.T_WinBak.T_BaoJiaToP.YXB_Kh_list.KHperson,
-                            KHphoto = a.T_WinBak.T_BaoJiaToP.YXB_Kh_list.KHphoto,
-                            KHname = a.T_WinBak.T_BaoJiaToP.YXB_Kh_list.KHname,
-                            Addess = a.T_WinBak.T_BaoJiaToP.Addess
+        private IQueryable GetListWINfAHUO(long TopId, out int TotalCount)
+        {
 
-                        };
-            var templist = rtemp.ToList();
-            for (int i = 0; i < templist.Count; i++)
-            {
-                templist[i].Addess = ArrF(templist[i].Addess);
-            }
-            return templist;
+            int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;           
+            var temp= YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out TotalCount, x => x.BaoJiaTop_id == TopId && x.DelFlag == 0 && x.WIN == 1, x => x.AddTime, true);
+           
+            var rtemp = from a in temp
+                        select new 
+                        {
+                            ID = a.id,
+                            CpName = a.T_ChanPinName.MyTexts,
+                            CpXinghao = a.T_ChanPinName1.MyTexts,
+                            CPShuLiang = a.CPShuLiang,
+                            WinMoney = a.WinMoney,
+                            WinYunFei = a.WinYunFei,
+                            AddTime = a.AddTime,
+                            Fahuoyint= a.T_WinBakFaHuo.Sum(x=>x.FahuoInt),
+                            FahuoTime=a.T_WinBakFaHuo.Max(x=>x.FaHuoTime),
+                            
+                        };            
+            return rtemp;
         }
         //删除发货信息
         public ActionResult DelFahuo()
@@ -457,39 +468,218 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var Dtime = Convert.ToDateTime(Request["Dtime"]);
             List<Month> retMonth = new List<Month>();
             var oldtemp = T_BaoJiaToPService.LoadEntities(x => x.AddTime < Utime);
+         
             if (T_BaoJiaToPService.LoadEntities(x => x.AddTime < Utime).FirstOrDefault() == null)
             {
-                retMonth.Add(new Month { ID = 0, WinCount = 0, LostCount = 0, DaiDingCount = 0, SumCount = 0 });
+                retMonth.Add(new Month { ID = 0, WinCount = 0, LostCount = 0, DaiDingCount = 0, SumCount = 0 ,WinDML=0,lostDML=0,DdDml=0,SumDMLCount=0});
             }
             else
             {
-                retMonth.Add(GetMonthVar(oldtemp, 0));
+                retMonth.Add(GetMonthVar(oldtemp, 0,0));
             }
-           
+            //获取成功失败原因列表
+            var yyItem = T_YSItemsService.LoadEntities(x => x.Items==1&&x.ID!=1);
+            List<Items>[] Rlis = new List<Items>[2];
+            Rlis[0] = AddList(yyItem, oldtemp);
+            oldtemp = T_BaoJiaToPService.LoadEntities(x=>x.AddTime>=Utime&&x.AddTime<=Dtime).DefaultIfEmpty();
+            
 
-            oldtemp = T_BaoJiaToPService.LoadEntities(x=>x.AddTime>=Utime&&x.AddTime<=Dtime);
-            retMonth.Add(GetMonthVar(oldtemp,  retMonth[0].DaiDingCount));
+           
+            Rlis[1]=AddList(yyItem, oldtemp);
+
+            retMonth.Add(GetMonthVar(oldtemp,  retMonth[0].DaiDingCount,retMonth[0].DdDml));
 
             oldtemp = T_BaoJiaToPService.LoadEntities(x => x.AddTime <= Dtime);
-            retMonth.Add(GetMonthVar(oldtemp, 0));
-            return Json(new { ret = "ok", temp = retMonth }, JsonRequestBehavior.AllowGet);
+            retMonth.Add(GetMonthVar(oldtemp, 0,0));
+
+            #region 成功失败待定金额百分比
+            var LostYuanyinItem = T_WinBakService.LoadEntities(x => x.AddTime < Utime).DefaultIfEmpty();
+            //获取报价人员
+            var Uload = UserInfoService.LoadEntities(x => x.BuMenID == 1).DefaultIfEmpty();   
+            //获取成功或失败的信息       
+            var DMYuanyinItem = T_WinBakService.LoadEntities(x => x.AddTime >= Utime && x.AddTime <= Dtime).DefaultIfEmpty();
+            //获取待定信息
+            var DaiDingData = T_BaoJiaToPService.LoadEntities(x => x.AddTime >= Utime && x.AddTime <= Dtime).Where(x => x.T_WinBak.Count() == 0).DefaultIfEmpty();
+
+           //.Sum(a => a.YXB_Baojia.Sum(m => m.CPShuLiang * (m.BaoJiaMoney + m.BaoJiaYunFei)));
+            var DMyyItem = from a in DMYuanyinItem
+                           select new {
+                               PerName = a.T_BaoJiaToP.YXB_Kh_list.UserInfo.PerSonName,
+                               WinMoney = a.YuanYin == 1 ? a.T_BaoJiaToP.YXB_Baojia.Sum(m => m.CPShuLiang * (m.WinMoney + m.WinYunFei)):0,
+                               LostMoney=a.YuanYin!=1 ? a.T_BaoJiaToP.YXB_Baojia.Sum(m => m.CPShuLiang * (m.WinMoney + m.WinYunFei)) : 0,
+                               DaiDingMoney=a.T_BaoJiaToP.YXB_Baojia.Where(m=>m.WIN==0).Sum(m => m.CPShuLiang * (m.BaoJiaMoney + m.BaoJiaYunFei)),
+                                
+                           };
+            List<Items> WinLostMoney = new List<Items>();
+
+            foreach (var f in Uload)
+            {
+                Items its = new Items();
+                its.PName = f.PerSonName;
+                its.Wmoney = DMyyItem.Where(x => x.PerName == its.PName).Sum(x => x.WinMoney) == null ? 0 : DMyyItem.Where(x => x.PerName == its.PName).Sum(x => x.WinMoney);
+                its.Lmoney = DMyyItem.Where(x => x.PerName == its.PName).Sum(x => x.LostMoney) == null ? 0 : DMyyItem.Where(x => x.PerName == its.PName).Sum(x => x.LostMoney);
+                var itm = DaiDingData.Where(x => x.YXB_Kh_list.UserInfo.PerSonName == f.PerSonName).DefaultIfEmpty().Sum(x => x.YXB_Baojia.Sum(y => (y.BaoJiaMoney + y.BaoJiaYunFei) * y.CPShuLiang));
+                its.Dmoney = itm == null ? 0 : itm;
+                its.WPercent = Rounds((its.Wmoney / DMyyItem.Sum(x => x.WinMoney) * 100) == null ? 0 : its.Wmoney / DMyyItem.Sum(x => x.WinMoney) * 100);
+                its.LPercent = Rounds((its.Lmoney / DMyyItem.Sum(x => x.LostMoney) * 100) == null ? 0 :its.Lmoney / DMyyItem.Sum(x => x.LostMoney) * 100);
+                var Summoneydd=DaiDingData.Sum(x => x.YXB_Baojia.Sum(y => (y.BaoJiaMoney + y.BaoJiaYunFei) * y.CPShuLiang));
+                its.DPercent = Rounds( Summoneydd == null ? 0 : its.Dmoney / Summoneydd*100);
+                WinLostMoney.Add(its);
+            }
+            //添加总数
+            Items ims = new Items();
+            ims.PName = "合计";
+            ims.Wmoney = WinLostMoney.Sum(x => x.Wmoney);
+            ims.Lmoney = WinLostMoney.Sum(x => x.Lmoney);
+            ims.Dmoney = WinLostMoney.Sum(x => x.Dmoney);
+            ims.WPercent = Convert.ToInt32(WinLostMoney.Sum(x => x.WPercent));
+            ims.LPercent = Convert.ToInt32(WinLostMoney.Sum(x => x.LPercent)); 
+            ims.DPercent = Convert.ToInt32(WinLostMoney.Sum(x => x.DPercent));
+            WinLostMoney.Add(ims);
+            #endregion
+
+
+            return Json(new { ret = "ok", temp = retMonth ,LostItem=Rlis,XiangXi= WinLostMoney }, JsonRequestBehavior.AllowGet);
         }
-        private Month GetMonthVar(IQueryable<T_BaoJiaToP> iq,int p)
+        private Month GetMonthVar(IQueryable<T_BaoJiaToP> iq,int p,decimal? ddmm)
         {
             var mscc = from a in iq
                        select new
                        {
                            Wcount = a.T_WinBak.Where(x => x.YuanYin == 1),
-                           Lcount = a.T_WinBak.Where(x => x.YuanYin != 1)
+                           Lcount = a.T_WinBak.Where(x => x.YuanYin != 1),
                        };
 
             Month mh = new Month() ;
             mh.ID = 1;
             mh.WinCount = mscc.Sum(x => x.Wcount.Count());
             mh.LostCount = mscc.Sum(x => x.Lcount.Count());
-            mh.DaiDingCount = iq.Where(x => x.T_WinBak.Count() == 0).Count() + p;
+            var ttw = iq.Where(x => x.T_WinBak.Count() == 0).FirstOrDefault();
+            mh.DaiDingCount = ttw==null?p: iq.Where(x => x.T_WinBak.Count() == 0).Count() + p;
             mh.SumCount = mh.WinCount + mh.LostCount + mh.DaiDingCount;
+
+            var t = mscc.Sum(x => x.Wcount.Sum(a => a.T_BaoJiaToP.YXB_Baojia.Sum(m => m.CPShuLiang * (m.WinMoney + m.WinYunFei))));
+            mh.WinDML =t==null?0:t;
+            t = mscc.Sum(x => x.Lcount.Sum(a => a.T_BaoJiaToP.YXB_Baojia.Sum(m => m.CPShuLiang * (m.WinMoney + m.WinYunFei))));
+            mh.lostDML = t == null ? 0 : t;
+            var gg = iq.Where(x => x.T_WinBak.Count() == 0).Sum(a => a.YXB_Baojia.Sum(m => m.CPShuLiang * (m.BaoJiaMoney + m.BaoJiaYunFei)));
+            mh.DdDml= (gg ==null?0:gg)+ ddmm;
+
+
+            mh.SumDMLCount = CdmlNull(mh.WinDML) + CdmlNull(mh.lostDML) + CdmlNull(mh.DdDml);
+            //Convert.ToDecimal( iq.Where(b=>b.T_WinBak.Where(ix=>ix.YuanYin==1)).Sum(x => x.YXB_Baojia.Sum(y => y.CPShuLiang * (y.WinMoney + y.WinYunFei))));
             return mh;
         }
+        private List<Items> AddList(IQueryable<T_YSItems> yyItem, IQueryable<T_BaoJiaToP> oldtemp)
+        {
+            var s = from a in oldtemp
+                    from m in yyItem
+                    select new
+                    {
+                        count = a.T_WinBak.Where(x => x.YuanYin == m.ID).Count(),
+                        text = m.MyText
+                    };
+            List<Items> ts = new List<Items>();
+            foreach (var a in yyItem)
+            {
+                Items tis = new Items();
+                tis.Text = a.MyText;
+                tis.Count = s.Where(x => x.count > 0 && x.text == a.MyText).Count();
+                ts.Add(tis);
+            }
+            return ts;
+        }
+        private decimal Rounds(decimal? val)
+        {
+            return decimal.Round(Convert.ToDecimal(val), 2);
+        }
+        //删除发货详细信息
+        public ActionResult DelFahuoXiangXI() {
+            var id = Convert.ToInt64(Request["ID"]);
+            var temp = T_WinBakFaHuoService.LoadEntities(x => x.ID == id).FirstOrDefault();
+            T_WinBakFaHuoService.DeleteEntity(temp);
+            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+        }
+        //获取发货详细信息
+        public ActionResult FaHuoXiangXI()
+        {
+            var id = Convert.ToInt64(Request["ID"]);
+            int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
+            int TotalCount = 0;
+            var temp = T_WinBakFaHuoService.LoadPageEntities(pageIndex, pageSize, out TotalCount, x =>x.BaoJia_ID==id, x => x.AddTime, true);
+            var ttemp = from a in temp
+                        select new
+                        {
+                            ID = a.ID,
+                            FaHuoBak= a.FaHuoBak,
+                            FahuoInt= a.FahuoInt,
+                            FaHuoTime=a.FaHuoTime,
+                            AddTime=a.AddTime,
+                            PerSonName= a.UserInfo1.PerSonName
+                        };
+        
+            return Json(new { ret = "ok", rows = ttemp, total = TotalCount }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        private decimal CdmlNull(decimal? dml)
+        {
+            return dml == null ? 0 : Convert.ToDecimal(dml);
+        }
+        public FileResult DownLoadExcel()
+        {           
+            DataTable Tdt = new DataTable();
+            Tdt.Columns.Add("id", typeof(int));
+            Tdt.Columns.Add("SqBaoJiaPer", typeof(string));
+            Tdt.Columns.Add("Comname", typeof(string));
+            Tdt.Columns.Add("KhName", typeof(string));
+            Tdt.Columns.Add("KhPer", typeof(string));
+            DataRow dr = Tdt.NewRow();
+            dr["id"] = 0;
+            dr["SqBaoJiaPer"] = "SqBaoJiaPer";
+            dr["Comname"] = "Comname";
+            dr["KhName"] = "KhName";
+            dr["KhPer"] = "KhPer";
+            Tdt.Rows.Add(dr);
+            DataTable dt = Tdt;//获取需要导出的datatable数据  
+                               //创建Excel文件的对象     
+            try
+            {
+                NPOI.HSSF.UserModel.HSSFWorkbook book = new NPOI.HSSF.UserModel.HSSFWorkbook();
+
+                //添加一个sheet  
+                NPOI.SS.UserModel.ISheet sheet1 = book.CreateSheet("Sheet1");
+                //给sheet1添加第一行的头部标题  
+                NPOI.SS.UserModel.IRow row1 = sheet1.CreateRow(0);
+                //row1.RowStyle.FillBackgroundColor = "";  
+                for (int i = 0; i < dt.Columns.Count; i++)
+                {
+                    row1.CreateCell(i).SetCellValue(dt.Columns[i].ColumnName);
+                }
+                //将数据逐步写入sheet1各个行  
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    NPOI.SS.UserModel.IRow rowtemp = sheet1.CreateRow(i + 1);
+                    for (int j = 0; j < dt.Columns.Count; j++)
+                    {
+                        rowtemp.CreateCell(j).SetCellValue(dt.Rows[i][j].ToString().Trim());
+                    }
+                }
+                string strdate = DateTime.Now.ToString("yyyyMMddhhmmss");//获取当前时间  
+                                                                         // 写入到客户端   
+                System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                book.Write(ms);
+                ms.Seek(0, SeekOrigin.Begin);
+                return File(ms, "application/vnd.ms-excel", strdate + "Excel.xls");
+            }
+            catch (Exception ex)
+            {
+                string ms = ex.ToString();
+                return null;
+            }
+           
+        }
+
     }
 }

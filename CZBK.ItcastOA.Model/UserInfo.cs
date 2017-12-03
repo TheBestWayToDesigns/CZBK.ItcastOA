@@ -9,31 +9,34 @@
 
 namespace CZBK.ItcastOA.Model
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    
+
     public partial class UserInfo
     {
         public UserInfo()
         {
-            this.R_UserInfo_ActionInfo = new HashSet<R_UserInfo_ActionInfo>();
-            this.Department = new HashSet<Department>();
-            this.RoleInfo = new HashSet<RoleInfo>();
-            this.YXB_Kh_list = new HashSet<YXB_Kh_list>();
             this.Login_list = new HashSet<Login_list>();
-            this.T_ChanPinName = new HashSet<T_ChanPinName>();
+            this.R_UserInfo_ActionInfo = new HashSet<R_UserInfo_ActionInfo>();
             this.T_CanPan = new HashSet<T_CanPan>();
             this.T_CanPan1 = new HashSet<T_CanPan>();
-            this.T_SczzItem = new HashSet<T_SczzItem>();
-            this.T_ShengChanZhiZhaoTopName = new HashSet<T_ShengChanZhiZhaoTopName>();
             this.T_SczzDanju = new HashSet<T_SczzDanju>();
             this.T_SczzDanju1 = new HashSet<T_SczzDanju>();
             this.T_SczzDanju2 = new HashSet<T_SczzDanju>();
             this.T_SczzDanju3 = new HashSet<T_SczzDanju>();
             this.T_SczzDanju4 = new HashSet<T_SczzDanju>();
+            this.T_SczzItem = new HashSet<T_SczzItem>();
+            this.T_ShengChanZhiZhaoTopName = new HashSet<T_ShengChanZhiZhaoTopName>();
+            this.YXB_Kh_list = new HashSet<YXB_Kh_list>();
+            this.Departments = new HashSet<Department>();
+            this.RoleInfoes = new HashSet<RoleInfo>();
+            this.T_ChanPinName = new HashSet<T_ChanPinName>();
+            this.YXB_Baojia = new HashSet<YXB_Baojia>();
             this.T_WinBakFaHuo = new HashSet<T_WinBakFaHuo>();
             this.T_WinBakFaHuo1 = new HashSet<T_WinBakFaHuo>();
-            this.YXB_Baojia = new HashSet<YXB_Baojia>();
+            this.Schedules = new HashSet<Schedule>();
+            this.ScheduleUsers = new HashSet<ScheduleUser>();
         }
     
         public int ID { get; set; }
@@ -55,25 +58,48 @@ namespace CZBK.ItcastOA.Model
         public string PerSonName { get; set; }
         public Nullable<int> QuXian { get; set; }
         public Nullable<int> BuMenID { get; set; }
-    
-        public virtual ICollection<R_UserInfo_ActionInfo> R_UserInfo_ActionInfo { get; set; }
-        public virtual ICollection<Department> Department { get; set; }
-        public virtual ICollection<RoleInfo> RoleInfo { get; set; }
-        public virtual ICollection<YXB_Kh_list> YXB_Kh_list { get; set; }
-        public virtual ICollection<Login_list> Login_list { get; set; }
-        public virtual ICollection<T_ChanPinName> T_ChanPinName { get; set; }
-        public virtual ICollection<T_CanPan> T_CanPan { get; set; }
-        public virtual ICollection<T_CanPan> T_CanPan1 { get; set; }
-        public virtual ICollection<T_SczzItem> T_SczzItem { get; set; }
-        public virtual ICollection<T_ShengChanZhiZhaoTopName> T_ShengChanZhiZhaoTopName { get; set; }
-        public virtual ICollection<T_SczzDanju> T_SczzDanju { get; set; }
-        public virtual ICollection<T_SczzDanju> T_SczzDanju1 { get; set; }
-        public virtual ICollection<T_SczzDanju> T_SczzDanju2 { get; set; }
-        public virtual ICollection<T_SczzDanju> T_SczzDanju3 { get; set; }
-        public virtual ICollection<T_SczzDanju> T_SczzDanju4 { get; set; }
+
+        [JsonIgnore]
         public virtual BumenInfoSet BumenInfoSet { get; set; }
-        public virtual ICollection<T_WinBakFaHuo> T_WinBakFaHuo { get; set; }
-        public virtual ICollection<T_WinBakFaHuo> T_WinBakFaHuo1 { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Login_list> Login_list { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<R_UserInfo_ActionInfo> R_UserInfo_ActionInfo { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<T_CanPan> T_CanPan { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<T_CanPan> T_CanPan1 { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<T_SczzDanju> T_SczzDanju { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<T_SczzDanju> T_SczzDanju1 { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<T_SczzDanju> T_SczzDanju2 { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<T_SczzDanju> T_SczzDanju3 { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<T_SczzDanju> T_SczzDanju4 { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<T_SczzItem> T_SczzItem { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<T_ShengChanZhiZhaoTopName> T_ShengChanZhiZhaoTopName { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<YXB_Kh_list> YXB_Kh_list { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Department> Departments { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<RoleInfo> RoleInfoes { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<T_ChanPinName> T_ChanPinName { get; set; }
+        [JsonIgnore]
         public virtual ICollection<YXB_Baojia> YXB_Baojia { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<T_WinBakFaHuo> T_WinBakFaHuo { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<T_WinBakFaHuo> T_WinBakFaHuo1 { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Schedule> Schedules { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<ScheduleUser> ScheduleUsers { get; set; }
     }
 }

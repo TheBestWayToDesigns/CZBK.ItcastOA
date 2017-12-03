@@ -15,21 +15,19 @@ namespace CZBK.ItcastOA.Model
     public partial class T_WinBakFaHuo
     {
         public long ID { get; set; }
-        public Nullable<long> WinBakID { get; set; }
         public Nullable<System.DateTime> FaHuoTime { get; set; }
-        public Nullable<decimal> FaHuoMoney { get; set; }
-        public Nullable<int> FaHuoID { get; set; }
         public Nullable<int> AddUser { get; set; }
         public Nullable<System.DateTime> AddTime { get; set; }
         public string FaHuoBak { get; set; }
         public Nullable<System.DateTime> EditTime { get; set; }
-        public Nullable<decimal> EditQianMoney { get; set; }
+        public Nullable<decimal> EditQianFahuoInt { get; set; }
         public Nullable<int> EditUser { get; set; }
         public Nullable<short> Del { get; set; }
-        public Nullable<short> WinFH { get; set; }
+        public long BaoJia_ID { get; set; }
+        public Nullable<decimal> FahuoInt { get; set; }
     
-        public virtual T_WinBak T_WinBak { get; set; }
-        public virtual UserInfo eidtuserinfo { get; set; }
-        public virtual UserInfo adduserinfo { get; set; }
+        public virtual YXB_Baojia YXB_Baojia { get; set; }
+        public virtual UserInfo UserInfo { get; set; }
+        public virtual UserInfo UserInfo1 { get; set; }
     }
 }

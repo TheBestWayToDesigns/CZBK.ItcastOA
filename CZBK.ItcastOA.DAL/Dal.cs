@@ -26,6 +26,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class FileItemDal :BaseDal<FileItem>,IFileItemDal
+    {
+
+    }
+		
 	public partial class Login_listDal :BaseDal<Login_list>,ILogin_listDal
     {
 
@@ -37,6 +42,21 @@ namespace CZBK.ItcastOA.DAL
     }
 		
 	public partial class RoleInfoDal :BaseDal<RoleInfo>,IRoleInfoDal
+    {
+
+    }
+		
+	public partial class ScheduleDal :BaseDal<Schedule>,IScheduleDal
+    {
+
+    }
+		
+	public partial class ScheduleTypeDal :BaseDal<ScheduleType>,IScheduleTypeDal
+    {
+
+    }
+		
+	public partial class ScheduleUserDal :BaseDal<ScheduleUser>,IScheduleUserDal
     {
 
     }

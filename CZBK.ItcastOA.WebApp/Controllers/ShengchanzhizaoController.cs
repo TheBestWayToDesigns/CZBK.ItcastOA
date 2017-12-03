@@ -310,12 +310,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                          ID = a.ID,
                          textname = a.T_ShengChanZhiZhaoTopName.TopText,
                          zhuangtai = a.ZhuangTai,
-                         jhtcr = a.AddUserinfo.PerSonName,
-                         sccjr=a.Scshuser.PerSonName,
-                         jhzdr = a.jhzdruser.PerSonName,
-                         jhpzr = a.Upshuser.PerSonName,
-                         jgcj = a.CJSHuser.PerSonName,
-                         panduan = a.AddUserinfo.QuXian == 0 ? LoginUser.QuXian == 0?false: true : false
+                         jhtcr = a.UserInfo.PerSonName,
+                         sccjr=a.UserInfo3.PerSonName,
+                         jhzdr = a.UserInfo2.PerSonName,
+                         jhpzr = a.UserInfo4.PerSonName,
+                         jgcj = a.UserInfo1.PerSonName,
+                         panduan = a.UserInfo.QuXian == 0 ? LoginUser.QuXian == 0?false: true : false
                      };
             if (tdj == null)
             {

@@ -47,7 +47,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var tem = from a in temp
                       select new 
                       {
-                          MyTexts=a.AddUserinfo.PerSonName,
+                          MyTexts=a.UserInfo.PerSonName,
                           ID = a.AddUser
                       };
             var tem_sd = tem.Distinct();
@@ -126,14 +126,14 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             AddTopTime = a.AddTime,
                             ImageInt = a.Image,
                             Bak = a.Bak,
-                            DjAddUser = a.AddUserinfo.PerSonName,
-                            Jhpzr = a.Upshuser.PerSonName,
+                            DjAddUser = a.UserInfo.PerSonName,
+                            Jhpzr = a.UserInfo4.PerSonName,
                             JhpzrEtime = a.UPshenhetime,
-                            Jhtcr = a.Scshuser.PerSonName,
+                            Jhtcr = a.UserInfo.PerSonName,
                             JhtcrEtime = a.ShenChanShenHetime,
-                            Jgcj = a.CJSHuser.PerSonName,
+                            Jgcj = a.UserInfo1.PerSonName,
                             JgcjEtime = a.CheJianShenHetime,
-                            Jhzdr = a.jhzdruser.PerSonName,
+                            Jhzdr = a.UserInfo2.PerSonName,
                             JhzdrEtime = a.JhzdrTime,
                             Zt = a.ZhuangTai
                         };

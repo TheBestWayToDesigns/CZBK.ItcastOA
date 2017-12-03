@@ -121,12 +121,12 @@ namespace CZBK.ItcastOA.BLL
             if (userinfo != null)
             {
                 //删除用户角色
-                userinfo.RoleInfo.Clear();
+                userinfo.RoleInfoes.Clear();
 
                 foreach (int roleid in list)
                 {
                     var roleinfo = this.GetCurrentDbSession.RoleInfoDal.LoadEntities(r => r.ID == roleid).FirstOrDefault();
-                    userinfo.RoleInfo.Add(roleinfo);//通过导航属性RoleInfo 进行修改
+                    userinfo.RoleInfoes.Add(roleinfo);//通过导航属性RoleInfo 进行修改
                 }
                 return this.GetCurrentDbSession.SaveChanges();//最后执行savechanges
             }

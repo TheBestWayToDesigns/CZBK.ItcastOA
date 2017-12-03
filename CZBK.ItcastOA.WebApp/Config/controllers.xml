@@ -38,6 +38,8 @@
    <property name="T_BaoJiaToPService" ref="T_BaoJiaToPService" />
    <property name="SysFieldService" ref="SysFieldService" />
    <property name="T_ChanPinNameService" ref="T_ChanPinNameService" />
+   <property name="T_BoolItemService" ref="T_BoolItemService" />
+   <property name="T_YSItemsService" ref="T_YSItemsService" />
   </object>
   <object type="CZBK.ItcastOA.WebApp.Controllers.MasterBaoJiaController, CZBK.ItcastOA.WebApp" singleton="false" >
     <property name="YXB_BaojiaService" ref="YXB_BaojiaService" />
@@ -70,7 +72,13 @@
     <property name="T_CanPanService" ref="T_CanPanService" />
     <property name="UserInfoService" ref="UserInfoService" />
   </object>
-
+  <object type="CZBK.ItcastOA.WebApp.Controllers.EverDayWorkController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="FileItemService" ref="FileItemService" />
+    <property name="ScheduleService" ref="ScheduleService" />
+    <property name="ScheduleTypeService" ref="ScheduleTypeService" />
+    <property name="ScheduleUserService" ref="ScheduleUserService" />
+    <property name="UserInfoService" ref="UserInfoService" />
+  </object>
 
 
 

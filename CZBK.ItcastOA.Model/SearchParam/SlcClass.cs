@@ -43,5 +43,13 @@ namespace CZBK.ItcastOA.Model.SearchParam
         public string Winbak { get; set; }
         public int del { get; set; }
         public decimal? FahuoMoney { get; set; }
+        public string HanShui { get; set; }
+        public decimal? BaoJiaYunFei { get; set; }
+        public decimal? WinYunFei { get; set; }
+        public string Remark { get; set; }
+        public string Denjiu { get; set; }
+        public string CpJB { get; set; }
+
+
     }
 }

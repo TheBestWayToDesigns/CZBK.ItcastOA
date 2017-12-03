@@ -31,9 +31,11 @@ namespace CZBK.ItcastOA.Model
         public System.DateTime AddTime { get; set; }
         public short DelFlag { get; set; }
         public string KHComname { get; set; }
-        public Nullable<int> HanShuiID { get; set; }
+        public Nullable<long> HanShuiID { get; set; }
+        public Nullable<long> PiaoJuID { get; set; }
     
         public virtual T_BoolItem T_BoolItem { get; set; }
+        public virtual T_YSItems T_YSItems { get; set; }
         public virtual YXB_Kh_list YXB_Kh_list { get; set; }
         public virtual ICollection<T_WinBak> T_WinBak { get; set; }
         public virtual ICollection<YXB_Baojia> YXB_Baojia { get; set; }

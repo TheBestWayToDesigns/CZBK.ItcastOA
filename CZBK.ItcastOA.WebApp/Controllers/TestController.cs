@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
 namespace CZBK.ItcastOA.WebApp.Controllers
 {
-    public class TestController : Controller
+    public class TestController : BaseController
     {
         //
         // GET: /Test/
@@ -22,6 +24,6 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             int c = a / b;
             return Content(c.ToString());
         }
-
+        
     }
 }
