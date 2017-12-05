@@ -146,6 +146,19 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IScheduleUserDal;
         }
 		
+	    public static IsysdiagramDal CreatesysdiagramDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".sysdiagramDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IsysdiagramDal;
+        }
+		
 	    public static ISysFieldDal CreateSysFieldDal()
         {
 

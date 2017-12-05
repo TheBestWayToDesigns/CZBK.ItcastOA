@@ -61,6 +61,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class sysdiagramDal :BaseDal<sysdiagram>,IsysdiagramDal
+    {
+
+    }
+		
 	public partial class SysFieldDal :BaseDal<SysField>,ISysFieldDal
     {
 

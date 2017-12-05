@@ -60,6 +60,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IsysdiagramService : IBaseService<sysdiagram>
+    {
+       
+    }   
+	
 	public partial interface ISysFieldService : IBaseService<SysField>
     {
        

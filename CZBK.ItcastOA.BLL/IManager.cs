@@ -91,6 +91,14 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class sysdiagramService :BaseService<sysdiagram>,IsysdiagramService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.sysdiagramDal;
+        }
+    }   
+	
 	public partial class SysFieldService :BaseService<SysField>,ISysFieldService
     {
         public override void SetCurretnDal()

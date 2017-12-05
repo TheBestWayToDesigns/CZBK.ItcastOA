@@ -112,7 +112,7 @@
           <Property Name="ScheduleTime" Type="datetime" Nullable="false" />
           <Property Name="ScheduleAddTime" Type="datetime" Nullable="false" />
           <Property Name="ScheduleUpdateTime" Type="datetime" />
-          <Property Name="ScheduleText" Type="text" />
+          <Property Name="ScheduleText" Type="nvarchar(max)" />
           <Property Name="ScheduleTypeID" Type="int" />
           <Property Name="TextReadBak" Type="nvarchar(max)" />
           <Property Name="TextReadUser" Type="int" />
@@ -135,6 +135,16 @@
           <Property Name="UserID" Type="int" />
           <Property Name="UpID" Type="int" />
           <Property Name="Del" Type="smallint" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="SysField">
           <Key>
@@ -914,6 +924,7 @@
           <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScheduleType" EntityType="Self.ScheduleType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScheduleUser" EntityType="Self.ScheduleUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SysField" EntityType="Self.SysField" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_BaoJiaToP" EntityType="Self.T_BaoJiaToP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_BoolItem" EntityType="Self.T_BoolItem" Schema="dbo" store:Type="Tables" />
@@ -1288,6 +1299,7 @@
             <End Role="UserInfo" EntitySet="UserInfoes" />
             <End Role="ScheduleUser" EntitySet="ScheduleUsers" />
           </AssociationSet>
+          <EntitySet Name="sysdiagrams" EntityType="OAModel.sysdiagram" />
           </EntityContainer>
         <EntityType Name="ActionInfo">
           <Key>
@@ -2066,7 +2078,7 @@
           <Property Name="ScheduleTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ScheduleAddTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ScheduleUpdateTime" Type="DateTime" Precision="3" />
-          <Property Name="ScheduleText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ScheduleText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ScheduleTypeID" Type="Int32" />
           <Property Name="TextReadBak" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TextReadUser" Type="Int32" />
@@ -2143,6 +2155,16 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2536,6 +2558,17 @@
                 <ScalarProperty Name="UpID" ColumnName="UpID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="OAModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

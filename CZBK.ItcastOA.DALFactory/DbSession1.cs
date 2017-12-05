@@ -165,6 +165,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _ScheduleUserDal = value; }
         }
 	
+		private IsysdiagramDal _sysdiagramDal;
+        public IsysdiagramDal sysdiagramDal
+        {
+            get
+            {
+                if(_sysdiagramDal == null)
+                {
+                   // _sysdiagramDal = new sysdiagramDal();
+				    _sysdiagramDal =AbstractFactory.CreatesysdiagramDal();
+                }
+                return _sysdiagramDal;
+            }
+            set { _sysdiagramDal = value; }
+        }
+	
 		private ISysFieldDal _SysFieldDal;
         public ISysFieldDal SysFieldDal
         {

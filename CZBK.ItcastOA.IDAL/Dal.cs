@@ -60,6 +60,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IsysdiagramDal :IBaseDal<sysdiagram>
+    {
+      
+    }
+	
 	public partial interface ISysFieldDal :IBaseDal<SysField>
     {
       

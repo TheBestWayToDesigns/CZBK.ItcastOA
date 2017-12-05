@@ -104,6 +104,9 @@
     <Compile Include="SearchParam\Month.cs" />
     <Compile Include="SearchParam\SlcClass.cs" />
     <Compile Include="SearchParam\UserInfoParam.cs" />
+    <Compile Include="sysdiagram.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="SysField.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

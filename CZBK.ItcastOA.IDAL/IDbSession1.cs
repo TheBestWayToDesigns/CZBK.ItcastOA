@@ -32,6 +32,8 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IScheduleUserDal ScheduleUserDal{get;set;}
 	
+		IsysdiagramDal sysdiagramDal{get;set;}
+	
 		ISysFieldDal SysFieldDal{get;set;}
 	
 		IT_BaoJiaToPDal T_BaoJiaToPDal{get;set;}
