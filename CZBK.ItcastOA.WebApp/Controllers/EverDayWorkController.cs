@@ -85,8 +85,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
 
-        //删除日程状态
-        public ActionResult UpdateSchedule()
+        //删除日程
+        public ActionResult DelSchedule()
         {
             var id = Convert.ToInt32(Request["id"]);
             var temp = ScheduleService.LoadEntities(x => x.ID == id).FirstOrDefault();
@@ -144,7 +144,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             { return Json(new { msg = "数据库中无要删除的信息！" }, JsonRequestBehavior.AllowGet); }
             else
             {
-                if (ScheduleTypeService.EditEntity(temp))
+                if (ScheduleTypeService.DeleteEntity(temp))
                 {
                     return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
                 }

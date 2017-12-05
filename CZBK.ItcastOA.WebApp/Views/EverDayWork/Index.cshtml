@@ -186,7 +186,7 @@
                     { field: 'FileItemID', title: '文件编号', align: 'center' },
                     {
                         field: 'Edit', title: '编辑栏', align: 'center', formatter: function (value, row, index) {
-                         return "<input type='button' class='icon-edit' style='margin:0px 10px;padding:0px 10px' onclick='updateSchedule()'/><input type='button' class='icon-remove' style='margin:0px 10px;padding:0px 10px' onclick='delSchedule()'/>";
+                            return "<a href='javascript:updateSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>修改</a><a href='javascript:delSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>删除</a>";
 
                             
                         }
@@ -352,15 +352,12 @@
                 buttons: [{
                     text: '确定',
                     iconCls: 'icon-ok',
-                    handler: function () {
-                        //if ($("#ItemText").val().trim().length <= 0) {
-                            //$.messager.alert("提示", "值不可以为空！");
-                           // return;
-                       // }
+                    handler: function () {                 
                         $("#updateschedulefrom").submit();//提交表单
                     }
                 }, {
                     text: '取消',
+                    iconCls: 'icon-cancel',
                     handler: function () {
                         $('#AddScheduleTypeDIV').dialog('close');
                     }
@@ -372,8 +369,7 @@
         //删除数据
         function deldata() {
             var rows = $('#tt').datagrid('getSelections');
-            if (rows.length != 1) {
-                //alert("请选择要修改的商品！");
+            if (rows.length != 1) {                
                 $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
                 return;
             }
@@ -390,7 +386,7 @@
 
 </head>
 <body class="easyui-layout">
-    <div id="divBtn" data-options="region:'west',split:true,title:'选项'"  class="easyui-panel btnlink" style="width:150px; padding:8px;">
+    <div id="divBtn" data-options="region:'west',split:true,title:'选项'"  class="easyui-panel btnlink " style="width:150px; padding:8px;">
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="EverD">日程</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="">添加中</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="">添加中</a>
