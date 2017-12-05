@@ -76,30 +76,41 @@
             }
         }
         //提交数据
-      
+
         $(function () {
             win = 0;
-            $("#Province").combobox({
+            $(".Province").combobox({
                 onChange: function (n, o) {
-                    var val = $('#Province').combobox('getValue');
-                    $('#City').combobox({
+                    var cityids = $(this).attr("id");
+                    var val = $(this).combobox('getValue');
+                    $('.' + cityids).combobox({
                         url: '/YXBJ/GetAddress?parentiD=' + val + '&MyColums=City',
                         valueField: 'ID',
                         textField: 'MyTexts'
                     });
-
                 }
             })
-            $("#City").combobox({
+            $(".CitySee").combobox({
                 onChange: function (n, o) {
-                    var val = $('#City').combobox('getValue');
-                    $('#Village').combobox({
-                        url: '/YXBJ/GetAddress?parentiD=' + val + '&MyColums=Village',
-                        valueField: 'ID',
-                        textField: 'MyTexts'
-                    });
+                    ComboboxF($(this))
                 }
             })
+            $(".CityAdd").combobox({
+                onChange: function (n, o) {
+                    ComboboxF($(this))
+                }
+            })
+            function ComboboxF(obj)
+            {
+                var cityids = obj.attr("id");
+                var val = obj.combobox('getValue');
+                $('.' + cityids).combobox({
+                    url: '/YXBJ/GetAddress?parentiD=' + val + '&MyColums=Village',
+                    valueField: 'ID',
+                    textField: 'MyTexts'
+                });
+            }
+
             //datagrid数据表格ID
             var datagridId = 'tt';
             loadData();
@@ -107,19 +118,21 @@
             $(window).resize(function () {
                 $('#' + datagridId).resizeDataGrid(0, 0, 200, 500);
             });
-            $("#editDiv").css("display", "none");
+            $("#EditDivTable").css("display", "none");
             $("#FaHuoDIV").css("display", "none");
             $("#AddFaHuoOneDiv").css("display", "none");
             $("#mothdiv").css("display", "none");
             $("#XiangXiDIV").css("display", "none");
             $("#divZhList").css("display", "none");
             $("#divMxList").css("display", "none");
-            $('#dlg').dialog('close');            
+            $("#City_Div").hide();
+            $('#CityDint').dialog('close')
+            $('#dlg').dialog('close');
             bindActionTypeEnumChange();
             bindFileUpclick();
             //报价列表
             $("#Bjlb").click(function () {
-               
+
                 delflg = 0;
                 win = 0;
                 var pars = {
@@ -241,15 +254,33 @@
                 WinHeTong()
             })
             $("#divBtn a").click(function () {
-                $("#tt").datagrid("clearSelections");
-                $("#TTdiv").show();
-                $("#mothdiv").hide();
+
+                if ($(this).attr("id") == "CityEdit") {
+                    $("#TTdiv").hide();
+                    $("#mothdiv").hide();
+                    $("#City_Div").show();
+
+                } else if ($(this).attr("id") == undefined) {
+                    $("#TTdiv").hide();
+                    $("#mothdiv").hide();
+                    $("#City_Div").hide();
+                }
+                else {
+                    $("#tt").datagrid("clearSelections");
+                    $("#TTdiv").show();
+                    $("#mothdiv").hide();
+                }
+
             })
             $("#MonthTable").click(function () {
                 $("#TTdiv").hide();
                 $("#mothdiv").show();
-              
+
             });
+            $("#CityEdit").click(function () {
+                var pars = { "ParentId": 0 };
+                LoadCity(pars);
+            })
             //情况选项数据
             $("#qingkou").click(function () {
                 qingkou();
@@ -259,11 +290,35 @@
             $("#PrintMonth").click(function () {
                 $("#Print_div").jqprint();
             })
+            function Contstr(obj, b) {
+                if (b) {
+                    return obj == 0 ? "-" : obj;
+                }
+                else {
+                    var rfc = formatCurrency(obj)
+                    return rfc == "0.00" ? "-" : rfc;
+                }
+            }
+            function formatCurrency(num) {
+                num = num.toString().replace(/\$|\,/g, '');
+                if (isNaN(num))
+                    num = "0";
+                sign = (num == (num = Math.abs(num)));
+                num = Math.floor(num * 100 + 0.50000000001);
+                cents = num % 100;
+                num = Math.floor(num / 100).toString();
+                if (cents < 10)
+                    cents = "0" + cents;
+                for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
+                    num = num.substring(0, num.length - (4 * i + 3)) + ',' +
+                    num.substring(num.length - (4 * i + 3));
+                return (((sign) ? '' : '-') + num + '.' + cents);
+            }
             //查询月总汇
             $("#MonthBTN").click(function () {
                 $("#ZhList").click();
                 $("#GetMonThData").html("");
-                $("#GetmoneyThData").html("");               
+                $("#GetmoneyThData").html("");
                 $("#MoneyListDa").html("");
                 $("#DDpercent").html("");
                 $.post("/MasterBaoJia/GetMonthSumData", { "Utime": $('#Mutime').combobox('getValue'), "Dtime": $('#Mdtime').combobox('getValue') }, function (data) {
@@ -282,33 +337,33 @@
                                 Dymct = item["LostCount"];
                             }
                             var sp = i == 0 ? "上月创建信息" : i == 1 ? "当月创建信息" : "累计创建信息";
-                            var $tdName = $("<tr><td >" + sp + "</td><td >" + item["WinCount"] + "</td><td >" + item["DaiDingCount"] + "</td><td >" + item["LostCount"] + "</td><td >" + item["SumCount"] + "</td> </tr>");
+                            var $tdName = $("<tr><td >" + sp + "</td><td >" + Contstr(item["WinCount"], true) + "</td><td >" + Contstr(item["DaiDingCount"], true) + "</td><td >" + Contstr(item["LostCount"], true) + "</td><td >" + Contstr(item["SumCount"], true) + "</td> </tr>");
                             $("#GetMonThData").append($tdName);
                         })
                         $.each(data.temp, function (i, item) {
                             var sp = i == 0 ? "上月创建信息" : i == 1 ? "当月创建信息" : "累计创建信息";
-                            var $tdName = $("<tr><td >" + sp + "</td><td >" + item["WinDML"] + "元</td><td >" + item["DdDml"] + "元</td><td >" + item["lostDML"] + "元</td><td >" + item["SumDMLCount"] + "元</td> </tr>");
+
+                            var $tdName = $("<tr><td >" + sp + "</td><td >" + Contstr(item["WinDML"]) + "</td><td >" + Contstr(item["DdDml"]) + "</td><td >" + Contstr(item["lostDML"]) + "</td><td >" + Contstr(item["SumDMLCount"]) + "</td> </tr>");
                             $("#GetmoneyThData").append($tdName);
                         })
                         var pi = 0;
-                        $.each(data.LostItem, function(ui, item) {
-                          
-                            var divtext =  (ui == 0 ? "上月" : "当月") + "失败原因百分比";
+                        $.each(data.LostItem, function (ui, item) {
+
+                            var divtext = (ui == 0 ? "上月" : "当月") + "失败原因";
                             var tr_td = "<tr><td>" + divtext + "</td>";
                             var trhread = "<tr><td>分类</td>";
-                          
-                            $.each(item, function (i, ite) {                                                       
+
+                            $.each(item, function (i, ite) {
                                 var thival = (ui == 0 ? ite["Count"] / Upmct : ite["Count"] / Dymct);
                                 thival = isNaN(thival) ? 0 : thival;
                                 if (pi == 0) {
                                     trhread = trhread + "<td>" + ite["Text"] + "</td>";
                                 }
-                                tr_td = tr_td + "<td>" + (thival * 100).toFixed(0) + "%</td>";
-                               
+                                tr_td = tr_td + "<td>" + Contstr((thival * 100).toFixed(0)) + "</td>";
+
                             })
                             tr_td = tr_td + "</tr>";
-                            if (pi == 0)
-                            {
+                            if (pi == 0) {
                                 trhread = trhread + "</tr>";
                                 $("#DDpercent").append(trhread);
                             }
@@ -316,7 +371,8 @@
                             $("#DDpercent").append(tr_td);
                         })
                         $.each(data.XiangXi, function (xx, item) {
-                            var $tdName = $("<tr><td >" + item["PName"] + "</td><td >" + item["Wmoney"] + "元&nbsp&nbsp/&nbsp&nbsp" + item["WPercent"] + "%</td>" + "<td >" + item["Dmoney"] + "元&nbsp&nbsp/&nbsp&nbsp" + item["DPercent"] + "%</td><td >" + item["Lmoney"] + "元&nbsp&nbsp/&nbsp&nbsp" + item["LPercent"] + "%</td></tr>");
+
+                            var $tdName = $("<tr><td>" + item["PName"] + "</td><td>" + Contstr(item["Wmoney"]) + "</td><td style='color:steelblue'>" + Contstr(item["WPercent"], true) + "</td><td>" + Contstr(item["Dmoney"]) + "</td><td style='color:steelblue'>" + Contstr(item["DPercent"], true) + "</td><td>" + Contstr(item["Lmoney"]) + "</td><td style='color:steelblue'>" + Contstr(item["LPercent"], true) + "</td></tr>");
                             $("#MoneyListDa").append($tdName);
                         })
                     }
@@ -331,6 +387,43 @@
                 $("#divZhList").css("display", "none");
                 $("#divMxList").css("display", "block");
             })
+
+            //追加城市
+            $("#Naddessbtn").click(function () {
+                var Pro = $("#CityAdd").combobox("getValue");
+                var Cit = $("#VillageAdd").combobox("getValue");
+                var strval = ""
+                var Parent = 0;
+                if (Pro.trim().length <= 0)
+                {
+                    strval = "Province";
+                }                   
+                else if (Cit.trim().length<= 0) {
+                    strval = "City";
+                    var Parent = Pro;
+                }
+                else {
+                    strval = "Village";
+                    var Parent = Cit;
+                }
+                var val = $("#AddCptVal").val();
+                
+                if(val.trim().length<=0)
+                {
+                    $.messager.alert("提示","值不可为空！");
+                    return;
+                }
+                $.post("/MasterBaoJia/AddSysfied", { "strval": strval, "Parent": Parent, "val": val }, function (data) {
+                    AfterFuncito(data);
+                })
+            });
+
+            $("#remoeybtn").click(function () {
+                 $("#CityAdd").combobox("setValue","");
+                $("#VillageAdd").combobox("setValue","");
+               
+            })
+            
         });
         //给权限类别绑定Change事件
         function bindActionTypeEnumChange() {
@@ -375,8 +468,6 @@
                 fitColumns: true, //列自适应
                 nowrap: true,
                 rownumbers: true,
-                //onClickCell: onClickCell,
-                //onAfterEdit: onAfterEdit,
                 idField: 'ID',//主键列的列明
                 loadMsg: '正在加载权限的信息...',
                 pagination: true,//是否有分页
@@ -398,7 +489,7 @@
                     { field: 'CPShuLiang', title: '产品数量' },
                      { field: 'WinStr', title: '是否成功', hidden: win == 1 ? false : true },
                      { field: 'bak', title: '备注信息', hidden: win == 1 ? false : true },
-                    
+
                     { field: 'HanShui', title: '是否含税' },
                       { field: 'CpJB', title: '产品级别' },
                      { field: 'Denjiu', title: '产品单据' },
@@ -410,7 +501,7 @@
                              var str = row.BaoJiaMoney + row.BaoJiaYunFei;
                              return str;
                          }
-                     },                   
+                     },
                      { field: 'WinMoney', title: '最终报价', hidden: win == 1 ? false : true },
                      { field: 'KHname', title: '客户名称' },
                       { field: 'KHperson', title: '客户联系人' },
@@ -461,8 +552,78 @@
                 }
             });
         }
-        function BaoJia(obj)
-        {
+        function LoadCity(pars) {
+            $("#Citytt").datagrid({
+                url: '/MasterBaojia/GetCity',
+                title: '城市信息',
+                height: $("#dgdiv").height()-2,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                    { field: 'ck', checkbox: true, align: 'left', width: 30, hidden: true },
+                    { field: 'ID', align: 'left' ,hidden:true},
+                    { field: 'Text', title: '名称' },
+                    {
+                        field: 'chaozuo', title: '操作', formatter: function (value, row, index) {
+
+                            var str = "<a href='javascript:InCit(" + row.ID + " )' class='l-btn deletes' style='padding:2px 5px 2px 5px' >选择</a>";
+                            str = row.MyColums == "Village" ? "" : str;
+                            //"<a href='javascript:InCit()' class='l-btn deletes' style='padding:2px 5px 2px 5px' >返回</a>";
+                            str = str + "&nbsp&nbsp&nbsp<a href='javascript:DelCc(" + row.ID + " )' class='l-btn deletes' style='padding:2px 5px 2px 5px' >删除</a>";
+                            return str;
+                        }
+                    },
+                    
+                ]],
+                toolbar: [{
+                    id: 'btnAdd',
+                    text: '添加名称',
+                    iconCls: 'icon-add',
+                    handler: function () {
+                        $("#AddProvince").show()
+                        $("#AddCity").hide()
+                        $("#AddVillage").hide()
+                        $('#CityDint').dialog('open');
+                    }
+                }],
+                onLoadSuccess: function () {
+                }
+            })
+
+        }
+        //删除追加的城市信息
+        function DelCc(obj) {
+            $.messager.confirm('提示', '是否删除所选信息?', function (r) {
+                if (r) {
+                    $.post("/MasterBaoJia/DelSysfiedF", { "id": obj }, function (data) {
+                        AfterFuncito(data);
+                    })
+                }
+            });
+           
+        }
+        function AfterFuncito(data) {
+            if (data.ret == "ok") {
+                $("#Citytt").datagrid("reload");
+            }
+            else {
+                $.messager.alert("提示", data.msg);
+            }
+        }
+        function InCit(obj) {
+            var pars = {"ParentId":obj };
+            LoadCity(pars);
+        }
+        function BaoJia(obj) {
             var rows = $('#tt').datagrid('getSelections');
             if (rows.length != 1) {
                 //alert("请选择要修改的商品！");
@@ -472,7 +633,7 @@
             $('#dlg').dialog('open');
             $("#BaoJiaID").val(rows[0].ID);
             $("#HanSHuiput").val(rows[0].HanShui);
-            
+
         }
         function Chazuo(obj, bol) {
             var Moneystr = bol ? "BaoJiaMoney" : "CpMoney";
@@ -480,7 +641,7 @@
             $.post("/MasterBaoJia/GetWinHeTongData", { "id": obj }, function (serverData) {
                 if (serverData.ret == "ok") {
                     $("#WinID").val(obj);
-                    $("#editDiv").css("display", "block");
+                    $("#EditDivTable").css("display", "block");
                     $("#XiangMuName").val(serverData.XiangMuName);
                     $("#HanShuiTD").val(serverData.HanShuiStr);
                     $("#Selebody").html("");
@@ -494,12 +655,12 @@
                         $("#Selebody").append(tr);
                         tr = "<tr><td>备注:</td><td  style='text-align:left'  colspan='2'>" + val["Remark"] + "</td></tr>"
                         $("#Selebody").append(tr);
-                         var $td_input = $("<tr><td>成交金额</td><td ><input type='text' onkeyup='num(this)' name='EidtMoney" + val["ID"] + "' value=\'" + val[Moneystr] + "\'/></td></tr>");
-                         $("#Selebody").append($td_input);
-                          $td_input = $("<tr><td>运费金额</td><td ><input type='text' onkeyup='num(this)' name='EidtYunFei" + val["ID"] + "' value=\'" + val[Yunfeistr] + "\'/></td></tr>");
+                        var $td_input = $("<tr><td>成交金额</td><td ><input type='text' onkeyup='num(this)' name='EidtMoney" + val["ID"] + "' value=\'" + val[Moneystr] + "\'/></td></tr>");
+                        $("#Selebody").append($td_input);
+                        $td_input = $("<tr><td>运费金额</td><td ><input type='text' onkeyup='num(this)' name='EidtYunFei" + val["ID"] + "' value=\'" + val[Yunfeistr] + "\'/></td></tr>");
                         $("#Selebody").append($td_input);
                     })
-                    $('#editDiv').dialog({
+                    $('#EditDivTable').dialog({
                         title: "信息处理",
                         width: 450,
                         height: 600,
@@ -526,13 +687,13 @@
                                 }
                                 else {
 
-                                    $('#editDiv').dialog('close');
+                                    $('#EditDivTable').dialog('close');
                                 }
                             }
                         }, {
                             text: '取消',
                             handler: function () {
-                                $('#editDiv').dialog('close');
+                                $('#EditDivTable').dialog('close');
                             }
                         }]
                     });
@@ -553,12 +714,13 @@
                 resizable: true,
                 modal: true,
                 buttons: [
-                    { text: '关闭',
+                    {
+                        text: '关闭',
                         handler: function () {
                             $('#FaHuoDIV').dialog('close');
                         }
                     }]
-            });  
+            });
             var pars = {
                 ID: obj
             };
@@ -595,14 +757,14 @@
                              return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
                          }
                      },
-                    { field: 'Fahuoyint', title: '发货总数' },                   
+                    { field: 'Fahuoyint', title: '发货总数' },
                     {
                         field: 'FahMoney', title: '发货金额',
                         formatter: function (value, row, index) {
                             return (row.WinMoney + row.WinYunFei) * row.Fahuoyint;
                         }
                     },
-                     
+
                      {
                          field: 'WeiFahuo', title: '未发货数',
                          formatter: function (value, row, index) {
@@ -617,11 +779,11 @@
                     {
                         field: 'FahuoTime', title: '最新发货时间',
                         formatter: function (value, row, index) {
-                            return value==null?"":(eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                            return value == null ? "" : (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
                         }
                     },
                     {
-                        field: "edit", title: "操作", 
+                        field: "edit", title: "操作",
                         formatter: function (value, row, index) {
                             var str = "<a href='javascript:XiangXi(" + row.ID + ")' class='l-btn deletes' style='padding:2px 5px 2px 5px' >详细列表</a>";
                             return str;
@@ -657,13 +819,12 @@
                                              $.messager.alert("错误", "时间不可为空！", "errer");
                                              return;
                                          }
-                                         if ($("#FahuoInt").val().length <= 0)
-                                         {
+                                         if ($("#FahuoInt").val().length <= 0) {
                                              $.messager.alert("错误", "金额不可为空！", "errer");
                                              return;
                                          }
                                          $("#AddFahuoOne").submit();
-                                         
+
                                      }
                                  },
                                 {
@@ -682,7 +843,7 @@
         }
         //获取报价发货详细信息
         function XiangXi(objID) {
-           
+
             $("#XiangXiDIV").css("display", "block");
             $('#XiangXiDIV').dialog({
                 title: "信息处理",
@@ -719,7 +880,7 @@
                      {
                          field: 'FaHuoTime', title: '发货时间',
                          formatter: function (value, row, index) {
-                             return value==null?"":(eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                             return value == null ? "" : (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
                          }
                      },
                      { field: 'FahuoInt', title: '发货数量' },
@@ -727,11 +888,11 @@
                      { field: 'PerSonName', title: '发货人员' },
                      {
                          field: 'AddTime', title: '创建时间',
-                             formatter: function (value, row, index) {
-                                 return value == null ? "" : (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
-                             }
-                        
-                     }, 
+                         formatter: function (value, row, index) {
+                             return value == null ? "" : (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                         }
+
+                     },
                     {
                         field: "edit", title: "操作",
                         formatter: function (value, row, index) {
@@ -778,18 +939,15 @@
                 }
             });
         }
-        //修改完成以后调用该方法
        
         function afterEdit(data) {
             if (data.ret == "ok") {
-                
-                try
-                {
+
+                try {
                     $('#tt').datagrid('reload');
-                    $('#editDiv').dialog('close');
+                    $('#EditDivTable').dialog('close');
                 }
-                catch(e)
-                {
+                catch (e) {
 
                 }
                 try {
@@ -799,10 +957,10 @@
                 catch (e) {
 
                 }
-               
-              
+
+
             } else if (data.ret == "no") {
-                $.messager.alert("提示",data.msg,"error");
+                $.messager.alert("提示", data.msg, "error");
             } else {
                 $.messager.alert("提醒", "修改数据错误!!", "error");
             }
@@ -830,18 +988,18 @@
                 columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
                      { field: 'CPname', title: '产品名称' },
                     { field: 'CPXingHao', title: '产品型号' },
-                    { field: 'CPShuLiang', title: '产品数量' },  
+                    { field: 'CPShuLiang', title: '产品数量' },
                     { field: 'HanShui', title: '是否含税' },
                     { field: 'BaoJiaMoney', title: '产品单价' },
-                     { field: 'PaoshuiMoney', title: '刨税单价' ,
-                     formatter: function (value, row, index) {
-                         var rtmoney = row.BaoJiaMoney == null ? 0 : row.BaoJiaMoney;                        
-                         if (row.HanShui == "含税")
-                         {
-                             rtmoney = (row.BaoJiaMoney / 1.17);                            
+                     {
+                         field: 'PaoshuiMoney', title: '刨税单价',
+                         formatter: function (value, row, index) {
+                             var rtmoney = row.BaoJiaMoney == null ? 0 : row.BaoJiaMoney;
+                             if (row.HanShui == "含税") {
+                                 rtmoney = (row.BaoJiaMoney / 1.17);
+                             }
+                             return rtmoney.toFixed(2);
                          }
-                         return rtmoney.toFixed(2);
-                     }
                      },
                     { field: 'BaoJiaYunFei', title: '运费单价' },
                      {
@@ -884,7 +1042,7 @@
                     { field: 'DaiBanYunShu', title: '代办运输' },
                     { field: 'JieShuanFanShi', title: '结算方式' },
                     { field: 'HeTongQianDing', title: '合同签订' },
-                   
+
 
                 ]],
                 onLoadSuccess: function () {
@@ -988,7 +1146,7 @@
                       { field: "FahuoMoney", title: "发货金额" },
                       {
                           field: "FahuoBFB", title: "发货百分比", formatter: function (value, row, index) {
-                              return ((row.FahuoMoney / row.WinMoney)*100).toFixed(2);
+                              return ((row.FahuoMoney / row.WinMoney) * 100).toFixed(2);
                           }
                       },
                     {
@@ -1028,7 +1186,7 @@
                     $('#tb').show();
                     $("#tb").css("height", "auto");
                     $("#Sousuo").hide();
-                    $("#Sousuo_win").show();                    
+                    $("#Sousuo_win").show();
                 }
             });
             var pager = $('#tt').datagrid().datagrid('getPager');
@@ -1037,27 +1195,27 @@
                     iconCls: 'icon-search',
                     text: '导出报表',
                     handler: function () {
-                        //查询参数直接添加在url中         
+                        //查询参数直接添加在url中
 
                         /* var url =$('#test').datagrid('options').url;
-                 
-                        // url = 'http://127.0.0.1:8080/web/AppAndRemoveServer.server?state=' +stateVal;   
-                 
+
+                        // url = 'http://127.0.0.1:8080/web/AppAndRemoveServer.server?state=' +stateVal;
+
                        //重新赋值url 属性
-                 
+
                          $('#test').datagrid('options').url=url;
-                 
-                         $("#test").datagrid('reload'); 
-                 
+
+                         $("#test").datagrid('reload');
+
                          */
                         $(location).attr('href', '/MasterBaoJia/DownLoadExcel');
-                       
+
                         return;
                         $('#tt').datagrid('options').url = "/MasterBaoJia/DownLoadExcel";
                         var queryParams = $('#tt').datagrid('options').queryParams;
-                       
+
                         queryParams.outexe = true;
-                     
+
                         $('#tt').datagrid('options').queryParams = queryParams;
                         alert($('#tt').datagrid('options').url)
                         $("#tt").datagrid('reload');
@@ -1076,7 +1234,6 @@
             $('#CPxh').combobox('clear');
             $('#YyZt').combobox('clear');
         }
-
         //报价操作
         function suFm() {
             var resultId = $("#BaoJiaID").val();//信息ID
@@ -1084,7 +1241,7 @@
                 $.messager.alert('提醒', '错误没有选中修改信息');
                 $("#tt").datagrid('reload');
                 return;
-            }            
+            }
             var finalRusult = $("#moneyBJ").val();//
             var finalRusult1 = $("#yunfeiBJ").val();
             var r = /^-?[0-9]/;//判断输入的是正整数
@@ -1119,8 +1276,9 @@
         }
         function submitForm(index, row, changes) {
             //  alert( row.resultId+"--"+changes.finalResult)daliyResultRate;
-           
+
         }
+
     </script>
     <style>
         html, body {
@@ -1135,55 +1293,207 @@
         }
         thead {
            font-size:18px;
-           font-weight:bold;            
-           
+           font-weight:bold;
+
         }
 
     </style>
 </head>
 <body class="easyui-layout">
-    <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink" style="width:150px; padding:8px">
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="Bjlb">报价列表</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="Ybj">完成报价</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="Winlb">完成报价查询</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="OverHeTong">合同完成操作</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="WinHeTong">完成合同查询</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MonthTable">月信息总汇表</a>
+    <div>
+        <div id="FaHuoDIV" style="height:100%; width:100%;">
+
+            <table id="FaHuoTT" class="easyui-datagrid" style="width: 700px; " title="标题，可以使用代码进行初始化" iconcls="icon-edit">
+                <thead data-options="frozen:true">
+                    <tr>
+                        <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
+                        <th data-options="field:'ID', width: 40">编号</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="AddFaHuoOneDiv" style="height:100%; width:100%;">
+            @using (Ajax.BeginForm("AddFahuo", "MasterBaoJia", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "AddFahuoOne" }))
+            {
+            <input type="hidden" id="BaoJia_ID" name="BaoJia_ID" />
+            <table>
+                <thead>
+                    <tr><td>发货时间</td><td><input type="text" class="easyui-datebox" name="FaHuoTime" id="FaHuoTime" /></td></tr>
+                    <tr><td>发货数量</td><td><input type="text" onkeyup='num(this)' name="FahuoInt" id="FahuoInt" /></td></tr>
+                    <tr><td>备注</td><td><input type="text" name="FaHuoBak" id="FaHuoBak" /></td></tr>
+                </thead>
+
+
+            </table>
+            }
+        </div>
+        <div id="dlg" class="easyui-dialog" title="Basic Dialog" data-options="iconCls:'icon-save'" style="width:400px;height:260px;padding:10px">
+            <div style="padding:20px 30px 20px 30px">
+                <form id="ff" method="post">
+                    <table cellpadding="5">
+                        <tr>
+                            <td>ID号:</td>
+                            <td><input class="easyui-textbox" type="text" name="name" readonly="readonly" id="BaoJiaID" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>是否含税:</td>
+                            <td><input class="easyui-textbox" type="text" name="name" readonly="readonly" id="HanSHuiput" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>产品金额:</td>
+                            <td><input class="easyui-textbox" type="text" name="moneyBJ" id="moneyBJ" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>运费金额:</td>
+                            <td><input class="easyui-textbox" type="text" name="yunfeiBJ" id="yunfeiBJ" data-options="required:true" /></td>
+                        </tr>
+
+                    </table>
+                </form>
+                <div style="text-align:center;padding:5px">
+                    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="suFm()">提交</a>
+                    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">关闭</a>
+                </div>
+            </div>
+        </div>
+        <div id="XiangXiDIV">
+            <table id="XiangXiTT" class="easyui-datagrid" title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit">
+                <thead data-options="frozen:true">
+                    <tr>
+                        <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
+                        <th data-options="field:'ID', width: 40">编号</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!---------------修改用户信息--------------------->
+        <div id="EditDivTable" style="height:100%; width:100%;">
+            @using (Ajax.BeginForm("WinChuLi", "MasterBaoJia", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "bollForm" }))
+            {
+            <table>
+                <thead>
+                    <tr><td>处理编号</td><td><input type="text" readonly="readonly" name="BaoJiaTOPID" id="WinID" /></td></tr>
+                    <tr><td>项目名称</td><td><input type="text" readonly="readonly" name="XiangMuName" id="XiangMuName" /></td></tr>
+                    <tr><td>是否含税</td><td><input type="text" readonly="readonly" name="HanShuiTD" id="HanShuiTD" /></td></tr>
+                    <tr>
+                        <td>处理方式</td>
+                        <td>
+                            <select class="easyui-combobox" name="YuanYin" id="Ceclfs" style="width:100px;">
+                                @{foreach (T_YSItems Item in ViewBag.items)
+                                        {
+                                    <option value="@Item.ID">@Item.MyText</option>
+                                        }
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td>处理备注</td>
+                        <td>
+                            <textarea rows="10" name="Bak" id="Bak"></textarea>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <table>
+                <tbody id="Selebody"></tbody>
+            </table>
+                                        }
+        </div>
+    </div>
+    <div>
+        <div id="CityDint" class="easyui-dialog" title="Complex Toolbar on Dialog" style="width:400px;height:300px;padding:10px"
+             data-options="iconCls:'icon-save' , toolbar:'#CityDint-toolbar' ,buttons:'#CityDint-buttons'">
+            <div>
+            &nbsp;&nbsp;省份
+            <input class="easyui-combobox Province" id="CityAdd"
+                 name="Province"
+                 url="/YXBJ/GetAddress?parentiD=0&MyColums=Province"
+                 valueField="ID"
+                 textField="MyTexts"
+                 panelHeight="auto" style="width:100px" /></div>
+            <div>
+                &nbsp;&nbsp;城市
+                <input class="easyui-combobox CityAdd"
+                       id="VillageAdd"
+                       name="City"
+                       url=""
+                       valueField="ID"
+                       textField="MyTexts"
+                       panelHeight="auto" style="width:100px" />
+            </div>            
+           <div>输入名称<input type="text" id="AddCptVal"  width="100" /></div>
+                    <a class="easyui-linkbutton" id="Naddessbtn">录入</a>    
+                    <a class="easyui-linkbutton" id="remoeybtn">重置</a>    
+            </div>
+        </div>
+        <div id="CityDint-toolbar" style="padding:2px 0">
+            <table cellpadding="0" cellspacing="0" style="width:100%">
+                <tr>
+                    <td style="padding-left:2px">
+                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加省份</a>
+                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加城市</a>
+                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加区域</a>
+                    </td>                   
+                </tr>
+            </table>
+        </div>
+        <div id="CityDint-buttons">
+            @*<a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:alert('save')">Save</a>*@
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript: $('#CityDint').dialog('close')">Close</a>
+        </div>
+    
+    <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink" style="width:150px;height:100%">
+        <div class="easyui-accordion">
+            <div title="搜索选项" data-options="iconCls:'icon-search'" style="overflow:auto;padding:10px;">
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="Bjlb">报价列表</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="Ybj">完成报价</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="Winlb">完成报价查询</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="OverHeTong">合同完成操作</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="WinHeTong">完成合同查询</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MonthTable">月信息总汇表</a>
+            </div>
+            <div title="其他选项" data-options="iconCls:'icon-ok'" style="padding:10px;">
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="CityEdit">编辑城市</a>
+            </div>
+        </div>
     </div>
     <div data-options="region:'center',title:'数据报表'" id="dgdiv">
         <div id="TTdiv">
-        <table id="tt" class="easyui-datagrid" style="width: 700px; " title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit"
-       data-options="toolbar:'#tb'">
-    <thead data-options="frozen:true">
-        <tr>
-            <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
-            <th data-options="field:'ID', width: 40">编号</th>
-            <th data-options="field:'UName'">申请报价人</th>
-            <th data-options="field:'KHComname'">工程项目名称</th>
-        </tr>
-    </thead>
+            <table id="tt" class="easyui-datagrid" style="width: 700px; " title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit"
+                   data-options="toolbar:'#tb'">
+                <thead data-options="frozen:true">
+                    <tr>
+                        <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
+                        <th data-options="field:'ID', width: 40">编号</th>
+                        <th data-options="field:'UName'">申请报价人</th>
+                        <th data-options="field:'KHComname'">工程项目名称</th>
+                    </tr>
+                </thead>
 
 
-</table>
+            </table>
         </div>
         <div id="mothdiv" class="easyui-layout" style="height:100%;">
-            <div  data-options="region:'north',title:'查询选项',iconCls:'icon-search'" style="height:auto;">
-            <div class="easyui-panel" style="padding:5px;">
-                <a class="">查询时间</a>
-                <input class="easyui-datebox" id="Mutime" value="2017-01-01" style="width:120px">
-                To: <input class="easyui-datebox" id="Mdtime" value="2017-12-30" style="width:120px">
-                <a href="#" id="MonthBTN" class="easyui-linkbutton">提交</a>
-                <a href="#" id="PrintMonth" class="easyui-linkbutton"  data-options="iconCls:'icon-print'" >打印</a>
+            <div data-options="region:'north',title:'查询选项',iconCls:'icon-search'" style="height:auto;">
+                <div class="easyui-panel" style="padding:5px;">
+                    <a class="">查询时间</a>
+                    <input class="easyui-datebox" id="Mutime" value="2017-01-01" style="width:120px">
+                    To: <input class="easyui-datebox" id="Mdtime" value="2017-12-30" style="width:120px">
+                    <a href="#" id="MonthBTN" class="easyui-linkbutton">提交</a>
+                    <a href="#" id="PrintMonth" class="easyui-linkbutton" data-options="iconCls:'icon-print'">打印</a>
+                </div>
+                <div class="easyui-panel" style="padding:5px">
+                    <a href="#" class="easyui-linkbutton" id="ZhList">总汇列表</a>
+                    <a href="#" class="easyui-linkbutton" id="MxList">明细列表</a>
+                </div>
             </div>
-             <div class="easyui-panel" style="padding:5px">
-                 <a href="#" class="easyui-linkbutton" id="ZhList">总汇列表</a>
-                 <a href="#" class="easyui-linkbutton" id="MxList">明细列表</a>
-             </div>
-            </div>
-            <div  data-options="region:'center',title:'Main Title',iconCls:'icon-ok'" style="padding:10px">
+            <div data-options="region:'center',title:'Main Title',iconCls:'icon-ok'" style="padding:10px">
                 <div id="Print_div">
                     <div style="height:25px"></div>
-                    <div id="divZhList">                       
+                    <div id="divZhList">
                         <div style="text-align:center;"><h1><span id="h1time">___________</span> 创 建 信 息 总 汇 表</h1></div>
                         <div style="height:35px"></div>
                         <table style="BORDER-COLLAPSE: collapse; width:80%; text-align:center;font-size:18px" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1">
@@ -1192,30 +1502,31 @@
                         </table>
                         <div style="height:25px"></div>
                         <div style="text-align:center;"><h1><span id="h2time">___________</span>  信 息 金 额 总 汇 表</h1></div>
-                        <div style="height:35px"></div>
+                        <div style="height:35px; width:80%; text-align:center"></div>
+                        <div style="width:80%; text-align:right; margin-left:auto; margin-right:auto"><span style="font-size:18px">单位(元)&nbsp;&nbsp;</span></div>
                         <table style="BORDER-COLLAPSE: collapse; width:80%; text-align:center;font-size:18px" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1">
                             <thead><tr><td>分类</td><td>成功</td><td>待定</td><td>失败</td><td>合计</td></tr></thead>
                             <tbody id="GetmoneyThData"></tbody>
                         </table>
                         <div style="height:65px"></div>
-                        <table style="BORDER-COLLAPSE: collapse; width:80%; text-align:center;font-size:18px" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1" id="DDpercent">
-                          
-                        </table>
-                        <div id="LostItem0" style="width:90%;text-align:right;font-size:18px"></div>
-                        <div id="LostItem1" style="width:90%;text-align:right;font-size:18px"></div>
-
+                        <div id="BFBdiv" style="width:80%; text-align:right; margin-left:auto; margin-right:auto"><span style="font-size:18px">单位(百分比)&nbsp;&nbsp;</span></div>
+                        <table style="BORDER-COLLAPSE: collapse; width:80%; text-align:center;font-size:18px" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1" id="DDpercent"></table>
                     </div>
+
                     <div id="divMxList">
+                        <div style="width:80%; text-align:right; margin-left:auto; margin-right:auto"><span style="font-size:18px">单位(元)&nbsp;&nbsp;</span></div>
                         <table style="BORDER-COLLAPSE: collapse; width:80%; text-align:center;font-size:18px" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1">
-                            <thead style=""><tr ><td>姓名</td><td>成功金额/百分比</td><td>待定金额/百分比</td><td>失败金额/百分比</td></tr></thead>
+                            <thead style=""><tr><td>姓名</td><td>成功金额</td><td>百分比</td><td>待定金额</td><td>百分比</td><td>失败金额</td><td>百分比</td></tr></thead>
                             <tbody id="MoneyListDa"></tbody>
                         </table>
-
                     </div>
-                    
+
                 </div>
-              
+
             </div>
+        </div>
+        <div id="City_Div">
+            <table id="Citytt" class="easyui-datagrid" style="width: 700px; " title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit" />
         </div>
     </div>
     <div id="tb" style="padding:5px;height:auto">
@@ -1252,29 +1563,29 @@
             客户名称:
             <select class="easyui-combobox" panelHeight="auto" id="KHname" style="width:auto">
                 @{foreach (YXB_Kh_list Item in ViewBag.KeHuName)
-        {
+                    {
             <option value="@Item.id">@Item.KHname</option>
-        }
+                    }
                 }
             </select> &nbsp;&nbsp; &nbsp;&nbsp;
             供货地点:&nbsp;&nbsp;省份
-            <input class="easyui-combobox" id="Province"
+            <input class="easyui-combobox Province" id="CitySee"
                    name="Province"
                    url="/YXBJ/GetAddress?parentiD=0&MyColums=Province"
                    valueField="ID"
                    textField="MyTexts"
                    panelHeight="auto" style="width:100px" />
             &nbsp;&nbsp;城市
-            <input class="easyui-combobox"
-                   id="City"
+            <input class="easyui-combobox CitySee"
+                   id="VillageSee"
                    name="City"
                    url=""
                    valueField="ID"
                    textField="MyTexts"
                    panelHeight="auto" style="width:100px" />
             &nbsp;&nbsp;区/县
-            <input class="easyui-combobox"
-                   id="Village"
+            <input class="easyui-combobox VillageSee"
+                   id="SeeDint"
                    name="Village"
                    url=""
                    valueField="ID"
@@ -1314,114 +1625,7 @@
         </div>
 
     </div>
-    <!---------------修改用户信息--------------------->
-    <div id="editDiv" style="height:100%; width:100%;">
-        @using (Ajax.BeginForm("WinChuLi", "MasterBaoJia", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "bollForm" }))
-        {
 
-        <table>
-            <thead>
-                <tr><td>处理编号</td><td><input type="text" readonly="readonly" name="BaoJiaTOPID" id="WinID" /></td></tr>
-                <tr><td>项目名称</td><td><input type="text" readonly="readonly" name="XiangMuName" id="XiangMuName" /></td></tr>
-                <tr><td>是否含税</td><td><input type="text" readonly="readonly" name="HanShuiTD" id="HanShuiTD" /></td></tr>
-                <tr>
-                    <td>处理方式</td>
-                    <td>
-                        <select class="easyui-combobox" name="YuanYin" id="Ceclfs" style="width:100px;">
-                            @{foreach (T_YSItems Item in ViewBag.items)
-                                    {
-                                <option value="@Item.ID">@Item.MyText</option>
-                                    }
-                            }
-                        </select>
-                    </td>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <td>处理备注</td>
-                    <td>
-                        <textarea rows="10" name="Bak" id="Bak"></textarea>
-                    </td>
-                </tr>
-
-            </tfoot>  
-        </table>
-        <table>
-            <tbody id="Selebody"></tbody>
-        </table>
-        
-         }
-    </div>
-    <div id="FaHuoDIV" style="height:100%; width:100%;">
-        
-        <table id="FaHuoTT" class="easyui-datagrid" style="width: 700px; " title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit">
-            <thead data-options="frozen:true">
-                <tr>
-                    <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
-                    <th data-options="field:'ID', width: 40">编号</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
-    <div id="AddFaHuoOneDiv" style="height:100%; width:100%;">
-        @using (Ajax.BeginForm("AddFahuo", "MasterBaoJia", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "AddFahuoOne" }))
-        {
-            <input type="hidden" id="BaoJia_ID" name="BaoJia_ID" />
-            <table>
-                <thead>
-                    <tr><td>发货时间</td><td><input type="text" class="easyui-datebox"  name="FaHuoTime" id="FaHuoTime" /></td></tr>
-                    <tr><td>发货数量</td><td><input type="text" onkeyup='num(this)' name="FahuoInt" id="FahuoInt" /></td></tr>
-                    <tr><td>备注</td><td><input type="text" name="FaHuoBak" id="FaHuoBak" /></td></tr>
-                </thead>
-             
-             
-            </table>
-         }
-    </div>
-
-    <div id="dlg" class="easyui-dialog" title="Basic Dialog" data-options="iconCls:'icon-save'" style="width:400px;height:260px;padding:10px">      
-            <div style="padding:20px 30px 20px 30px">
-                <form id="ff" method="post">
-                    <table cellpadding="5">
-                        <tr>
-                            <td>ID号:</td>
-                            <td><input class="easyui-textbox" type="text" name="name" readonly="readonly" id="BaoJiaID" data-options="required:true" /></td>
-                        </tr>
-                        <tr>
-                            <td>是否含税:</td>
-                            <td><input class="easyui-textbox" type="text" name="name" readonly="readonly" id="HanSHuiput" data-options="required:true" /></td>
-                        </tr>
-                        <tr>
-                            <td>产品金额:</td>
-                            <td><input class="easyui-textbox" type="text" name="moneyBJ" id="moneyBJ" data-options="required:true" /></td>
-                        </tr>
-                        <tr>
-                            <td>运费金额:</td>
-                            <td><input class="easyui-textbox" type="text" name="yunfeiBJ" id="yunfeiBJ" data-options="required:true" /></td>
-                        </tr>
-                     
-                    </table>
-                </form>
-                <div style="text-align:center;padding:5px">
-                    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="suFm()">提交</a>
-                    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">关闭</a>
-                </div>
-            </div>       
-    </div>
-
-
-   <div id="XiangXiDIV">
-       <table id="XiangXiTT" class="easyui-datagrid"  title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit">
-           <thead data-options="frozen:true">
-               <tr>
-                   <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
-                   <th data-options="field:'ID', width: 40">编号</th>
-               </tr>
-           </thead>
-       </table>
-   </div>
-       
 
 </body>
 </html>

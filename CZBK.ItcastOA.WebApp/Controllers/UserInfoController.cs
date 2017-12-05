@@ -16,7 +16,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IUserInfoService UserInfoService{get;set;}
         IBLL.IRoleInfoService RoleInfoService { get; set; }
         IBLL.IActionInfoService ActionInfoService { get; set; }
-       
+        IBLL.IBumenInfoSetService BumenInfoSetService { get; set; }
        // short Delflag = (short)DelFlagEnum.Normarl;
         public ActionResult Index()
         {
@@ -136,7 +136,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 PageSize = pageSize,
                 TotalCount = totalCount,
                 UserName = name,
-                Remark = remark
+                Remark = remark,
+                QuXian = LoginUser.QuXian,
+                BumenID=LoginUser.BuMenID
+                
                 //IsMaster = true,
                 //C_id = zhgl != null ? zhgl != string.Empty ? LoginUser.ID : 0 : 0
             };                     
@@ -148,7 +151,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                           ThisMastr=u.ThisMastr,
                           MasterID=u.MasterID,
                           CityID=u.CityID,
-                          Umoney=u.Umoney
+                          Umoney=u.Umoney,
+                          PerSonName=u.PerSonName,
+                          QuXian=u.QuXian,
+                          BuMenID = u.BuMenID,
+                          BuMen=u.BumenInfoSet.Name,
+                          UPwd =u.UPwd
                       };
            return Json(new { rows = temp, total = userInfoParam.TotalCount }, JsonRequestBehavior.AllowGet);
         }
@@ -336,5 +344,19 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
         }
         #endregion
+
+
+        //获取部门信息
+        public ActionResult GetBuMen() {
+
+            var sbm = BumenInfoSetService.LoadEntities(x => x.DelFlag == 0 && x.Gushu < 99).DefaultIfEmpty();
+            var temp = from a in sbm
+                       select new
+                       {
+                           ID = a.ID,
+                           MyTexts = a.Name
+                       };
+            return Json(temp, JsonRequestBehavior.AllowGet);
+        }
     }
 }

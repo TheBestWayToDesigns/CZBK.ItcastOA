@@ -12,7 +12,7 @@ namespace CZBK.ItcastOA.Common
         private static readonly MemcachedClient mc = null;
         static MemcacheHelper()
         {
-            string[] serverlist = { "60.18.162.202:11211", "200.0.0.0:11211" };//一定要将地址写到Web.config文件中。
+            string[] serverlist = { "60.18.162.202:11211", "127.0.0.0:11211" };//一定要将地址写到Web.config文件中。
             //初始化池   
             SockIOPool pool = SockIOPool.GetInstance();
             pool.SetServers(serverlist);

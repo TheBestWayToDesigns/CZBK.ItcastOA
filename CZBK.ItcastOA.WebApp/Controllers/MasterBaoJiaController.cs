@@ -25,6 +25,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IT_ChanPinNameService T_ChanPinNameService { get; set; }
         IBLL.IT_WinBakFaHuoService T_WinBakFaHuoService { get; set; }
         
+        
 
         short delFlag = (short)DelFlagEnum.Normarl;
         public ActionResult Index()
@@ -559,7 +560,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             mh.SumCount = mh.WinCount + mh.LostCount + mh.DaiDingCount;
 
             var t = mscc.Sum(x => x.Wcount.Sum(a => a.T_BaoJiaToP.YXB_Baojia.Sum(m => m.CPShuLiang * (m.WinMoney + m.WinYunFei))));
-            mh.WinDML =t==null?0:t;
+            mh.WinDML = Math.Round( Convert.ToDecimal(t==null?0:t),2);
             t = mscc.Sum(x => x.Lcount.Sum(a => a.T_BaoJiaToP.YXB_Baojia.Sum(m => m.CPShuLiang * (m.WinMoney + m.WinYunFei))));
             mh.lostDML = t == null ? 0 : t;
             var gg = iq.Where(x => x.T_WinBak.Count() == 0).Sum(a => a.YXB_Baojia.Sum(m => m.CPShuLiang * (m.BaoJiaMoney + m.BaoJiaYunFei)));
@@ -680,6 +681,67 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
            
         }
+        //获取城市列表
+        public ActionResult GetCity() {
+            int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
+            int TotalCount = 0;
+            var CityTemy = SysFieldService.LoadPageEntities(pageIndex, pageSize, out TotalCount, x => x.MyColums == "Province", x => x.MyTexts, false);
+            if (Request["ParentId"] != null)
+            {
+                var sp = int.Parse(Request["ParentId"]);
+                CityTemy = SysFieldService.LoadPageEntities(pageIndex, pageSize, out TotalCount, x => x.ParentId == sp&&x.ID!=sp, x => x.MyTexts, false);
+            }
+          
+            
+            var temp = from a in CityTemy
+                       select new {
+                          ID= a.ID,
+                          Text=a.MyTexts,
+                          ParentId=a.ParentId,
+                          MyColums= a.MyColums
+                       };
+            return Json(new { rows = temp, total = TotalCount }, JsonRequestBehavior.AllowGet);
+        }
+        //追加城市列表信息
+        public ActionResult AddSysfied() {
+            int? ParentID = Convert.ToInt32(Request["Parent"]);
+            var strval = Request["strval"];
+            var val = Request["val"];
+            var isdistc= SysFieldService.LoadEntities(x => x.ParentId == ParentID && x.MyColums == strval && x.MyTexts == val).FirstOrDefault();
+            if (isdistc != null)
+            {
+                return Json(new { ret = "no", msg = "不可添加重复信息！" }, JsonRequestBehavior.AllowGet);
+            }
+            SysField sfd = new SysField();
+            sfd.MyTexts = val;
+            sfd.ParentId = ParentID;
+            sfd.MyColums = strval;
+            SysFieldService.AddEntity(sfd); 
+            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+        }
+        //删除追加的城市列表信息
+        public ActionResult DelSysfiedF()
+        {
+            int? did = Convert.ToInt32(Request["id"]);
+           
+            var isdistc = SysFieldService.LoadEntities(x => x.ID==did).FirstOrDefault();
+            if (isdistc != null)
+            {
+                if (SysFieldService.DeleteEntity(isdistc))
+                {
+                    return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { ret = "no", msg = "删除失败！" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new { ret = "no", msg = "未找到要删除的信息ID！" }, JsonRequestBehavior.AllowGet);
 
+            }  
+        }
     }
 }

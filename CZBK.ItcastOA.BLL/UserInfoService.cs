@@ -57,8 +57,20 @@ namespace CZBK.ItcastOA.BLL
         /// <returns></returns>
         public IQueryable<UserInfo> LoadSearchEntities(Model.SearchParam.UserInfoParam userInfoSearchParam)
         {
+
             short delFlag=(short)DelFlagEnum.Normarl;
             var temp = this.GetCurrentDbSession.UserInfoDal.LoadEntities(c => c.DelFlag == delFlag);
+            if (userInfoSearchParam.QuXian != null)
+            {
+                if (userInfoSearchParam.QuXian != 999)
+                {
+                    temp = this.GetCurrentDbSession.UserInfoDal.LoadEntities(c => c.DelFlag == delFlag && c.BuMenID == userInfoSearchParam.BumenID);
+                }
+            }
+            else
+            { }
+            
+          
             if (userInfoSearchParam.IsMaster)
             {
                 temp = temp.Where<UserInfo>(u => u.ThisMastr== userInfoSearchParam.IsMaster);

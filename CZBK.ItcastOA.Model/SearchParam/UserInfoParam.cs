@@ -32,6 +32,8 @@ namespace CZBK.ItcastOA.Model.SearchParam
         public int? adduser { get; set; }
         public int? SHuser { get; set; }
         public int? CPtext { get; set; }
+        public int? QuXian { get; set; }
+        public int? BumenID { get; set; }
 
     }
 }
