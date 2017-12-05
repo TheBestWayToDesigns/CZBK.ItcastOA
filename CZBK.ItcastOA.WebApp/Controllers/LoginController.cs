@@ -27,6 +27,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             string validateCode = Session["validateCode"] == null ? string.Empty : Session["validateCode"].ToString();
             if (string.IsNullOrEmpty(validateCode))
             {
+               
                 return Content("notyzm");
             }
             Session["validateCode"] = null;

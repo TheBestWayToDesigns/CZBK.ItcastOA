@@ -170,10 +170,11 @@
                 } else if (serverData == "notyzm")
                 {
                     alert("验证吗错误！")
-                    window.location.href = "/Login/Index";
+                    changeCheckCode();
                     return;
                 }
                 else {
+                    alert(serverData)
                     alert("系统错误请联系系统管理员！")
                     changeCheckCode();
                 };
