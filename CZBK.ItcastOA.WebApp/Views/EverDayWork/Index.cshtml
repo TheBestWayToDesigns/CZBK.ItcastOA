@@ -241,6 +241,23 @@
             if (data.ret == "ok") {
                 try {
                     $('#tt').datagrid('reload');
+                    $('#UpdateScheduleDIV').dialog('close');
+                }
+                catch (e) {
+
+                }
+
+            } else if (data.ret == "no") {
+                $.messager.alert("提示", data.msg, "error");
+            } else {
+                $.messager.alert("提醒", "修改数据错误!!", "error");
+            }
+        }
+        //添加日程以后调用
+        function afterAddSchedule(data) {
+            if (data.ret == "ok") {
+                try {
+                    $('#tt').datagrid('reload');
                     $('#AddScheduleDIV').dialog('close');
                 }
                 catch (e) {
@@ -330,16 +347,16 @@
         function updateSchedule() {
             var row = $('#tt').datagrid('getSelected'); 
             $("#UpdateID").val(row.ID);
-            document.getElementById("UpdateID").disabled = 'disabled';
+            document.getElementById("UpdateID").setAttribute('readOnly', true);
             document.getElementById("UpdateUserID").value = row.UserID;
-            document.getElementById("UpdateUserID").disabled = 'disabled';
+            document.getElementById("UpdateUserID").setAttribute('readOnly', true);
             document.getElementById("UpdateScheduleAddTime").value = ChangeDateFormat(row.ScheduleAddTime);
-            document.getElementById("UpdateScheduleAddTime").disabled = 'disabled';
+            document.getElementById("UpdateScheduleAddTime").setAttribute('readOnly', true);
             document.getElementById("UpdateScheduleText").value = row.ScheduleText;
             document.getElementById("UpdateTextReadBak").value = row.TextReadBak;
-            document.getElementById("UpdateTextReadBak").disabled = 'disabled';
-            document.getElementById("UpdateTextReadUser").disabled = 'disabled';
-            document.getElementById("UpdateTextReadTime").disabled = 'disabled';
+            document.getElementById("UpdateTextReadBak").setAttribute('readOnly', true);
+            document.getElementById("UpdateTextReadUser").setAttribute('readOnly', true);
+            document.getElementById("UpdateTextReadTime").setAttribute('readOnly', true);
 
             $("#UpdateScheduleDIV").css("display", "block");
             $('#UpdateScheduleDIV').dialog({
@@ -365,6 +382,23 @@
             });
         }
 
+
+        //删除日程
+        function delSchedule(){
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+            $.post("/EverDayWork/DelSchedule", { "id": rows[0].ID }, function (data) {
+                if (data.ret == "ok") {
+                    $('#tt').datagrid("reload");
+                }
+                else {
+                    $.messager.alert("提示", data.msg);
+                }
+            })
+        }
 
         //删除数据
         function deldata() {
@@ -404,7 +438,7 @@
    
     <!---------------添加日程类型信息--------------------->
     <div id="AddScheduleTypeDIV" style="height:100%; width:100%;">
-        @using (Ajax.BeginForm("AddScheduleType", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterScheduleTypeEdit" }, new { id = "addscheduleTypefrom" }))
+        @using (Ajax.BeginForm("AddScheduleType", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterScheduleTypeEdit" }, new { id = "addscheduletypefrom" }))
         {<table>               
                 <tr><td>日程状态</td><td><input type="text"  name="ItemText" id="ItemText" /></td></tr>               
             </table>
@@ -417,7 +451,7 @@
 
     <!---------------添加日程----------------->
     <div id="AddScheduleDIV" style="height:100%; width:100%;">
-        @using (Ajax.BeginForm("AddSchedule", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterScheduleEdit" }, new { id = "addschedulefrom" }))
+        @using (Ajax.BeginForm("AddSchedule", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddSchedule" }, new { id = "addschedulefrom" }))
         {<table id="AddScheduleTab">
              <tr><td>日程时间</td><td><input type="text" class="easyui-datetimebox" name="ScheduleTime" id="ScheduleTime" /></td></tr>
              <tr><td>日程内容</td><td><textarea class="easyui-textarea" name="ScheduleText" id="ScheduleText"  style="width:302px;height:158px"></textarea></td></tr>
@@ -453,11 +487,11 @@
     <div id="UpdateScheduleDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("UpdateSchedule", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterScheduleEdit" }, new { id = "updateschedulefrom" }))
         {<table id="UpdateScheduleTab">
-            <tr><td>日程编号</td><td><input type="text" name="UpdateID" id="UpdateID"/></td></tr>
-            <tr><td>用户编号</td><td><input type="text"  name="UpdateUserID" id="UpdateUserID"/></td></tr>
-            <tr><td>日程时间</td><td><input type="text" class="easyui-datetimebox" name="UpdateScheduleTime" id="UpdateScheduleTime" /></td></tr>
-            <tr><td>日程创建时间</td><td><input type="text" name="UpdateScheduleAddTime" id="UpdateScheduleAddTime" /></td></tr>
-            <tr><td>日程内容</td><td><textarea class="easyui-textarea" name="UpdateScheduleText" id="UpdateScheduleText" style="width:302px;height:158px"></textarea></td></tr>
+            <tr><td>日程编号</td><td><input type="text" name="ID" id="UpdateID"/></td></tr>
+            <tr><td>用户编号</td><td><input type="text"  name="UserID" id="UpdateUserID"/></td></tr>
+            <tr><td>日程时间</td><td><input type="text" class="easyui-datetimebox" name="ScheduleTime" id="UpdateScheduleTime" /></td></tr>
+            <tr><td>日程创建时间</td><td><input type="text" name="ScheduleAddTime" id="UpdateScheduleAddTime" /></td></tr>
+            <tr><td>日程内容</td><td><textarea class="easyui-textarea" name="ScheduleText" id="UpdateScheduleText" style="width:302px;height:158px"></textarea></td></tr>
             <tr>
                 <td>日程类型</td>
                 <td>
@@ -471,9 +505,9 @@
                            panelHeight="auto" style="width:100px" />
                 </td>
             </tr>
-             <tr><td>日程审核状态</td><td><input type="text" name="UpdateTextReadBak" id="UpdateTextReadBak" /></td></tr>
-             <tr><td>日程审核人</td><td><input  name="UpdateTextReadUser" id="UpdateTextReadUser"/></td></tr>
-             <tr><td>日程审核时间</td><td><input type="text"  name="UpdateTextReadTime" id="UpdateTextReadTime" /></td></tr>
+             <tr><td>日程审核状态</td><td><input type="text" name="TextReadBak" id="UpdateTextReadBak" /></td></tr>
+             <tr><td>日程审核人</td><td><input  name="TextReadUser" id="UpdateTextReadUser"/></td></tr>
+             <tr><td>日程审核时间</td><td><input type="text"  name="TextReadTime" id="UpdateTextReadTime" /></td></tr>
         </table>
         <table>
             <tbody id="Selebody"></tbody>

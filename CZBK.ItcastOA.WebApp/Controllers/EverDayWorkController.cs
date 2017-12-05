@@ -85,6 +85,14 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
 
+        //修改日程
+        public ActionResult UpdateSchedule(Schedule sd)
+        {
+            sd.ScheduleUpdateTime = DateTime.Now;
+            ScheduleService.EditEntity(sd);
+            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+        }
+
         //删除日程
         public ActionResult DelSchedule()
         {
@@ -94,7 +102,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             { return Json(new { msg = "数据库中无要修改的信息！" }, JsonRequestBehavior.AllowGet); }
             else
             {
-                if (ScheduleService.EditEntity(temp))
+                if (ScheduleService.DeleteEntity(temp))
                 {
                     return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
                 }

@@ -704,3 +704,1229 @@ System.IO.IOException: ÎÞ·¨´Ó´«ÊäÁ¬½ÓÖÐ¶ÁÈ¡Êý¾Ý: Ô¶³ÌÖ÷»úÇ¿ÆÈ¹Ø±ÕÁËÒ»¸öÏÖÓÐµÄÁ¬½
    ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
 
 ----------------------footer--------------------------
+
+----------------------header--------------------------
+2017-12-05 17:19:32,364 [5] ERROR errorMsg - System.Data.EntityException: »ù´¡Ìá¹©³ÌÐòÔÚ Open ÉÏÊ§°Ü¡£ ---> System.Data.SqlClient.SqlException: ÔÚÓë SQL Server ½¨Á¢Á¬½ÓÊ±³öÏÖÓëÍøÂçÏà¹ØµÄ»òÌØ¶¨ÓÚÊµÀýµÄ´íÎó¡£Î´ÕÒµ½»òÎÞ·¨·ÃÎÊ·þÎñÆ÷¡£ÇëÑéÖ¤ÊµÀýÃû³ÆÊÇ·ñÕýÈ·²¢ÇÒ SQL Server ÒÑÅäÖÃÎªÔÊÐíÔ¶³ÌÁ¬½Ó¡£ (provider: Named Pipes Provider, error: 40 - ÎÞ·¨´ò¿ªµ½ SQL Server µÄÁ¬½Ó) ---> System.ComponentModel.Win32Exception: ÕÒ²»µ½ÍøÂçÂ·¾¶¡£
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, DbConnectionPool pool, String accessToken, Boolean applyTransientFaultHandling)
+   ÔÚ System.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   ÔÚ System.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   ÔÚ System.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   ÔÚ System.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   ÔÚ System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   ÔÚ System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   ÔÚ System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   ÔÚ System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   ÔÚ System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   ÔÚ System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   ÔÚ System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   ÔÚ System.Data.SqlClient.SqlConnection.Open()
+   ÔÚ System.Data.EntityClient.EntityConnection.OpenStoreConnectionIf(Boolean openCondition, DbConnection storeConnectionToOpen, DbConnection originalConnection, String exceptionCode, String attemptedOperation, Boolean& closeStoreConnectionOnFailure)
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.EntityClient.EntityConnection.OpenStoreConnectionIf(Boolean openCondition, DbConnection storeConnectionToOpen, DbConnection originalConnection, String exceptionCode, String attemptedOperation, Boolean& closeStoreConnectionOnFailure)
+   ÔÚ System.Data.EntityClient.EntityConnection.Open()
+   ÔÚ System.Data.Objects.ObjectContext.EnsureConnection()
+   ÔÚ System.Data.Objects.ObjectQuery`1.GetResults(Nullable`1 forMergeOption)
+   ÔÚ System.Data.Objects.ObjectQuery`1.System.Collections.Generic.IEnumerable<T>.GetEnumerator()
+   ÔÚ System.Linq.Enumerable.FirstOrDefault[TSource](IEnumerable`1 source)
+   ÔÚ System.Data.Objects.ELinq.ObjectQueryProvider.<>c__11`1.<GetElementFunction>b__11_1(IEnumerable`1 sequence)
+   ÔÚ System.Data.Objects.ELinq.ObjectQueryProvider.ExecuteSingle[TResult](IEnumerable`1 query, Expression queryRoot)
+   ÔÚ System.Data.Objects.ELinq.ObjectQueryProvider.System.Linq.IQueryProvider.Execute[S](Expression expression)
+   ÔÚ System.Data.Entity.Internal.Linq.DbQueryProvider.Execute[TResult](Expression expression)
+   ÔÚ System.Linq.Queryable.FirstOrDefault[TSource](IQueryable`1 source)
+   ÔÚ CZBK.ItcastOA.WebApp.Controllers.LoginController.CheckLogin() Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\LoginController.cs:ÐÐºÅ 43
+   ÔÚ lambda_method(Closure , ControllerBase , Object[] )
+   ÔÚ System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   ÔÚ System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<BeginInvokeActionMethodWithFilters>b__36(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   ÔÚ System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   ÔÚ System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2017-12-05 17:20:02,374 [5] ERROR errorMsg - System.Data.EntityException: »ù´¡Ìá¹©³ÌÐòÔÚ Open ÉÏÊ§°Ü¡£ ---> System.Data.SqlClient.SqlException: ÔÚÓë SQL Server ½¨Á¢Á¬½ÓÊ±³öÏÖÓëÍøÂçÏà¹ØµÄ»òÌØ¶¨ÓÚÊµÀýµÄ´íÎó¡£Î´ÕÒµ½»òÎÞ·¨·ÃÎÊ·þÎñÆ÷¡£ÇëÑéÖ¤ÊµÀýÃû³ÆÊÇ·ñÕýÈ·²¢ÇÒ SQL Server ÒÑÅäÖÃÎªÔÊÐíÔ¶³ÌÁ¬½Ó¡£ (provider: Named Pipes Provider, error: 40 - ÎÞ·¨´ò¿ªµ½ SQL Server µÄÁ¬½Ó) ---> System.ComponentModel.Win32Exception: ÕÒ²»µ½ÍøÂçÂ·¾¶¡£
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, DbConnectionPool pool, String accessToken, Boolean applyTransientFaultHandling)
+   ÔÚ System.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   ÔÚ System.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   ÔÚ System.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   ÔÚ System.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   ÔÚ System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   ÔÚ System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   ÔÚ System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   ÔÚ System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   ÔÚ System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   ÔÚ System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   ÔÚ System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   ÔÚ System.Data.SqlClient.SqlConnection.Open()
+   ÔÚ System.Data.EntityClient.EntityConnection.OpenStoreConnectionIf(Boolean openCondition, DbConnection storeConnectionToOpen, DbConnection originalConnection, String exceptionCode, String attemptedOperation, Boolean& closeStoreConnectionOnFailure)
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.EntityClient.EntityConnection.OpenStoreConnectionIf(Boolean openCondition, DbConnection storeConnectionToOpen, DbConnection originalConnection, String exceptionCode, String attemptedOperation, Boolean& closeStoreConnectionOnFailure)
+   ÔÚ System.Data.EntityClient.EntityConnection.Open()
+   ÔÚ System.Data.Objects.ObjectContext.EnsureConnection()
+   ÔÚ System.Data.Objects.ObjectQuery`1.GetResults(Nullable`1 forMergeOption)
+   ÔÚ System.Data.Objects.ObjectQuery`1.System.Collections.Generic.IEnumerable<T>.GetEnumerator()
+   ÔÚ System.Linq.Enumerable.FirstOrDefault[TSource](IEnumerable`1 source)
+   ÔÚ System.Data.Objects.ELinq.ObjectQueryProvider.<>c__11`1.<GetElementFunction>b__11_1(IEnumerable`1 sequence)
+   ÔÚ System.Data.Objects.ELinq.ObjectQueryProvider.ExecuteSingle[TResult](IEnumerable`1 query, Expression queryRoot)
+   ÔÚ System.Data.Objects.ELinq.ObjectQueryProvider.System.Linq.IQueryProvider.Execute[S](Expression expression)
+   ÔÚ System.Data.Entity.Internal.Linq.DbQueryProvider.Execute[TResult](Expression expression)
+   ÔÚ System.Linq.Queryable.FirstOrDefault[TSource](IQueryable`1 source)
+   ÔÚ CZBK.ItcastOA.WebApp.Controllers.LoginController.CheckLogin() Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\LoginController.cs:ÐÐºÅ 43
+   ÔÚ lambda_method(Closure , ControllerBase , Object[] )
+   ÔÚ System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   ÔÚ System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<BeginInvokeActionMethodWithFilters>b__36(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   ÔÚ System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   ÔÚ System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+2017-12-05 17:22:29,974 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 17:22:29,983 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 17:22:32,146 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:08:36,949 [74] ERROR Memcached.ClientLibrary.MemcachedClient - Exception thrown while trying to get object from cache for key: 96a51d3e-1116-4593-9fd7-2e3f6bf3fa94
+System.IO.IOException: ÎÞ·¨´Ó´«ÊäÁ¬½ÓÖÐ¶ÁÈ¡Êý¾Ý: ÄãµÄÖ÷»úÖÐµÄÈí¼þÖÐÖ¹ÁËÒ»¸öÒÑ½¨Á¢µÄÁ¬½Ó¡£¡£ ---> System.Net.Sockets.SocketException: ÄãµÄÖ÷»úÖÐµÄÈí¼þÖÐÖ¹ÁËÒ»¸öÒÑ½¨Á¢µÄÁ¬½Ó¡£
+   ÔÚ System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   ÔÚ System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 size)
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 size)
+   ÔÚ System.IO.BufferedStream.Read(Byte[] array, Int32 offset, Int32 count)
+   ÔÚ Memcached.ClientLibrary.SockIO.ReadLine()
+   ÔÚ Memcached.ClientLibrary.MemcachedClient.LoadItems(SockIO sock, Hashtable hm, Boolean asString)
+   ÔÚ Memcached.ClientLibrary.MemcachedClient.Get(String key, Object hashCode, Boolean asString)
+2017-12-05 18:08:37,512 [14] ERROR errorMsg - System.Web.HttpException (0x80004005): ·þÎñÆ÷ÎÞ·¨ÔÚ·¢ËÍ HTTP ±êÍ·Ö®ºóÉèÖÃÄÚÈÝÀàÐÍ¡£
+   ÔÚ System.Web.HttpResponse.set_ContentType(String value)
+   ÔÚ System.Web.HttpResponseWrapper.set_ContentType(String value)
+   ÔÚ System.Web.Mvc.JsonResult.ExecuteResult(ControllerContext context)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1a.<InvokeActionResultWithFilters>b__17()
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1a.<>c__DisplayClass1c.<InvokeActionResultWithFilters>b__19()
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+2017-12-05 18:08:55,945 [86] ERROR Memcached.ClientLibrary.MemcachedClient - Exception thrown while trying to get object from cache for key: 96a51d3e-1116-4593-9fd7-2e3f6bf3fa94
+System.IO.IOException: ÎÞ·¨´Ó´«ÊäÁ¬½ÓÖÐ¶ÁÈ¡Êý¾Ý: ÄãµÄÖ÷»úÖÐµÄÈí¼þÖÐÖ¹ÁËÒ»¸öÒÑ½¨Á¢µÄÁ¬½Ó¡£¡£ ---> System.Net.Sockets.SocketException: ÄãµÄÖ÷»úÖÐµÄÈí¼þÖÐÖ¹ÁËÒ»¸öÒÑ½¨Á¢µÄÁ¬½Ó¡£
+   ÔÚ System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   ÔÚ System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 size)
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 size)
+   ÔÚ System.IO.BufferedStream.Read(Byte[] array, Int32 offset, Int32 count)
+   ÔÚ Memcached.ClientLibrary.SockIO.ReadLine()
+   ÔÚ Memcached.ClientLibrary.MemcachedClient.LoadItems(SockIO sock, Hashtable hm, Boolean asString)
+   ÔÚ Memcached.ClientLibrary.MemcachedClient.Get(String key, Object hashCode, Boolean asString)
+2017-12-05 18:08:58,515 [14] ERROR errorMsg - System.Web.HttpException (0x80004005): ·þÎñÆ÷ÎÞ·¨ÔÚ·¢ËÍ HTTP ±êÍ·Ö®ºóÉèÖÃÄÚÈÝÀàÐÍ¡£
+   ÔÚ System.Web.HttpResponse.set_ContentType(String value)
+   ÔÚ System.Web.HttpResponseWrapper.set_ContentType(String value)
+   ÔÚ System.Web.Mvc.JsonResult.ExecuteResult(ControllerContext context)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1a.<InvokeActionResultWithFilters>b__17()
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1a.<>c__DisplayClass1c.<InvokeActionResultWithFilters>b__19()
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+2017-12-05 18:09:08,952 [84] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:09:10,707 [82] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:10:13,132 [86] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:10:16,543 [84] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:10:21,577 [74] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:11:03,967 [74] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:20:14,120 [61] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:21:38,567 [56] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:22:41,576 [62] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------header--------------------------
+2017-12-05 18:24:08,946 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:24:08,955 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 18:24:12,189 [16] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------header--------------------------
+2017-12-05 18:28:18,333 [7] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:28:18,343 [7] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 18:28:20,231 [7] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:28:54,702 [7] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+2017-12-05 18:40:57,804 [35] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:40:57,812 [35] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 18:41:00,903 [40] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:41:59,263 [41] ERROR errorMsg - System.Data.Entity.Infrastructure.DbUpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.UpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.SqlTypes.SqlTypeException: SqlDateTime Òç³ö¡£±ØÐë½éÓÚ 1/1/1753 12:00:00 AM ºÍ 12/31/9999 11:59:59 PM Ö®¼ä¡£
+   ÔÚ System.Data.SqlClient.TdsParser.TdsExecuteRPC(SqlCommand cmd, _SqlRPC[] rpcArray, Int32 timeout, Boolean inSchema, SqlNotificationRequest notificationRequest, TdsParserStateObject stateObj, Boolean isCommandProc, Boolean sync, TaskCompletionSource`1 completion, Int32 startRpc, Int32 startParam)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   ÔÚ System.Data.Mapping.Update.Internal.DynamicUpdateCommand.Execute(UpdateTranslator translator, EntityConnection connection, Dictionary`2 identifierValues, List`1 generatedValues)
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   ÔÚ System.Data.EntityClient.EntityAdapter.Update(IEntityStateManager entityCache)
+   ÔÚ System.Data.Objects.ObjectContext.SaveChanges(SaveOptions options)
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.DbContext.SaveChanges()
+   ÔÚ CZBK.ItcastOA.DALFactory.DBSession.SaveChanges() Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.DALFactory\DBSession.cs:ÐÐºÅ 44
+   ÔÚ CZBK.ItcastOA.BLL.BaseService`1.EditEntity(T entity) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.BLL\BaseService.cs:ÐÐºÅ 59
+   ÔÚ CZBK.ItcastOA.WebApp.Controllers.EverDayWorkController.UpdateSchedule(Schedule sd) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\EverDayWorkController.cs:ÐÐºÅ 92
+   ÔÚ lambda_method(Closure , ControllerBase , Object[] )
+   ÔÚ System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   ÔÚ System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<BeginInvokeActionMethodWithFilters>b__36(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   ÔÚ System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   ÔÚ System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2017-12-05 18:42:05,264 [41] ERROR errorMsg - System.Data.Entity.Infrastructure.DbUpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.UpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.SqlTypes.SqlTypeException: SqlDateTime Òç³ö¡£±ØÐë½éÓÚ 1/1/1753 12:00:00 AM ºÍ 12/31/9999 11:59:59 PM Ö®¼ä¡£
+   ÔÚ System.Data.SqlClient.TdsParser.TdsExecuteRPC(SqlCommand cmd, _SqlRPC[] rpcArray, Int32 timeout, Boolean inSchema, SqlNotificationRequest notificationRequest, TdsParserStateObject stateObj, Boolean isCommandProc, Boolean sync, TaskCompletionSource`1 completion, Int32 startRpc, Int32 startParam)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   ÔÚ System.Data.Mapping.Update.Internal.DynamicUpdateCommand.Execute(UpdateTranslator translator, EntityConnection connection, Dictionary`2 identifierValues, List`1 generatedValues)
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   ÔÚ System.Data.EntityClient.EntityAdapter.Update(IEntityStateManager entityCache)
+   ÔÚ System.Data.Objects.ObjectContext.SaveChanges(SaveOptions options)
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.DbContext.SaveChanges()
+   ÔÚ CZBK.ItcastOA.DALFactory.DBSession.SaveChanges() Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.DALFactory\DBSession.cs:ÐÐºÅ 44
+   ÔÚ CZBK.ItcastOA.BLL.BaseService`1.EditEntity(T entity) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.BLL\BaseService.cs:ÐÐºÅ 59
+   ÔÚ CZBK.ItcastOA.WebApp.Controllers.EverDayWorkController.UpdateSchedule(Schedule sd) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\EverDayWorkController.cs:ÐÐºÅ 92
+   ÔÚ lambda_method(Closure , ControllerBase , Object[] )
+   ÔÚ System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   ÔÚ System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<BeginInvokeActionMethodWithFilters>b__36(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   ÔÚ System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   ÔÚ System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+2017-12-05 18:45:45,670 [27] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:45:45,679 [27] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 18:45:47,090 [22] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:46:19,775 [41] ERROR errorMsg - System.Data.Entity.Infrastructure.DbUpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.UpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.SqlTypes.SqlTypeException: SqlDateTime Òç³ö¡£±ØÐë½éÓÚ 1/1/1753 12:00:00 AM ºÍ 12/31/9999 11:59:59 PM Ö®¼ä¡£
+   ÔÚ System.Data.SqlClient.TdsParser.TdsExecuteRPC(SqlCommand cmd, _SqlRPC[] rpcArray, Int32 timeout, Boolean inSchema, SqlNotificationRequest notificationRequest, TdsParserStateObject stateObj, Boolean isCommandProc, Boolean sync, TaskCompletionSource`1 completion, Int32 startRpc, Int32 startParam)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   ÔÚ System.Data.Mapping.Update.Internal.DynamicUpdateCommand.Execute(UpdateTranslator translator, EntityConnection connection, Dictionary`2 identifierValues, List`1 generatedValues)
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   ÔÚ System.Data.EntityClient.EntityAdapter.Update(IEntityStateManager entityCache)
+   ÔÚ System.Data.Objects.ObjectContext.SaveChanges(SaveOptions options)
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.DbContext.SaveChanges()
+   ÔÚ CZBK.ItcastOA.DALFactory.DBSession.SaveChanges() Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.DALFactory\DBSession.cs:ÐÐºÅ 44
+   ÔÚ CZBK.ItcastOA.BLL.BaseService`1.EditEntity(T entity) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.BLL\BaseService.cs:ÐÐºÅ 59
+   ÔÚ CZBK.ItcastOA.WebApp.Controllers.EverDayWorkController.UpdateSchedule(Schedule sd) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\EverDayWorkController.cs:ÐÐºÅ 92
+   ÔÚ lambda_method(Closure , ControllerBase , Object[] )
+   ÔÚ System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   ÔÚ System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<BeginInvokeActionMethodWithFilters>b__36(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   ÔÚ System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   ÔÚ System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2017-12-05 18:46:19,775 [41] ERROR errorMsg - System.Data.Entity.Infrastructure.DbUpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.UpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.SqlTypes.SqlTypeException: SqlDateTime Òç³ö¡£±ØÐë½éÓÚ 1/1/1753 12:00:00 AM ºÍ 12/31/9999 11:59:59 PM Ö®¼ä¡£
+   ÔÚ System.Data.SqlClient.TdsParser.TdsExecuteRPC(SqlCommand cmd, _SqlRPC[] rpcArray, Int32 timeout, Boolean inSchema, SqlNotificationRequest notificationRequest, TdsParserStateObject stateObj, Boolean isCommandProc, Boolean sync, TaskCompletionSource`1 completion, Int32 startRpc, Int32 startParam)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   ÔÚ System.Data.Mapping.Update.Internal.DynamicUpdateCommand.Execute(UpdateTranslator translator, EntityConnection connection, Dictionary`2 identifierValues, List`1 generatedValues)
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   ÔÚ System.Data.EntityClient.EntityAdapter.Update(IEntityStateManager entityCache)
+   ÔÚ System.Data.Objects.ObjectContext.SaveChanges(SaveOptions options)
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.DbContext.SaveChanges()
+   ÔÚ CZBK.ItcastOA.DALFactory.DBSession.SaveChanges() Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.DALFactory\DBSession.cs:ÐÐºÅ 44
+   ÔÚ CZBK.ItcastOA.BLL.BaseService`1.EditEntity(T entity) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.BLL\BaseService.cs:ÐÐºÅ 59
+   ÔÚ CZBK.ItcastOA.WebApp.Controllers.EverDayWorkController.UpdateSchedule(Schedule sd) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\EverDayWorkController.cs:ÐÐºÅ 92
+   ÔÚ lambda_method(Closure , ControllerBase , Object[] )
+   ÔÚ System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   ÔÚ System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<BeginInvokeActionMethodWithFilters>b__36(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   ÔÚ System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   ÔÚ System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+2017-12-05 18:51:28,279 [15] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:51:28,288 [15] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 18:51:30,988 [41] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:51:33,221 [15] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:51:34,817 [41] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:51:38,521 [41] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:51:58,582 [15] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:51:59,650 [24] ERROR errorMsg - System.Data.Entity.Infrastructure.DbUpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.UpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.SqlTypes.SqlTypeException: SqlDateTime Òç³ö¡£±ØÐë½éÓÚ 1/1/1753 12:00:00 AM ºÍ 12/31/9999 11:59:59 PM Ö®¼ä¡£
+   ÔÚ System.Data.SqlClient.TdsParser.TdsExecuteRPC(SqlCommand cmd, _SqlRPC[] rpcArray, Int32 timeout, Boolean inSchema, SqlNotificationRequest notificationRequest, TdsParserStateObject stateObj, Boolean isCommandProc, Boolean sync, TaskCompletionSource`1 completion, Int32 startRpc, Int32 startParam)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   ÔÚ System.Data.Mapping.Update.Internal.DynamicUpdateCommand.Execute(UpdateTranslator translator, EntityConnection connection, Dictionary`2 identifierValues, List`1 generatedValues)
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   ÔÚ System.Data.EntityClient.EntityAdapter.Update(IEntityStateManager entityCache)
+   ÔÚ System.Data.Objects.ObjectContext.SaveChanges(SaveOptions options)
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.DbContext.SaveChanges()
+   ÔÚ CZBK.ItcastOA.DALFactory.DBSession.SaveChanges() Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.DALFactory\DBSession.cs:ÐÐºÅ 44
+   ÔÚ CZBK.ItcastOA.BLL.BaseService`1.EditEntity(T entity) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.BLL\BaseService.cs:ÐÐºÅ 59
+   ÔÚ CZBK.ItcastOA.WebApp.Controllers.EverDayWorkController.UpdateSchedule(Schedule sd) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\EverDayWorkController.cs:ÐÐºÅ 92
+   ÔÚ lambda_method(Closure , ControllerBase , Object[] )
+   ÔÚ System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   ÔÚ System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<BeginInvokeActionMethodWithFilters>b__36(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   ÔÚ System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   ÔÚ System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2017-12-05 18:52:03,195 [50] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:52:05,651 [24] ERROR errorMsg - System.Data.Entity.Infrastructure.DbUpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.UpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.SqlTypes.SqlTypeException: SqlDateTime Òç³ö¡£±ØÐë½éÓÚ 1/1/1753 12:00:00 AM ºÍ 12/31/9999 11:59:59 PM Ö®¼ä¡£
+   ÔÚ System.Data.SqlClient.TdsParser.TdsExecuteRPC(SqlCommand cmd, _SqlRPC[] rpcArray, Int32 timeout, Boolean inSchema, SqlNotificationRequest notificationRequest, TdsParserStateObject stateObj, Boolean isCommandProc, Boolean sync, TaskCompletionSource`1 completion, Int32 startRpc, Int32 startParam)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   ÔÚ System.Data.Mapping.Update.Internal.DynamicUpdateCommand.Execute(UpdateTranslator translator, EntityConnection connection, Dictionary`2 identifierValues, List`1 generatedValues)
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   ÔÚ System.Data.EntityClient.EntityAdapter.Update(IEntityStateManager entityCache)
+   ÔÚ System.Data.Objects.ObjectContext.SaveChanges(SaveOptions options)
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.DbContext.SaveChanges()
+   ÔÚ CZBK.ItcastOA.DALFactory.DBSession.SaveChanges() Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.DALFactory\DBSession.cs:ÐÐºÅ 44
+   ÔÚ CZBK.ItcastOA.BLL.BaseService`1.EditEntity(T entity) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.BLL\BaseService.cs:ÐÐºÅ 59
+   ÔÚ CZBK.ItcastOA.WebApp.Controllers.EverDayWorkController.UpdateSchedule(Schedule sd) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\EverDayWorkController.cs:ÐÐºÅ 92
+   ÔÚ lambda_method(Closure , ControllerBase , Object[] )
+   ÔÚ System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   ÔÚ System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<BeginInvokeActionMethodWithFilters>b__36(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   ÔÚ System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   ÔÚ System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+2017-12-05 18:56:46,406 [59] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:56:46,414 [59] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 18:56:47,784 [54] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:56:52,044 [54] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:56:53,878 [24] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:56:56,337 [59] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:57:42,067 [41] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:57:44,505 [49] ERROR errorMsg - System.Data.Entity.Infrastructure.DbUpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.UpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.SqlTypes.SqlTypeException: SqlDateTime Òç³ö¡£±ØÐë½éÓÚ 1/1/1753 12:00:00 AM ºÍ 12/31/9999 11:59:59 PM Ö®¼ä¡£
+   ÔÚ System.Data.SqlClient.TdsParser.TdsExecuteRPC(SqlCommand cmd, _SqlRPC[] rpcArray, Int32 timeout, Boolean inSchema, SqlNotificationRequest notificationRequest, TdsParserStateObject stateObj, Boolean isCommandProc, Boolean sync, TaskCompletionSource`1 completion, Int32 startRpc, Int32 startParam)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   ÔÚ System.Data.Mapping.Update.Internal.DynamicUpdateCommand.Execute(UpdateTranslator translator, EntityConnection connection, Dictionary`2 identifierValues, List`1 generatedValues)
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   ÔÚ System.Data.EntityClient.EntityAdapter.Update(IEntityStateManager entityCache)
+   ÔÚ System.Data.Objects.ObjectContext.SaveChanges(SaveOptions options)
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.DbContext.SaveChanges()
+   ÔÚ CZBK.ItcastOA.DALFactory.DBSession.SaveChanges() Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.DALFactory\DBSession.cs:ÐÐºÅ 44
+   ÔÚ CZBK.ItcastOA.BLL.BaseService`1.EditEntity(T entity) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.BLL\BaseService.cs:ÐÐºÅ 59
+   ÔÚ CZBK.ItcastOA.WebApp.Controllers.EverDayWorkController.UpdateSchedule(Schedule sd) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\EverDayWorkController.cs:ÐÐºÅ 92
+   ÔÚ lambda_method(Closure , ControllerBase , Object[] )
+   ÔÚ System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   ÔÚ System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<BeginInvokeActionMethodWithFilters>b__36(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   ÔÚ System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   ÔÚ System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2017-12-05 18:59:22,603 [48] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:59:36,327 [41] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 18:59:59,798 [48] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:00:02,526 [49] ERROR errorMsg - System.Data.Entity.Infrastructure.DbUpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.UpdateException: ¸üÐÂÌõÄ¿Ê±³ö´í¡£ÓÐ¹ØÏêÏ¸ÐÅÏ¢£¬Çë²Î¼ûÄÚ²¿Òì³£¡£ ---> System.Data.SqlTypes.SqlTypeException: SqlDateTime Òç³ö¡£±ØÐë½éÓÚ 1/1/1753 12:00:00 AM ºÍ 12/31/9999 11:59:59 PM Ö®¼ä¡£
+   ÔÚ System.Data.SqlClient.TdsParser.TdsExecuteRPC(SqlCommand cmd, _SqlRPC[] rpcArray, Int32 timeout, Boolean inSchema, SqlNotificationRequest notificationRequest, TdsParserStateObject stateObj, Boolean isCommandProc, Boolean sync, TaskCompletionSource`1 completion, Int32 startRpc, Int32 startParam)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   ÔÚ System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   ÔÚ System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   ÔÚ System.Data.Mapping.Update.Internal.DynamicUpdateCommand.Execute(UpdateTranslator translator, EntityConnection connection, Dictionary`2 identifierValues, List`1 generatedValues)
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Mapping.Update.Internal.UpdateTranslator.Update(IEntityStateManager stateManager, IEntityAdapter adapter)
+   ÔÚ System.Data.EntityClient.EntityAdapter.Update(IEntityStateManager entityCache)
+   ÔÚ System.Data.Objects.ObjectContext.SaveChanges(SaveOptions options)
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
+   ÔÚ System.Data.Entity.Internal.InternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   ÔÚ System.Data.Entity.DbContext.SaveChanges()
+   ÔÚ CZBK.ItcastOA.DALFactory.DBSession.SaveChanges() Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.DALFactory\DBSession.cs:ÐÐºÅ 44
+   ÔÚ CZBK.ItcastOA.BLL.BaseService`1.EditEntity(T entity) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.BLL\BaseService.cs:ÐÐºÅ 59
+   ÔÚ CZBK.ItcastOA.WebApp.Controllers.EverDayWorkController.UpdateSchedule(Schedule sd) Î»ÖÃ E:\dit\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\EverDayWorkController.cs:ÐÐºÅ 92
+   ÔÚ lambda_method(Closure , ControllerBase , Object[] )
+   ÔÚ System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   ÔÚ System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<BeginInvokeActionMethodWithFilters>b__36(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   ÔÚ System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   ÔÚ System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   ÔÚ System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+2017-12-05 19:00:53,312 [48] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:00:53,320 [48] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+
+----------------------header--------------------------
+2017-12-05 19:01:01,605 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:01:01,615 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 19:01:03,102 [5] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:01:05,219 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:01:06,971 [9] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:01:11,155 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:01:27,459 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------header--------------------------
+2017-12-05 19:05:20,175 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:05:20,184 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 19:05:22,731 [14] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:05:24,263 [14] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:05:25,934 [14] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:05:27,822 [9] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:05:51,165 [13] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------header--------------------------
+2017-12-05 19:06:18,464 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:06:18,475 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 19:06:35,657 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:06:37,086 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:06:38,588 [14] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:06:40,455 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:07:40,711 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------header--------------------------
+2017-12-05 19:09:16,795 [9] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:09:16,804 [9] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 19:09:18,269 [14] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:09:19,713 [9] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:09:21,137 [15] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:09:23,699 [9] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+2017-12-05 19:10:02,523 [7] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:10:02,531 [7] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 19:10:05,376 [14] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+2017-12-05 19:14:30,316 [32] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:14:30,325 [32] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+
+----------------------header--------------------------
+2017-12-05 19:14:56,770 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:14:56,780 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 19:14:58,747 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------header--------------------------
+2017-12-05 19:17:09,218 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:17:09,227 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 19:17:10,736 [14] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:17:12,182 [13] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:17:13,725 [14] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:18:45,526 [14] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:18:49,672 [19] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------header--------------------------
+2017-12-05 19:20:41,476 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:20:41,486 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 19:20:42,900 [5] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:20:45,532 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:20:47,262 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------header--------------------------
+2017-12-05 19:21:30,663 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:21:30,673 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 19:21:32,168 [13] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:21:34,095 [14] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:21:57,657 [14] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:21:59,669 [17] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------header--------------------------
+2017-12-05 19:23:48,589 [10] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:23:48,598 [10] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 19:23:49,765 [11] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:23:51,057 [10] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:23:52,559 [10] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:23:54,466 [9] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:26:26,057 [21] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:26:36,303 [11] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:26:44,025 [22] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:27:05,713 [11] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:27:33,443 [27] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+2017-12-05 19:31:51,563 [32] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:31:51,572 [32] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 19:31:52,954 [28] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+2017-12-05 19:35:31,658 [33] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:35:31,667 [33] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 19:35:32,842 [14] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:35:34,154 [7] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:35:35,644 [32] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:35:38,105 [33] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:35:45,327 [29] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:36:05,857 [41] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:36:21,117 [32] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:36:53,569 [33] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:37:38,095 [14] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------header--------------------------
+2017-12-05 19:39:44,265 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:39:44,275 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 19:39:45,703 [13] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:39:53,061 [14] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:39:54,611 [14] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:40:05,300 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:41:11,221 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:42:37,713 [18] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------header--------------------------
+2017-12-05 19:50:27,144 [6] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-05 19:50:27,153 [6] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-05 19:50:29,187 [10] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   ÔÚ Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   ÔÚ Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   ÔÚ Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
