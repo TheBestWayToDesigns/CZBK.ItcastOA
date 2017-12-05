@@ -4,7 +4,8 @@
   <object type="CZBK.ItcastOA.WebApp.Controllers.UserInfoController, CZBK.ItcastOA.WebApp" singleton="false" >
     <property name="UserInfoService" ref="UserInfoService" />
     <property name="RoleInfoService" ref="RoleInfoService" />
-    <property name="ActionInfoService" ref="ActionInfoService" />    
+    <property name="ActionInfoService" ref="ActionInfoService" />
+    <property name="BumenInfoSetService" ref="BumenInfoSetService" />
   </object>
 
   <object type="CZBK.ItcastOA.WebApp.Controllers.LoginController, CZBK.ItcastOA.WebApp" singleton="false" >
