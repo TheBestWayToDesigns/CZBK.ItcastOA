@@ -23,22 +23,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return View();
         }
 
-        //获取日程用户信息
-        public ActionResult GetScheduleUser()
-        {
-            int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
-            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 10;
-            int totalCount;
-            var temp = ScheduleUserService.LoadPageEntities(pageIndex, pageSize, out totalCount, x => x.UserID == 0, x => x.ID, false);
-            var Rtmp = from a in temp
-                       select new
-                       {
-                           ID = a.ID,
-                           UserID = a.UserID,
-                           UpID = a.UpID
-                       };
-            return Json(new { rows = Rtmp, total = totalCount }, JsonRequestBehavior.AllowGet);
-        }
+        //获取下级用户日程信息
+        
 
         //获取日程信息
         public ActionResult GetSchedule()

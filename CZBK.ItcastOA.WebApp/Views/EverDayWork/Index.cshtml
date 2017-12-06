@@ -213,7 +213,7 @@
         //加载日程用户页面
         function loadScheduleUser(pars) {
             $('#tt').datagrid({
-                url: '/EverDayWork/GetScheduleUser',
+                url: '/EverDayWork/GetDownUserSchedule',
                 title: '',
                 height: $("#dgdiv").height() - 20,
                 fitColumns: true, //列自适应
@@ -476,12 +476,12 @@
 </head>
 <body class="easyui-layout">
     <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink " style="width:150px; padding:8px;">
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuSchedule">日程</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuScheduleUser">日程用户</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="">添加中</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="">添加中</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="">添加中</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuScheduleType">日程状态</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuSchedule" style="width:100%;margin:10px auto">日程信息</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="" style="width:100%;margin:10px auto">日程文件信息</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuScheduleUser" style="width:100%;margin:10px auto">下级日程信息</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="" style="width:100%;margin:10px auto">下级日程文件信息</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="" style="width:100%;margin:10px auto">添加中</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuScheduleType" style="width:100%;margin:10px auto">日程状态</a>
     </div>
     <div data-options="region:'center',title:'数据报表'" id="dgdiv">
         <div id="TTdiv">
