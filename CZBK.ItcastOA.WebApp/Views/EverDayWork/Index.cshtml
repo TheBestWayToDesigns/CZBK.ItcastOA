@@ -39,7 +39,7 @@
             // 当窗口大小发生变化时，调整DataGrid的大小211434
             $(window).resize(function () {
                 $('#tt').resizeDataGrid(0, 0, 200, 500);
-            });          
+            });
             //$("#dd").combobox({
             //    onChange: function (n, o) {
             //        var val = $('#Province').combobox('getValue');
@@ -55,19 +55,22 @@
             $("#AddScheduleDIV").css("display", "none");
             $("#UpdateScheduleDIV").css("display", "none");
             loadData();
-            $("#divBtn a").click(function () {                
+            $("#divBtn a").click(function () {
                 var ClickA = $(this).attr("id");
-                if (ClickA == "EverDwork")
+                if (ClickA == "MenuScheduleType")
                 {
                     loadData();
                 }
-                else if (ClickA == "EverD")
+                else if (ClickA == "MenuSchedule")
                 {
                     loadSchedule();
                 }
-            })            
+                else if (ClickA == "MenuScheduleUser") {
+                    loadScheduleUser();
+                }
+            })
         });
-     
+
         //文件上传
         function bindFileUpclick() {
             $(".filebox").click(function () {
@@ -91,10 +94,12 @@
                 })
             });
         }
+
+        //加载日程类型页面
         function loadData(pars) {
             $('#tt').datagrid({
                 url: '/EverDayWork/GetScheduleType',
-                title: '',              
+                title: '',
                 height: $("#dgdiv").height() - 20,
                 fitColumns: true, //列自适应
                 nowrap: true,
@@ -114,9 +119,9 @@
                     { field: 'ID', title: '编号' },
                     { field: 'ItemText', title: '日程状态种类' },
                     {
-                        field: 'Del', title: '操作',
+                        field: 'Del', title: '编辑栏',
                         formatter: function (value, row, index) {
-                            return "<a href='#' onclick='deldata()' >删除</a>";
+                            return "<a href='#' class='l-btn' style='margin:0px 5px;padding:2px 8px ' onclick='deldata()' >删除</a>";
                     } },
                 ]],
                 toolbar: [{
@@ -188,7 +193,7 @@
                         field: 'Edit', title: '编辑栏', align: 'center', formatter: function (value, row, index) {
                             return "<a href='javascript:updateSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>修改</a><a href='javascript:delSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>删除</a>";
 
-                            
+
                         }
                     }
                 ]],
@@ -205,6 +210,41 @@
             });
         }
 
+        //加载日程用户页面
+        function loadScheduleUser(pars) {
+            $('#tt').datagrid({
+                url: '/EverDayWork/GetScheduleUser',
+                title: '',
+                height: $("#dgdiv").height() - 20,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                //onClickCell: onClickCell,
+                //onAfterEdit: onAfterEdit,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[
+                    { field: 'ck', checkbox: true, title: '', width: 30 },
+                    { field: 'ID', title: '编号', align: 'center' },
+                    { field: 'UserID', title: '用户编号', align: 'center' },
+                    { field: 'UpID', title: '上级用户编号', align: 'center' },
+                    {
+                        field: 'Del', title: '编辑栏', align: 'center',
+                        formatter: function (value, row, index) {
+                            return "<a href='#' class='l-btn' style='margin:0px 5px;padding:2px 8px ' onclick='deldata()' >删除</a>";
+                        }
+                    },
+                ]],
+                onLoadSuccess: function () {
+                }
+            });
+        }
 
 
         //将序列化成json格式后日期(毫秒数)转成日期格式
@@ -212,7 +252,7 @@
             var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
             var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
             var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-            var hour = date.getHours();
+            var hour = date.getHours()< 10 ? "0" +date.getHours():date.getHours();
             var minutes = date.getMinutes()<10?"0"+date.getMinutes():date.getMinutes();
             var seconds = date.getSeconds()<10?"0"+date.getSeconds():date.getSeconds();
             return date.getFullYear() + "-" + month + "-" + currentDate + " " + hour + ":" + minutes + ":" + seconds;
@@ -228,7 +268,7 @@
                 catch(e)
                 {
 
-                }   
+                }
 
             } else if (data.ret == "no") {
                 $.messager.alert("提示",data.msg,"error");
@@ -280,7 +320,7 @@
         }
         //添加日程类型
         function addScheduleType() {
-            $("#AddScheduleTypeDIV").css("display", "block");  
+            $("#AddScheduleTypeDIV").css("display", "block");
             $('#AddScheduleTypeDIV').dialog({
                 title: "添加日程状态",
                 width: 450,
@@ -310,7 +350,7 @@
         //添加日程
         function addSchedule() {
             $("#AddScheduleDIV").css("display", "block");
-            
+
             $('#AddScheduleDIV').dialog({
                 title: "添加日程",
                 width: 450,
@@ -322,7 +362,7 @@
                     text: '确定',
                     iconCls: 'icon-ok',
                     handler: function () {
-                       
+
                         $("#addschedulefrom").submit();//提交表单
                     }
                 }, {
@@ -340,16 +380,17 @@
                 }
                 ]
             });
-            
+
         }
 
         //修改日程
         function updateSchedule() {
-            var row = $('#tt').datagrid('getSelected'); 
+            var row = $('#tt').datagrid('getSelected');
             $("#UpdateID").val(row.ID);
             document.getElementById("UpdateID").setAttribute('readOnly', true);
             document.getElementById("UpdateUserID").value = row.UserID;
             document.getElementById("UpdateUserID").setAttribute('readOnly', true);
+            $("#UpdateScheduleTime").datetimebox('setValue', ChangeDateFormat(row.ScheduleTime));
             document.getElementById("UpdateScheduleAddTime").value = ChangeDateFormat(row.ScheduleAddTime);
             document.getElementById("UpdateScheduleAddTime").setAttribute('readOnly', true);
             document.getElementById("UpdateScheduleText").value = row.ScheduleText;
@@ -369,14 +410,20 @@
                 buttons: [{
                     text: '确定',
                     iconCls: 'icon-ok',
-                    handler: function () {                 
-                        $("#updateschedulefrom").submit();//提交表单
+                    handler: function () {
+                        var re =/^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
+                        if(re.test($("#UpdateScheduleTime").datetimebox("getValue"))){
+                           $("#updateschedulefrom").submit();//提交表单
+                        }
+                        else {
+                           $.messager.alert("提示", "<h3>请仔细检查日程时间的格式!</h3></br>日期格式：</br>年-月-日 时:分:秒&nbsp;&nbsp;(YYYY-MM-DD hh:mm:ss)");
+                        }
                     }
                 }, {
                     text: '取消',
                     iconCls: 'icon-cancel',
                     handler: function () {
-                        $('#AddScheduleTypeDIV').dialog('close');
+                        $('#UpdateScheduleDIV').dialog('close');
                     }
                 }]
             });
@@ -384,100 +431,106 @@
 
 
         //删除日程
-        function delSchedule(){
-            var rows = $('#tt').datagrid('getSelections');
-            if (rows.length != 1) {
-                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
-                return;
+        function delSchedule() {
+            //弹窗提示
+            if (confirm('确定要执行删除操作吗?'))
+            {
+                 var rows = $('#tt').datagrid('getSelections');
+                 if (rows.length != 1) {
+                     $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                     return;
+                 }
+                 $.post("/EverDayWork/DelSchedule", { "id": rows[0].ID }, function (data) {
+                     if (data.ret == "ok") {
+                         $('#tt').datagrid("reload");
+                     }
+                     else {
+                         $.messager.alert("提示", data.msg);
+                     }
+                 })
             }
-            $.post("/EverDayWork/DelSchedule", { "id": rows[0].ID }, function (data) {
-                if (data.ret == "ok") {
-                    $('#tt').datagrid("reload");
-                }
-                else {
-                    $.messager.alert("提示", data.msg);
-                }
-            })
+            return;
         }
 
-        //删除数据
+        //删除日程类型
         function deldata() {
-            var rows = $('#tt').datagrid('getSelections');
-            if (rows.length != 1) {                
-                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
-                return;
+            if (confirm('确定要执行删除操作吗?')) {
+                var rows = $('#tt').datagrid('getSelections');
+                if (rows.length != 1) {
+                    $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                    return;
+                }
+                $.post("/EverDayWork/DelType", { "id": rows[0].ID }, function (data) {
+                    if (data.ret == "ok") {
+                        $('#tt').datagrid("reload");
+                    }
+                    else {
+                        $.messager.alert("提示", data.msg);
+                    }
+                })
             }
-            $.post("/EverDayWork/DelType", { "id": rows[0].ID }, function (data) {
-                if (data.ret == "ok") {
-                    $('#tt').datagrid("reload");
-                }
-                else {
-                    $.messager.alert("提示", data.msg);
-                }
-            })
+            return;
         }
     </script>
 
 </head>
 <body class="easyui-layout">
-    <div id="divBtn" data-options="region:'west',split:true,title:'选项'"  class="easyui-panel btnlink " style="width:150px; padding:8px;">
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="EverD">日程</a>
+    <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink " style="width:150px; padding:8px;">
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuSchedule">日程</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuScheduleUser">日程用户</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="">添加中</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="">添加中</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="">添加中</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="">添加中</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="EverDwork">日程状态</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuScheduleType">日程状态</a>
     </div>
     <div data-options="region:'center',title:'数据报表'" id="dgdiv">
         <div id="TTdiv">
-            <table id="tt" class="easyui-datagrid"  title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit"  data-options="toolbar:'#tb'"
-                    >
-            </table>
+            <table id="tt" class="easyui-datagrid" title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit" data-options="toolbar:'#tb'"></table>
         </div>
     </div>
-   
+
     <!---------------添加日程类型信息--------------------->
     <div id="AddScheduleTypeDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddScheduleType", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterScheduleTypeEdit" }, new { id = "addscheduletypefrom" }))
-        {<table>               
-                <tr><td>日程状态</td><td><input type="text"  name="ItemText" id="ItemText" /></td></tr>               
-            </table>
+        {<table>
+            <tr><td>日程状态</td><td><input type="text" name="ItemText" id="ItemText" /></td></tr>
+        </table>
             <table>
                 <tbody id="Selebody"></tbody>
             </table>
 
-            }
+        }
     </div>
 
     <!---------------添加日程----------------->
     <div id="AddScheduleDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddSchedule", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddSchedule" }, new { id = "addschedulefrom" }))
         {<table id="AddScheduleTab">
-             <tr><td>日程时间</td><td><input type="text" class="easyui-datetimebox" name="ScheduleTime" id="ScheduleTime" /></td></tr>
-             <tr><td>日程内容</td><td><textarea class="easyui-textarea" name="ScheduleText" id="ScheduleText"  style="width:302px;height:158px"></textarea></td></tr>
-             <tr>
+            <tr><td>日程时间</td><td><input type="text" class="easyui-datetimebox" name="ScheduleTime" id="ScheduleTime" /></td></tr>
+            <tr><td>日程内容</td><td><textarea class="easyui-textarea" name="ScheduleText" id="ScheduleText" style="width:302px;height:158px"></textarea></td></tr>
+            <tr>
                 <td>日程类型</td>
                 <td>
                     <!--从数据库取值的下拉菜单-->
                     <input class="easyui-combobox" id="ScheduleType"
-                         name="ScheduleTypeID"
-                         url="/EverDayWork/GetScheduleTypeall"
-                         valueField="ID"
-                         textField="ItemText"
-                         panelHeight="auto" style="width:100px" />
-                 </td>
-             </tr>
-             <tr>
+                           name="ScheduleTypeID"
+                           url="/EverDayWork/GetScheduleTypeall"
+                           valueField="ID"
+                           textField="ItemText"
+                           panelHeight="auto" style="width:100px" />
+                </td>
+            </tr>
+            <tr>
                 <td>文件</td>
                 <td>
-                    <input class="filebox" type="file" name="file-1" style="width:100%"/>
-                    <input id="hiddenMenuIcon" name="FileItemID" type="text" style="display:none"/>
+                    <input class="filebox" type="file" name="file-1" style="width:100%" />
+                    <input id="hiddenMenuIcon" name="FileItemID" type="text" style="display:none" />
                 </td>
-             </tr>
+            </tr>
         </table>
-            <table>
-                <tbody id="Selebody"></tbody>
-            </table>
+        <table>
+            <tbody id="Selebody"></tbody>
+        </table>
 
         }
     </div>
@@ -487,8 +540,8 @@
     <div id="UpdateScheduleDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("UpdateSchedule", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterScheduleEdit" }, new { id = "updateschedulefrom" }))
         {<table id="UpdateScheduleTab">
-            <tr><td>日程编号</td><td><input type="text" name="ID" id="UpdateID"/></td></tr>
-            <tr><td>用户编号</td><td><input type="text"  name="UserID" id="UpdateUserID"/></td></tr>
+            <tr><td>日程编号</td><td><input type="text" name="ID" id="UpdateID" /></td></tr>
+            <tr><td>用户编号</td><td><input type="text" name="UserID" id="UpdateUserID" /></td></tr>
             <tr><td>日程时间</td><td><input type="text" class="easyui-datetimebox" name="ScheduleTime" id="UpdateScheduleTime" /></td></tr>
             <tr><td>日程创建时间</td><td><input type="text" name="ScheduleAddTime" id="UpdateScheduleAddTime" /></td></tr>
             <tr><td>日程内容</td><td><textarea class="easyui-textarea" name="ScheduleText" id="UpdateScheduleText" style="width:302px;height:158px"></textarea></td></tr>
@@ -505,9 +558,9 @@
                            panelHeight="auto" style="width:100px" />
                 </td>
             </tr>
-             <tr><td>日程审核状态</td><td><input type="text" name="TextReadBak" id="UpdateTextReadBak" /></td></tr>
-             <tr><td>日程审核人</td><td><input  name="TextReadUser" id="UpdateTextReadUser"/></td></tr>
-             <tr><td>日程审核时间</td><td><input type="text"  name="TextReadTime" id="UpdateTextReadTime" /></td></tr>
+            <tr><td>日程审核状态</td><td><input type="text" name="TextReadBak" id="UpdateTextReadBak" /></td></tr>
+            <tr><td>日程审核人</td><td><input name="TextReadUser" id="UpdateTextReadUser" /></td></tr>
+            <tr><td>日程审核时间</td><td><input type="text" name="TextReadTime" id="UpdateTextReadTime" /></td></tr>
         </table>
         <table>
             <tbody id="Selebody"></tbody>
@@ -524,98 +577,98 @@
 
 
 @*<div id="tb" style="padding:5px;height:auto">
-    <div style="margin-bottom:5px">
-        &nbsp;&nbsp; &nbsp;&nbsp;
-        开始时间: <input class="easyui-datebox" id="StTime" value="2017-01-01" style="width:120px">
-        To: <input class="easyui-datebox" id="DwTime" value="2017-12-30" style="width:120px">
-        &nbsp;&nbsp; &nbsp;&nbsp;
+        <div style="margin-bottom:5px">
+            &nbsp;&nbsp; &nbsp;&nbsp;
+            开始时间: <input class="easyui-datebox" id="StTime" value="2017-01-01" style="width:120px">
+            To: <input class="easyui-datebox" id="DwTime" value="2017-12-30" style="width:120px">
+            &nbsp;&nbsp; &nbsp;&nbsp;
 
-        营销员:
-        <select class="easyui-combobox" panelHeight="auto" id="Person" style="width:100px">
-            @{foreach (UserInfo Item in ViewBag.user)
-                {
-                    <option value="@Item.ID">@Item.UName</option>
-                }
-            }
-        </select> &nbsp;&nbsp; &nbsp;&nbsp;
-
-        <span id="SpanYyZt">
-            原因:
-            <select class="easyui-combobox" id="YyZt" panelHeight="auto" style="width:100px">
-                <option value="-99">失败</option>
-                @{foreach (T_YSItems Item in ViewBag.items)
+            营销员:
+            <select class="easyui-combobox" panelHeight="auto" id="Person" style="width:100px">
+                @{foreach (UserInfo Item in ViewBag.user)
                     {
-                        <option value="@Item.ID">@Item.MyText</option>
+                        <option value="@Item.ID">@Item.UName</option>
                     }
                 }
-            </select>
-        </span>&nbsp;&nbsp; &nbsp;&nbsp;
-    </div>
-    <div style="">
-        &nbsp;&nbsp; &nbsp;&nbsp;
+            </select> &nbsp;&nbsp; &nbsp;&nbsp;
 
-        客户名称:
-        <select class="easyui-combobox" panelHeight="auto" id="KHname" style="width:auto">
-            @{foreach (YXB_Kh_list Item in ViewBag.KeHuName)
-                {
-                    <option value="@Item.id">@Item.KHname</option>
+            <span id="SpanYyZt">
+                原因:
+                <select class="easyui-combobox" id="YyZt" panelHeight="auto" style="width:100px">
+                    <option value="-99">失败</option>
+                    @{foreach (T_YSItems Item in ViewBag.items)
+                        {
+                            <option value="@Item.ID">@Item.MyText</option>
+                        }
+                    }
+                </select>
+            </span>&nbsp;&nbsp; &nbsp;&nbsp;
+        </div>
+        <div style="">
+            &nbsp;&nbsp; &nbsp;&nbsp;
+
+            客户名称:
+            <select class="easyui-combobox" panelHeight="auto" id="KHname" style="width:auto">
+                @{foreach (YXB_Kh_list Item in ViewBag.KeHuName)
+                    {
+                        <option value="@Item.id">@Item.KHname</option>
+                    }
                 }
-            }
-        </select> &nbsp;&nbsp; &nbsp;&nbsp;
-        供货地点:&nbsp;&nbsp;省份
-        <input class="easyui-combobox" id="Province"
-               name="Province"
-               url="/YXBJ/GetAddress?parentiD=0&MyColums=Province"
-               valueField="ID"
-               textField="MyTexts"
-               panelHeight="auto" style="width:100px" />
-        &nbsp;&nbsp;城市
-        <input class="easyui-combobox"
-               id="City"
-               name="City"
-               url=""
-               valueField="ID"
-               textField="MyTexts"
-               panelHeight="auto" style="width:100px" />
-        &nbsp;&nbsp;区/县
-        <input class="easyui-combobox"
-               id="Village"
-               name="Village"
-               url=""
-               valueField="ID"
-               textField="MyTexts"
-               panelHeight="auto" style="width:100px" />
-    </div>
-    <div>
-        <span id="CanPinSelect">
-            &nbsp;&nbsp; &nbsp;&nbsp;
-            产品名称:
-
-            <input class="easyui-combobox"
-                   id="CPname"
-                   name="CPname"
-                   url="/MasterBaoJia/GetCPname?Action=1"
+            </select> &nbsp;&nbsp; &nbsp;&nbsp;
+            供货地点:&nbsp;&nbsp;省份
+            <input class="easyui-combobox" id="Province"
+                   name="Province"
+                   url="/YXBJ/GetAddress?parentiD=0&MyColums=Province"
                    valueField="ID"
-                   textField="MyText"
-                   panelHeight="auto" style="width:auto" />
-
-            &nbsp;&nbsp; &nbsp;&nbsp;
-            产品型号:
-            <input class="easyui-combobox"
-                   id="CPxh"
-                   name="CPxh"
-                   url="/MasterBaoJia/GetCPname?Action=2"
-                   valueField="ID"
-                   textField="MyText"
+                   textField="MyTexts"
                    panelHeight="auto" style="width:100px" />
+            &nbsp;&nbsp;城市
+            <input class="easyui-combobox"
+                   id="City"
+                   name="City"
+                   url=""
+                   valueField="ID"
+                   textField="MyTexts"
+                   panelHeight="auto" style="width:100px" />
+            &nbsp;&nbsp;区/县
+            <input class="easyui-combobox"
+                   id="Village"
+                   name="Village"
+                   url=""
+                   valueField="ID"
+                   textField="MyTexts"
+                   panelHeight="auto" style="width:100px" />
+        </div>
+        <div>
+            <span id="CanPinSelect">
+                &nbsp;&nbsp; &nbsp;&nbsp;
+                产品名称:
 
-        </span>
-        &nbsp;&nbsp; &nbsp;&nbsp;
-        <a href="#" class="easyui-linkbutton" id="qingkou" iconCls="icon-reload">清空</a>
-        <a href="#" class="easyui-linkbutton" id="Sousuo" iconCls="icon-search">搜索1</a>
+                <input class="easyui-combobox"
+                       id="CPname"
+                       name="CPname"
+                       url="/MasterBaoJia/GetCPname?Action=1"
+                       valueField="ID"
+                       textField="MyText"
+                       panelHeight="auto" style="width:auto" />
 
-        <a href="#" class="easyui-linkbutton" id="Sousuo_win" iconCls="icon-search">搜索2</a>
+                &nbsp;&nbsp; &nbsp;&nbsp;
+                产品型号:
+                <input class="easyui-combobox"
+                       id="CPxh"
+                       name="CPxh"
+                       url="/MasterBaoJia/GetCPname?Action=2"
+                       valueField="ID"
+                       textField="MyText"
+                       panelHeight="auto" style="width:100px" />
 
-    </div>
+            </span>
+            &nbsp;&nbsp; &nbsp;&nbsp;
+            <a href="#" class="easyui-linkbutton" id="qingkou" iconCls="icon-reload">清空</a>
+            <a href="#" class="easyui-linkbutton" id="Sousuo" iconCls="icon-search">搜索1</a>
 
-</div>*@
+            <a href="#" class="easyui-linkbutton" id="Sousuo_win" iconCls="icon-search">搜索2</a>
+
+        </div>
+
+    </div>*@

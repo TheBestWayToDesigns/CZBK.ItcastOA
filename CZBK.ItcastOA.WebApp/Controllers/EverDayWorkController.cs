@@ -23,6 +23,23 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return View();
         }
 
+        //获取日程用户信息
+        public ActionResult GetScheduleUser()
+        {
+            int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 10;
+            int totalCount;
+            var temp = ScheduleUserService.LoadPageEntities(pageIndex, pageSize, out totalCount, x => x.UserID == 0, x => x.ID, false);
+            var Rtmp = from a in temp
+                       select new
+                       {
+                           ID = a.ID,
+                           UserID = a.UserID,
+                           UpID = a.UpID
+                       };
+            return Json(new { rows = Rtmp, total = totalCount }, JsonRequestBehavior.AllowGet);
+        }
+
         //获取日程信息
         public ActionResult GetSchedule()
         {
@@ -44,20 +61,22 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            TextReadUser = a.TextReadUser,
                            TextReadTime = a.TextReadTime,
                            FileItemID = a.FileItemID
-        };
+                       };
             return Json(new { rows = Rtmp, total = totalCount }, JsonRequestBehavior.AllowGet);
         }
 
         //获取Type状态信息
-        public ActionResult GetScheduleType() {
+        public ActionResult GetScheduleType()
+        {
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 10;
             int totalCount;
             var temp = ScheduleTypeService.LoadPageEntities(pageIndex, pageSize, out totalCount, x => x.Del == 0, x => x.ID, false);
             var Rtmp = from a in temp
-                       select new {
-                          ID= a.ID,
-                          ItemText=a.ItemText
+                       select new
+                       {
+                           ID = a.ID,
+                           ItemText = a.ItemText
                        };
 
             return Json(new { rows = Rtmp, total = totalCount }, JsonRequestBehavior.AllowGet);
@@ -77,7 +96,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //添加日程
         public ActionResult AddSchedule(Schedule sd)
         {
-           
+
             sd.UserID = LoginUser.ID;
             sd.ScheduleAddTime = DateTime.Now;
             sd.TextReadBak = "未审核";
@@ -132,16 +151,17 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             {
                 return Content("no:文件类型错误，文件扩展名错误！");
             }
-         }
+        }
 
- 
+
 
 
         //添加日程状态
-        public ActionResult AddScheduleType(ScheduleType sdt) {
-            sdt.Del = 0;            
+        public ActionResult AddScheduleType(ScheduleType sdt)
+        {
+            sdt.Del = 0;
             ScheduleTypeService.AddEntity(sdt);
-            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);  
+            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
         //删除日程状态
         public ActionResult DelType()
@@ -158,7 +178,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 }
                 else
                 {
-                    return Json(new { msg="操作错误，没有删除成功！" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { msg = "操作错误，没有删除成功！" }, JsonRequestBehavior.AllowGet);
                 }
             }
         }
