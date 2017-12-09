@@ -34,6 +34,8 @@ namespace CZBK.ItcastOA.Model.SearchParam
         public int? CPtext { get; set; }
         public int? QuXian { get; set; }
         public int? BumenID { get; set; }
+        public long ID { get; set; }
+        public IQueryable<ScheduleUser>  _Schedule { get; set; }
 
     }
 }

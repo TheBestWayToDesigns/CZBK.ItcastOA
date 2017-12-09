@@ -50,5 +50,8 @@ namespace CZBK.ItcastOA.Model
         public DbSet<ScheduleType> ScheduleTypes { get; set; }
         public DbSet<ScheduleUser> ScheduleUsers { get; set; }
         public DbSet<sysdiagram> sysdiagrams { get; set; }
+        public DbSet<T_BaoXiaoBill> T_BaoXiaoBill { get; set; }
+        public DbSet<T_BaoxiaoItems> T_BaoxiaoItems { get; set; }
+        public DbSet<T_JieKuanBill> T_JieKuanBill { get; set; }
     }
 }

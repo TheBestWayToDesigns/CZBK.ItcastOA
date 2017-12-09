@@ -201,6 +201,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
             int win = Request["win"] == null ? 0 : int.Parse(Request["win"]);   
             UserInfoParam uim = new UserInfoParam();
+            
             uim.Uptime = Convert.ToDateTime(Request["UpTime"]);
             uim.Dwtime = Convert.ToDateTime(Request["DwTime"]);
             uim.zt = Request["Zt"] == null ? 0 : int.Parse(Request["Zt"]); 

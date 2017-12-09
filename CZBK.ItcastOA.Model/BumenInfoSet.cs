@@ -17,6 +17,7 @@ namespace CZBK.ItcastOA.Model
         public BumenInfoSet()
         {
             this.UserInfoes = new HashSet<UserInfo>();
+            this.T_JieKuanBill = new HashSet<T_JieKuanBill>();
         }
     
         public int ID { get; set; }
@@ -27,5 +28,6 @@ namespace CZBK.ItcastOA.Model
         public short DelFlag { get; set; }
     
         public virtual ICollection<UserInfo> UserInfoes { get; set; }
+        public virtual ICollection<T_JieKuanBill> T_JieKuanBill { get; set; }
     }
 }

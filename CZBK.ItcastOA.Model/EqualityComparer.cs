@@ -31,5 +31,16 @@ namespace CZBK.ItcastOA.Model
             return obj.GetHashCode();
         }
     }
+    public class EqualityComparerSch : IEqualityComparer<Schedule>
+    {
+        public bool Equals(Schedule x, Schedule y)
+        {
+            return x.ID == y.ID;
+        }
 
+        public int GetHashCode(Schedule obj)
+        {
+            return obj.GetHashCode();
+        }
+    }
 }

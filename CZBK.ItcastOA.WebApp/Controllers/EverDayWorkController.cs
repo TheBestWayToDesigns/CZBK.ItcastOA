@@ -1,4 +1,5 @@
 ﻿using CZBK.ItcastOA.Model;
+using CZBK.ItcastOA.Model.SearchParam;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,8 +24,56 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return View();
         }
 
-        //获取下级用户日程信息
-        
+        //获取下级用户名称
+        public ActionResult GetDownUserall()
+        {
+            var localID = Convert.ToInt64(LoginUser.ID);
+            var tempSUser = ScheduleUserService.LoadEntities(x => x.UpID == localID ).DefaultIfEmpty(); 
+            var Rtmp = from a in tempSUser                     
+                       select new
+                       {
+                           ID=a.UserInfo.ID,
+                           Text=a.UserInfo.PerSonName
+                       };
+            return Json(Rtmp, JsonRequestBehavior.AllowGet);
+        }
+
+        //获取下级用户日程
+        public ActionResult GetDownUser()
+        {
+            var duid = Request["AdduserID"]!=null?Convert.ToInt64(Request["AdduserID"]):0;
+            //如果等于0 那么不查询跳出
+            var tempScheduleUser =ScheduleUserService.LoadEntities(x => x.UpID ==LoginUser.ID).DefaultIfEmpty();
+            UserInfoParam uip = new UserInfoParam();
+            uip.PageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            uip.PageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 10;
+            uip.TotalCount = 0;
+            uip._Schedule = tempScheduleUser;
+            uip.ID = duid;
+            var Rtmp = ScheduleService.LoadSearchEntities(uip);
+            if (Rtmp.FirstOrDefault() == null)
+            {
+                return Json(new { rows = "", total = 0 }, JsonRequestBehavior.AllowGet);
+            }
+            var tRtmp = from a in Rtmp
+                        select new
+                        {
+                            ID = a.ID,
+                            UserID = a.UserInfo.UName,
+                            ScheduleTime = a.ScheduleTime,
+                            ScheduleAddTime = a.ScheduleAddTime,
+                            ScheduleUpdateTime = a.ScheduleUpdateTime,
+                            ScheduleText = a.ScheduleText,
+                            ScheduleTypeID = a.ScheduleTypeID,
+                            TextReadBak = a.TextReadBak,
+                            TextReadUser = a.UserInfo1.UName,
+                            TextReadTime = a.TextReadTime,
+                            FileItemID = a.FileItemID,
+                            ReadUser = a.TextReadUser
+                        };
+            return Json(new { rows = tRtmp, total = uip.TotalCount }, JsonRequestBehavior.AllowGet);
+        }
+
 
         //获取日程信息
         public ActionResult GetSchedule()
@@ -32,7 +81,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 10;
             int totalCount;
-            var temp = ScheduleService.LoadPageEntities(pageIndex, pageSize, out totalCount, x => x.ID > 0, x => x.ID, false);
+            var temp = ScheduleService.LoadPageEntities(pageIndex, pageSize, out totalCount, x => x.UserID == LoginUser.ID, x => x.ID, false);
             var Rtmp = from a in temp
                        select new
                        {
@@ -168,6 +217,24 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 }
             }
         }
+
+        //查阅下级用户
+        public ActionResult ReviewSchedule(Schedule sc)
+        {
+            var textReadBak = Request["TextReadBak"];
+            var id = Convert.ToInt64(Request["ReviewScheduleID"]);
+            var temp= ScheduleService.LoadEntities(x => x.ID == id).FirstOrDefault();
+            var user = UserInfoService.LoadEntities(x => x.ID == LoginUser.ID).FirstOrDefault();
+            temp.TextReadUser = LoginUser.ID;
+            temp.TextReadBak = textReadBak;
+            temp.TextReadTime = DateTime.Now;
+            ScheduleService.EditEntity(temp);
+            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+
 
     }
 }
