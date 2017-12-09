@@ -41,37 +41,57 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //获取下级用户日程
         public ActionResult GetDownUser()
         {
-            var duid = Request["AdduserID"]!=null?Convert.ToInt64(Request["AdduserID"]):0;
-            //如果等于0 那么不查询跳出
-            var tempScheduleUser =ScheduleUserService.LoadEntities(x => x.UpID ==LoginUser.ID).DefaultIfEmpty();
-            UserInfoParam uip = new UserInfoParam();
-            uip.PageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
-            uip.PageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 10;
-            uip.TotalCount = 0;
-            uip._Schedule = tempScheduleUser;
-            uip.ID = duid;
-            var Rtmp = ScheduleService.LoadSearchEntities(uip);
-            if (Rtmp.FirstOrDefault() == null)
-            {
-                return Json(new { rows = "", total = 0 }, JsonRequestBehavior.AllowGet);
+            var DownUserID = Request["AdduserID"]!=null?Convert.ToInt64(Request["AdduserID"]):0;
+            int PageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            int PageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 10;
+            int TotalCount = 0;
+            if (DownUserID!=0) { 
+                //var tempScheduleUser =ScheduleUserService.LoadEntities(x => x.UpID ==LoginUser.ID).DefaultIfEmpty();
+                var tempSchedule = ScheduleService.LoadEntities(x => x.UserID == DownUserID).DefaultIfEmpty();
+                var tRtmp = //from a in tempScheduleUser
+                            from b in tempSchedule
+                            //where b.UserID == a.UserID
+                            select new
+                            {
+                                ID = b.ID,
+                                UserID = b.UserInfo.UName,
+                                ScheduleTime = b.ScheduleTime,
+                                ScheduleAddTime = b.ScheduleAddTime,
+                                ScheduleUpdateTime = b.ScheduleUpdateTime,
+                                ScheduleText = b.ScheduleText,
+                                ScheduleTypeID = b.ScheduleTypeID,
+                                TextReadBak = b.TextReadBak,
+                                TextReadUser = b.UserInfo1.UName,
+                                TextReadTime = b.TextReadTime,
+                                FileItemID = b.FileItemID,
+                                ReadUser = b.TextReadUser
+                            };
+                return Json(new { rows = tRtmp, total = TotalCount }, JsonRequestBehavior.AllowGet);
             }
-            var tRtmp = from a in Rtmp
-                        select new
-                        {
-                            ID = a.ID,
-                            UserID = a.UserInfo.UName,
-                            ScheduleTime = a.ScheduleTime,
-                            ScheduleAddTime = a.ScheduleAddTime,
-                            ScheduleUpdateTime = a.ScheduleUpdateTime,
-                            ScheduleText = a.ScheduleText,
-                            ScheduleTypeID = a.ScheduleTypeID,
-                            TextReadBak = a.TextReadBak,
-                            TextReadUser = a.UserInfo1.UName,
-                            TextReadTime = a.TextReadTime,
-                            FileItemID = a.FileItemID,
-                            ReadUser = a.TextReadUser
-                        };
-            return Json(new { rows = tRtmp, total = uip.TotalCount }, JsonRequestBehavior.AllowGet);
+            else {
+                var tempScheduleUser = ScheduleUserService.LoadEntities(x => x.UpID == LoginUser.ID).DefaultIfEmpty();
+                var tempSchedule = ScheduleService.LoadEntities(x => x.ID > 0).DefaultIfEmpty();
+                var tRtmp = from a in tempScheduleUser
+                           from b in tempSchedule
+                           where b.UserID != LoginUser.ID
+                           where a.UserID == b.UserID
+                           select new
+                            {
+                                ID = b.ID,
+                                UserID = b.UserInfo.UName,
+                                ScheduleTime = b.ScheduleTime,
+                                ScheduleAddTime = b.ScheduleAddTime,
+                                ScheduleUpdateTime = b.ScheduleUpdateTime,
+                                ScheduleText = b.ScheduleText,
+                                ScheduleTypeID = b.ScheduleTypeID,
+                                TextReadBak = b.TextReadBak,
+                                TextReadUser = b.UserInfo1.UName,
+                                TextReadTime = b.TextReadTime,
+                                FileItemID = b.FileItemID,
+                            };
+                return Json(new { rows = tRtmp, total = TotalCount }, JsonRequestBehavior.AllowGet);
+            }
+           
         }
 
 
@@ -86,14 +106,14 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                        select new
                        {
                            ID = a.ID,
-                           UserID = a.UserID,
+                           UserID = a.UserInfo1.UName,
                            ScheduleTime = a.ScheduleTime,
                            ScheduleAddTime = a.ScheduleAddTime,
                            ScheduleUpdateTime = a.ScheduleUpdateTime,
                            ScheduleText = a.ScheduleText,
                            ScheduleTypeID = a.ScheduleTypeID,
                            TextReadBak = a.TextReadBak,
-                           TextReadUser = a.TextReadUser,
+                           TextReadUser = a.UserInfo1.UName,
                            TextReadTime = a.TextReadTime,
                            FileItemID = a.FileItemID
                        };
@@ -217,6 +237,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 }
             }
         }
+
 
         //查阅下级用户
         public ActionResult ReviewSchedule(Schedule sc)

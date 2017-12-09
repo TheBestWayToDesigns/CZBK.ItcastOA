@@ -79,11 +79,9 @@
                     loadDownUser(pars);
                 }
             })
-
-
-           
             //onchange = "changeDownUser()"
         });
+
 
         //文件上传
         function bindFileUpclick() {
@@ -165,7 +163,7 @@
                 columns: [[
                     { field: 'ck', checkbox: true, title: '', width: 30 },
                     { field: 'ID', title: '日程编号' , align:'center'},
-                    { field: 'UserID', title: '用户编号', align: 'center' },
+                    { field: 'UserID', title: '用户名称', align: 'center' },
                     {
                         field: 'ScheduleTime', title: '日程时间', align:'center',formatter: function (value, row, col) {
                             var sd = value == null ? '' : ChangeDateFormat(value);
@@ -207,8 +205,9 @@
                 }
             });
         }
-        //加载日程用户页面
+        //加载下级日程用户页面
         function loadDownUser(pars) {
+                        //$("#DUInput").combobox("setValue","");
             $('#tt').datagrid({
                 url: '/EverDayWork/GetDownUser',
                 title: '下级用户日程',
@@ -270,13 +269,13 @@
                 }
             });
         }
-        //审核下级日程
+        //查阅下级日程
         function reviewSchedule() {
             var row = $('#tt').datagrid('getSelected');
             $("#ReviewScheduleID").val(row.ID);
             $("#ReviewScheduleDIV").css("display", "block");
             $('#ReviewScheduleDIV').dialog({
-                title: "审查日程",
+                title: "查阅日程",
                 width: 450,
                 height: 400,
                 collapsible: true,
@@ -361,7 +360,7 @@
                 $.messager.alert("提醒", "修改数据错误!!", "error");
             }
         }
-        //审核下级日程后调用
+        //查阅下级日程后调用
         function afterReviewSchedule(data) {
             if (data.ret == "ok") {
                 try {
