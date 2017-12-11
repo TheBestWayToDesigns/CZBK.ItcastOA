@@ -82,6 +82,16 @@
             //onchange = "changeDownUser()"
         });
 
+        //清空datagrid数据
+        function cleanDatagrid() {
+            var item = $('#tt').datagrid('getRows');
+            if (item) {
+                for (var i = item.length - 1; i >= 0; i--) {
+                    var index = $('#tt').datagrid('getRowIndex', item[i]);
+                    $('#tt').datagrid('deleteRow', index);
+                }
+            }
+        }
 
         //文件上传
         function bindFileUpclick() {
@@ -141,6 +151,7 @@
                 }
             });
         }
+
         //加载日程页面
         function loadSchedule(pars) {
             $('#tt').datagrid({
@@ -207,7 +218,7 @@
         }
         //加载下级日程用户页面
         function loadDownUser(pars) {
-                        //$("#DUInput").combobox("setValue","");
+            cleanDatagrid();
             $('#tt').datagrid({
                 url: '/EverDayWork/GetDownUser',
                 title: '下级用户日程',
@@ -265,7 +276,8 @@
                     }
                 ]],
                 toolbar: "#DownUserCombox",
-                onLoadSuccess: function () {                    
+                onLoadSuccess: function () {
+
                 }
             });
         }
@@ -374,7 +386,8 @@
             } else if (data.ret == "no") {
                 $.messager.alert("提示", data.msg, "error");
             } else {
-                $.messager.alert("提醒", "修改数据错误!!", "error");
+                $('#tt').datagrid('reload');
+                $('#ReviewScheduleDIV').dialog('close');
             }
         }
         //数字验证
@@ -573,7 +586,7 @@
                     <input id="DUInput" class="easyui-combobox" name="DownUserName"
                            url="/EverDayWork/GetDownUserall"
                            valueField="ID"
-                           textField="Text" 
+                           textField="name" 
                            panelHeight="auto" style="width:100px" />
                 </div>
             </div>
@@ -661,7 +674,7 @@
     <!--------------审核下级日程-------------------->
     <div id="ReviewScheduleDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("ReviewSchedule", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterReviewSchedule" }, new { id = "reviewschedulefrom" }))
-        {<table id="UpdateScheduleTab">        
+        {<table id="ReviewScheduleTab">        
             <tr ><td colspan="2"><h1>查阅意见</h1></td></tr>
             <tr><td><input type="hidden" id="ReviewScheduleID" name="ReviewScheduleID"/></td></tr>
             <tr>

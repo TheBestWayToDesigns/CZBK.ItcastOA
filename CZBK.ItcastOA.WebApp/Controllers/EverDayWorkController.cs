@@ -27,34 +27,51 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //获取下级用户名称
         public ActionResult GetDownUserall()
         {
-            var localID = Convert.ToInt64(LoginUser.ID);
-            var tempSUser = ScheduleUserService.LoadEntities(x => x.UpID == localID ).DefaultIfEmpty(); 
-            var Rtmp = from a in tempSUser                     
-                       select new
-                       {
-                           ID=a.UserInfo.ID,
-                           Text=a.UserInfo.PerSonName
-                       };
-            return Json(Rtmp, JsonRequestBehavior.AllowGet);
+            List<Uidorname> Luin = GetAllDownUser();
+            return Json(Luin, JsonRequestBehavior.AllowGet);
         }
-
+        //获取所有下级用户
+        public List<Uidorname> GetAllDownUser()
+        {
+            var localID = Convert.ToInt64(LoginUser.ID);
+            var tempSUser = ScheduleUserService.LoadEntities(x => x.UpID == localID).DefaultIfEmpty();
+            List<Uidorname> Luin = new List<Uidorname>();
+            ForUser(tempSUser, Luin);
+            return Luin;
+        }
+        //迭代
+        public void ForUser(IQueryable<ScheduleUser> tsu,List<Uidorname> Luin)
+        {
+            foreach (var tpuser in tsu)
+            {
+                Uidorname uin = new Uidorname();
+                uin.ID = Convert.ToInt32(tpuser.UserID);
+                uin.name = tpuser.UserInfo.PerSonName;
+                Luin.Add(uin);
+                var duibi = ScheduleUserService.LoadEntities(x => x.UpID == tpuser.UserID).FirstOrDefault();
+                if (duibi != null)
+                {
+                   var temp=  ScheduleUserService.LoadEntities(x => x.UpID == tpuser.UserID).DefaultIfEmpty();
+                    ForUser(temp, Luin);
+                }                
+                
+            }
+        }
         //获取下级用户日程
         public ActionResult GetDownUser()
         {
-            var DownUserID = Request["AdduserID"]!=null?Convert.ToInt64(Request["AdduserID"]):0;
+            var DownUserID = Request["AdduserID"] != null ? Convert.ToInt64(Request["AdduserID"]) : 0;
             int PageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int PageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 10;
             int TotalCount = 0;
-            if (DownUserID!=0) { 
-                //var tempScheduleUser =ScheduleUserService.LoadEntities(x => x.UpID ==LoginUser.ID).DefaultIfEmpty();
+            if (DownUserID != 0)
+            {
                 var tempSchedule = ScheduleService.LoadEntities(x => x.UserID == DownUserID).DefaultIfEmpty();
-                var tRtmp = //from a in tempScheduleUser
-                            from b in tempSchedule
-                            //where b.UserID == a.UserID
+                var tRtmp = from b in tempSchedule
                             select new
                             {
                                 ID = b.ID,
-                                UserID = b.UserInfo.UName,
+                                UserID = b.UserInfo.PerSonName,
                                 ScheduleTime = b.ScheduleTime,
                                 ScheduleAddTime = b.ScheduleAddTime,
                                 ScheduleUpdateTime = b.ScheduleUpdateTime,
@@ -68,34 +85,36 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             };
                 return Json(new { rows = tRtmp, total = TotalCount }, JsonRequestBehavior.AllowGet);
             }
-            else {
-                var tempScheduleUser = ScheduleUserService.LoadEntities(x => x.UpID == LoginUser.ID).DefaultIfEmpty();
-                var tempSchedule = ScheduleService.LoadEntities(x => x.ID > 0).DefaultIfEmpty();
-                var tRtmp = from a in tempScheduleUser
-                           from b in tempSchedule
-                           where b.UserID != LoginUser.ID
-                           where a.UserID == b.UserID
-                           select new
+            else
+            {
+                List < Uidorname > Luin = GetAllDownUser();
+                List<int> list = new List<int>();
+                foreach(var a in Luin)
+                {
+                    list.Add(a.ID);
+                }
+                var sc = ScheduleService.LoadEntities(x =>list.Contains(x.UserID));
+                var tRtmp = from a in sc
+                            select new
                             {
-                                ID = b.ID,
-                                UserID = b.UserInfo.UName,
-                                ScheduleTime = b.ScheduleTime,
-                                ScheduleAddTime = b.ScheduleAddTime,
-                                ScheduleUpdateTime = b.ScheduleUpdateTime,
-                                ScheduleText = b.ScheduleText,
-                                ScheduleTypeID = b.ScheduleTypeID,
-                                TextReadBak = b.TextReadBak,
-                                TextReadUser = b.UserInfo1.UName,
-                                TextReadTime = b.TextReadTime,
-                                FileItemID = b.FileItemID,
+                                ID = a.ID,
+                                UserID = a.UserInfo.PerSonName,
+                                ScheduleTime = a.ScheduleTime,
+                                ScheduleAddTime = a.ScheduleAddTime,
+                                ScheduleUpdateTime = a.ScheduleUpdateTime,
+                                ScheduleText = a.ScheduleText,
+                                ScheduleTypeID = a.ScheduleTypeID,
+                                TextReadBak = a.TextReadBak,
+                                TextReadUser = a.UserInfo1.UName,
+                                TextReadTime = a.TextReadTime,
+                                FileItemID = a.FileItemID
                             };
                 return Json(new { rows = tRtmp, total = TotalCount }, JsonRequestBehavior.AllowGet);
             }
-           
+
         }
 
-
-        //获取日程信息
+        //获取日程
         public ActionResult GetSchedule()
         {
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
@@ -252,10 +271,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             ScheduleService.EditEntity(temp);
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
-
-
-
-
-
+    }
+    public class Uidorname {
+        public int ID { get; set; }
+        public string name { get; set; }
     }
 }
