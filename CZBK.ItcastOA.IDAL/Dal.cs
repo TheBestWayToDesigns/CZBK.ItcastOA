@@ -20,12 +20,22 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface ICarNumberDal :IBaseDal<CarNumber>
+    {
+      
+    }
+	
 	public partial interface IDepartmentDal :IBaseDal<Department>
     {
       
     }
 	
 	public partial interface IFileItemDal :IBaseDal<FileItem>
+    {
+      
+    }
+	
+	public partial interface IGongLuBaoXiaoBillDal :IBaseDal<GongLuBaoXiaoBill>
     {
       
     }
@@ -75,6 +85,16 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IT_BaoXiaoBillDal :IBaseDal<T_BaoXiaoBill>
+    {
+      
+    }
+	
+	public partial interface IT_BaoxiaoItemsDal :IBaseDal<T_BaoxiaoItems>
+    {
+      
+    }
+	
 	public partial interface IT_BoolItemDal :IBaseDal<T_BoolItem>
     {
       
@@ -86,6 +106,11 @@ namespace CZBK.ItcastOA.IDAL
     }
 	
 	public partial interface IT_ChanPinNameDal :IBaseDal<T_ChanPinName>
+    {
+      
+    }
+	
+	public partial interface IT_JieKuanBillDal :IBaseDal<T_JieKuanBill>
     {
       
     }

@@ -20,12 +20,22 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface ICarNumberService : IBaseService<CarNumber>
+    {
+       
+    }   
+	
 	public partial interface IDepartmentService : IBaseService<Department>
     {
        
     }   
 	
 	public partial interface IFileItemService : IBaseService<FileItem>
+    {
+       
+    }   
+	
+	public partial interface IGongLuBaoXiaoBillService : IBaseService<GongLuBaoXiaoBill>
     {
        
     }   
@@ -75,6 +85,16 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IT_BaoXiaoBillService : IBaseService<T_BaoXiaoBill>
+    {
+       
+    }   
+	
+	public partial interface IT_BaoxiaoItemsService : IBaseService<T_BaoxiaoItems>
+    {
+       
+    }   
+	
 	public partial interface IT_BoolItemService : IBaseService<T_BoolItem>
     {
        
@@ -86,6 +106,11 @@ namespace CZBK.ItcastOA.IBLL
     }   
 	
 	public partial interface IT_ChanPinNameService : IBaseService<T_ChanPinName>
+    {
+       
+    }   
+	
+	public partial interface IT_JieKuanBillService : IBaseService<T_JieKuanBill>
     {
        
     }   

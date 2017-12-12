@@ -101,7 +101,7 @@
                 rownumbers: true,
                 //onClickCell: onClickCell,
                 //onAfterEdit: onAfterEdit,
-                idField: 'ID',//主键列的列明
+                idField: 'ccID',//主键列的列明
                 loadMsg: '正在加载权限的信息...',
                 pagination: true,//是否有分页
                 singleSelect: true,//是否单行选择
@@ -141,9 +141,7 @@
                 fitColumns: true, //列自适应
                 nowrap: true,
                 rownumbers: true,
-                //onClickCell: onClickCell,
-                //onAfterEdit: onAfterEdit,
-                idField: 'ID',//主键列的列明
+                idField: 'cxID',//主键列的列明
                 loadMsg: '正在加载权限的信息...',
                 pagination: true,//是否有分页
                 singleSelect: true,//是否单行选择
@@ -154,41 +152,12 @@
                 columns: [[
                     { field: 'ck', checkbox: true, title: '', width: 30 },
                     { field: 'ID', title: '日程编号' , align:'center'},
-                    { field: 'UserID', title: '用户编号', align: 'center' },
-                    {
-                        field: 'ScheduleTime', title: '日程时间', align:'center',formatter: function (value, row, col) {
-                            var sd = value == null ? '' : ChangeDateFormat(value);
-                            return sd;
-                        }
-                    },
-                    {
-                        field: 'ScheduleAddTime', title: '日程创建时间', align: 'center', formatter: function (value, row, col) {
-                            var sd = value == null ? '' : ChangeDateFormat(value);
-                            return sd;
-                        }
-                    },
-                    {
-                        field: 'ScheduleUpdateTime', title: '日程最后修改时间', align: 'center', formatter: function (value, row, col) {
-                            var sd = value == null ? '' : ChangeDateFormat(value);
-                            return sd;
-                        }
-                    },
-                    { field: 'ScheduleText', title: '日程内容', align: 'center' },
-                    { field: 'ScheduleTypeID', title: '日程类型', align: 'center' },
-                    { field: 'TextReadBak', title: '日程审核状态', align: 'center' },
-                    { field: 'TextReadUser', title: '日程审核人', align: 'center' },
-                    {
-                        field: 'TextReadTime', title: '日程审核时间', align: 'center', formatter: function (value, row, col) {
-                            var sd = value == null ? '' : ChangeDateFormat(value);
-                            return sd;
-                        }
-                    },
+                    { field: 'UserID', title: '用户编号', align: 'center' },                  
                     { field: 'FileItemID', title: '文件编号', align: 'center' },
                     {
-                        field: 'Edit', title: '编辑栏', align: 'center', formatter: function (value, row, index) {
-                         return "<input type='button' class='icon-edit' style='margin:0px 10px;padding:0px 10px' onclick='updateSchedule()'/><input type='button' class='icon-remove' style='margin:0px 10px;padding:0px 10px' onclick='delSchedule()'/>";
-
-                            
+                        field: 'eds', title: '编辑栏',formatter: function (value, row, index) {
+                            //return "<input type='button' class='icon-edit' style='margin:0px 10px;padding:0px 10px' onclick='updateSchedule()'/><input type='button' class='icon-remove' style='margin:0px 10px;padding:0px 10px' onclick='delSchedule()'/>";
+                            return "<a href='javascript:updateSchedule()' class='l-btn deletes' style='padding:2px 5px 2px 5px' >DDa</a>";
                         }
                     }
                 ]],
@@ -205,6 +174,55 @@
             });
         }
 
+        //修改日程
+        function updateSchedule() {
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+            alert(rows[0].ID);
+            $("#UpdateID").val(row.ID);
+
+
+            document.getElementById("UpdateID").disabled = 'disabled';
+            document.getElementById("UpdateUserID").value = row.UserID;
+            document.getElementById("UpdateUserID").disabled = 'disabled';
+            document.getElementById("UpdateScheduleAddTime").value = ChangeDateFormat(row.ScheduleAddTime);
+            document.getElementById("UpdateScheduleAddTime").disabled = 'disabled';
+            document.getElementById("UpdateScheduleText").value = row.ScheduleText;
+            document.getElementById("UpdateTextReadBak").value = row.TextReadBak;
+            document.getElementById("UpdateTextReadBak").disabled = 'disabled';
+            document.getElementById("UpdateTextReadUser").disabled = 'disabled';
+            document.getElementById("UpdateTextReadTime").disabled = 'disabled';
+
+            $("#UpdateScheduleDIV").css("display", "block");
+            $('#UpdateScheduleDIV').dialog({
+                title: "修改日程",
+                width: 450,
+                height: 400,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '确定',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+                        //if ($("#ItemText").val().trim().length <= 0) {
+                        //$.messager.alert("提示", "值不可以为空！");
+                        // return;
+                        // }
+                        $("#updateschedulefrom").submit();//提交表单
+                    }
+                }, {
+                    text: '取消',
+                    handler: function () {
+                        $('#AddScheduleTypeDIV').dialog('close');
+                    }
+                }]
+            });
+        }
 
 
         //将序列化成json格式后日期(毫秒数)转成日期格式
@@ -326,47 +344,7 @@
             
         }
 
-        //修改日程
-        function updateSchedule() {
-            var row = $('#tt').datagrid('getSelected'); 
-            $("#UpdateID").val(row.ID);
-            document.getElementById("UpdateID").disabled = 'disabled';
-            document.getElementById("UpdateUserID").value = row.UserID;
-            document.getElementById("UpdateUserID").disabled = 'disabled';
-            document.getElementById("UpdateScheduleAddTime").value = ChangeDateFormat(row.ScheduleAddTime);
-            document.getElementById("UpdateScheduleAddTime").disabled = 'disabled';
-            document.getElementById("UpdateScheduleText").value = row.ScheduleText;
-            document.getElementById("UpdateTextReadBak").value = row.TextReadBak;
-            document.getElementById("UpdateTextReadBak").disabled = 'disabled';
-            document.getElementById("UpdateTextReadUser").disabled = 'disabled';
-            document.getElementById("UpdateTextReadTime").disabled = 'disabled';
-
-            $("#UpdateScheduleDIV").css("display", "block");
-            $('#UpdateScheduleDIV').dialog({
-                title: "修改日程",
-                width: 450,
-                height: 400,
-                collapsible: true,
-                resizable: true,
-                modal: true,
-                buttons: [{
-                    text: '确定',
-                    iconCls: 'icon-ok',
-                    handler: function () {
-                        //if ($("#ItemText").val().trim().length <= 0) {
-                            //$.messager.alert("提示", "值不可以为空！");
-                           // return;
-                       // }
-                        $("#updateschedulefrom").submit();//提交表单
-                    }
-                }, {
-                    text: '取消',
-                    handler: function () {
-                        $('#AddScheduleTypeDIV').dialog('close');
-                    }
-                }]
-            });
-        }
+     
 
 
         //删除数据

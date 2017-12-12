@@ -21,12 +21,22 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class CarNumberDal :BaseDal<CarNumber>,ICarNumberDal
+    {
+
+    }
+		
 	public partial class DepartmentDal :BaseDal<Department>,IDepartmentDal
     {
 
     }
 		
 	public partial class FileItemDal :BaseDal<FileItem>,IFileItemDal
+    {
+
+    }
+		
+	public partial class GongLuBaoXiaoBillDal :BaseDal<GongLuBaoXiaoBill>,IGongLuBaoXiaoBillDal
     {
 
     }
@@ -76,6 +86,16 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class T_BaoXiaoBillDal :BaseDal<T_BaoXiaoBill>,IT_BaoXiaoBillDal
+    {
+
+    }
+		
+	public partial class T_BaoxiaoItemsDal :BaseDal<T_BaoxiaoItems>,IT_BaoxiaoItemsDal
+    {
+
+    }
+		
 	public partial class T_BoolItemDal :BaseDal<T_BoolItem>,IT_BoolItemDal
     {
 
@@ -87,6 +107,11 @@ namespace CZBK.ItcastOA.DAL
     }
 		
 	public partial class T_ChanPinNameDal :BaseDal<T_ChanPinName>,IT_ChanPinNameDal
+    {
+
+    }
+		
+	public partial class T_JieKuanBillDal :BaseDal<T_JieKuanBill>,IT_JieKuanBillDal
     {
 
     }

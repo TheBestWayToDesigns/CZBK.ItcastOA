@@ -27,6 +27,14 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class CarNumberService :BaseService<CarNumber>,ICarNumberService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.CarNumberDal;
+        }
+    }   
+	
 	public partial class DepartmentService :BaseService<Department>,IDepartmentService
     {
         public override void SetCurretnDal()
@@ -40,6 +48,14 @@ namespace CZBK.ItcastOA.BLL
         public override void SetCurretnDal()
         {
             CurrentDal = this.GetCurrentDbSession.FileItemDal;
+        }
+    }   
+	
+	public partial class GongLuBaoXiaoBillService :BaseService<GongLuBaoXiaoBill>,IGongLuBaoXiaoBillService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.GongLuBaoXiaoBillDal;
         }
     }   
 	
@@ -115,6 +131,22 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class T_BaoXiaoBillService :BaseService<T_BaoXiaoBill>,IT_BaoXiaoBillService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.T_BaoXiaoBillDal;
+        }
+    }   
+	
+	public partial class T_BaoxiaoItemsService :BaseService<T_BaoxiaoItems>,IT_BaoxiaoItemsService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.T_BaoxiaoItemsDal;
+        }
+    }   
+	
 	public partial class T_BoolItemService :BaseService<T_BoolItem>,IT_BoolItemService
     {
         public override void SetCurretnDal()
@@ -136,6 +168,14 @@ namespace CZBK.ItcastOA.BLL
         public override void SetCurretnDal()
         {
             CurrentDal = this.GetCurrentDbSession.T_ChanPinNameDal;
+        }
+    }   
+	
+	public partial class T_JieKuanBillService :BaseService<T_JieKuanBill>,IT_JieKuanBillService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.T_JieKuanBillDal;
         }
     }   
 	

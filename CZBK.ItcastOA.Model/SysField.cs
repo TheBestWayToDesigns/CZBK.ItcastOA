@@ -14,6 +14,11 @@ namespace CZBK.ItcastOA.Model
     
     public partial class SysField
     {
+        public SysField()
+        {
+            this.GongLuBaoXiaoBills = new HashSet<GongLuBaoXiaoBill>();
+        }
+    
         public long ID { get; set; }
         public string MyTexts { get; set; }
         public Nullable<int> ParentId { get; set; }
@@ -25,5 +30,7 @@ namespace CZBK.ItcastOA.Model
         public string CreatePerson { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
         public string UpdatePerson { get; set; }
+    
+        public virtual ICollection<GongLuBaoXiaoBill> GongLuBaoXiaoBills { get; set; }
     }
 }

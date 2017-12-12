@@ -183,6 +183,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ActionInfoController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BillPrintController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\EverDayWorkController.cs" />
     <Compile Include="Controllers\GeRenController.cs" />
@@ -557,6 +558,7 @@
     <Content Include="Content\lib\ligerUI\skins\Silvery\images\layout\tabs-item-over-bg.gif" />
     <Content Include="Content\lib\ligerUI\skins\Silvery\images\layout\tabs-item-right-bg.gif" />
     <Content Include="Content\lib\ligerUI\skins\Silvery\images\layout\tabs-tools.gif" />
+    <Content Include="Content\Print.css" />
     <Content Include="Content\tableStyle.css" />
     <Content Include="Content\themes\black\accordion.css" />
     <Content Include="Content\themes\black\calendar.css" />
@@ -1306,6 +1308,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\EverDayWork\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\BillPrint\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

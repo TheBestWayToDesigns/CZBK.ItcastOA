@@ -42,6 +42,19 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IBumenInfoSetDal;
         }
 		
+	    public static ICarNumberDal CreateCarNumberDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".CarNumberDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as ICarNumberDal;
+        }
+		
 	    public static IDepartmentDal CreateDepartmentDal()
         {
 
@@ -66,6 +79,19 @@ namespace CZBK.ItcastOA.DALFactory
 
 
             return obj as IFileItemDal;
+        }
+		
+	    public static IGongLuBaoXiaoBillDal CreateGongLuBaoXiaoBillDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".GongLuBaoXiaoBillDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IGongLuBaoXiaoBillDal;
         }
 		
 	    public static ILogin_listDal CreateLogin_listDal()
@@ -185,6 +211,32 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IT_BaoJiaToPDal;
         }
 		
+	    public static IT_BaoXiaoBillDal CreateT_BaoXiaoBillDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".T_BaoXiaoBillDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IT_BaoXiaoBillDal;
+        }
+		
+	    public static IT_BaoxiaoItemsDal CreateT_BaoxiaoItemsDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".T_BaoxiaoItemsDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IT_BaoxiaoItemsDal;
+        }
+		
 	    public static IT_BoolItemDal CreateT_BoolItemDal()
         {
 
@@ -222,6 +274,19 @@ namespace CZBK.ItcastOA.DALFactory
 
 
             return obj as IT_ChanPinNameDal;
+        }
+		
+	    public static IT_JieKuanBillDal CreateT_JieKuanBillDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".T_JieKuanBillDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IT_JieKuanBillDal;
         }
 		
 	    public static IT_SczzDanjuDal CreateT_SczzDanjuDal()

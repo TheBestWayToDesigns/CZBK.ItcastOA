@@ -1,0 +1,722 @@
+﻿@{
+    Layout = null;
+}
+@using CZBK.ItcastOA.Model
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>产品报价列表</title>
+    <link href="~/Content/themes/icon.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
+    <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
+    <link href="~/Content/Print.css" rel="stylesheet" type="text/css"  media="print"/>
+    <script src="~/Scripts/jquery.easyui.min.js"></script>
+    <script src="~/Scripts/easyui-lang-zh_CN.js"></script>
+    <script src="~/Scripts/datapattern.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/MyAjaxForm.js"></script>
+    <script src="~/Scripts/MyNewJS.js"></script>
+    <script src="~/Scripts/jquery.jqprint-0.3.js"></script>
+    <script type="text/javascript">
+        $.fn.extend({
+            resizeDataGrid: function (heightMargin, widthMargin, minHeight, minWidth) {
+
+                var height = $("#dgdiv").height() - heightMargin;
+                var width = $("#dgdiv").width() - widthMargin;
+                height = height < minHeight ? minHeight : height;
+                width = width < minWidth ? minWidth : width;
+                $(this).datagrid('resize', {
+                    height: height,
+                    width: width
+                });
+            }
+        });
+        $(function () {
+            $("#NewBill").hide();
+            $("#NewBaoXiaoBill").hide();
+            loadData();
+            // 当窗口大小发生变化时，调整DataGrid的大小
+            $(window).resize(function () {
+                $('#tt').resizeDataGrid(0, 0, 200, 500);
+            });
+            $("#AddBxBill").css("display", "none");
+            $("#AddJieKuanBill").css("display", "none");
+            $("#PrintDIV").css("display", "none");
+            $("#AddBxBillData").css("display", "none");
+            $("#BxBillShow").css("display", "none");             
+            $("#addta").css("display", "none"); addta
+            $("#BtnJkd").click(function () {
+                loadData();
+            })
+            //打印月预览总汇
+            $("#PrintMonth").click(function () {
+                $("#PrintDIV").jqprint();
+            })    
+            $("#NewBill").click(function () {
+                $("#AddJieKuanBill").css("display", "block");
+                $('#AddJieKuanBill').dialog({
+                    title: "添加用户信息",
+                    width: 600,
+                    height: 400,
+                    collapsible: true,
+                    resizable: true,
+                    modal: true,
+                    buttons: [{
+                        text: '确定',
+                        iconCls: 'icon-ok',
+                        handler: function () {     
+                            $("#JKBillFrom").submit();//提交表单                            
+                        }
+                    }, {
+                        text: '取消',
+                        handler: function () {
+                            $('#AddJieKuanBill').dialog('close');
+                        }
+                    }]
+                });
+            })
+            $("#BtnBaoXiao").click(function () {
+                LoadBaoXiao();
+            })
+            $("#NewBaoXiaoBill").click(function () {
+                $("#AddBxBill").css("display", "block");
+                $('#AddBxBill').dialog({
+                    title: "新建报销单据",
+                    width: 600,
+                    height: 400,
+                    collapsible: true,
+                    resizable: true,
+                    modal: true,
+                    buttons: [{
+                        text: '确定',
+                        iconCls: 'icon-ok',
+                        handler: function () {
+                            $("#BXBillFrom").submit();//提交表单                            
+                        }
+                    }, {
+                        text: '取消',
+                        handler: function () {
+                            $('#AddBxBill').dialog('close');
+                        }
+                    }]
+                });
+            })
+            
+            
+        });
+        function loadData(pars) {
+            $('#tt').datagrid({
+                url: '/BillPrint/GETjiekuandata',
+                title: '借款单数据',
+                width: $("#dgdiv").width() - 2,
+                height: $("#dgdiv").height() - 2,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime 
+                    { field: 'Bumen', title: '部门' },                    
+                    { field: 'SkdwName', title: '收款单位全称（姓名）' },
+                    { field: 'JieKuanYuanYin', title: '借款原因' },
+                    { field: 'JieKuanPerson', title: '借款人' },
+                    {
+                        field: 'JieKuanMoney', title: '借款金额',formatter:function (value, row, index) {
+                         
+                        return value == null ? 0 : formatCurrency(value.toFixed(2));
+                        }
+                    },
+                    { field: 'OpenHang', title: '开户行' },
+                    { field: 'CardNumber', title: '账号(卡号)' },
+                    { field: 'Bak', title: '备注' }, 
+                     { field: 'Del', title: '状态' },
+                     { field: 'BillTime', title: '借款日期' ,formatter: function (value, row, index) {
+                         var str = ChangeDateFormat(value);
+                         return str;
+                     }},
+                     {
+                         field: 'AddTime', title: '创建时间', formatter: function (value, row, index) {
+                             var str = ChangeDateFormatHours_Minute(value);
+                             return str;
+                         }
+                     },
+                     {
+                         field: "Print", title: "打印预览", formatter: function (value, row, index) {
+                             return "<a href='javascript:DigPrint()' class='l-btn' style='padding:2px 5px;'>打印预览</a>";
+                         }
+                     },
+                     {
+                         field: "Zuofei", title: "作废", formatter: function (value, row, index) {
+                           return "<a href='javascript:DigPrint()' class='l-btn' style='padding:2px 5px;'>作废</a>";
+                     }
+        }
+
+                ]],
+                onLoadSuccess: function () {
+                    $("#NewBill").show();
+                    $("#NewBaoXiaoBill").hide();
+                }
+            });
+        }
+        function LoadBaoXiao(pars) {
+            $('#tt').datagrid({
+                url: '/BillPrint/GETBaoXiaodata',
+                title: '报销单据封面',
+                width: $("#dgdiv").width() - 2,
+                height: $("#dgdiv").height() - 2,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime 
+                    { field: 'BaoxianDanwei', title: '报销单位' },
+                    {
+                        field: 'IntTime', title: '单据时间', formatter: function (value, row, index) {
+                            var str = ChangeDateFormat(value);
+                            return str;
+                        }
+                    },
+                     {
+                         field: 'Addtime', title: '创建单据时间', formatter: function (value, row, index) {
+                             var str = ChangeDateFormatHours_Minute(value);
+                             return str;
+                         }
+                     },                                  
+                    { field: 'Icount', title: '单据下信息数量' },
+                     { field: 'Del', title: '状态' },                     
+                     {
+                         field: "ddc", title: "添加内容", formatter: function (value, row, index) {
+                             return "<a href='javascript:DigBaoXiaoshow()' class='l-btn' style='padding:2px 5px;'>添加内容</a>";
+                         }
+                     },
+                     {
+                         field: "ddz", title: "作废", formatter: function (value, row, index) {
+                             return "<a href='javascript:' class='l-btn' style='padding:2px 5px;'>作废</a>";
+                         }
+                     }
+
+                ]],
+                onLoadSuccess: function () {
+                    $("#NewBaoXiaoBill").show();
+                    $("#NewBill").hide();
+                }
+            });
+        }
+       
+        function afterEdit(data) {
+            if (data.ret == "ok") {
+                try {
+                    $('#tt').datagrid('reload');
+                    $('#AddJieKuanBill').dialog('close');
+                    $('#AddBxBill').dialog('close');
+                }
+                catch (e) { }              
+                try {
+                    $('#BillShow').datagrid('reload');
+                }
+                catch (e) {}
+            } else  {
+                $.messager.alert("提示", data.msg, "error");
+            } 
+        }
+        function formatCurrency(num) {
+            num = num.toString().replace(/\$|\,/g, '');
+            if (isNaN(num))
+                num = "0";
+            sign = (num == (num = Math.abs(num)));
+            num = Math.floor(num * 100 + 0.50000000001);
+            cents = num % 100;
+            num = Math.floor(num / 100).toString();
+            if (cents < 10)
+                cents = "0" + cents;
+            for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
+                num = num.substring(0, num.length - (4 * i + 3)) + ',' +
+                num.substring(num.length - (4 * i + 3));
+            return (((sign) ? '' : '-') + num + '.' + cents);
+        }
+        function DigPrint() {
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+            writ();
+            $("#SSBM").text(rows[0].Bumen);
+            $("#JEperson").text(rows[0].JieKuanPerson);
+            $("#SkdwName").text(rows[0].SkdwName);
+            var strM = "￥" + rows[0].JieKuanMoney;
+            var Moneyd = rows[0].JieKuanMoney;
+            Moneyd = formatCurrency(Moneyd.toFixed(2))
+            $("#Money").text("￥" + Moneyd);
+            $("#BigMoney").text("ⓧ" + Arabia_to_Chinese(strM));
+            $("#KHH").text(rows[0].OpenHang);
+            $("#CardNumber").text(rows[0].CardNumber);
+            $("#JKyy").text(rows[0].JieKuanYuanYin);
+            $("#baktd").text(rows[0].Bak);
+            var Dtime = ChangeDateFormat(rows[0].BillTime).split("-");
+            $("#Wyear").text(Dtime[0])
+            $("#Wmonth").text(Dtime[1])
+            $("#Wdata").text(Dtime[2])
+
+            $("#Ptble tr>td:nth-child(2)").css("text-align", "left")
+            $("#PrintDIV").css("display", "block");           
+            $('#PrintDIV').dialog({
+                title: "打印预览",
+                width: $(document).width()/1.5,
+                height: $(document).height() / 1.5,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '打印',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+                        $("#Ptble tr>td:nth-child(1)").text("");
+                        $("#Ptble tr:eq(0) td:eq(2) ").text("");
+                        $("#Ptble tr:eq(2) td:eq(2) ").text("");
+                        $("#Ptble tr:eq(3) td:eq(2) ").text("");
+                        $("#bannar1").text("");
+                        $("#bannar2").text("");
+                        
+                        $("#JKDprint").jqprint();
+                    }
+                }, {
+                    text: '取消',
+                    handler: function () {
+                        $('#PrintDIV').dialog('close');
+                    }
+                }]
+            });
+           
+        }
+        function DigBaoXiaoshow() {
+            $("#BxBillShow").css("display", "block");
+            $('#BxBillShow').dialog({
+                title: "显示列表数据",
+                width: $(document).width() / 1.5,
+                height: $(document).height() / 1.2,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '关闭',
+                    handler: function () {
+                        $('#BxBillShow').dialog('close');
+                    }
+                }]
+            });           
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+            $("#BaoXianID").val(rows[0].ID);
+            var pars = {BillId:rows[0].ID};
+            $('#BillShow').datagrid({
+                url: '/BillPrint/GETBaoXiaolist',
+                title: '报销单据封面',
+                height: $("#BxBillShow").height() - $("#addta").height(),
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'BxBillID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime 
+                    { field: 'BaoXiaoName', title: '报销内容' },
+                    { field: 'DanJiuInt', title: '单据张数' },
+                    {
+                        field: 'BaoXiaoMoeny', title: '报销金额', formatter: function (value, row, index) {
+                            
+                            return value==null?0: formatCurrency(value.toFixed(2));
+                        }
+                    },
+                    {
+                        field: 'AddTime', title: '创建时间', formatter: function (value, row, index) {
+                            var str =value==null?"": ChangeDateFormat(value);
+                            return str;
+                        }
+                    },
+                     { field: 'Del', title: '状态' },
+                     {
+                         field: "ddz", title: "作废", formatter: function (value, row, index) {
+                             return "<a href='javascript:Delbxpzbill()' class='l-btn' style='padding:2px 5px;'>作废</a>";
+                         }
+                     }
+
+                ]],
+                toolbar: "#addta",
+                onLoadSuccess: function () {                    
+                }
+            });
+           
+        }
+        function Delbxpzbill() {
+            var rows = $('#BillShow').datagrid('getSelections');
+            if (rows.length != 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+            $.post("/BillPrint/DelBxlistbill",{"DelID":rows[0].ID}, function (data) {
+                if (data.ret == "ok") {
+                    $.messager.alert("提示", data.msg);
+                    $("#BillShow").datagrid("reload");
+                }
+                else {
+                    $.messager.alert("提示", data.msg);
+                }
+            })
+            alert(rows[0].ID)
+        }
+        function Remc() {
+            $("#BxDanwei").text('');
+            $("#W1year").text('');
+            $("#W1month").text('');
+            $("#W1data").text('');
+
+            for (var b = 1; b < 6;b++) {
+
+                for (var i = 0; i < 4; i++) {
+                    $("#BxTAB tr:eq("+b+") td:eq(" + i + ") ").text("");
+                }
+            }
+           
+        }
+        function DigBaoXiaoPrint() {
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+            //情况之前的信息
+            Remc();
+            $("#BxDanwei").text(rows[0].BaoxianDanwei);
+            var Dtime = ChangeDateFormat(rows[0].IntTime).split("-");
+            $("#W1year").text(Dtime[0]);
+            $("#W1month").text(Dtime[1]);
+            $("#W1data").text(Dtime[2]);
+            var Allrow = $("#BillShow").datagrid("getRows")
+           
+            var Djzs = 0;
+            var Money = 0;
+            $.each(Allrow, function (e, ine) {
+                e++;
+                $("#BxTAB tr:eq(" + e + ") td:eq(0) ").text(ine.BaoXiaoName);
+                $("#BxTAB tr:eq(" + e + ") td:eq(1) ").text(ine.DanJiuInt);
+                var Moneyd = ine.BaoXiaoMoeny;
+                Moneyd = formatCurrency(Moneyd.toFixed(2));
+                $("#BxTAB tr:eq(" + e + ") td:eq(2) ").text(Moneyd);
+                Djzs = Djzs + ine.DanJiuInt;
+                Money = Money + ine.BaoXiaoMoeny;
+            })          
+            $("#BxTAB tr:eq(6) td:eq(1) ").text(Djzs);
+            
+            $("#BxTAB tr:eq(6) td:eq(2) ").text("￥" +formatCurrency(Money.toFixed(2) ));
+            var EditMoney = Arabia_to_Chinese("￥" + formatCurrency(Money.toFixed(2)));
+            $("#BigBXMoney").text("ⓧ" + EditMoney);
+
+            $("#AddBxBillData").css("display", "block");
+            $('#AddBxBillData').dialog({
+                title: "打印预览",
+                width: $(document).width() / 1.5,
+                height: $(document).height() / 1.2,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '打印',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+                        $("#BxTAB tr:eq(0) td:eq(0) ").text("");
+                        $("#BxTAB tr:eq(0) td:eq(1) ").text("");
+                        $("#BxTAB tr:eq(0) td:eq(2) ").text("");
+                        $("#BxTAB tr:eq(0) td:eq(3) ").text("");
+                        $("#clerSpbxdw").text("");
+                        $("#SumTD").text("");
+                        
+                        $("#PrintBxPZ").jqprint();
+                    }
+                }, {
+                    text: '取消',
+                    handler: function () {
+                        $('#AddBxBillData').dialog('close');
+                    }
+                }]
+            });
+        }
+        function writ() {
+            $("#Ptble tr:eq(0) td:eq(2) ").text("收款单位全称（姓名）");
+            $("#Ptble tr:eq(2) td:eq(2) ").text("开户行");
+            $("#Ptble tr:eq(3) td:eq(2) ").text("账号（卡号）");           
+            var ei = 0
+            $("#Ptble tr>td:nth-child(1)").each(function (e, i) {
+                switch (ei) {
+                    case 0: $(this).text("所属部门");
+                        break;
+                    case 1: $(this).text("借款人");
+                        break;
+                    case 2: $(this).text("借款金额（大写）");
+                        break;
+                    case 3: $(this).text("借款金额（小写）");
+                        break;
+                    case 4: $(this).text("借款原因");
+                        break;
+                    case 5: $(this).text("备注");
+                        break;
+                }
+                ei++;
+            })
+        }
+        function addbxlist() {
+            
+            if ($('#BaoXiaoName').val().trim().length <= 0)
+            {
+                $.messager.alert("", "报销内容不可为空");
+                return;
+            }
+            if ($('#DanJiuInt').val().trim().length <= 0) {
+                $.messager.alert("", "单据张数不可为空");
+                return;
+            }
+            if ($('#BaoXiaoMoeny').val().length <= 0) {
+                $.messager.alert("", "报销金额不可为空");
+                return;
+            }
+            
+            $('#BXLaFrom').submit();
+        }
+
+    </script>
+    <style>
+        html, body {
+            height: 80%;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .btnlink a {
+            width: 90%;
+            margin-top: 3px;
+        }
+
+        thead {
+            font-size: 16px;
+            font-weight: bold;
+            
+        }
+        .JKtable {
+            padding:10px;
+        }
+        .JKtable input {
+            width:200%;
+            height:150%;
+        }
+        .Ptable {
+            BORDER-COLLAPSE: collapse; width:840px; font-size:14px;text-align:center;
+        }
+        .Ptable tr td {
+            height:60px;
+        }
+        .Pbxtable {
+             BORDER-COLLAPSE: collapse; width:670px; font-size:14px;text-align:center;
+        }
+         .Pbxtable tr td {
+            height:45px;
+        }
+        .BxpzTop {
+            width:670px;
+            height:10px;
+        }
+    </style>
+</head>
+<body class="easyui-layout">
+    <div>
+        <div id="AddJieKuanBill" style="height:100%; width:100%;">
+            @using (Ajax.BeginForm("AddOrEditJiekuan", "BillPrint", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "JKBillFrom" }))
+            {
+                <input type="hidden" id="JieKuanID" name="ID" />
+                <table class="JKtable">
+                    <thead>
+                        <tr><td>借款时间</td><td><input type="text" class="easyui-datebox" name="BillTime" id="FaHuoTime" /></td></tr>
+                        <tr>
+                            <td>所属部门</td>
+                            <td>
+                                <input class="easyui-combobox " id="BuMenid"
+                                       name="BuMenid"
+                                       url="/BillPrint/GetBumen"
+                                       valueField="ID"
+                                       textField="MyTexts"
+                                       panelHeight="auto" style="width:100px" />
+                             </td></tr>
+                        <tr><td>借款人</td><td><input type="text" name="JieKuanPerson" id="FaHuoBak" /></td></tr>
+                        <tr><td>收款单位</td><td><input type="text" name="SkdwName" id="FaHuoBak" /></td></tr>
+                        <tr><td>借款金额</td><td><input type="text" name="JieKuanMoney" id="FaHuoBak" onkeyup="num(this)" /></td></tr>
+                        <tr><td>开户行</td><td><input type="text" name="OpenHang" id="FaHuoBak" /></td></tr>
+                        <tr><td>账号（卡号）</td><td><input type="text" name="CardNumber" id="FaHuoBak" onkeyup="num(this)"  /></td></tr>
+                        <tr><td>借款原因</td><td><input type="text" name="JieKuanYuanYin" id="FaHuoBak" /></td></tr>
+                        <tr><td>备注</td><td><input type="text" name="Bak" id="FaHuoBak" /></td></tr>
+                    </thead>
+
+
+                </table>
+            }
+        </div>  
+        <div id="PrintDIV" style="width:100%;margin:0px; padding:0px;overflow:hidden">
+            <div id="JKDprint" style="width:100%;margin-left:16px; padding:0px;">
+                <div style="height:90px;text-align:center;width:840px; font-size:18px">
+                    <span id="bannar1" >辽&nbsp;&nbsp;宁&nbsp;&nbsp;衍&nbsp;&nbsp;水&nbsp;&nbsp;集&nbsp;&nbsp;团</span><br />
+                    <span id="bannar2">借&nbsp;款&nbsp;单</span><br />
+                    <div style="width:840px;text-align:right; margin-top:20px;">
+                        <span id="Stime" class="Printcc" style="margin-right:70px;font-size:14px;" >
+                        <a id="Wyear" style="margin-right:35px;">2017</a>
+                        <a id="Wmonth" style="margin-right:40px;">11</a>
+                        <a id="Wdata"  style="margin-right:26px;">11</a></span>
+                    </div>                  
+                </div>
+                <table id="Ptble"  class="Ptable"  borderColor="#000000"  cellSpacing="0" bgColor="#ffffff" border="1">                    
+                    <tr><td style="width:140px;">所属部门</td><td style="width:270px;" id="SSBM"></td>
+                    <td colspan="2" style="width:430px;">收款单位全称（姓名）</td>
+                    </tr>
+                    <tr><td>借款人</td><td id="JEperson"></td>
+                    <td colspan="2"  id="SkdwName"></td></tr>
+                    <tr><td >借款金额（大写）</td><td id="BigMoney"></td>
+                    <td style="width:98px" >开户行</td><td id="KHH"></td></tr>
+                    <tr><td >借款金额（小写）</td><td id="Money"></td>
+                    <td >账号（卡号）</td><td id="CardNumber"></td></tr>
+                    <tr><td>借款原因</td><td colspan="3" id="JKyy"></td></tr>
+                    <tr><td>备注</td><td colspan="3" id="baktd"></td></tr>
+                </table>
+            </div>
+        </div>
+        <div id="AddBxBill" style="height:100%; width:100%;">
+            @using (Ajax.BeginForm("AddOrEditBxBill", "BillPrint", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "BXBillFrom" }))
+            {
+                <input type="hidden" id="BxID" name="ID" />
+                <table class="JKtable">
+                    <thead>
+                        <tr><td>单据时间</td><td><input type="text" class="easyui-datebox" name="IntTime" id="BxTime" /></td></tr>                        
+                        <tr><td>报销单位</td><td><input type="text" name="BaoxianDanwei" id="BxDw" /></td></tr>                       
+                    </thead>
+                </table>
+            }
+        </div>  
+        <div id="BxBillShow">
+            <table id="BillShow" class="easyui-datagrid"  title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit">
+                <tr>
+                    <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
+                    <th data-options="field:'ID', width: 40">编号</th>
+                </tr>
+            </table>
+        </div>
+        <div id="AddBxBillData" style="height:100%; width:100%; text-align:center;">
+                <div style="height:45px;text-align:center;width:670px; font-size:18px">
+                    <span  style="font-size:22px;">辽&nbsp;宁&nbsp;衍&nbsp;水&nbsp;集&nbsp;团&nbsp;报&nbsp;销&nbsp;单&nbsp;据&nbsp;封&nbsp;面</span><br />
+                   
+                </div>
+                <div id="PrintBxPZ" class="divcss">
+                    <div class="BxpzTop" >
+                        <div style="float:left"><span  style="margin-left:80px;" id="BxDanwei"></span></div>
+                        <div style="float:right">
+                            <span>
+                                <span id="W1year" style="margin-right:30px;">2017</span>
+                                <span id="W1month" style="margin-right:30px;">11</span>
+                                <span id="W1data" style="margin-right:50px;">11</span>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <table id="BxTAB" class="Pbxtable" borderColor="#000000" cellSpacing="0" bgColor="#ffffff" border="1">
+                        <tr>
+                            <td style="width:380px;">报&nbsp;销&nbsp;内&nbsp;容</td>
+                            <td style="width:40px;" >单据张数</td>
+                            <td style="width:120px;">报销金额</td>
+                            <td style="width:120px;">核准金额</td>
+                        </tr>
+                       <tr><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td></tr>
+                        <tr><td id="SumTD">合&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;计</td><td></td><td></td><td></td></tr>
+                        <tr><td colspan="4" style="text-align:left"><span style="margin-left:180px; font-size:16px" id="BigBXMoney"></span></td></tr>
+                       
+                    </table>
+                </div>   
+        </div>  
+    </div> 
+    <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink" style="width:150px;height:100%">
+        <div class="easyui-accordion">
+            <div title="搜索选项" data-options="iconCls:'icon-search'" style="overflow:auto;padding:10px;">
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="BtnJkd">借款单</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="BtnBaoXiao">报销单据封面</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="Winlb">公路费报销凭证</a>
+            </div>
+            <div title="其他选项" data-options="iconCls:'icon-ok'" style="padding:10px;">
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="CityEdit">其他</a>
+            </div>
+        </div>
+    </div>
+    <div data-options="region:'center',title:'数据报表'" id="dgdiv">
+        <div id="TTdiv">
+            <table id="tt" class="easyui-datagrid" style="width: 700px; " title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit"
+                   data-options="toolbar:'#tb'">
+                <thead data-options="frozen:true">
+                    <tr>
+                        <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
+                        <th data-options="field:'ID', width: 40">编号</th>
+                    </tr>
+                </thead>
+
+
+            </table>
+        </div>
+     
+    </div>
+    <div id="tb" style="padding:5px;height:auto">
+        <div>
+            <a href="#" class="easyui-linkbutton" id="NewBill" iconCls="icon-add">新建借款单</a>
+            <a href="#" class="easyui-linkbutton" id="NewBaoXiaoBill" iconCls="icon-add">新建报销单据</a>
+         </div>
+    </div>
+    <div id="addta" style="padding:5px;height:auto;">        
+@using (Ajax.BeginForm("AddOrEditBxlistBill", "BillPrint", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "BXLaFrom" }))
+{              <input type="hidden" id="BaoXianID" name="BaoXiaoID"  />
+        <div style="font-size:16px;">
+            报销内容：<input class="easyui-linkbutton" name="BaoXiaoName" id="BaoXiaoName" style="width:400px" />
+        </div>
+        <div style="font-size:16px;">
+          
+            单据张数：<input class="easyui-linkbutton" name="DanJiuInt" id="DanJiuInt" style="width:80px" onkeyup="num(this)" />
+            报销金额：<input class="easyui-linkbutton" name="BaoXiaoMoeny" id="BaoXiaoMoeny" style="width:100px" onkeyup="num(this)"/>
+            <a href="#" onclick="addbxlist()" class="easyui-linkbutton" iconCls="icon-add">新增</a>
+        </div>
+        <div>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-print" onclick="DigBaoXiaoPrint()">打印预览</a>
+        </div>
+}
+    </div>
+
+</body>
+</html>

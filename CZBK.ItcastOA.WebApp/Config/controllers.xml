@@ -80,7 +80,12 @@
     <property name="ScheduleUserService" ref="ScheduleUserService" />
     <property name="UserInfoService" ref="UserInfoService" />
   </object>
-
+  <object type="CZBK.ItcastOA.WebApp.Controllers.BillPrintController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="T_BaoXiaoBillService" ref="T_BaoXiaoBillService" />
+    <property name="T_BaoxiaoItemsService" ref="T_BaoxiaoItemsService" />
+    <property name="T_JieKuanBillService" ref="T_JieKuanBillService" />
+    <property name="BumenInfoSetService" ref="BumenInfoSetService" />
+  </object>
 
 
 

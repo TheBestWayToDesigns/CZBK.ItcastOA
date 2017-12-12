@@ -1,23 +1,21 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    Layout = null;
 }
 @using CZBK.ItcastOA.Model
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>产品报价列表</title>
-
-    <link href="~/Content/themes/icon.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
-
+    <link href="~/Content/themes/icon.css" rel="stylesheet" />  
     <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
     <script src="~/Scripts/jquery.easyui.min.js"></script>
     <script src="~/Scripts/easyui-lang-zh_CN.js"></script>
     <script src="~/Scripts/datapattern.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/jquery.jqprint-0.3.js"></script>
     <script src="~/Scripts/MyAjaxForm.js"></script>
     <script src="~/Scripts/MyNewJS.js"></script>
-    <script src="~/Scripts/jquery.jqprint-0.3.js"></script>
     <script type="text/javascript">
         $.fn.extend({
 
@@ -158,10 +156,8 @@
                 };
                 loadData(pars);
             })
-            $("#Sousuo").click(function () {
-
+            $("#Sousuo").click(function () {                
                 var UpTime = $('#StTime').combobox('getValue');
-
                 if (UpTime.length <= 0) {
                     $.messager.alert("提示", "开始时间不可为空！")
                     return;
@@ -171,38 +167,18 @@
                     $.messager.alert("提示", "结束时间不可为空！")
                     return;
                 }
-
-                ////var Zt = $('#Zt').combobox('getValue')
-                var addess;
-
-                if ($('#City').combobox('getValue') == undefined || $('#City').combobox('getValue').length <= 0) {
-                    addess = $('#Province').combobox('getValue') == undefined ? "" : $('#Province').combobox('getValue').length <= 0 ? "" : $('#Province').combobox('getValue') + ",";
-                }
-                else {
-                    if ($('#Province').combobox('getValue') == undefined || $('#Province').combobox('getValue').length <= 0) {
-                        addess = "";
-                    }
-                    else {
-
-                        addess = $('#Province').combobox('getValue') + "," + $('#City').combobox('getValue') + "," + $('#Village').combobox('getValue');
-                    }
-
-                }
-
+                var addess = RetAddess();                
                 var Person = $('#Person').combobox('getValue');
                 var KHname = $('#KHname').combobox('getValue');
                 var CPname = $('#CPname').combobox('getValue');
-                var CPxh = $('#CPxh').combobox('getValue');
-
+                var CPxh = $('#CPxh').combobox('getValue');               
                 var pars = {
                     UpTime: UpTime, DwTime: DwTime, addess: addess, Person: Person, KHname: KHname, CPname: CPname, CPxh: CPxh
                 };
                 DuoXuanEascsh(pars);
             })
             $("#Sousuo_win").click(function () {
-
                 var UpTime = $('#StTime').combobox('getValue');
-
                 if (UpTime.length <= 0) {
                     $.messager.alert("提示", "开始时间不可为空！")
                     return;
@@ -212,31 +188,12 @@
                     $.messager.alert("提示", "结束时间不可为空！")
                     return;
                 }
-
                 var YyZt = $('#YyZt').combobox('getValue')
-
-                var addess;
-
-                if ($('#City').combobox('getValue') == undefined || $('#City').combobox('getValue').length <= 0) {
-                    addess = $('#Province').combobox('getValue') == undefined ? "" : $('#Province').combobox('getValue').length <= 0 ? "" : $('#Province').combobox('getValue') + ",";
-                }
-                else {
-                    if ($('#Province').combobox('getValue') == undefined || $('#Province').combobox('getValue').length <= 0) {
-                        addess = "";
-                    }
-                    else {
-
-                        addess = $('#Province').combobox('getValue') + "," + $('#City').combobox('getValue') + "," + $('#Village').combobox('getValue');
-                    }
-
-                }
-
-
+                var addess = RetAddess();  
                 var Person = $('#Person').combobox('getValue');
                 var KHname = $('#KHname').combobox('getValue');
                 var CPname = $('#CPname').combobox('getValue');
                 var CPxh = $('#CPxh').combobox('getValue');
-
                 var pars = {
                     UpTime: UpTime, DwTime: DwTime, addess: addess, Person: Person, KHname: KHname, CPname: CPname, CPxh: CPxh, YyZt: YyZt
                 };
@@ -425,6 +382,24 @@
             })
             
         });
+
+        //返回ADDESS地址
+        function RetAddess() {
+            var addess = "";
+            if ($('#VillageSee').combobox('getValue') == undefined || $('#VillageSee').combobox('getValue').length <= 0) {
+                addess = $('#CitySee').combobox('getValue') == undefined ? "" : $('#CitySee').combobox('getValue').length <= 0 ? "" : $('#CitySee').combobox('getValue') + ",";
+            }
+            else {
+                if ($('#CitySee').combobox('getValue') == undefined || $('#CitySee').combobox('getValue').length <= 0) {
+                    addess = "";
+                }
+                else {
+
+                    addess = $('#CitySee').combobox('getValue') + "," + $('#VillageSee').combobox('getValue') + "," + $('#SeeDint').combobox('getValue');
+                }
+            }
+            return addess;
+        }
         //给权限类别绑定Change事件
         function bindActionTypeEnumChange() {
             $("#ActionTypeEnumChange").change(function () {
@@ -1226,9 +1201,9 @@
         //情况选项
         function qingkou() {
             $('#Person').combobox('clear');
-            $('#Province').combobox('clear');
-            $('#City').combobox('clear');
-            $('#Village').combobox('clear');
+            $('#SeeDint').combobox('clear');
+            $('#CitySee').combobox('clear');
+            $('#VillageSee').combobox('clear');
             $('#KHname').combobox('clear');
             $('#CPname').combobox('clear');
             $('#CPxh').combobox('clear');
@@ -1537,7 +1512,7 @@
             &nbsp;&nbsp; &nbsp;&nbsp;
 
             营销员:
-            <select class="easyui-combobox" panelHeight="auto" id="Person" style="width:100px">
+            <select class="easyui-combobox"  panelHeight="auto" id="Person" style="width:100px">
                 @{foreach (UserInfo Item in ViewBag.user)
                     {
             <option value="@Item.ID">@Item.UName</option>

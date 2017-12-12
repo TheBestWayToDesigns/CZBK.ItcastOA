@@ -169,7 +169,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         }
         #endregion
         #endregion
-       
+        public ActionResult DelActioninfo() {
+            var strId = Convert.ToInt32( Request["strId"]);
+            var temp = ActionInfoService.LoadEntities(x => x.ID == strId).FirstOrDefault();
+            ActionInfoService.DeleteEntity(temp);
+            return Json(new { ret= "ok" }, JsonRequestBehavior.AllowGet);
+        }
 
 
     }

@@ -29,5 +29,6 @@ namespace CZBK.ItcastOA.Model
         public virtual FileItem FileItem { get; set; }
         public virtual ScheduleType ScheduleType { get; set; }
         public virtual UserInfo UserInfo { get; set; }
+        public virtual UserInfo UserInfo1 { get; set; }
     }
 }

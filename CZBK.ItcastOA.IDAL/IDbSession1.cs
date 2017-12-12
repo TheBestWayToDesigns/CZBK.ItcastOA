@@ -16,9 +16,13 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IBumenInfoSetDal BumenInfoSetDal{get;set;}
 	
+		ICarNumberDal CarNumberDal{get;set;}
+	
 		IDepartmentDal DepartmentDal{get;set;}
 	
 		IFileItemDal FileItemDal{get;set;}
+	
+		IGongLuBaoXiaoBillDal GongLuBaoXiaoBillDal{get;set;}
 	
 		ILogin_listDal Login_listDal{get;set;}
 	
@@ -38,11 +42,17 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IT_BaoJiaToPDal T_BaoJiaToPDal{get;set;}
 	
+		IT_BaoXiaoBillDal T_BaoXiaoBillDal{get;set;}
+	
+		IT_BaoxiaoItemsDal T_BaoxiaoItemsDal{get;set;}
+	
 		IT_BoolItemDal T_BoolItemDal{get;set;}
 	
 		IT_CanPanDal T_CanPanDal{get;set;}
 	
 		IT_ChanPinNameDal T_ChanPinNameDal{get;set;}
+	
+		IT_JieKuanBillDal T_JieKuanBillDal{get;set;}
 	
 		IT_SczzDanjuDal T_SczzDanjuDal{get;set;}
 	

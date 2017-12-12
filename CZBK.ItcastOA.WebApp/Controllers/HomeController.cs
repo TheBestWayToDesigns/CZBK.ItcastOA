@@ -13,9 +13,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IUserInfoService UserInfoService { get; set; }
         IBLL.IYXB_BaojiaService YXB_BaojiaService { get; set; }
         IBLL.IYXB_Kh_listService YXB_Kh_listService { get; set; }
-
-
-        //
+        
         // GET: /Home/
         public ActionResult Index()
         {

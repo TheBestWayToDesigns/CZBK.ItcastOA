@@ -239,7 +239,7 @@
             </div>
         
     </div>
-    <div class="container" id="zhucheTABLE">
+    <div class="container" id="zhucheTABLE" style="display:none;">
         @using (Ajax.BeginForm("AddUserInfo", "Login", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAdd" }, new { id = "adduserForm" }))
         {
             <div class="form-group">
@@ -284,7 +284,7 @@
             </div>
         }
     </div>
-    <div class="container" id="ZHpassDIV">
+    <div class="container" id="ZHpassDIV" style="display:none"> 
         <div class="form-group">
             <div class="input-group input-group-lg">
                 <span class="input-group-addon ">用户名称</span>

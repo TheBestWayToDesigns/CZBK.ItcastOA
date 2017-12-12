@@ -45,6 +45,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _BumenInfoSetDal = value; }
         }
 	
+		private ICarNumberDal _CarNumberDal;
+        public ICarNumberDal CarNumberDal
+        {
+            get
+            {
+                if(_CarNumberDal == null)
+                {
+                   // _CarNumberDal = new CarNumberDal();
+				    _CarNumberDal =AbstractFactory.CreateCarNumberDal();
+                }
+                return _CarNumberDal;
+            }
+            set { _CarNumberDal = value; }
+        }
+	
 		private IDepartmentDal _DepartmentDal;
         public IDepartmentDal DepartmentDal
         {
@@ -73,6 +88,21 @@ namespace CZBK.ItcastOA.DALFactory
                 return _FileItemDal;
             }
             set { _FileItemDal = value; }
+        }
+	
+		private IGongLuBaoXiaoBillDal _GongLuBaoXiaoBillDal;
+        public IGongLuBaoXiaoBillDal GongLuBaoXiaoBillDal
+        {
+            get
+            {
+                if(_GongLuBaoXiaoBillDal == null)
+                {
+                   // _GongLuBaoXiaoBillDal = new GongLuBaoXiaoBillDal();
+				    _GongLuBaoXiaoBillDal =AbstractFactory.CreateGongLuBaoXiaoBillDal();
+                }
+                return _GongLuBaoXiaoBillDal;
+            }
+            set { _GongLuBaoXiaoBillDal = value; }
         }
 	
 		private ILogin_listDal _Login_listDal;
@@ -210,6 +240,36 @@ namespace CZBK.ItcastOA.DALFactory
             set { _T_BaoJiaToPDal = value; }
         }
 	
+		private IT_BaoXiaoBillDal _T_BaoXiaoBillDal;
+        public IT_BaoXiaoBillDal T_BaoXiaoBillDal
+        {
+            get
+            {
+                if(_T_BaoXiaoBillDal == null)
+                {
+                   // _T_BaoXiaoBillDal = new T_BaoXiaoBillDal();
+				    _T_BaoXiaoBillDal =AbstractFactory.CreateT_BaoXiaoBillDal();
+                }
+                return _T_BaoXiaoBillDal;
+            }
+            set { _T_BaoXiaoBillDal = value; }
+        }
+	
+		private IT_BaoxiaoItemsDal _T_BaoxiaoItemsDal;
+        public IT_BaoxiaoItemsDal T_BaoxiaoItemsDal
+        {
+            get
+            {
+                if(_T_BaoxiaoItemsDal == null)
+                {
+                   // _T_BaoxiaoItemsDal = new T_BaoxiaoItemsDal();
+				    _T_BaoxiaoItemsDal =AbstractFactory.CreateT_BaoxiaoItemsDal();
+                }
+                return _T_BaoxiaoItemsDal;
+            }
+            set { _T_BaoxiaoItemsDal = value; }
+        }
+	
 		private IT_BoolItemDal _T_BoolItemDal;
         public IT_BoolItemDal T_BoolItemDal
         {
@@ -253,6 +313,21 @@ namespace CZBK.ItcastOA.DALFactory
                 return _T_ChanPinNameDal;
             }
             set { _T_ChanPinNameDal = value; }
+        }
+	
+		private IT_JieKuanBillDal _T_JieKuanBillDal;
+        public IT_JieKuanBillDal T_JieKuanBillDal
+        {
+            get
+            {
+                if(_T_JieKuanBillDal == null)
+                {
+                   // _T_JieKuanBillDal = new T_JieKuanBillDal();
+				    _T_JieKuanBillDal =AbstractFactory.CreateT_JieKuanBillDal();
+                }
+                return _T_JieKuanBillDal;
+            }
+            set { _T_JieKuanBillDal = value; }
         }
 	
 		private IT_SczzDanjuDal _T_SczzDanjuDal;

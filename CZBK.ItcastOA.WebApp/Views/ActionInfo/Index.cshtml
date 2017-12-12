@@ -125,16 +125,7 @@
                             return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
                         }
                     },
-                     {
-                         field: 'Operator', title: '操作', width: 120,
-                         formatter: function (value, row, index) {
-                             var str = "<a href='javascript:void(0)' ids='" + row.ID +
-                                 "' class='deletes' >删除</a>";
-                             str = str + " &nbsp&nbsp<a href='javascript:void(0)' ids='" + row.id +
-                                 "' class='edits' >编辑</a>";
-                             return str;
-                         }
-                     },
+                     
 
                 ]],
                 toolbar: [{
@@ -347,8 +338,8 @@
                         strId = strId + rows[i].ID + ",";//1,2,3,
                     }
                     strId = strId.substr(0, strId.length - 1);
-                    $.post("/RoleInfo/DeleteRoleInfo", { "strId": strId }, function (data) {
-                        if (data == "ok") {
+                    $.post("/Actioninfo/DelActioninfo", { "strId": strId }, function (data) {
+                        if (data.ret == "ok") {
                             $('#tt').datagrid('clearSelections');
                             $('#tt').datagrid('reload');
                             //loadData();

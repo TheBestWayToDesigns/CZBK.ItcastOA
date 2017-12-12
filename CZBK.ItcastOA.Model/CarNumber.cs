@@ -12,22 +12,17 @@ namespace CZBK.ItcastOA.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class BumenInfoSet
+    public partial class CarNumber
     {
-        public BumenInfoSet()
+        public CarNumber()
         {
-            this.UserInfoes = new HashSet<UserInfo>();
-            this.T_JieKuanBill = new HashSet<T_JieKuanBill>();
+            this.GongLuBaoXiaoBills = new HashSet<GongLuBaoXiaoBill>();
         }
     
         public int ID { get; set; }
-        public string Name { get; set; }
-        public int Gushu { get; set; }
-        public string Renark { get; set; }
-        public System.DateTime SubTime { get; set; }
-        public short DelFlag { get; set; }
+        public string CarNumber1 { get; set; }
+        public short Del { get; set; }
     
-        public virtual ICollection<UserInfo> UserInfoes { get; set; }
-        public virtual ICollection<T_JieKuanBill> T_JieKuanBill { get; set; }
+        public virtual ICollection<GongLuBaoXiaoBill> GongLuBaoXiaoBills { get; set; }
     }
 }
