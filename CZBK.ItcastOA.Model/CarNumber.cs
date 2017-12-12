@@ -12,24 +12,16 @@ namespace CZBK.ItcastOA.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class SysField
+    public partial class CarNumber
     {
-        public SysField()
+        public CarNumber()
         {
             this.GongLuBaoXiaoBills = new HashSet<GongLuBaoXiaoBill>();
         }
     
-        public long ID { get; set; }
-        public string MyTexts { get; set; }
-        public Nullable<int> ParentId { get; set; }
-        public string MyTables { get; set; }
-        public string MyColums { get; set; }
-        public Nullable<int> Sort { get; set; }
-        public string Remark { get; set; }
-        public Nullable<System.DateTime> CreateTime { get; set; }
-        public string CreatePerson { get; set; }
-        public Nullable<System.DateTime> UpdateTime { get; set; }
-        public string UpdatePerson { get; set; }
+        public int ID { get; set; }
+        public string CarNumber1 { get; set; }
+        public short Del { get; set; }
     
         public virtual ICollection<GongLuBaoXiaoBill> GongLuBaoXiaoBills { get; set; }
     }

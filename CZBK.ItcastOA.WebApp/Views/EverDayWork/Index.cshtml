@@ -35,8 +35,8 @@
             }
         });
 
+        // 当窗口大小发生变化时，调整DataGrid的大小211434
         $(function () {
-            // 当窗口大小发生变化时，调整DataGrid的大小211434
             $(window).resize(function () {
                 $('#tt').resizeDataGrid(0, 0, 200, 500);
             });           
@@ -63,7 +63,7 @@
                     $("#AddScheduleTypeBtnDIV").css("display", "none");
                     $("#AddScheduleBtnDIV").css("display", "none");
                     loadDownUser();
-                }
+                } 
             })
             $("#AddScheduleBtn").click(function () {
                 AddScheduleFc();
@@ -79,6 +79,9 @@
                     loadDownUser(pars);
                 }
             })
+            //$("#fileboxID").change(function () {
+            //    fileup(this);
+            //})
             //onchange = "changeDownUser()"
         });
 
@@ -91,30 +94,6 @@
                     $('#tt').datagrid('deleteRow', index);
                 }
             }
-        }
-
-        //文件上传
-        function bindFileUpclick() {
-            $(".filebox").click(function () {
-                if ($(".filebox").val() == "") {
-                    $.messager.alert("提示", "请选择上传文件", "errer");
-                    return;
-                }
-                //开始进行异步上传文件
-                $("#addschedulefrom").ajaxSubmit({
-                    success: function (data) {
-                        var serverData = data.split(":");
-                        if (serverData[0] == "yes") {
-                            $("#hiddenMenuIcon").val(serverData[1]);//将上传成功的文件地址放在隐藏input中
-                        }
-                        else {
-                            $.messager.alert("提示", serverData[1], "errer");
-                        }
-                    },
-                    url: "/EverDayWork/FileUpload",
-                    type: "post"
-                })
-            });
         }
 
         //加载日程类型页面
@@ -205,9 +184,9 @@
                     },
                     { field: 'FileItemID', title: '文件编号', align: 'center' },
                     {
-                        field: 'Edit', title: '编辑栏', align: 'center', formatter: function (value, row, index) {
-                            return "<a href='javascript:updateSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>修改</a><a href='javascript:delSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>删除</a>";
-                        }
+                       field: 'Edit', title: '编辑栏', align: 'center', formatter: function (value, row, index) {
+                           return "<a href='javascript:checkFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看文件</a><a href='javascript:updateSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>修改</a><a href='javascript:delSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>删除</a>";
+                       }
                     }
                 ]],
                 toolbar: "#AddScheduleBtnDIV",
@@ -216,6 +195,7 @@
                 }
             });
         }
+       
         //加载下级日程用户页面
         function loadDownUser(pars) {
             cleanDatagrid();
@@ -271,7 +251,7 @@
                     { field: 'FileItemID', title: '文件编号', align: 'center' },
                     {
                         field: 'Edit', title: '编辑栏', align: 'center', formatter: function (value, row, index) {
-                            return "<a href='javascript:reviewSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查阅意见</a>";
+                            return "<a href='javascript:checkFile()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看文件</a><a href='javascript:reviewSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查阅意见</a>";
                         }
                     }
                 ]],
@@ -307,7 +287,6 @@
                 } ]
             });
         }
-
 
         //将序列化成json格式后日期(毫秒数)转成日期格式
         function ChangeDateFormat(cellval) {
@@ -428,6 +407,35 @@
             });
         }
        
+        //查看文件
+        function checkFiles() {
+            var Rows = $('#tt').datagrid('getSelected');
+            alert(Rows.length);
+            $.post("/EverDayWork/CheckFile", { "id": row[0].FileItemID }, function (data) {
+                document.getElementById("CheckID").value = data.ID;
+                document.getElementById("CheckID").setAttribute('readOnly', true);
+                document.getElementById("CheckUrl").value = data.Url;
+                document.getElementById("CheckUrl").setAttribute('readOnly', true);
+                document.getElementById("CheckAddTime").value = data.AddTime;
+                document.getElementById("CheckAddTime").setAttribute('readOnly', true);
+                document.getElementById("CheckBeiZhuArea").value = data.BeiZhu;
+                document.getElementById("CheckBeiZhuArea").setAttribute('readOnly', true);
+            });
+            $('#checkFileDIV').dialog({
+                title: "查看文件",
+                width: 450,
+                height: 450,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '确定',
+                    handler: function () {
+                        $('#checkFileDIV').dialog('close');
+                    }
+                }]
+            });
+        }
         
         //添加日程
         function AddScheduleFc() {
@@ -435,7 +443,7 @@
             $('#AddScheduleDIV').dialog({
                 title: "添加日程",
                 width: 450,
-                height: 400,
+                height: 450,
                 collapsible: true,
                 resizable: true,
                 modal: true,
@@ -443,7 +451,8 @@
                     text: '确定',
                     iconCls: 'icon-ok',
                     handler: function () {
-
+                        document.getElementById("Url").value = document.getElementById("fileid").value;
+                        document.getElementById("BeiZhu").value = document.getElementById("BeiZhuArea").value;
                         $("#addschedulefrom").submit();//提交表单
                     }
                 }, {
@@ -451,15 +460,7 @@
                     handler: function () {
                         $('#AddScheduleDIV').dialog('close');
                     }
-                },
-                {
-                    text: '增加一个文件框',
-                    iconCls: 'icon-add',
-                    handler: function () {
-                        $('#AddScheduleTab').append('<tr><td>文件</td><td><input class="filebox" type="file" style="width:100%"/></td></tr>');
-                    }
-                }
-                ]
+                } ]
             });
         }
         //修改日程
@@ -556,9 +557,7 @@
 <body class="easyui-layout">
     <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink " style="width:150px; padding:8px;">
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuSchedule" style="width:100%;margin:10px auto">日程信息</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="" style="width:100%;margin:10px auto">日程文件信息</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuDownUser" style="width:100%;margin:10px auto">下级日程信息</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="" style="width:100%;margin:10px auto">下级日程文件信息</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuScheduleType" style="width:100%;margin:10px auto">日程状态</a>
     </div>
     <div data-options="region:'center',title:'数据报表'" id="dgdiv">
@@ -581,16 +580,16 @@
             </div>
         </div>
         <!---------------下级用户下拉框-------------------->
-            <div id="DownUserCombox" style="padding:5px;height:auto">
-                <div>
-                    <input id="DUInput" class="easyui-combobox" name="DownUserName"
-                           url="/EverDayWork/GetDownUserall"
-                           valueField="ID"
-                           textField="name" 
-                           panelHeight="auto" style="width:100px" />
-                </div>
+        <div id="DownUserCombox" style="padding:5px;height:auto">
+            <div>
+                <input id="DUInput" class="easyui-combobox" name="DownUserName"
+                       url="/EverDayWork/GetDownUserall"
+                       valueField="ID"
+                       textField="name" 
+                       panelHeight="auto" style="width:100px" />
             </div>
         </div>
+    </div>
 
     <!---------------添加日程类型信息--------------------->
     <div id="AddScheduleTypeDIV" style="height:100%; width:100%;">
@@ -625,10 +624,15 @@
             </tr>
             <tr>
                 <td>文件</td>
-                <td>
-                    <input class="filebox" type="file" name="file-1" style="width:100%" />
-                    <input id="hiddenMenuIcon" name="FileItemID" type="text" style="display:none" />
-                </td>
+                <td><input type="file" id="fileid" name="filename"/></td>
+            </tr>
+            <tr>
+                <td>文件备注</td>
+                <td><textarea id="BeiZhuArea" name="BeiZhuArea" style="width:302px"></textarea></td>
+            </tr>
+            <tr>
+                <td><input type="hidden" id="Url" name="Url" /></td>
+                <td><input type="hidden" id="BeiZhu" name="BeiZhu" /></td>
             </tr>
         </table>
         <table>
@@ -638,7 +642,30 @@
         }
     </div>
 
-
+    <!-------------查看文件--------------->
+    <div id="CheckFileDIV" style="height:100%; width:100%;">
+        <table id="CheckFileTab">
+            <tr>
+                <td>文件路径</td>
+                <td><input type="text" id="CheckId" name="CheckId" /></td>
+            </tr>
+            <tr>
+                <td>文件路径</td>
+                <td><input type="text" id="CheckUrl" name="CheckUrl"/></td>
+            </tr>
+            <tr>
+                <td>上传文件时间</td>
+                <td><input type="text" id="CheckAddTime" name="CheckAddTime" /></td>
+            </tr>
+            <tr>
+                <td>文件备注</td>
+                <td><textarea id="CheckBeiZhuArea" name="CheckBeiZhuArea" style="width:302px"></textarea></td>
+            </tr>
+        </table>
+        <table>
+            <tbody id="Selebody"></tbody>
+        </table>
+    </div>
     <!-------------修改日程--------------->
     <div id="UpdateScheduleDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("UpdateSchedule", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterScheduleEdit" }, new { id = "updateschedulefrom" }))
@@ -686,7 +713,6 @@
         </table>
         }
     </div>
-
 
 </body>
 </html>

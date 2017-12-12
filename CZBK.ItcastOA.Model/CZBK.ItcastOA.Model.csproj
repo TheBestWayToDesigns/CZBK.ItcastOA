@@ -55,6 +55,9 @@
     <Compile Include="BumenInfoSet.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="CarNumber.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Department.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -64,6 +67,9 @@
     <Compile Include="Enum\AddMD5.cs" />
     <Compile Include="EqualityComparer.cs" />
     <Compile Include="FileItem.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GongLuBaoXiaoBill.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Login_list.cs">
@@ -104,6 +110,12 @@
     <Compile Include="SearchParam\Month.cs" />
     <Compile Include="SearchParam\SlcClass.cs" />
     <Compile Include="SearchParam\UserInfoParam.cs" />
+    <Compile Include="sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_helpdiagrams_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="sysdiagram.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

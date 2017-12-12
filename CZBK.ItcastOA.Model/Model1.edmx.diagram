@@ -77,6 +77,11 @@
         <AssociationConnector Association="OAModel.FK_T_BaoXiaoBill_Userinfo" />
         <AssociationConnector Association="OAModel.FK_T_BaoxiaoItems_T_BaoxiaoBill" />
         <AssociationConnector Association="OAModel.FK_T_JieKuanBill_Userinfo" />
+        <EntityTypeShape EntityType="OAModel.CarNumber" Width="1.5" PointX="21.8750005" PointY="11.570393880208332" />
+        <EntityTypeShape EntityType="OAModel.GongLuBaoXiaoBill" Width="1.5" PointX="24.1250005" PointY="4.7108052571614571" />
+        <AssociationConnector Association="OAModel.FK_GongLuBaoXiaoBill_CarNumber" />
+        <AssociationConnector Association="OAModel.FK_GongLuBaoXiaoBill_SysField" />
+        <AssociationConnector Association="OAModel.FK_GongLuBaoXiaoBill_UserInfo" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

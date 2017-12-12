@@ -10,21 +10,13 @@
 namespace CZBK.ItcastOA.Model
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class FileItem
+    public partial class sp_helpdiagrams_Result
     {
-        public FileItem()
-        {
-            this.Schedules = new HashSet<Schedule>();
-        }
-    
+        public string Database { get; set; }
+        public string Name { get; set; }
         public int ID { get; set; }
-        public string Url { get; set; }
-        public Nullable<short> Del { get; set; }
-        public Nullable<System.DateTime> AddTime { get; set; }
-        public string BeiZhu { get; set; }
-    
-        public virtual ICollection<Schedule> Schedules { get; set; }
+        public string Owner { get; set; }
+        public int OwnerID { get; set; }
     }
 }

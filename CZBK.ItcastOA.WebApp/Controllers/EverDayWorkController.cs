@@ -20,8 +20,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IUserInfoService UserInfoService { get; set; }
         public ActionResult Index()
         {
-            //ViewBag.items = ScheduleTypeService.LoadEntities(x => x.Del == 0).DefaultIfEmpty()==;
             return View();
+        }
+        //获取个人日程文件
+        public ActionResult GetProFile()
+        {
+            return null;
         }
 
         //获取下级用户名称
@@ -42,18 +46,23 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //迭代
         public void ForUser(IQueryable<ScheduleUser> tsu,List<Uidorname> Luin)
         {
-            foreach (var tpuser in tsu)
-            {
-                Uidorname uin = new Uidorname();
-                uin.ID = Convert.ToInt32(tpuser.UserID);
-                uin.name = tpuser.UserInfo.PerSonName;
-                Luin.Add(uin);
-                var duibi = ScheduleUserService.LoadEntities(x => x.UpID == tpuser.UserID).FirstOrDefault();
-                if (duibi != null)
+            
+                foreach (var tpuser in tsu)
                 {
-                   var temp=  ScheduleUserService.LoadEntities(x => x.UpID == tpuser.UserID).DefaultIfEmpty();
-                    ForUser(temp, Luin);
-                }                
+                    if(tpuser == null)
+                    {
+                    continue;
+                    }
+                    Uidorname uin = new Uidorname();
+                    uin.ID = Convert.ToInt32(tpuser.UserID);
+                    uin.name = tpuser.UserInfo.PerSonName;
+                    Luin.Add(uin);
+                    var duibi = ScheduleUserService.LoadEntities(x => x.UpID == tpuser.UserID).FirstOrDefault();
+                    if (duibi != null)
+                    {
+                        var temp = ScheduleUserService.LoadEntities(x => x.UpID == tpuser.UserID).DefaultIfEmpty();
+                        ForUser(temp, Luin);
+                    }
                 
             }
         }
@@ -125,16 +134,17 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                        select new
                        {
                            ID = a.ID,
-                           UserID = a.UserInfo1.UName,
+                           UserID = a.UserInfo.PerSonName,
                            ScheduleTime = a.ScheduleTime,
                            ScheduleAddTime = a.ScheduleAddTime,
                            ScheduleUpdateTime = a.ScheduleUpdateTime,
                            ScheduleText = a.ScheduleText,
                            ScheduleTypeID = a.ScheduleTypeID,
                            TextReadBak = a.TextReadBak,
-                           TextReadUser = a.UserInfo1.UName,
+                           TextReadUser = a.UserInfo1.PerSonName,
                            TextReadTime = a.TextReadTime,
-                           FileItemID = a.FileItemID
+                           FileItemID = a.FileItemID,
+                           ReadUser = a.TextReadUser
                        };
             return Json(new { rows = Rtmp, total = totalCount }, JsonRequestBehavior.AllowGet);
         }
@@ -167,15 +177,41 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                        };
             return Json(Rtmp, JsonRequestBehavior.AllowGet);
         }
+
+        //添加文件表数据
+        public int UpdateFile(string beizhu,string url)
+        {
+            FileItem fi = new FileItem();
+            fi.Url = url;
+            fi.AddTime = DateTime.Now;
+            fi.Del = 0;
+            fi.BeiZhu = beizhu;
+            var dm = FileItemService.AddEntity(fi);
+            return dm.ID;
+        }
         //添加日程
         public ActionResult AddSchedule(Schedule sd)
         {
-
+            string url = Request["Url"];
+            string beizhu = Request["BeiZhu"];
+            int fileid = UpdateFile(beizhu,url);
+            sd.FileItemID = fileid;
             sd.UserID = LoginUser.ID;
             sd.ScheduleAddTime = DateTime.Now;
             sd.TextReadBak = "未审核";
             ScheduleService.AddEntity(sd);
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+        }
+        //查看文件
+        public ActionResult checkFile()
+        {
+            int fileid = Convert.ToInt32(Request["id"]);
+            var fileItem = FileItemService.LoadEntities(x => x.ID == fileid).ToList();
+            string id = (fileItem[0].ID).ToString();
+            string url = fileItem[0].Url;
+            string beizhu = fileItem[0].BeiZhu;
+            string addtime = (fileItem[0].AddTime).ToString();
+            return Json(new { ID = id,Url = url,BeiZhu = beizhu,addtime = addtime }, JsonRequestBehavior.AllowGet);
         }
 
         //修改日程
@@ -272,6 +308,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
     }
+    //下拉菜单下级用户类
     public class Uidorname {
         public int ID { get; set; }
         public string name { get; set; }

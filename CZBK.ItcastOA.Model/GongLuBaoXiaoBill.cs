@@ -12,19 +12,21 @@ namespace CZBK.ItcastOA.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class FileItem
+    public partial class GongLuBaoXiaoBill
     {
-        public FileItem()
-        {
-            this.Schedules = new HashSet<Schedule>();
-        }
-    
         public int ID { get; set; }
-        public string Url { get; set; }
-        public Nullable<short> Del { get; set; }
+        public int CarNumberID { get; set; }
+        public Nullable<long> AddessID { get; set; }
+        public Nullable<decimal> BillMoney { get; set; }
+        public string BaoXiaoPerson { get; set; }
+        public string Bak { get; set; }
+        public short Del { get; set; }
+        public Nullable<int> AddUser { get; set; }
+        public Nullable<System.DateTime> BillTime { get; set; }
         public Nullable<System.DateTime> AddTime { get; set; }
-        public string BeiZhu { get; set; }
     
-        public virtual ICollection<Schedule> Schedules { get; set; }
+        public virtual CarNumber CarNumber { get; set; }
+        public virtual SysField SysField { get; set; }
+        public virtual UserInfo UserInfo { get; set; }
     }
 }
