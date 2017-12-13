@@ -24,6 +24,7 @@ namespace CZBK.ItcastOA.Model
         public Nullable<short> Del { get; set; }
         public Nullable<System.DateTime> AddTime { get; set; }
         public string BeiZhu { get; set; }
+        public Nullable<int> FileFirstID { get; set; }
     
         public virtual ICollection<Schedule> Schedules { get; set; }
     }

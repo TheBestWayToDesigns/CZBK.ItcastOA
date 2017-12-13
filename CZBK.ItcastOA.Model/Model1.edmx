@@ -73,6 +73,7 @@
           <Property Name="Del" Type="smallint" />
           <Property Name="AddTime" Type="datetime" />
           <Property Name="BeiZhu" Type="nvarchar(max)" />
+          <Property Name="FileFirstID" Type="int" />
         </EntityType>
         <EntityType Name="GongLuBaoXiaoBill">
           <Key>
@@ -2371,6 +2372,7 @@
           <Property Name="AddTime" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Schedules" Relationship="OAModel.FK_Schedule_UserInfo" FromRole="FileItem" ToRole="Schedule" />
           <Property Name="BeiZhu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FileFirstID" Type="Int32" />
         </EntityType>
         <EntityType Name="Schedule">
           <Key>
@@ -3002,6 +3004,7 @@
           <EntitySetMapping Name="FileItems">
             <EntityTypeMapping TypeName="OAModel.FileItem">
               <MappingFragment StoreEntitySet="FileItem">
+                <ScalarProperty Name="FileFirstID" ColumnName="FileFirstID" />
                 <ScalarProperty Name="BeiZhu" ColumnName="BeiZhu" />
                 <ScalarProperty Name="AddTime" ColumnName="AddTime" />
                 <ScalarProperty Name="Del" ColumnName="Del" />
