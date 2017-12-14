@@ -82,6 +82,9 @@
         <AssociationConnector Association="OAModel.FK_GongLuBaoXiaoBill_CarNumber" />
         <AssociationConnector Association="OAModel.FK_GongLuBaoXiaoBill_SysField" />
         <AssociationConnector Association="OAModel.FK_GongLuBaoXiaoBill_UserInfo" />
+        <EntityTypeShape EntityType="OAModel.YXB_BaoJiaEidtMoney" Width="1.5" PointX="23.9062505" PointY="1.3793741861979152" />
+        <AssociationConnector Association="OAModel.FK_YXB_BaoJiaEidtMoney_UserInfo" />
+        <AssociationConnector Association="OAModel.FK_YXB_BaoJiaEidtMoney_YXB_Baojia" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

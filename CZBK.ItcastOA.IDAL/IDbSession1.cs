@@ -70,6 +70,8 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IYXB_BaojiaDal YXB_BaojiaDal{get;set;}
 	
+		IYXB_BaoJiaEidtMoneyDal YXB_BaoJiaEidtMoneyDal{get;set;}
+	
 		IYXB_Kh_listDal YXB_Kh_listDal{get;set;}
 	}	
 }

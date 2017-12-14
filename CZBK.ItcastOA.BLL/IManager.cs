@@ -243,6 +243,14 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class YXB_BaoJiaEidtMoneyService :BaseService<YXB_BaoJiaEidtMoney>,IYXB_BaoJiaEidtMoneyService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.YXB_BaoJiaEidtMoneyDal;
+        }
+    }   
+	
 	public partial class YXB_Kh_listService :BaseService<YXB_Kh_list>,IYXB_Kh_listService
     {
         public override void SetCurretnDal()

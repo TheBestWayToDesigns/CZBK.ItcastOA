@@ -155,6 +155,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IYXB_BaoJiaEidtMoneyService : IBaseService<YXB_BaoJiaEidtMoney>
+    {
+       
+    }   
+	
 	public partial interface IYXB_Kh_listService : IBaseService<YXB_Kh_list>
     {
        

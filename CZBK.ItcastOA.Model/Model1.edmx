@@ -429,6 +429,18 @@
           <Property Name="WinYunFei" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Remark" Type="nvarchar" MaxLength="550" />
           <Property Name="CPDengJiID" Type="bigint" />
+          <Property Name="CheckMoney" Type="smallint" />
+        </EntityType>
+        <EntityType Name="YXB_BaoJiaEidtMoney">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="YXB_BJ_ID" Type="bigint" Nullable="false" />
+          <Property Name="EidtUser_ID" Type="int" Nullable="false" />
+          <Property Name="EidtTime" Type="datetime" Nullable="false" />
+          <Property Name="EditBJMoney" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EditYFMoney" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="YXB_Kh_list">
           <Key>
@@ -1047,6 +1059,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_YXB_BaoJiaEidtMoney_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="YXB_BaoJiaEidtMoney" Type="Self.YXB_BaoJiaEidtMoney" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_BaoJiaEidtMoney">
+              <PropertyRef Name="EidtUser_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YXB_BaoJiaEidtMoney_YXB_Baojia">
+          <End Role="YXB_Baojia" Type="Self.YXB_Baojia" Multiplicity="1" />
+          <End Role="YXB_BaoJiaEidtMoney" Type="Self.YXB_BaoJiaEidtMoney" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="YXB_Baojia">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="YXB_BaoJiaEidtMoney">
+              <PropertyRef Name="YXB_BJ_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_YXB_Kh_list_UserInfo">
           <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1138,6 +1174,7 @@
           <EntitySet Name="UserInfoDepartment" EntityType="Self.UserInfoDepartment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfoRoleInfo" EntityType="Self.UserInfoRoleInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YXB_Baojia" EntityType="Self.YXB_Baojia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="YXB_BaoJiaEidtMoney" EntityType="Self.YXB_BaoJiaEidtMoney" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YXB_Kh_list" EntityType="Self.YXB_Kh_list" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_ActionInfoR_UserInfo_ActionInfo" Association="Self.FK_ActionInfoR_UserInfo_ActionInfo">
             <End Role="ActionInfo" EntitySet="ActionInfo" />
@@ -1334,6 +1371,14 @@
           <AssociationSet Name="FK_YXB_Baojia_T_BaoJiaToP1" Association="Self.FK_YXB_Baojia_T_BaoJiaToP1">
             <End Role="T_BaoJiaToP" EntitySet="T_BaoJiaToP" />
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YXB_BaoJiaEidtMoney_UserInfo" Association="Self.FK_YXB_BaoJiaEidtMoney_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="YXB_BaoJiaEidtMoney" EntitySet="YXB_BaoJiaEidtMoney" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YXB_BaoJiaEidtMoney_YXB_Baojia" Association="Self.FK_YXB_BaoJiaEidtMoney_YXB_Baojia">
+            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
+            <End Role="YXB_BaoJiaEidtMoney" EntitySet="YXB_BaoJiaEidtMoney" />
           </AssociationSet>
           <AssociationSet Name="FK_YXB_Kh_list_UserInfo" Association="Self.FK_YXB_Kh_list_UserInfo">
             <End Role="UserInfo" EntitySet="UserInfo" />
@@ -1597,6 +1642,15 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="YXB_BaoJiaEidtMoney" EntityType="OAModel.YXB_BaoJiaEidtMoney" />
+          <AssociationSet Name="FK_YXB_BaoJiaEidtMoney_UserInfo" Association="OAModel.FK_YXB_BaoJiaEidtMoney_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="YXB_BaoJiaEidtMoney" EntitySet="YXB_BaoJiaEidtMoney" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YXB_BaoJiaEidtMoney_YXB_Baojia" Association="OAModel.FK_YXB_BaoJiaEidtMoney_YXB_Baojia">
+            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
+            <End Role="YXB_BaoJiaEidtMoney" EntitySet="YXB_BaoJiaEidtMoney" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ActionInfo">
           <Key>
@@ -1933,6 +1987,7 @@
           <NavigationProperty Name="T_BaoXiaoBill" Relationship="OAModel.FK_T_BaoXiaoBill_Userinfo" FromRole="UserInfo" ToRole="T_BaoXiaoBill" />
           <NavigationProperty Name="T_JieKuanBill" Relationship="OAModel.FK_T_JieKuanBill_Userinfo" FromRole="UserInfo" ToRole="T_JieKuanBill" />
           <NavigationProperty Name="GongLuBaoXiaoBills" Relationship="OAModel.FK_GongLuBaoXiaoBill_UserInfo" FromRole="UserInfo" ToRole="GongLuBaoXiaoBill" />
+          <NavigationProperty Name="YXB_BaoJiaEidtMoney" Relationship="OAModel.FK_YXB_BaoJiaEidtMoney_UserInfo" FromRole="UserInfo" ToRole="YXB_BaoJiaEidtMoney" />
         </EntityType>
         <Association Name="FK_Bumen">
           <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
@@ -2147,6 +2202,8 @@
           <Property Name="CPDengJiID" Type="Int64" />
           <NavigationProperty Name="T_ChanPinName11" Relationship="OAModel.FK_YXB_Baojia_CanPinDengji" FromRole="YXB_Baojia" ToRole="T_ChanPinName" />
           <NavigationProperty Name="T_WinBakFaHuo" Relationship="OAModel.FK_T_WinBakFaHuo_BaoJia" FromRole="YXB_Baojia" ToRole="T_WinBakFaHuo" />
+          <NavigationProperty Name="YXB_BaoJiaEidtMoney" Relationship="OAModel.FK_YXB_BaoJiaEidtMoney_YXB_Baojia" FromRole="YXB_Baojia" ToRole="YXB_BaoJiaEidtMoney" />
+          <Property Name="CheckMoney" Type="Int16" />
         </EntityType>
         <Association Name="FK_baojia_conameXinghao">
           <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="0..1" />
@@ -2651,6 +2708,43 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="YXB_BaoJiaEidtMoney">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="YXB_BJ_ID" Type="Int64" Nullable="false" />
+          <Property Name="EidtUser_ID" Type="Int32" Nullable="false" />
+          <Property Name="EidtTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_YXB_BaoJiaEidtMoney_UserInfo" FromRole="YXB_BaoJiaEidtMoney" ToRole="UserInfo" />
+          <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_YXB_BaoJiaEidtMoney_YXB_Baojia" FromRole="YXB_BaoJiaEidtMoney" ToRole="YXB_Baojia" />
+          <Property Name="EditBJMoney" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="EditYFMoney" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <Association Name="FK_YXB_BaoJiaEidtMoney_UserInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+          <End Type="OAModel.YXB_BaoJiaEidtMoney" Role="YXB_BaoJiaEidtMoney" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_BaoJiaEidtMoney">
+              <PropertyRef Name="EidtUser_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YXB_BaoJiaEidtMoney_YXB_Baojia">
+          <End Type="OAModel.YXB_Baojia" Role="YXB_Baojia" Multiplicity="1" />
+          <End Type="OAModel.YXB_BaoJiaEidtMoney" Role="YXB_BaoJiaEidtMoney" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="YXB_Baojia">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="YXB_BaoJiaEidtMoney">
+              <PropertyRef Name="YXB_BJ_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2928,6 +3022,7 @@
           <EntitySetMapping Name="YXB_Baojia">
             <EntityTypeMapping TypeName="OAModel.YXB_Baojia">
               <MappingFragment StoreEntitySet="YXB_Baojia">
+                <ScalarProperty Name="CheckMoney" ColumnName="CheckMoney" />
                 <ScalarProperty Name="CPDengJiID" ColumnName="CPDengJiID" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="WinYunFei" ColumnName="WinYunFei" />
@@ -3153,6 +3248,18 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="OAModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="OAModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="YXB_BaoJiaEidtMoney">
+            <EntityTypeMapping TypeName="OAModel.YXB_BaoJiaEidtMoney">
+              <MappingFragment StoreEntitySet="YXB_BaoJiaEidtMoney">
+                <ScalarProperty Name="EditYFMoney" ColumnName="EditYFMoney" />
+                <ScalarProperty Name="EditBJMoney" ColumnName="EditBJMoney" />
+                <ScalarProperty Name="EidtTime" ColumnName="EidtTime" />
+                <ScalarProperty Name="EidtUser_ID" ColumnName="EidtUser_ID" />
+                <ScalarProperty Name="YXB_BJ_ID" ColumnName="YXB_BJ_ID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>
