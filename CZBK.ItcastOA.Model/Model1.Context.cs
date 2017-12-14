@@ -12,6 +12,9 @@ namespace CZBK.ItcastOA.Model
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Objects;
+    using System.Data.Objects.DataClasses;
+    using System.Linq;
     
     public partial class OAEntities : DbContext
     {
@@ -53,7 +56,5 @@ namespace CZBK.ItcastOA.Model
         public DbSet<T_BaoXiaoBill> T_BaoXiaoBill { get; set; }
         public DbSet<T_BaoxiaoItems> T_BaoxiaoItems { get; set; }
         public DbSet<T_JieKuanBill> T_JieKuanBill { get; set; }
-        public DbSet<CarNumber> CarNumbers { get; set; }
-        public DbSet<GongLuBaoXiaoBill> GongLuBaoXiaoBills { get; set; }
     }
 }
