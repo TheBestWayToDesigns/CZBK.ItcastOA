@@ -598,6 +598,7 @@
             var pars = {"ParentId":obj };
             LoadCity(pars);
         }
+        //报价
         function BaoJia(obj) {
             var rows = $('#tt').datagrid('getSelections');
             if (rows.length != 1) {
@@ -1302,13 +1303,25 @@
             </table>
             }
         </div>
-        <div id="dlg" class="easyui-dialog" title="Basic Dialog" data-options="iconCls:'icon-save'" style="width:400px;height:260px;padding:10px">
+        <div id="dlg" class="easyui-dialog" title="Basic Dialog" data-options="iconCls:'icon-save'" style="width:400px;height:360px;padding:10px">
             <div style="padding:20px 30px 20px 30px">
                 <form id="ff" method="post">
                     <table cellpadding="5">
                         <tr>
                             <td>ID号:</td>
                             <td><input class="easyui-textbox" type="text" name="name" readonly="readonly" id="BaoJiaID" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>产品名称:</td>
+                            <td><input class="easyui-textbox" type="text" name="" readonly="readonly" id="" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>产品型号:</td>
+                            <td><input class="easyui-textbox" type="text" name="" readonly="readonly" id="" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>产品等级</td>
+                            <td><input class="easyui-textbox" type="text" name="" readonly="readonly" id="" data-options="required:true" /></td>
                         </tr>
                         <tr>
                             <td>是否含税:</td>
