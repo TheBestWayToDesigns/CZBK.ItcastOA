@@ -69,19 +69,6 @@
         <AssociationConnector Association="OAModel.FK_Schedule_UserInfo1" />
         <AssociationConnector Association="OAModel.FK_ScheduleUser_UserInfo" />
         <EntityTypeShape EntityType="OAModel.sysdiagram" Width="1.5" PointX="0.75" PointY="6.75" />
-        <EntityTypeShape EntityType="OAModel.T_BaoXiaoBill" Width="1.5" PointX="14.348484867983613" PointY="25.285540846749193" />
-        <EntityTypeShape EntityType="OAModel.T_BaoxiaoItems" Width="1.5" PointX="16.598484867983615" PointY="25.285540846749193" />
-        <EntityTypeShape EntityType="OAModel.T_JieKuanBill" Width="1.5" PointX="14.348485367983614" PointY="0.98674242552523783" />
-        <AssociationConnector Association="OAModel.FK_T_JieKuanBill_Bummen" />
-        <AssociationConnector Association="OAModel.FK_T_BaoXiaoBill_Userinfo" />
-        <AssociationConnector Association="OAModel.FK_T_BaoxiaoItems_T_BaoxiaoBill" />
-        <AssociationConnector Association="OAModel.FK_T_JieKuanBill_Userinfo" />
-        <EntityTypeShape EntityType="OAModel.CarNumber" Width="1.5" PointX="21.8750005" PointY="12.045010264823716" />
-        <EntityTypeShape EntityType="OAModel.GongLuBaoXiaoBill" Width="1.5" PointX="24.1250005" PointY="5.1854216417768413" />
-        <AssociationConnector Association="OAModel.FK_GongLuBaoXiaoBill_CarNumber" />
-        <AssociationConnector Association="OAModel.FK_GongLuBaoXiaoBill_SysField" />
-        <AssociationConnector Association="OAModel.FK_GongLuBaoXiaoBill_UserInfo" />
-        <AssociationConnector Association="OAModel.FK_Schedule_UserInfo2" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
