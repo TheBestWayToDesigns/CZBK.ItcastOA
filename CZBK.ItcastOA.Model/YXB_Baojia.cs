@@ -17,12 +17,13 @@ namespace CZBK.ItcastOA.Model
         public YXB_Baojia()
         {
             this.T_WinBakFaHuo = new HashSet<T_WinBakFaHuo>();
+            this.YXB_BaoJiaEidtMoney = new HashSet<YXB_BaoJiaEidtMoney>();
         }
     
         public long id { get; set; }
         public long BaoJiaTop_id { get; set; }
-        public Nullable<long> CPname { get; set; }
-        public Nullable<long> CPXingHao { get; set; }
+        public string CPname { get; set; }
+        public string CPXingHao { get; set; }
         public string CPGuiGe { get; set; }
         public decimal CPShuLiang { get; set; }
         public System.DateTime AddTime { get; set; }
@@ -41,12 +42,13 @@ namespace CZBK.ItcastOA.Model
         public Nullable<decimal> WinYunFei { get; set; }
         public string Remark { get; set; }
         public Nullable<long> CPDengJiID { get; set; }
+        public Nullable<short> CheckMoney { get; set; }
+        public Nullable<System.DateTime> GhOverTime { get; set; }
     
-        public virtual T_ChanPinName T_ChanPinName { get; set; }
-        public virtual T_ChanPinName T_ChanPinName1 { get; set; }
-        public virtual UserInfo UserInfo { get; set; }
         public virtual T_BaoJiaToP T_BaoJiaToP { get; set; }
-        public virtual T_ChanPinName T_ChanPinName11 { get; set; }
+        public virtual T_ChanPinName T_ChanPinName { get; set; }
         public virtual ICollection<T_WinBakFaHuo> T_WinBakFaHuo { get; set; }
+        public virtual UserInfo UserInfo { get; set; }
+        public virtual ICollection<YXB_BaoJiaEidtMoney> YXB_BaoJiaEidtMoney { get; set; }
     }
 }

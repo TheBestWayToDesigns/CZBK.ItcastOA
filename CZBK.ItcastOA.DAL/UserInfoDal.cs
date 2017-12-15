@@ -12,6 +12,7 @@ namespace CZBK.ItcastOA.DAL
     public partial class UserInfoDal : BaseDal<UserInfo>, IUserInfoDal
     {
         //实现自己特有的方法。
+      
 
     }
 }

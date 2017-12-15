@@ -32,13 +32,16 @@ namespace CZBK.ItcastOA.Model
             this.Departments = new HashSet<Department>();
             this.RoleInfoes = new HashSet<RoleInfo>();
             this.T_ChanPinName = new HashSet<T_ChanPinName>();
-            this.YXB_Baojia = new HashSet<YXB_Baojia>();
             this.T_WinBakFaHuo = new HashSet<T_WinBakFaHuo>();
             this.T_WinBakFaHuo1 = new HashSet<T_WinBakFaHuo>();
             this.Schedules = new HashSet<Schedule>();
             this.ScheduleUsers = new HashSet<ScheduleUser>();
+            this.Schedules1 = new HashSet<Schedule>();
             this.T_BaoXiaoBill = new HashSet<T_BaoXiaoBill>();
             this.T_JieKuanBill = new HashSet<T_JieKuanBill>();
+            this.GongLuBaoXiaoBills = new HashSet<GongLuBaoXiaoBill>();
+            this.YXB_BaoJiaEidtMoney = new HashSet<YXB_BaoJiaEidtMoney>();
+            this.YXB_Baojia = new HashSet<YXB_Baojia>();
         }
     
         public int ID { get; set; }
@@ -94,8 +97,6 @@ namespace CZBK.ItcastOA.Model
         [JsonIgnore]
         public virtual ICollection<T_ChanPinName> T_ChanPinName { get; set; }
         [JsonIgnore]
-        public virtual ICollection<YXB_Baojia> YXB_Baojia { get; set; }
-        [JsonIgnore]
         public virtual ICollection<T_WinBakFaHuo> T_WinBakFaHuo { get; set; }
         [JsonIgnore]
         public virtual ICollection<T_WinBakFaHuo> T_WinBakFaHuo1 { get; set; }
@@ -104,8 +105,16 @@ namespace CZBK.ItcastOA.Model
         [JsonIgnore]
         public virtual ICollection<ScheduleUser> ScheduleUsers { get; set; }
         [JsonIgnore]
+        public virtual ICollection<Schedule> Schedules1 { get; set; }
+        [JsonIgnore]
         public virtual ICollection<T_BaoXiaoBill> T_BaoXiaoBill { get; set; }
         [JsonIgnore]
         public virtual ICollection<T_JieKuanBill> T_JieKuanBill { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<GongLuBaoXiaoBill> GongLuBaoXiaoBills { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<YXB_BaoJiaEidtMoney> YXB_BaoJiaEidtMoney { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<YXB_Baojia> YXB_Baojia { get; set; }
     }
 }

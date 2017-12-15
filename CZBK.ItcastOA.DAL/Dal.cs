@@ -156,6 +156,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class YXB_BaoJiaEidtMoneyDal :BaseDal<YXB_BaoJiaEidtMoney>,IYXB_BaoJiaEidtMoneyDal
+    {
+
+    }
+		
 	public partial class YXB_Kh_listDal :BaseDal<YXB_Kh_list>,IYXB_Kh_listDal
     {
 

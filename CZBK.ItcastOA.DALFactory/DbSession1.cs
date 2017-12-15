@@ -450,6 +450,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _YXB_BaojiaDal = value; }
         }
 	
+		private IYXB_BaoJiaEidtMoneyDal _YXB_BaoJiaEidtMoneyDal;
+        public IYXB_BaoJiaEidtMoneyDal YXB_BaoJiaEidtMoneyDal
+        {
+            get
+            {
+                if(_YXB_BaoJiaEidtMoneyDal == null)
+                {
+                   // _YXB_BaoJiaEidtMoneyDal = new YXB_BaoJiaEidtMoneyDal();
+				    _YXB_BaoJiaEidtMoneyDal =AbstractFactory.CreateYXB_BaoJiaEidtMoneyDal();
+                }
+                return _YXB_BaoJiaEidtMoneyDal;
+            }
+            set { _YXB_BaoJiaEidtMoneyDal = value; }
+        }
+	
 		private IYXB_Kh_listDal _YXB_Kh_listDal;
         public IYXB_Kh_listDal YXB_Kh_listDal
         {

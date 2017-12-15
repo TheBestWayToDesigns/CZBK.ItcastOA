@@ -393,6 +393,19 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IYXB_BaojiaDal;
         }
 		
+	    public static IYXB_BaoJiaEidtMoneyDal CreateYXB_BaoJiaEidtMoneyDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".YXB_BaoJiaEidtMoneyDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IYXB_BaoJiaEidtMoneyDal;
+        }
+		
 	    public static IYXB_Kh_listDal CreateYXB_Kh_listDal()
         {
 

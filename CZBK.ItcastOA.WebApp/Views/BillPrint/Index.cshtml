@@ -424,10 +424,14 @@
             $.each(Allrow, function (e, ine) {
                 e++;
                 $("#BxTAB tr:eq(" + e + ") td:eq(0) ").text(ine.BaoXiaoName);
+                //style = "text-align:":10px
+                $("#BxTAB tr:eq(" + e + ") td:eq(0) ").css("text-align", "left")
+                $("#BxTAB tr:eq(" + e + ") td:eq(0) ").css("padding-left", "10px")
                 $("#BxTAB tr:eq(" + e + ") td:eq(1) ").text(ine.DanJiuInt);
                 var Moneyd = ine.BaoXiaoMoeny;
                 Moneyd = formatCurrency(Moneyd.toFixed(2));
                 $("#BxTAB tr:eq(" + e + ") td:eq(2) ").text(Moneyd);
+                $("#BxTAB tr:eq(" + e + ") td:eq(2) ").css("text-align", "right")
                 Djzs = Djzs + ine.DanJiuInt;
                 Money = Money + ine.BaoXiaoMoeny;
             })          
@@ -436,6 +440,7 @@
             $("#BxTAB tr:eq(6) td:eq(2) ").text("￥" +formatCurrency(Money.toFixed(2) ));
             var EditMoney = Arabia_to_Chinese("￥" + formatCurrency(Money.toFixed(2)));
             $("#BigBXMoney").text("ⓧ" + EditMoney);
+            $("#BxTAB tr:eq(6) td:eq(2) ").css("text-align", "right")
 
             $("#AddBxBillData").css("display", "block");
             $('#AddBxBillData').dialog({
@@ -596,7 +601,7 @@
                     </div>                  
                 </div>
                 <table id="Ptble"  class="Ptable"  borderColor="#000000"  cellSpacing="0" bgColor="#ffffff" border="1">                    
-                    <tr><td style="width:140px;">所属部门</td><td style="width:270px;" id="SSBM"></td>
+                    <tr ><td style="width:140px;">所属部门</td><td style="width:270px;" id="SSBM"></td>
                     <td colspan="2" style="width:430px;">收款单位全称（姓名）</td>
                     </tr>
                     <tr><td>借款人</td><td id="JEperson"></td>
@@ -649,10 +654,10 @@
                     
                     <table id="BxTAB" class="Pbxtable" borderColor="#000000" cellSpacing="0" bgColor="#ffffff" border="1">
                         <tr>
-                            <td style="width:380px;">报&nbsp;销&nbsp;内&nbsp;容</td>
+                            <td style="width:380px; ">报&nbsp;销&nbsp;内&nbsp;容</td>
                             <td style="width:40px;" >单据张数</td>
-                            <td style="width:120px;">报销金额</td>
-                            <td style="width:120px;">核准金额</td>
+                            <td style="width:110px;">报销金额</td>
+                            <td style="width:130px;">核准金额</td>
                         </tr>
                        <tr><td></td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td></tr>

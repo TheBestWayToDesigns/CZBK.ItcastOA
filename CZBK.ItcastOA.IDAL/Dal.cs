@@ -155,6 +155,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IYXB_BaoJiaEidtMoneyDal :IBaseDal<YXB_BaoJiaEidtMoney>
+    {
+      
+    }
+	
 	public partial interface IYXB_Kh_listDal :IBaseDal<YXB_Kh_list>
     {
       

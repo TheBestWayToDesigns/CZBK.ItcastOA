@@ -57,8 +57,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            select new SlcClass
                            {
                                ID = a.id,
-                               CPname = a.T_ChanPinName.MyTexts,
-                               CPXingHao = a.T_ChanPinName1.MyTexts,
+                               CPname = a.CPname,
+                               CPXingHao = a.CPXingHao,
                                CPShuLiang = a.CPShuLiang,
                                AddTime = a.AddTime,
                                ZhuangTai = a.ZhuangTai,
@@ -84,7 +84,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                HanShui=a.T_BaoJiaToP.T_BoolItem.str,
                                BaoJiaYunFei= a.BaoJiaYunFei,
                                Remark=a.Remark,
-                               CpJB = a.T_ChanPinName11.MyTexts,
+                               CpJB = a.T_ChanPinName.MyTexts,
                                Denjiu= a.T_BaoJiaToP.T_YSItems.MyText
                                
                            };
@@ -208,8 +208,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             uim.addess = Request["addess"];
             uim.Person = Request["Person"]==null?0 : Request["Person"].Length <= 0 ? 0 : int.Parse( Request["Person"]);
             uim.KHname = Request["KHname"] == null ? 0 : Request["KHname"].Length<=0?0: int.Parse(Request["KHname"]);
-            uim.CPname = Request["CPname"] == null ? 0 : Request["CPname"].Length <= 0 ? 0 : int.Parse(Request["CPname"]);
-            uim.CPxh = Request["CPxh"] == null ? 0 : Request["CPxh"].Length <= 0 ?0: int.Parse(Request["CPxh"]);
+            uim.CPname = Request["CPname"] == null ? "" : Request["CPname"].Length <= 0 ?"": Request["CPname"];
+            uim.CPxh = Request["CPxh"] == null ? "" : Request["CPxh"].Length <= 0 ?"": Request["CPxh"];
             uim.PageIndex = pageIndex;
             uim.PageSize = pageSize;
             uim.TotalCount = 0;
@@ -218,8 +218,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                        select new SlcClass
                        {
                            ID = a.id,
-                           CPname = a.T_ChanPinName.MyTexts,
-                           CPXingHao = a.T_ChanPinName1.MyTexts,
+                           CPname = a.CPname,
+                           CPXingHao = a.CPXingHao,
                            CPShuLiang = a.CPShuLiang,
                            AddTime = a.AddTime,
                            ZhuangTai = a.ZhuangTai,
@@ -320,15 +320,15 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                       select new
                       {
                           ID = a.id,
-                          CPname = a.T_ChanPinName.MyTexts,
-                          CpXingHao = a.T_ChanPinName1.MyTexts,
+                          CPname = a.CPname,
+                          CpXingHao = a.CPXingHao,
                           CpMoney = a.WinMoney,
                           WinYunFei=a.WinYunFei,
                           BaoJiaMoney=a.BaoJiaMoney,
                           CPShuLiang = a.CPShuLiang,
                           BaoJiaYunFei= a.BaoJiaYunFei,
                           Remark=a.Remark,
-                          Cpdengji= a.T_ChanPinName11.MyTexts
+                          Cpdengji= a.T_ChanPinName.MyTexts
                          
                       };
             return Json(new {ret="ok",temp=mmp,XiangMuName=XiangMuName,HanShuiStr= HanShuiStr,bak = bak }, JsonRequestBehavior.AllowGet);
@@ -355,8 +355,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             uim.addess = Request["addess"];
             uim.Person = Request["Person"] == null ? 0 : Request["Person"].Length <= 0 ? 0 : int.Parse(Request["Person"]);
             uim.KHname = Request["KHname"] == null ? 0 : Request["KHname"].Length <= 0 ? 0 : int.Parse(Request["KHname"]);
-            uim.CPname = Request["CPname"] == null ? 0 : Request["CPname"].Length <= 0 ? 0 : int.Parse(Request["CPname"]);
-            uim.CPxh = Request["CPxh"] == null ? 0 : Request["CPxh"].Length <= 0 ? 0 : int.Parse(Request["CPxh"]);
+            uim.CPname = Request["CPname"] == null ? "" : Request["CPname"].Length <= 0 ?"": Request["CPname"];
+            uim.CPxh = Request["CPxh"] == null ? "" : Request["CPxh"].Length <= 0 ? "" : Request["CPxh"];
             uim.PageIndex = pageIndex;
             uim.PageSize = pageSize;
             uim.TotalCount = 0;
@@ -446,8 +446,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                         select new 
                         {
                             ID = a.id,
-                            CpName = a.T_ChanPinName.MyTexts,
-                            CpXinghao = a.T_ChanPinName1.MyTexts,
+                            CpName = a.CPname,
+                            CpXinghao = a.CPXingHao,
                             CPShuLiang = a.CPShuLiang,
                             WinMoney = a.WinMoney,
                             WinYunFei = a.WinYunFei,

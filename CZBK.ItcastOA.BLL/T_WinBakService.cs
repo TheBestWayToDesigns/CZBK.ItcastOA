@@ -39,11 +39,11 @@ namespace CZBK.ItcastOA.BLL
             {
                 temp = temp.Where<T_WinBak>(u => u.T_BaoJiaToP.Kh_List_id== sisp.KHname);
             }
-            if (sisp.CPname != 0)
+            if (sisp.CPname.Trim().Length>0)
             {
                 temp = temp.Where<T_WinBak>(u => u.T_BaoJiaToP.YXB_Baojia.Where(m => m.CPname == sisp.CPname).DefaultIfEmpty() != null?Convert.ToBoolean( u.T_BaoJiaToP.YXB_Baojia.Select(m=>m.CPname==sisp.CPname)): Convert.ToBoolean(u.T_BaoJiaToP.YXB_Baojia.Select(m => m.ZhuangTai == 1)));
             }
-            if (sisp.CPxh != 0)
+            if (sisp.CPxh.Trim().Length > 0)
             {
                 temp = temp.Where<T_WinBak>(u => u.T_BaoJiaToP.YXB_Baojia.Where(m => m.CPXingHao == sisp.CPxh).DefaultIfEmpty() != null ? Convert.ToBoolean(u.T_BaoJiaToP.YXB_Baojia.Select(m => m.CPXingHao == sisp.CPxh)) : Convert.ToBoolean(u.T_BaoJiaToP.YXB_Baojia.Select(m => m.ZhuangTai == 1)));
             }
