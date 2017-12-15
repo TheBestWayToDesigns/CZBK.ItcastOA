@@ -448,13 +448,12 @@
             var row = $('#tt').datagrid('getSelected');
             if (row.FileItemID != null) {
                 $.post("/EverDayWork/checkFile", { "id": row.FileItemID }, function (fileInfo) {
-                document.getElementById("CheckID").value = fileInfo.ID;
-                document.getElementById("CheckID").setAttribute('readOnly', true);
-                document.getElementById("hiddenUrl").value = fileInfo.Url;
-                document.getElementById("CheckAddTime").value = fileInfo.AddTime;
-                document.getElementById("CheckAddTime").setAttribute('readOnly', true);
-                document.getElementById("CheckBeiZhuArea").value = fileInfo.BeiZhu;
-                document.getElementById("CheckBeiZhuArea").setAttribute('readOnly', true);
+                    alert(fileInfo);
+                    var ay = new Array();
+                    ay = fileInfo.split(",");
+                    //for (var i = 0; i+=2;i<ay.length){
+                    //    document.getElementById("CheckFileTab").innerHTML = "<tr><td>"+ay[i]+"</td><td><a href='"+ay[i+1]+"'></a></td></tr>";
+                    //}
                 $("#CheckFileDIV").css("display", "block");
                 $('#CheckFileDIV').dialog({
                     title: "查看文件",
@@ -481,8 +480,6 @@
             var row = $('#tt').datagrid('getSelected');
             var schid = row.ID;
             var fileitemid = row.FileItemID;
-            alert(schid);
-            alert(fileitemid);
             $("#AddUploadScheduleID").val(schid);
             $("#FirstFileID").val(fileitemid);
             $("#AddUploadFileDIV").css("display", "block");
@@ -785,22 +782,6 @@
     <!-------------查看文件--------------->
     <div id="CheckFileDIV" style="height:100%; width:100%;">
         <table id="CheckFileTab">
-            <tr>
-                <td>文件编号</td>
-                <td><input type="text" id="CheckID" name="CheckID" /></td>
-            </tr>
-            <tr>
-                <td>上传文件时间</td>
-                <td><input type="text" id="CheckAddTime" name="CheckAddTime" /></td>
-            </tr>
-            <tr>
-                <td>文件备注</td>
-                <td><textarea id="CheckBeiZhuArea" name="CheckBeiZhuArea" style="width:302px"></textarea></td>
-            </tr>
-            <tr>
-                <td><input type="hidden" id="hiddenUrl" name="hiddenUrl" /></td>
-                <td><input type="button" id="downloadFile" name="downloadFile" value="下载文件"/></td>
-            </tr>
         </table>
         <table>
             <tbody id="Selebody"></tbody>

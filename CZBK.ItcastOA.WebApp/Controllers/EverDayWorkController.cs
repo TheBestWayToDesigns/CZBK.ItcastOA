@@ -292,12 +292,15 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public ActionResult checkFile()
         {
             int fileid = Convert.ToInt32(Request["id"]);
-            var fileItem = FileItemService.LoadEntities(x => x.ID == fileid).ToList();
-            string id = (fileItem[0].ID).ToString();
-            string url = fileItem[0].Url;
-            string beizhu = fileItem[0].BeiZhu;
-            string addtime = (fileItem[0].AddTime).ToString();
-            return Json(new { ID = id,Url = url,BeiZhu = beizhu,AddTime = addtime }, JsonRequestBehavior.AllowGet);
+            var fileItem = FileItemService.LoadEntities(x => x.ID == fileid).FirstOrDefault();
+            var fileItems = FileItemService.LoadEntities(x => x.FileFirstID == fileid).DefaultIfEmpty().ToList();
+            fileItems.Add(fileItem);
+            string s = "";
+            foreach(var b in fileItems)
+            {
+                s = s + b.BeiZhu +","+b.Url+",";
+            }
+            return Json(s , JsonRequestBehavior.AllowGet);
         }
 
         //修改日程

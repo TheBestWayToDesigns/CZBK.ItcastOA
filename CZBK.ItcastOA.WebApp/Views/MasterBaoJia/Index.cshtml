@@ -626,7 +626,7 @@
             if (rows.length != 1) {
                 $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
                 return;
-            } else if (rows[0].CheckState != null || rows[0].CheckState != "") {
+            } else if (rows[0].CheckState != null){
                 if (rows[0].CheckState == 0) {
                     $('#YesOrNoDiv').dialog({
                         title: "审核意见",
@@ -679,13 +679,16 @@
                 $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
                 return;
             }
-            $('#dlg').dialog('open');
-            $("#BaoJiaID").val(rows[0].ID);
-            $("#HanSHuiput").val(rows[0].HanShui);
-            $("#ProductName").val(rows[0].CPname);
-            $("#ProductType").val(rows[0].CPXingHao);
-            $("#ProductLevel").val(rows[0].CpJB);
-
+            if (rows[0].CheckState != 1) {
+                 $('#dlg').dialog('open');
+                 $("#BaoJiaID").val(rows[0].ID);
+                 $("#HanSHuiput").val(rows[0].HanShui);
+                 $("#ProductName").val(rows[0].CPname);
+                 $("#ProductType").val(rows[0].CPXingHao);
+                 $("#ProductLevel").val(rows[0].CpJB);
+            } else {
+                $.messager.alert("提示","已报价并且已审核同意，不能修改报价");
+            }  
         }
         function Chazuo(obj, bol) {
             var Moneystr = bol ? "BaoJiaMoney" : "CpMoney";
@@ -1331,6 +1334,7 @@
             $('#ff').form('clear');
             $('#dlg').dialog('close');
         }
+
         function submitForm(index, row, changes) {
             //  alert( row.resultId+"--"+changes.finalResult)daliyResultRate;
 
@@ -1384,6 +1388,7 @@
             </table>
             }
         </div>
+        <!--第一次报价-->
         <div id="dlg" class="easyui-dialog" title="Basic Dialog" data-options="iconCls:'icon-save'" style="width:400px;height:360px;padding:10px">
             <div style="padding:20px 30px 20px 30px">
                 <form id="ff" method="post">

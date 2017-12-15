@@ -137,7 +137,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                      baojia.BaoJiaTime = MvcApplication.GetT_time();
                      baojia.ZhuangTai = 1;
                      baojia.CheckMoney = 0;//未审核
-                    YXB_BaojiaService.EditEntity(baojia);
+                     YXB_BaojiaService.EditEntity(baojia);
                  }
                  else
                  {
@@ -149,7 +149,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                      baojia.BaoJiaYunFei = Convert.ToDecimal(eYunfei);
                      baojia.ZhuangTai = 1;
                      baojia.CheckMoney = 0;//未审核
-                    YXB_BaojiaService.EditEntity(baojia);
+                     YXB_BaojiaService.EditEntity(baojia);
                  }
                  return Json(new { ret = true }, JsonRequestBehavior.AllowGet);
             }
