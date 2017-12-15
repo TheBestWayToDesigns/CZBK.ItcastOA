@@ -434,6 +434,7 @@
                 })
             });
         }
+        //未报价信息
         function loadData(pars) {
             $('#tt').datagrid({
                 url: '/MasterBaoJia/GetMoneyInfo',
@@ -458,6 +459,25 @@
                              var str = "<a href='javascript:BaoJia(" + row.ID + " )' class='l-btn deletes' style='padding:2px 5px 2px 5px' >报价</a>";
                              return str;
                          }
+                     }, {
+                         field: 'CheckState', title: '审核状态',
+                         formatter: function (value, row, index) {
+                             if(row.CheckState == 0){
+                                 var state = "未审核";
+                             }else if(row.CheckState == 1){
+                                 var state = "审核同意";
+                             } else if (row.CheckState == 2) {
+                                 var state = "审核不同意";
+                             } else {
+                                 var state = "未报价";
+                             }
+                             return state;
+                         }
+                     },{ field: 'shenhe', title: '审核报价',
+                         formatter: function (value, row, index) {
+                             var str = "<a href='javascript:CheckBaoJia( )' class='l-btn deletes' style='padding:2px 5px 2px 5px' >审核报价</a>";
+                             return str;
+                         }
                      },
                     { field: 'CPname', title: '产品名称' },
                     { field: 'CPXingHao', title: '产品型号' },
@@ -478,6 +498,20 @@
                          }
                      },
                      { field: 'WinMoney', title: '最终报价', hidden: win == 1 ? false : true },
+                     {
+                         field: 'GhTime', title: '供货时间', align: 'center',
+                         formatter: function (value, row, col) {
+                             var sd = value == null ? '' : ChangeDateFormat(value);
+                             return sd;
+                         }
+                     },
+                    {
+                        field: 'AddTime', title: '申请时间', align: 'center',
+                        formatter: function (value, row, col) {
+                            var sd = value == null ? '' : ChangeDateFormat(value);
+                            return sd;
+                        }
+                    },
                      { field: 'KHname', title: '客户名称' },
                       { field: 'KHperson', title: '客户联系人' },
                       { field: 'KHzhiwu', title: '联系人职务' },
@@ -487,19 +521,7 @@
                     { field: 'Addess', title: '供货地点' },
                     { field: 'DaiBanYunShu', title: '代办运输' },
                     { field: 'JieShuanFanShi', title: '结算方式' },
-                    { field: 'HeTongQianDing', title: '合同签订' },
-                    {
-                        field: 'GhTime', title: '供货时间',
-                        formatter: function (value, row, index) {
-                            return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
-                        }
-                    },
-                    {
-                        field: 'AddTime', title: '申请时间', align: 'right',
-                        formatter: function (value, row, index) {
-                            return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
-                        }
-                    }
+                    { field: 'HeTongQianDing', title: '合同签订' }
                 ]],
                 onLoadSuccess: function () {
 
@@ -598,6 +620,57 @@
             var pars = {"ParentId":obj };
             LoadCity(pars);
         }
+        //审核报价
+        function CheckBaoJia(obj) {
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            } else if (rows[0].CheckState != null || rows[0].CheckState != "") {
+                if (rows[0].CheckState == 0) {
+                    $('#YesOrNoDiv').dialog({
+                        title: "审核意见",
+                        width: 200,
+                        height: 200,
+                        collapsible: true,
+                        resizable: true,
+                        modal: true,
+                        buttons: [
+                            {
+                                text: '同意',
+                                handler: function () {
+                                    $.post("/MasterBaoJia/CheckBaoJiaYes", { "bjid": rows[0].ID, "ckid": rows[0].CheckState }, function (data) {
+                                        if (data.ret == "ok") {
+                                            $('#tt').datagrid("reload");
+                                        }
+                                        else {
+                                            $.messager.alert("提示", "审核失败！");
+                                        }
+                                    });
+                                    $('#YesOrNoDiv').dialog('close');
+                                }
+                            }, {
+                                text: '不同意',
+                                handler: function () {
+                                    $.post("/MasterBaoJia/CheckBaoJiaNo", { "bjid": rows[0].ID, "ckid": rows[0].CheckState }, function (data) {
+                                        if (data.ret == "ok") {
+                                            $('#tt').datagrid("reload");
+                                        }
+                                        else {
+                                            $.messager.alert("提示", "审核失败！");
+                                        }
+                                    });
+                                    $('#YesOrNoDiv').dialog('close');
+                                }
+                            }]
+                    });
+                } else {
+                    $.messager.alert("提示", "已审核过，不能重复审核！");
+                }
+            } else {
+                $.messager.alert("提示", "还未完成提交报价，不能审核！");
+            }
+        }
         //报价
         function BaoJia(obj) {
             var rows = $('#tt').datagrid('getSelections');
@@ -609,6 +682,9 @@
             $('#dlg').dialog('open');
             $("#BaoJiaID").val(rows[0].ID);
             $("#HanSHuiput").val(rows[0].HanShui);
+            $("#ProductName").val(rows[0].CPname);
+            $("#ProductType").val(rows[0].CPXingHao);
+            $("#ProductLevel").val(rows[0].CpJB);
 
         }
         function Chazuo(obj, bol) {
@@ -901,7 +977,10 @@
             var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
             var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
             var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-            return date.getFullYear() + "-" + month + "-" + currentDate;
+            var hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+            var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+            var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            return date.getFullYear() + "-" + month + "-" + currentDate + " " + hour + ":" + minutes + ":" + seconds;
         }
         function bool_click() {
             $.post("/ActionInfo/btnbool", { "id": "" }, function (serverData) {
@@ -1235,13 +1314,15 @@
                 url: "/MasterBaojia/editMoney",
                 data: {
                     "resultId": resultId,
-                    "finalRusult": finalRusult,
+                    "PMoney": finalRusult,
                     "Yunfei": finalRusult1
                 },
                 success: function (data) {
                     if (data.ret == true) {
                         $("#tt").datagrid('reload');
                         clearForm();
+                    }else if(data.ret == false){
+                        $.messager.alert("提示","修改报价错误,请仔细核对！");
                     }
                 }
             })
@@ -1313,15 +1394,15 @@
                         </tr>
                         <tr>
                             <td>产品名称:</td>
-                            <td><input class="easyui-textbox" type="text" name="" readonly="readonly" id="" data-options="required:true" /></td>
+                            <td><input class="easyui-textbox" type="text" name="" readonly="readonly" id="ProductName" data-options="required:true" /></td>
                         </tr>
                         <tr>
                             <td>产品型号:</td>
-                            <td><input class="easyui-textbox" type="text" name="" readonly="readonly" id="" data-options="required:true" /></td>
+                            <td><input class="easyui-textbox" type="text" name="" readonly="readonly" id="ProductType" data-options="required:true" /></td>
                         </tr>
                         <tr>
                             <td>产品等级</td>
-                            <td><input class="easyui-textbox" type="text" name="" readonly="readonly" id="" data-options="required:true" /></td>
+                            <td><input class="easyui-textbox" type="text" name="" readonly="readonly" id="ProductLevel" data-options="required:true" /></td>
                         </tr>
                         <tr>
                             <td>是否含税:</td>
@@ -1613,7 +1694,9 @@
         </div>
 
     </div>
-
+    <div id="YesOrNoDiv">
+        <h1>审核是否同意？</h1>
+    </div>
 
 </body>
 </html>

@@ -24,8 +24,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IUserInfoService UserInfoService { get; set; }
         IBLL.IT_ChanPinNameService T_ChanPinNameService { get; set; }
         IBLL.IT_WinBakFaHuoService T_WinBakFaHuoService { get; set; }
-        
-        
+        IBLL.IYXB_BaoJiaEidtMoneyService YXB_BaoJiaEidtMoneyService { get; set; }
+
+
+
 
         short delFlag = (short)DelFlagEnum.Normarl;
         public ActionResult Index()
@@ -94,42 +96,84 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     templist[i].Addess = ArrF(templist[i].Addess);
                 }
                 return Json(new { rows = templist, ret = delflg, total = totalCount }, JsonRequestBehavior.AllowGet);
-            }
-           
-           
-           
+            }   
            
         }
-        public ActionResult editMoney()
+        //提交报价前先在BaoJiaEidtMoney表中存个记录
+        public bool createEditMoneyTab(long rid,string eM,string eY)
         {
-            var rID =Convert.ToInt64( Request["resultId"]);
-            var eMoney = Request["finalRusult"];
-            var eYunfei = Request["Yunfei"];
-            var baojia= YXB_BaojiaService.LoadEntities(x => x.id == rID).FirstOrDefault();            
-            //检查更改金额之前是否存在值
-            if (baojia.BaoJiaMoney == null)
+            YXB_BaoJiaEidtMoney bjem = new YXB_BaoJiaEidtMoney();
+            bjem.YXB_BJ_ID = rid;
+            bjem.EidtUser_ID = LoginUser.ID;
+            bjem.EidtTime = DateTime.Now;
+            bjem.EditBJMoney = Convert.ToDecimal(eM);
+            bjem.EditYFMoney = Convert.ToDecimal(eY);
+            var s = YXB_BaoJiaEidtMoneyService.AddEntity(bjem);
+            if (s == null)
             {
-                baojia.BaoJiaMoney = Convert.ToDecimal(eMoney);
-                baojia.BaoJiaYunFei= Convert.ToDecimal(eYunfei);
-                baojia.BaoJiaPerson = LoginUser.ID;
-                baojia.BaoJiaTime = MvcApplication.GetT_time();
-                baojia.ZhuangTai = 1;
-                YXB_BaojiaService.EditEntity(baojia);
+                return false;
             }
             else
             {
-                baojia.EditQianMoney=baojia.BaoJiaMoney;
-                baojia.EditQianYunFei = baojia.BaoJiaYunFei;
-                baojia.UpdataTime= MvcApplication.GetT_time();
-                baojia.UpdataUserID = LoginUser.ID;
-                baojia.BaoJiaMoney = Convert.ToDecimal(eMoney);  
-                baojia.BaoJiaYunFei = Convert.ToDecimal(eYunfei);
-                baojia.ZhuangTai = 1;
-                YXB_BaojiaService.EditEntity(baojia);
+                return true;
             }
-            
-
-            return Json(new {  ret = true }, JsonRequestBehavior.AllowGet);
+        }
+        //提交报价
+        public ActionResult editMoney()
+        {
+            var rID =Convert.ToInt64( Request["resultId"]);
+            var eMoney = Request["PMoney"];
+            var eYunfei = Request["Yunfei"];
+            bool b = createEditMoneyTab(rID,eMoney,eYunfei);
+            if (b) {
+                 var baojia= YXB_BaojiaService.LoadEntities(x => x.id == rID).FirstOrDefault();            
+                 //检查更改金额之前是否存在值
+                 if (baojia.BaoJiaMoney == null)
+                 {
+                     baojia.BaoJiaMoney = Convert.ToDecimal(eMoney);
+                     baojia.BaoJiaYunFei= Convert.ToDecimal(eYunfei);
+                     baojia.BaoJiaPerson = LoginUser.ID;
+                     baojia.BaoJiaTime = MvcApplication.GetT_time();
+                     baojia.ZhuangTai = 1;
+                     baojia.CheckMoney = 0;//未审核
+                    YXB_BaojiaService.EditEntity(baojia);
+                 }
+                 else
+                 {
+                     baojia.EditQianMoney=baojia.BaoJiaMoney;
+                     baojia.EditQianYunFei = baojia.BaoJiaYunFei;
+                     baojia.UpdataTime= MvcApplication.GetT_time();
+                     baojia.UpdataUserID = LoginUser.ID;
+                     baojia.BaoJiaMoney = Convert.ToDecimal(eMoney);  
+                     baojia.BaoJiaYunFei = Convert.ToDecimal(eYunfei);
+                     baojia.ZhuangTai = 1;
+                     baojia.CheckMoney = 0;//未审核
+                    YXB_BaojiaService.EditEntity(baojia);
+                 }
+                 return Json(new { ret = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { ret = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        //审核报价
+        public ActionResult CheckBaoJiaYes()
+        {
+            var bjid = Convert.ToInt64(Request["bjid"]);
+            var ckid = Request["ckid"];
+            var temp = YXB_BaojiaService.LoadEntities(x => x.id == bjid).FirstOrDefault();
+            temp.CheckMoney = 1;//表示审核同意
+            YXB_BaojiaService.EditEntity(temp);
+            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult CheckBaoJiaNo()
+        {
+            var bjid = Convert.ToInt64(Request["bjid"]);
+            var temp = YXB_BaojiaService.LoadEntities(x => x.id == bjid).FirstOrDefault();
+            temp.CheckMoney = 2;//表示审核不同意
+            YXB_BaojiaService.EditEntity(temp);
+            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
         //信息完成处理
         public ActionResult WinChuLi(T_WinBak Twbak)

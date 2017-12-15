@@ -13,7 +13,7 @@ namespace CZBK.ItcastOA.Model.SearchParam
         public string CPname { get; set; }
         public string CPXingHao { get; set; }
         public decimal CPShuLiang { get; set; }
-
+        public short? CheckState { get; set; }
         public DateTime? AddTime { get; set; }
         public int ZhuangTai { get; set; }
         public decimal? BaoJiaMoney { get; set; }
