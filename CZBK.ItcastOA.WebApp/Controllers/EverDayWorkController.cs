@@ -1,4 +1,5 @@
-﻿using CZBK.ItcastOA.Model;
+﻿using CZBK.ItcastOA.BLL;
+using CZBK.ItcastOA.Model;
 using CZBK.ItcastOA.Model.SearchParam;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IScheduleTypeService ScheduleTypeService { get; set; }
         IBLL.IScheduleUserService ScheduleUserService { get; set; }
         IBLL.IUserInfoService UserInfoService { get; set; }
+        IBLL.IBumenInfoSetService BumenInfoSetService { get; set; }
         public ActionResult Index()
         {
             return View();
@@ -62,7 +64,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             ForUser(tempSUser, Luin);
             return Luin;
         }
-        //迭代
+        //迭代下级用户的次级用户
         public void ForUser(IQueryable<ScheduleUser> tsu,List<Uidorname> Luin)
         {
             
@@ -145,6 +147,34 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 return Json(new { rows = tRtmp, total = TotalCount }, JsonRequestBehavior.AllowGet);
             }
             
+        }
+        //获取所有下级部门
+        public List<BuMen> GetAllDownBuMen()
+        {
+            var localID = Convert.ToInt64(LoginUser.ID);
+            var tempSUser = ScheduleUserService.LoadEntities(x => x.UpID == localID).DefaultIfEmpty();
+            List<Uidorname> Luin = new List<Uidorname>();
+            ForUser(tempSUser, Luin);
+            List<BuMen> Luinfo = new List<BuMen>();
+            foreach (var a in Luin)
+            {
+                var z = UserInfoService.LoadEntities(x => x.ID == a.ID).FirstOrDefault();
+                BuMen bm = new BuMen();
+                bm.ID = Convert.ToInt32(z.BuMenID);
+                var y = BumenInfoSetService.LoadEntities(x => x.ID == bm.ID).FirstOrDefault();
+                bm.Name = y.Name;
+                Luinfo.Add(bm);
+            }
+            HashSet<BuMen> hs = new HashSet<BuMen>(Luinfo);
+            Luinfo.Clear();
+            Luinfo.AddRange(hs);
+            return Luinfo;
+        }
+        //获取下级部门名称
+        public ActionResult GetDownBuMenall()
+        {
+            List<BuMen> Luin = GetAllDownBuMen();
+            return Json(Luin, JsonRequestBehavior.AllowGet);
         }
         //获取修改日程行的汉字ID
         public ActionResult getUpdateUserID()
@@ -385,5 +415,11 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public int ID { get; set; }
         public string Url { get; set; }
         public int FirstFileID { get; set; }
+    }
+
+    public class BuMen
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
     }
 }

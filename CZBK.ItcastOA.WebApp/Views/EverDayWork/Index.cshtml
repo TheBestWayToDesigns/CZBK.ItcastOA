@@ -48,6 +48,7 @@
             $("#AddScheduleTypeBtnDIV").css("display", "none");
             $("#AddScheduleBtnDIV").css("display", "none");
             $("#DownUserCombox").css("display", "none");
+            $("#DownBuMenCombox").css("display", "none");
             $("#AddUploadFileDIV").css("display", "none");
             loadData();
 
@@ -58,12 +59,14 @@
                 {
                     $("#AddScheduleBtnDIV").css("display", "none");
                     $("#DownUserCombox").css("display", "none");
+                    $("#DownBuMenCombox").css("display", "none");
                     loadData();
                 }
                 else if (ClickA == "MenuSchedule")
                 {
                     $("#AddScheduleTypeBtnDIV").css("display", "none");
                     $("#DownUserCombox").css("display", "none");
+                    $("#DownBuMenCombox").css("display", "none");
                     loadSchedule();
                 }
                 else if (ClickA == "MenuDownUser") {
@@ -274,7 +277,7 @@
                         }
                     }
                 ]],
-                toolbar: "#DownUserCombox",
+                toolbar: "#DownUserCombox,#DownBuMenCombox",
                 onLoadSuccess: function () {
 
                 }
@@ -689,8 +692,20 @@
                 <a href="#" class="easyui-linkbutton" id="AddScheduleTypeBtn"  iconCls="icon-add" plain="true">添加日程状态</a>               
             </div>
         </div>
-        <!---------------下级用户下拉框-------------------->
+        <!---------------下级部门下拉框-------------------->
+        <div id="DownBuMenCombox" style="padding:5px;height:auto">
+            <div><label>下级部门：</label></div>
+            <div>
+                <input id="DBMInput" class="easyui-combobox" name="DownBuMenName"
+                       url="/EverDayWork/GetDownBuMenall"
+                       valueField="ID"
+                       textField="Name"
+                       panelHeight="auto" style="width:100px" />
+            </div>
+        </div>
+        <!---------------下级部门用户下拉框-------------------->
         <div id="DownUserCombox" style="padding:5px;height:auto">
+            <div><label>下级部门成员：</label></div>
             <div>
                 <input id="DUInput" class="easyui-combobox" name="DownUserName"
                        url="/EverDayWork/GetDownUserall"
