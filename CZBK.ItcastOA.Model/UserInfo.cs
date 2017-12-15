@@ -32,7 +32,6 @@ namespace CZBK.ItcastOA.Model
             this.Departments = new HashSet<Department>();
             this.RoleInfoes = new HashSet<RoleInfo>();
             this.T_ChanPinName = new HashSet<T_ChanPinName>();
-            this.YXB_Baojia = new HashSet<YXB_Baojia>();
             this.T_WinBakFaHuo = new HashSet<T_WinBakFaHuo>();
             this.T_WinBakFaHuo1 = new HashSet<T_WinBakFaHuo>();
             this.Schedules = new HashSet<Schedule>();
@@ -42,6 +41,7 @@ namespace CZBK.ItcastOA.Model
             this.T_JieKuanBill = new HashSet<T_JieKuanBill>();
             this.GongLuBaoXiaoBills = new HashSet<GongLuBaoXiaoBill>();
             this.YXB_BaoJiaEidtMoney = new HashSet<YXB_BaoJiaEidtMoney>();
+            this.YXB_Baojia = new HashSet<YXB_Baojia>();
         }
     
         public int ID { get; set; }
@@ -97,8 +97,6 @@ namespace CZBK.ItcastOA.Model
         [JsonIgnore]
         public virtual ICollection<T_ChanPinName> T_ChanPinName { get; set; }
         [JsonIgnore]
-        public virtual ICollection<YXB_Baojia> YXB_Baojia { get; set; }
-        [JsonIgnore]
         public virtual ICollection<T_WinBakFaHuo> T_WinBakFaHuo { get; set; }
         [JsonIgnore]
         public virtual ICollection<T_WinBakFaHuo> T_WinBakFaHuo1 { get; set; }
@@ -116,5 +114,7 @@ namespace CZBK.ItcastOA.Model
         public virtual ICollection<GongLuBaoXiaoBill> GongLuBaoXiaoBills { get; set; }
         [JsonIgnore]
         public virtual ICollection<YXB_BaoJiaEidtMoney> YXB_BaoJiaEidtMoney { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<YXB_Baojia> YXB_Baojia { get; set; }
     }
 }

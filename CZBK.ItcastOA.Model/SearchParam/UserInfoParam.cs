@@ -26,8 +26,8 @@ namespace CZBK.ItcastOA.Model.SearchParam
         public string addess { get; set; }
         public int? Person { get; set; }
         public int? KHname { get; set; }
-        public int? CPname { get; set; }
-        public int? CPxh { get; set; }
+        public string CPname { get; set; }
+        public string CPxh { get; set; }
         public int? Jhname { get; set; }
         public int? adduser { get; set; }
         public int? SHuser { get; set; }

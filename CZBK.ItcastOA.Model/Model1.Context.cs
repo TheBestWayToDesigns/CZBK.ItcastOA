@@ -44,7 +44,6 @@ namespace CZBK.ItcastOA.Model
         public DbSet<T_WinBak> T_WinBak { get; set; }
         public DbSet<UserInfo> UserInfoes { get; set; }
         public DbSet<T_ChanPinName> T_ChanPinName { get; set; }
-        public DbSet<YXB_Baojia> YXB_Baojia { get; set; }
         public DbSet<T_BaoJiaToP> T_BaoJiaToP { get; set; }
         public DbSet<T_BoolItem> T_BoolItem { get; set; }
         public DbSet<T_WinBakFaHuo> T_WinBakFaHuo { get; set; }
@@ -59,6 +58,7 @@ namespace CZBK.ItcastOA.Model
         public DbSet<CarNumber> CarNumbers { get; set; }
         public DbSet<GongLuBaoXiaoBill> GongLuBaoXiaoBills { get; set; }
         public DbSet<YXB_BaoJiaEidtMoney> YXB_BaoJiaEidtMoney { get; set; }
+        public DbSet<YXB_Baojia> YXB_Baojia { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

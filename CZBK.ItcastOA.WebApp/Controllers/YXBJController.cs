@@ -1,5 +1,7 @@
 ﻿using CZBK.ItcastOA.Model;
 using CZBK.ItcastOA.Model.Enum;
+using CZBK.ItcastOA.TModel;
+using CZBK.ItcastOA.TModel.ClassDal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -222,8 +224,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             bj.AddTime = MvcApplication.GetT_time();
             bj.DelFlag = delFlag;
             bj.ZhuangTai = 0;
-            bj.CPname =Convert.ToInt64( Request["CPname"]);
-            bj.CPXingHao = Convert.ToInt64(Request["CPXingHao"]);
+            //bj.CPname =Convert.ToInt64( Request["CPname"]);
+            //bj.CPXingHao = Convert.ToInt64(Request["CPXingHao"]);
+            bj.CPname = Request["CPname"];
+            bj.CPXingHao = Request["CPXingHao"];
             bj.CPShuLiang =Convert.ToDecimal(Request["CPShuLiang"]);
             bj.BaoJiaTop_id = Convert.ToInt64(Request["editID"]);
             bj.WIN = 0;
@@ -242,14 +246,14 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                        select new
                        {
                            ID = a.id,
-                           CPname = a.T_ChanPinName.MyTexts,
-                           CPXingHao = a.T_ChanPinName1.MyTexts,
+                           CPname = a.CPname,
+                           CPXingHao = a.CPXingHao,
                            CPShuLiang = a.CPShuLiang,
                            addTime = a.AddTime,
                            CPzt=a.ZhuangTai,
                            Money=a.BaoJiaMoney,
                            Remark=a.Remark,
-                           CPdanjiu= a.T_ChanPinName11.MyTexts
+                           CPdanjiu= a.T_ChanPinName.MyTexts,
                        };
             return Json(new { rows = temp, ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
@@ -263,15 +267,15 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                        select new
                        {
                            ID = a.id,
-                           CPname = a.T_ChanPinName.MyTexts,
-                           CPXingHao = a.T_ChanPinName1.MyTexts,
+                           CPname = a.CPname,
+                           CPXingHao = a.CPXingHao,
                            CPShuLiang = a.CPShuLiang,
                            addTime = a.AddTime,
                            CPzt = a.ZhuangTai,
                            Money =a.WIN==1?a.WinMoney: a.BaoJiaMoney,
                            YunFei=a.WIN==1?a.WinYunFei: a.BaoJiaYunFei,
                            sumMM=(a.WIN == 1 ? a.WinMoney : a.BaoJiaMoney)+(a.WIN == 1 ? a.WinYunFei : a.BaoJiaYunFei),
-                           Cpdengji= a.T_ChanPinName11.MyTexts,
+                           Cpdengji= a.T_ChanPinName.MyTexts,
                            Remark=a.Remark
                        };
             return Json(new { rows = temp, ret = "ok" }, JsonRequestBehavior.AllowGet);
@@ -354,24 +358,51 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         }
         //读取产品名称与型号列表
         public ActionResult GetChanPinList() {
-            
-            var tmc = T_ChanPinNameService.LoadEntities(x=>x.Del==0);
-            var tempName = from a in tmc
-                           where a.MyColums == "CPname"
-                           select new
-                           {
-                               ID=a.ID,
-                               MyText=a.MyTexts,
-                               MyColums=a.MyColums
-                           };
-            var tempXingH = from a in tmc
-                           where a.MyColums == "CPxinghao"
-                            select new
-                           {
-                               ID = a.ID,
-                               MyText = a.MyTexts,
-                               MyColums = a.MyColums
-                           };
+
+           
+            //isSale==1是产品 0是运费
+            TModel.DAL.AA_InventoryDal Tda = new TModel.DAL.AA_InventoryDal();
+            var tempCp = Tda.LoadEntities(x => x.idwarehouse == 5 && x.isSale == 1).DefaultIfEmpty();
+
+            List<Inventory> Liy = new List<Inventory>();
+            foreach (var a in tempCp)
+            {
+                Inventory ity = new Inventory();
+                ity.ID = a.id;
+                ity.code = a.code;
+                ity.Name = a.name;
+                ity.XingH = a.specification;
+                ity.shorthand = a.shorthand;
+                Liy.Add(ity);
+            }
+            var DitName = Liy.GroupBy(x => x.Name).Where(g => g.Count() > 1).ToList();
+            List<MoedName> lmn = new List<MoedName>();
+            foreach (var aa in DitName)
+            {
+                MoedName mn = new MoedName();
+                mn.MyColums = aa.Key;
+                mn.MyText = aa.Key;
+                
+            }
+            var tempName = lmn;
+           
+            //var tempName = from a in tmc
+            //               where a.MyColums == "CPname"
+            //               select new
+            //               {
+            //                   ID=a.ID,
+            //                   MyText=a.MyTexts,
+            //                   MyColums=a.MyColums
+            //               };
+            //var tempXingH = from a in tmc
+            //               where a.MyColums == "CPxinghao"
+            //                select new
+            //               {
+            //                   ID = a.ID,
+            //                   MyText = a.MyTexts,
+            //                   MyColums = a.MyColums
+            //               };
+            var tmc = T_ChanPinNameService.LoadEntities(x => x.Del == 0);
             var tempDengji = from a in tmc
                             where a.MyColums == "CPDengJi"
                             select new
@@ -380,10 +411,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                 MyText = a.MyTexts,
                                 MyColums = a.MyColums
                             };
-            tempName = tempName.OrderBy(p => p.MyText);
-            tempXingH = tempXingH.OrderBy(p => p.MyText);
+           
             tempDengji = tempDengji.OrderBy(p => p.MyText);
-            return Json(new { tempName = tempName, tempXingH= tempXingH, tempDengji= tempDengji, ret = "ok" }, JsonRequestBehavior.AllowGet);
+            return Json(new { tempName = tempName, tempXingH= "", tempDengji= tempDengji, ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
         //获取含税列表
         public ActionResult GetHashui() {
@@ -413,4 +443,5 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public string HanSui { get; set; }
         public string MyText { get; set; }
     }
+    
 }

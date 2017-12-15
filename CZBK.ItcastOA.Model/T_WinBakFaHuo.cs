@@ -26,8 +26,8 @@ namespace CZBK.ItcastOA.Model
         public long BaoJia_ID { get; set; }
         public Nullable<decimal> FahuoInt { get; set; }
     
-        public virtual YXB_Baojia YXB_Baojia { get; set; }
         public virtual UserInfo UserInfo { get; set; }
         public virtual UserInfo UserInfo1 { get; set; }
+        public virtual YXB_Baojia YXB_Baojia { get; set; }
     }
 }

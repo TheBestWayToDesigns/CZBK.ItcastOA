@@ -1,0 +1,3052 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{45B7CABF-B174-4FCA-B77E-E87B5F0FBF29}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CZBK.ItcastOA.TModel</RootNamespace>
+    <AssemblyName>CZBK.ItcastOA.TModel</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.2.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.2.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.2.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.2.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.2.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EntityDeploy Include="TModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>TModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="TModel.edmx.diagram">
+      <DependentUpon>TModel.edmx</DependentUpon>
+    </Content>
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DAL\Dal.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Dal.cs</LastGenOutput>
+    </Content>
+    <Content Include="TModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TModel.edmx</DependentUpon>
+      <LastGenOutput>TModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="TModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TModel.edmx</DependentUpon>
+      <LastGenOutput>TModel.cs</LastGenOutput>
+    </Content>
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AA_Account.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_AccountAssociation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_AccountType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Account_AuxProperty.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Account_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_AssetClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_AssetClass_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_AssetProp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_BankAccount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_BarCodeInformation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_BarCodeInformationClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_BarCodeSectionInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_BarCodeSolution.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_BarCodeTermAnalysisInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_BizUsage.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_BOM.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_BOMChild.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_BomRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_BusiType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_CancelType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_CashFlowItem.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_CashFlowItemClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_CashFlowItemClass_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_CashItemAccountDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_CommonSummary.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_CommonSummaryClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_CommonSummaryClass_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Currency.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_CustomerInventoryDiscount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_CustomerInventoryPrice.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_CustomerInventoryPriceTrace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Department.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DepartmentInventoryPrice.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DepartmentInventoryPriceTrace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DeprMethod.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="aa_DimensionSet.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_District.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DocAccountDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DocType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DocumentsUsage.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_Member.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_MemberBatchAdd.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_MemberChangeCard.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_MemberIntegralDetails.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_MemberRetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_MemberRetail_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_MemberRetail_Payment.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_MemberStorageDetails.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_MemberStorageUsed.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_MemberType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_MemberType_Discount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_MemberType_Integral.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_MemberType_IntegralDouble.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_MemberType_IntegralForStorageRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_MemberType_StorageRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_MemberUpgradeRecord.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_Store.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_Store_CashShield.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_Store_POS.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_Store_Round.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_Store_SettleStyle.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_DR_Store_Shift.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_EcodeSeting.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_EnumFreeItemsAvailable.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ExchangeRate.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ExpenseItem.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_expenseitem_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_FixedAssetsBarCodeSectionInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_FixedAssetsBarCodeSolution.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_FreeItemsEnum.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_HandleReason.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_HandleReason_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_IncDecWay.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_IncDecWay_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Income.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_income_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Inventory.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_InventoryBarCode.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_InventoryClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_InventoryCountLevelPrice.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_InventoryLocation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_InventoryMutiCode.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_InventoryPrice.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_InventoryPriceForNumeric.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_InventoryPriceTrace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_InventoryToDstCode.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_InventoryUnitPrice.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Inventory_MultiUnit.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_MarketingOrgan.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_OutSourcedPriceSource.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_OutsourcedVendorInventoryPrice.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_OutsourcedVendorInventoryPriceTrace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_OutsourcedVendorPriceStrategy.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentAccount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentAssetClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentCashFlowItemClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentCommonSummaryClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentDepartment.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentDistrict.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentExpenseItem.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentHandleReason.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentIncDecWay.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentIncome.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentInventoryClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentInventoryLocation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentMarketingOrgan.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentPartnerClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentPosition.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentProjectClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentRDStyle.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentUserDefineArticleDTO_0001.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ParentUseStatus.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Partner.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_PartnerAddress.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_PartnerClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="aa_partnerclassprice.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_PartnerClassPriceTrace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_PartnerInventory.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Person.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Position.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Position_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_PriceStrategy.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_PriceTrace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ProductProcess.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Project.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_ProjectClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_PurchasePriceSource.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_RDStyle.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Routing.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Routing_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_SalePriceSource.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_SettleStyle.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_StoreInventoryPrice.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Suite.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_SuiteChild.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_TicketType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Unit.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_UnitGroup.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_UseStatus.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_UseStatus_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_VendorInventoryPrice.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_VendorInventoryPriceDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_VendorInventoryPriceTrace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AA_Warehouse.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_Asset.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_Attachment.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_CheckDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_CheckRangeDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_CheckUseDept.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_CheckVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_DeprSummary.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_HandleVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_HandleVoucherChangeType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_HandleVoucherDept.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_HandleVoucher_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_Maintain.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_OldCheckUseDept.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_SplitDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_SplitVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AM_UseDept.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Api_RequestQuene.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_Cancel.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_Cancel_FirstDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_Cancel_FirstDetail_Devide1.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_Cancel_FirstDetail_Devide2.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_Cancel_SecondDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_Cancel_SecondDetail_Devide1.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_Cancel_SecondDetail_Devide2.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_Detail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_DetailSecond.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_ExchangeAdjust.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_ExchangeAdjust_ApDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_ExchangeAdjust_ArDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_OriginalAmount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_OriginalAmount_ApDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_OriginalAmount_ArDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_ReceivePayment.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_ReceivePayment_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_ReceivePayment_MultiPayment.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_ReceivePayment_MultiSettle.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_StrikeBalance.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_StrikeBalance_FirstDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_StrikeBalance_RetailSettle.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ARAP_StrikeBalance_SecondDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2B_BankAccountUploadLog.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2B_CurrentStockTs.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2B_CurrentStock_Tmp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2B_DispatchInformation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2B_DispatchInformationHistory.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2B_HoldFunctionAuth.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2B_InventoryClassUploadLog.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2B_InventoryUploadLog.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2B_MsgRecipient.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2B_PartnerClassUploadLog.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2B_PartnerUploadLog.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2B_Sku.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2B_WarehouseUploadLog.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BAP_DelLogTable.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BAP_temp_old_new_id.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassDal\Inventory.cs" />
+    <Compile Include="CS_BankCashAccessVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_BankCheckAccount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_BankCheckAccountVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_CashAccount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_CashAccountDaily.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_CashAccountPeriodBeginning.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_CashAccountPeriodBeginning_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_CashCheckVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_CashCheckVoucherDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_Cheque.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_ChequeBook.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_DataNoteRelate.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_DataProject.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_DefPrinterParam.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_ExpenseVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_ExpenseVoucher_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_ExpenseVoucher_MultiPayment.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_ExpenseVoucher_MultiSettle.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_IncomeVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_IncomeVoucher_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_IncomeVoucher_MultiPayment.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_IncomeVoucher_MultiSettle.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_NNRelate.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_NoteBase.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_NoteCommonInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_NoteImage.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_NoteLevel.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_NotePartProperty.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_NotePrintFilter.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_NotePrintInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_NotePrintList.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_NotePrintOrder.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_OtherPaymentVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_OtherPaymentVoucher_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_OtherReceiveVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_OtherReceiveVoucher_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_PeriodBeginNoArrival.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_PeriodBeginNoArrival_Bank.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_PeriodBeginNoArrival_Daily.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_PrinterParam.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_PrintJobInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CS_PrintJobList.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\AA_InventoryDal.cs" />
+    <Compile Include="DAL\BaseDal.cs" />
+    <Compile Include="DAL\Dal.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Dal.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\DbContextFactory.cs" />
+    <Compile Include="DI_DailyCurrentStock.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_Distribution.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_DistributionSourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_Distribution_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_ReplenishmentPriorityLevelLevel.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RRABulidPurchaseOrder.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RRAGeneratePurchaseOrderRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RRAInventory.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RRAOption.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RRAResult.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RRAResultSum.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RRARuleObj.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RRARuleSet_Customer.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RRARuleSet_Store.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RRASourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RRAStoreCustormer.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RunShop.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RunShopLine.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RunShopLine_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RunShopMap.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RunShopMapMark.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RunShopNews.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RunShopRecord.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_RunShopTarget.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_SelectInventoryByRRA.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_StockRequest.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_StockRequest_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_StockSalesReport.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_StockSalesReport_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_StoreDailyCurrentStock.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DI_VoucherSelectResult.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="doc_metadata.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dtproperties.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_AccInformation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_AccountClear.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_AccountClearPlugin.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_AppUserAssociation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_attachmentinfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_AuthControl.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_AuthorizedApp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_AuxiliaryAccounting.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_BusOperation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_BusOperationMain.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_chartoption.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_CloudUserApp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_ColumnSet.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_ColumnSetSolution.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_ColumnSetSolution_User.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_ColumnSet_User.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_designDTOLog.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_Designtable.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_DTO.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_DTOProperty.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_DTORelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_EditTable.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_EditTableColumn.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_EditTableColumnGroup.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_Enum.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_EnumItem.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_EnumItem_bak.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_EnumItem_temp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_Enum_bak.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_externalaccountbinding.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_FieldAuth.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_FinanceDataHead.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_FreeItems.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_FunctionAuth.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_GridParams.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_history.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_HoldFieldAuth.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_HoldFunctionAuth.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_HoldRowAuth.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_idesktopappitem.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_idesktopshortcut.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_idesktopsolution.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_idesktopsolutionitem.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_idesktopsystemshortcut.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_InitNavigation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_LevelBaseInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_MBApps.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_MBColumnSet.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_MBColumnSetSolution.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_MBGroup.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_MBRefSet.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_MBTemplateTree.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_MBVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_MBVoucherControls.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_Menu.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_MenuDefaultOption.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_MenuIndividuation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_MenuTree.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_MenuTreeRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_MenuUserEverUsed.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_MessageAddress.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_MessageAttachment.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_MessageBox.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_MessageRuleInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_MessageRuleTypeInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_MessageSettings.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_MessageTemplate.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_MutexContent.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_OperationLog.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_OperationLogBakPara.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_OperationLogFileName.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_Package.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_PortalMenu.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_PortalMessage.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_PortalMessageTodoSetting.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_PortalMessageType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_PortalSkin.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_PortalSystem.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_printbussetting.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_printbussetting_global.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_PrintCountSet.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_PrintDataColumn.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_PrintDataField.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_PrintDataTable.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_PrintDesignField.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_printdir.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_PrintOption.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_PrintSetting.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_printtemplate.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_RefSet.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_RefSet_ExtControls.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_ReportCarriedItem.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_ReportCommonData.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_ReportCommonSet.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_ReportCommonSetRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_reportfield.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_ReportFilterItem.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_ReportMatrixColumnSort.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_ReportMatrixItem.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_ReportPageSet.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_ReportRelationEntity.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_ReportSection.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_reportsolution.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_reporttablecol.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_reporttemplate.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_ReportUserCarriedItem.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_ReportUserFilterItem.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_RowAuth.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_RowAuthItem.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_RowAuthMapping.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_SchemaDoc.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_SchemaDoc_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_SearchInfo_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_SearchItemCtrlInfo_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_SearchItem_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_SearchPlanInfo_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_SearchPlanItemGroupInfo_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_SearchPlanItem_Ext.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_SetupApp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_syncfileinfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_syncfileinfo122.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_Template.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_TemplateGroup.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_UFMessage.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_User.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_UserDefineArticleColumn.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_userdefinearticledict.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_UserDefineArticleDTO_0001.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_UserDefineArticleDTO_0002.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_UserDefineItemRefSet.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_UserDefineItems.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_UserGroupRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_UserImageInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_ViewModule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_ViewParameter.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_ViewSet.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_ViewSetItem.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_Voucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_VoucherControls.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_VoucherDesignTree.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_VoucherDraft.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_VoucherModule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_VoucherQueryConfig.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_VoucherQueryConfigAuthField.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_VoucherQueryConfigQueryField.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EAP_voucherQueryConifgExpAlias.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_VoucherTab.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_VoucherTable.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_VoucherTableColumn.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_VoucherTableColumnGroup.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_VoucherWebControls.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_wfauditlog.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_wfinprocess.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_wfnode.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_wfperformer.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_wfroute.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_wfsolution.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="eap_wftask.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_WorkPlanFormSettingSolution.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_WorkPlanForm_Default.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Eap_WorkPlanForm_User.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_AccountAuxPeriodBeginDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_AccountPeriodBegin.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_AccountPeriodBeginDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_AuxiliaryInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_CashFlowInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_CashFlowPeriodBegin.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_Doc.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_Entry.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_ExAuxAcc.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_ExchangeLossProfitTransform.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_FuncDefinition.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_Journal.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_KeyWord.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_MultiColumnSet.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_MultiColumnSetDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_PeriodLossProfitTransform.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_PeriodLossProfitTransformDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_ReferenceAuxiliaryInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_ReferenceCashFlowInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_ReferenceDoc.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_ReferenceDocClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_ReferenceEntry.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Gl_SalesCostTransForm.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_SalesCostTransform_Details.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_SrcVoucherInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_SummarySet.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_Userdefinedtransform.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_Userdefinedtransformdetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_WriteOffHistory.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GL_WriteOffJournal.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InvCostAnalysisRpt20.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InvCostAnalysisRpt28.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MB_EntInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MB_SyncPartnerAddress.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ME_IntegralAdjust.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ME_IntegralClear.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ME_IntegralForGift.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ME_IntegralForGiftSetting.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ME_IntegralForGift_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ME_IntegralForStorage.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ME_IntegralForStorage_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ME_IntegralSteadCashSetting.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ME_IntegralSteadCashSetting_MemberType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ME_MemberStorage.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ME_MemberStorageDetail_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ME_MemberStorage_MutiSettle.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ME_MemberUpgrade.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ME_MemberUpgradeSetting.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_Available.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_BomRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CostAllocationDirectMaterialSumOrder.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CostAllocationDirectMaterialSumOrder_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CostAllocationDirectMaterialSumOrder_b_tmp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CostAllocationDirectMaterialSumOrder_s.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CostAllocationDirectMaterialSumOrder_s_tmp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CostAllocationDirectMaterialSumOrder_tmp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CostAllocationOrder.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CostAllocationOrder_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CostAllocationOrder_b_tmp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CostAllocationOrder_src.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CostAllocationOrder_src_tmp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CostAllocationOrder_tmp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_DeductAq.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_DeductAqSum.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_IntendSaleOrder.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_IntendSaleOrder_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_InventoryLine.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_ManufactureOrder.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_ManufactureOrder_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_ManufactureOrder_Material.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_ManufactureOrder_SourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_ManufactureOrder_Trace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_MRPPRA_SourceVoucherDetails.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_MRPPRA_StopWatch.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_OperationSku.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_FormComputerSetting.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_GeneratePurchaseOrderRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_GeneratePurchaseOrderSetting.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_GeneratePurchaseRequisitionRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_GeneratePurchaseRequisitionSetting.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_PraComputeVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_PraComputeVoucher_Temp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_PraOption.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_PraResult.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_PraWarehouse.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_PurchaseSuggestion.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_PurchaseSuggestionSourceTrace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_PurchaseSuggestion_Temp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_PurSuggestion2PurOrder.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_PurSuggestion2PurRequisition.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_ResultSourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_ResultSourceTrace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_SourceType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_SuggestionSourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PRA_Voucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_ResultTemp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_SKU.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_Step.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OM_OutSourceExpenseVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OM_OutSourceExpenseVoucher_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OM_OutSourceExpenseVoucher_SourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OM_OutSourceExpenseVoucher_Trace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OM_OutSourceOrder.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OM_OutSourceOrder_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OM_OutSourceOrder_Material.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OM_OutSourceOrder_SourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OM_OutSourceOrder_Trace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_AA_Account.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_AA_AccountType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_AA_AssetClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_AA_AssetProp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_AA_CashFlowItem.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_AA_CashFlowItemClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_AA_DeprMethod.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_FI_SM_TransferredCode.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_GL_ReferenceDoc.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_GL_ReferenceDocClass.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_GL_ReferenceEntry.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PR_SalePromotion_OrderCalled.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PR_SalesPromotion.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PR_SalesPromotion_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PR_SalesPromotion_Customer.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PR_SalesPromotion_LimitSale.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PR_SalesPromotion_MemberType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PR_SalesPromotion_Mult.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PR_SalesPromotion_Store.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PR_SalesPromotion_Subs.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PU_PurchaseArrival.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PU_PurchaseArrival_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PU_PurchaseArrival_b_InvLocation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Pu_PurchaseArrival_MultiPayment.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PU_PurchaseArrival_MultiSettle.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PU_PurchaseArrival_SourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Pu_PurchaseArrival_Trace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PU_PurchaseInvoice.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PU_PurchaseInvoice_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Pu_PurchaseInvoice_MultiPayment.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PU_PurchaseInvoice_MultiSettle.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PU_PurchaseInvoice_SourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Pu_PurchaseInvoice_Trace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PU_PurchaseOrder.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PU_PurchaseOrder_ArnestMoney.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PU_PurchaseOrder_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PU_PurchaseOrder_SourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Pu_PurchaseOrder_Trace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Pu_PurchaseRequisition.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Pu_PurchaseRequisition_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Pu_PurchaseRequisition_SourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Pu_PurchaseRequisition_Trace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_DailyDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_DailyDetail_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_ReceiveDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_ReceiveDetail_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_Retail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_RetailDetail_Merge.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_RetailMemberStorageUsedkey.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_RetailSettle.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_RetailSettle_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_RetailSettle_MutiSettle.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_RetailSettle_PreReceive.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_Retail_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_Retail_bak.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_Retail_b_bak.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_Retail_Payment.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_Retail_Payment_bak.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_Retail_Storage.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_Retail_Storage_bak.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_ShiftVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RE_ShiftVoucher_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RT_ReportCenter.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_BusinessOverviewRptConfig.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_CreditOccupancy.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_CreditOccupancyHistory.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_InventoryLocation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleDelivery.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleDeliveryPreReceive.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleDeliverySettlement.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleDeliverySourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleDelivery_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleExpenseAllocation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleExpenseAllocationDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleExpenseAllocationExpenseDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleInvoice.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleInvoicePreReceive.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleInvoiceSettlement.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleInvoiceSourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleInvoice_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleOrder.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleOrderSubscription.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleOrder_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleOrder_SourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleQuotation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_SaleQuotation_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SCM_PrintMemory.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_CodingPrefixion.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_CodingRuleRelationWithPrefixion.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sm_config.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_DocBreakNumberCode.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_DocCodeUnique.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_DocDeleteLog.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_DocSerialNumber.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_FC_AccountExtendRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_FC_AccountExtendRuleColumn.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_FC_AccountExtractCompositeColumn.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_FC_AccountRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sm_fc_bookformatrelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_FC_DocSourceVoucherCodtion.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_FC_DocSourceVoucherPropertyFilter.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_FC_DocSourceVoucherType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_FC_DocSummaryDetailRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_FC_DocSummaryRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_FC_History_TransactionDoc.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_FC_History_TransactionEntry.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_FC_History_TransactionEntrySourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_FC_MergeOption.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_FC_MergeRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_FC_QryVoucherURL.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_IndMessageRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_Information.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_MessageAssociateInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_MessageReceivers.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sm_messageruleuser.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_MessageTemplate.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sm_optexpression.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_Period.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_PrintSolution.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_PrintSolutionType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_ReportManualSendRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_SearchMessageRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_SendTimeRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_SMSTemplate.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_TransferredCode.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_Upgrade.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_UsedRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_UserDefineOutColumnSetSolution.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_VoucherMessageRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sm_vouchermessagesendtime.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_VoucherType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_VoucherTypeToBusinessType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SM_WarningMessageRule.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_AdjustCostVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_AdjustCostVoucher_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_AgeAnalysisRptSet.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_AssemDetachVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_AssemDetachVoucher_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_AssistantDataBook.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_AssistantDataOutOtherAmount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_AssistantDataRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_AssistantDataShareOtherAmount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_CheckVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_CheckVoucherSelectSetFilter.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_CheckVoucherSelectSetting.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_CheckVoucher_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="st_checkvoucher_b_relation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_CurrentStock.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_LocationAccount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_LocationDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="st_marketingorganinvprice.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_MultiLocationDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_PartialCheckVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_PartialCheckVoucherDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_PositionAdjustVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_PositionAdjustVoucher_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_PositionInit.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_PositionInitDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_ProcedureLog.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_ProductionCostDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_PurchaseSettleVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_PurchaseSettleVoucher_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_RDRecord.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_RDRecordSourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_RDRecord_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_RDRecord_Trace.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_RedBlueBackVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_RedBlueBackVoucher_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_Replenishment.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="st_safestocksetting.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_ShapeVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_ShapeVoucher_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_ShareExpenseVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_ShareExpenseVoucherExpenseDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_ShareExpenseVoucherRdDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_SubsidiaryBook.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_SubTemp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_SummaryBook.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_ToValuation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_TransSourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_TransVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_TransVoucher_b.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_TranVoucherRecord.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ST_WarehouseLocationLock.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveAccountSumRpt_18f12a29_f262_d009_c3a9_60fc00c6ea21865_Grp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveAccountSumRpt_18f12a29_f262_d009_c3a9_60fc00c6ea21865_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveAccountSumRpt_44bff7f8_b0d3_7969_fc0c_bdb95fa6bb99796_Grp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveAccountSumRpt_44bff7f8_b0d3_7969_fc0c_bdb95fa6bb99796_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveAccountSumRpt_5a987305_41ab_c698_1e14_8239f6e52544865_Grp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveAccountSumRpt_5a987305_41ab_c698_1e14_8239f6e52544865_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveAccountSumRpt_b8728925_cc45_1383_7483_caf0c93eae6b796_Grp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveAccountSumRpt_b8728925_cc45_1383_7483_caf0c93eae6b796_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveVoucherDetailRpt_2ac84caa_3716_b4bf_e95d_8b932f568de6751.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveVoucherDetailRpt_2ac84caa_3716_b4bf_e95d_8b932f568de6751_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveVoucherDetailRpt_2f4622f4_075e_234c_e6f6_bd8e7afa28ce751.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveVoucherDetailRpt_2f4622f4_075e_234c_e6f6_bd8e7afa28ce751_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveVoucherDetailRpt_92275a20_72cc_385b_9a5f_0d3fbcc04b73751.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveVoucherDetailRpt_92275a20_72cc_385b_9a5f_0d3fbcc04b73751_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveVoucherDetailRpt_e3e4bc27_ab18_d68f_f938_dff736cce1ff751.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveVoucherDetailRpt_e3e4bc27_ab18_d68f_f938_dff736cce1ff751_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveVoucherDetailRpt_ee251bf5_7423_da21_5776_94cdd890545c828.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveVoucherDetailRpt_ee251bf5_7423_da21_5776_94cdd890545c828_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveVoucherSumRpt_43100922_93fe_ac13_d1ee_908bde6eea44758_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ARAP_ReceiveVoucherSumRpt_57f57bce_c970_baad_f9e2_15a0526ecdc0758_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxBalanceSumRpt_6bea159d_e130_e37e_dceb_0236d77e05cb580.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxBalanceSumRpt_6bea159d_e130_e37e_dceb_0236d77e05cb580_Filter.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxBalanceSumRpt_6bea159d_e130_e37e_dceb_0236d77e05cb580_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxBalanceSumRpt_db758e5d_1d24_976e_e267_8275ce0bd1f41078.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxBalanceSumRpt_db758e5d_1d24_976e_e267_8275ce0bd1f41078_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxBalanceSumRpt_efc466c1_2789_8ead_f4c5_8fde7b008725580.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxBalanceSumRpt_efc466c1_2789_8ead_f4c5_8fde7b008725580_Filter.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxBalanceSumRpt_efc466c1_2789_8ead_f4c5_8fde7b008725580_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxBalanceSumRpt_efc466c1_2789_8ead_f4c5_8fde7b008725580_Print.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxBalanceSumRpt_efc466c1_2789_8ead_f4c5_8fde7b008725580_Print_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxGLDetailRpt_a2a81eee_9c09_f111_2466_0ccdfd9eba07996.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxGLDetailRpt_a2a81eee_9c09_f111_2466_0ccdfd9eba07996_Filter.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxGLDetailRpt_a2a81eee_9c09_f111_2466_0ccdfd9eba07996_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxGLDetailRpt_b03c5bcc_2359_c736_79b6_e2226fb11d6f664.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxGLDetailRpt_b03c5bcc_2359_c736_79b6_e2226fb11d6f664_Filter.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_AuxGLDetailRpt_b03c5bcc_2359_c736_79b6_e2226fb11d6f664_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_BalanceSumRpt_c29b99ac_3b96_1eb8_c722_b604fde0ed0d1008.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_BalanceSumRpt_c29b99ac_3b96_1eb8_c722_b604fde0ed0d1008_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_GLDetailRpt_43d71038_1605_776d_29cb_1efa009e03b8643.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_GLDetailRpt_43d71038_1605_776d_29cb_1efa009e03b8643_Filter.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_GL_GLDetailRpt_43d71038_1605_776d_29cb_1efa009e03b8643_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_PU_PurchaseArrivalDetailRpt_d555d3e2_0e3d_ce75_b67d_2c3ce9f10199706.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_PU_PurchaseArrivalDetailRpt_d555d3e2_0e3d_ce75_b67d_2c3ce9f10199706_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleDeliveryDetailRpt_61fbb602_b498_f117_9834_12d3919dce1d864.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleDeliveryDetailRpt_61fbb602_b498_f117_9834_12d3919dce1d864_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleDeliveryDetailRpt_6f9ee051_cfe9_08ba_46a4_baa7d02a9a17680.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleDeliveryDetailRpt_6f9ee051_cfe9_08ba_46a4_baa7d02a9a17680_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleDeliveryDetailRpt_d1275148_8ffe_928e_ac72_50bd38ab39af864.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleDeliveryDetailRpt_d1275148_8ffe_928e_ac72_50bd38ab39af864_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_25c34104_aa64_006e_199c_2e2d4e2455e4721.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_25c34104_aa64_006e_199c_2e2d4e2455e4721_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_40325efa_cd8e_9284_5aaf_35a801221b96721.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_40325efa_cd8e_9284_5aaf_35a801221b96721_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_505afee7_282a_2f75_ed84_104394c21ed4742.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_505afee7_282a_2f75_ed84_104394c21ed4742_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_6dbf31ca_d99b_83c2_03d4_c10777489d16721.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_6dbf31ca_d99b_83c2_03d4_c10777489d16721_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_7612aea4_e65d_dde5_4578_3dc9f190543b721.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_7612aea4_e65d_dde5_4578_3dc9f190543b721_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_8469f6ef_0423_4fdf_b6f6_3a908a0e65d5742.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_8469f6ef_0423_4fdf_b6f6_3a908a0e65d5742_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_af8f3230_35e5_376e_c6dc_c865c8ad6050721.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_af8f3230_35e5_376e_c6dc_c865c8ad6050721_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_b2fb3667_d94b_7ad1_ae48_24413b061fb7721.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_b2fb3667_d94b_7ad1_ae48_24413b061fb7721_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_c926d5f2_62ca_93fa_c83e_a3085b46cf23721.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_c926d5f2_62ca_93fa_c83e_a3085b46cf23721_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_cf3c8334_448b_da6a_a354_e6baef7571b1742.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_cf3c8334_448b_da6a_a354_e6baef7571b1742_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_e92b9974_6bca_82d1_27f2_474995bcf1fc721.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_e92b9974_6bca_82d1_27f2_474995bcf1fc721_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_edf48b5f_903d_b25f_4a0c_d98f761d56c5721.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_edf48b5f_903d_b25f_4a0c_d98f761d56c5721_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_f124e35b_7989_d7d7_bb31_7157a6675025721.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_SA_SaleOrderDetailRpt_f124e35b_7989_d7d7_bb31_7157a6675025721_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_CurrentStockRpt_2c2753f8_acef_0ab5_9d37_c37af8cebc4d1105.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_CurrentStockRpt_2c2753f8_acef_0ab5_9d37_c37af8cebc4d1105_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_0595e97b_2344_8a4d_683e_4231c7a208a2649.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_0595e97b_2344_8a4d_683e_4231c7a208a2649_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_07e21b8d_1b69_3d4b_ec85_0b64e6f4da7b649.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_07e21b8d_1b69_3d4b_ec85_0b64e6f4da7b649_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_2a2dbc20_3d12_78b3_24fc_f8b4ff6c1c65901.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_2a2dbc20_3d12_78b3_24fc_f8b4ff6c1c65901_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_2bfc79ca_10b7_c9ab_cc15_3927ca6caf981132.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_2bfc79ca_10b7_c9ab_cc15_3927ca6caf981132_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_3ae1165e_9243_92be_3dff_ee4d92e923581132.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_3ae1165e_9243_92be_3dff_ee4d92e923581132_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_4b8ff30d_6d1e_76e5_d03b_1d050611e505649.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_4b8ff30d_6d1e_76e5_d03b_1d050611e505649_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_5d26542f_df3a_d35b_63b0_123e6fcb20c81132.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_5d26542f_df3a_d35b_63b0_123e6fcb20c81132_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_8f881230_0034_bca0_13bf_c39d1648328a609.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_8f881230_0034_bca0_13bf_c39d1648328a609_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_9cf1704c_e6ec_79d7_f8a6_097954e49bcf901.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_9cf1704c_e6ec_79d7_f8a6_097954e49bcf901_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_aba1dcab_1e0e_3b51_56d4_f67ced3b61c31132.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_aba1dcab_1e0e_3b51_56d4_f67ced3b61c31132_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_c3830316_115c_e84b_c716_4b0c4ad576271132.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_c3830316_115c_e84b_c716_4b0c4ad576271132_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_d991298f_a14b_3d97_42ec_96535d4e86c6901.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchDetailRpt_d991298f_a14b_3d97_42ec_96535d4e86c6901_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchSumRpt_0671e178_65d7_09aa_6226_067375c092fd1131_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchSumRpt_1289caba_e2b1_6607_8d47_48e205eaafe31129.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchSumRpt_1289caba_e2b1_6607_8d47_48e205eaafe31129_Grp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchSumRpt_1289caba_e2b1_6607_8d47_48e205eaafe31129_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchSumRpt_12a69ca8_13de_1386_b6d7_310e1deeea66774_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchSumRpt_268e53dd_8210_b9a7_c287_bb60fb1cc6371131.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchSumRpt_268e53dd_8210_b9a7_c287_bb60fb1cc6371131_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchSumRpt_37c1d88c_8fd5_2365_4bf9_ea2e781dd17a857_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchSumRpt_5eab04d6_10d4_2c00_66eb_a6703902f1211129.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchSumRpt_5eab04d6_10d4_2c00_66eb_a6703902f1211129_Grp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchSumRpt_5eab04d6_10d4_2c00_66eb_a6703902f1211129_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchSumRpt_7daa3b25_c414_853d_53a5_f7df40dc198f857_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchSumRpt_99bfe5e9_58e2_6e7e_ab37_e1fce46dfa37857_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchSumRpt_eb8f12a9_26c8_26a4_8ec6_dfcec103897f774_Grp.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_MaterialDispatchSumRpt_eb8f12a9_26c8_26a4_8ec6_dfcec103897f774_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_PurchaseReceiveDetailRpt_22284bad_3cfb_4dd5_8a10_a9540f62dbb0608.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_PurchaseReceiveDetailRpt_22284bad_3cfb_4dd5_8a10_a9540f62dbb0608_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_PurchaseReceiveDetailRpt_5d7fa07b_de91_8a8e_0441_d6f0f614b625608.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_PurchaseReceiveDetailRpt_5d7fa07b_de91_8a8e_0441_d6f0f614b625608_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_PurchaseReceiveDetailRpt_5e5dce63_f51a_7633_f861_7af2303d9d11608.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_PurchaseReceiveDetailRpt_5e5dce63_f51a_7633_f861_7af2303d9d11608_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_PurchaseReceiveDetailRpt_f8c6b99c_72a5_d2f4_5485_9360ecc3d61d927.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_PurchaseReceiveDetailRpt_f8c6b99c_72a5_d2f4_5485_9360ecc3d61d927_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_RDSInventoryDetailRpt_b4e80eba_d6a2_d3c8_076c_9c2ec906e54d1085.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_RDSInventoryDetailRpt_b4e80eba_d6a2_d3c8_076c_9c2ec906e54d1085_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_RDSInventoryDetailRpt_d5e85cc8_9935_4eb9_e992_52c62bb93ce61085.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_RDSInventoryDetailRpt_d5e85cc8_9935_4eb9_e992_52c62bb93ce61085_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_RDSInventoryDetailRpt_f832ab3c_567a_ea70_2e8d_7e61276ce7b51085.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_EAP_Rpt_ST_RDSInventoryDetailRpt_f832ab3c_567a_ea70_2e8d_7e61276ce7b51085_Index.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Temp_0_GL_AccountAssociationForMu23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Temp_0_GL_AccountAssociationForMu60.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Temp_0_GL_AuxBalanceSumRpt23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Temp_0_GL_AuxBalanceSumRpt60.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Temp_0_GL_AuxGLDetailRpt23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Temp_0_GL_AuxGLDetailRpt60.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Temp_0_GL_AuxMultiColumnDetailRpt60.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_GL_AuxMultiColumnJournalTempTable60.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_GL_AuxMultiColumnSumTempTable60.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Temp_0_GL_BalanceSumRpt23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Temp_0_GL_BalanceSumRpt60.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Temp_0_GL_GLDetailRpt23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Temp_0_GL_GLDetailRpt60.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_GL_TempAuxiliaryInfo_UserID_22.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_GL_TempAuxiliaryInfo_UserID_23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_GL_TempCashFlowInfo_UserID_22.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_GL_TempCashFlowInfo_UserID_23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_GL_TempDocSrcDocDetailInfo_UserID_22.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_GL_TempDocSrcDocDetailInfo_UserID_23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_GL_TempDocSrcDocInfo_UserID_22.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_GL_TempDocSrcDocInfo_UserID_23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_GL_TempDoc_UserID_22.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_GL_TempDoc_UserID_23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_GL_TempEntry_UserID_22.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_GL_TempEntry_UserID_23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_SM_FC_TransactionAuxiliaryInfo_UserID_22.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_SM_FC_TransactionAuxiliaryInfo_UserID_23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_SM_FC_TransactionDocSourceRelation_UserID_22.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_SM_FC_TransactionDocSourceRelation_UserID_23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_SM_FC_TransactionDoc_UserID_22.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_SM_FC_TransactionDoc_UserID_23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_SM_FC_TransactionEntrySourceRelation_UserID_22.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_SM_FC_TransactionEntrySourceRelation_UserID_23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_SM_FC_TransactionEntry_UserID_22.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_SM_FC_TransactionEntry_UserID_23.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_ST_TEMP_0_EAP_Rpt_ST_CurrentStockRpt_2c2753f8_acef_0ab5_9d37_c37af8cebc4d1105.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_ST_TEMP_0_EAP_Rpt_ST_RDSInventoryDetailRpt_b4e80eba_d6a2_d3c8_076c_9c2ec906e54d1085.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_ST_TEMP_0_EAP_Rpt_ST_RDSInventoryDetailRpt_d5e85cc8_9935_4eb9_e992_52c62bb93ce61085.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_0_ST_TEMP_0_EAP_Rpt_ST_RDSInventoryDetailRpt_f832ab3c_567a_ea70_2e8d_7e61276ce7b51085.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_GL_DocJournal.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_GL_FindBalance.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_GL_FindBalanceDetail.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_GL_GLCheckAccountInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_GL_PeriodCloseBroughtInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_GL_PeriodCloseInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_GL_PeriodCloseWorkLoadInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_GL_TempAuxiliaryInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_GL_TempCashFlowInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_GL_TempDoc.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_GL_TempDocSrcDocDetailInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_GL_TempDocSrcDocInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_GL_TempEntry.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_GL_TEMPOpeningAccount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_GL_WriteOffHistoryCache.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_SM_FC_DocSimpleSourceVoucher.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_SM_FC_PBSAMCheckAccount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_SM_FC_PBSARAPCheckAccount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_SM_FC_PBSCashBankCheckAccount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_SM_FC_PBSInventoryCheckAccount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_SM_FC_PBSPurRecCheckAccount.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_SM_FC_PeriodBeginSyncAcc.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_SM_FC_PeriodBeginSyncBizData.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_SM_FC_PeriodBeginSyncData.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_SM_FC_PeriodBeginSyncError.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_SM_FC_TransactionAuxiliaryInfo.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_SM_FC_TransactionDoc.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_SM_FC_TransactionDocSourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_SM_FC_TransactionEntry.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TEMP_1_SM_FC_TransactionEntrySourceRelation.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Temp_eap_columnSet_User_BD8C4CE0A3184873A581578023BA866E.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_FinanceDataKeyConfig.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_ReportBasic.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_ReportData.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_ReportFormat.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_ReportFormula.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_ReportFormulaCheck.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_ReportFormulaType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_ReportFormulaValue.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_ReportKeyWords.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_ReportKeyWordsData.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_ReportReject.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_ReportTemplateBasic.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_ReportTemplateFormat.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_ReportTemplateFormulas.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_ReportTemplateModel.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_ReportType.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_SYSReportKeyWordsData.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_SYSReportTemplateBasic.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_SYSReportTemplateFormat.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_SYSReportTemplateFormulas.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TUFO_SYSReportTemplateModel.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UA_ListPrintstyle.cs">
+      <DependentUpon>TModel.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>17909</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:17909/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

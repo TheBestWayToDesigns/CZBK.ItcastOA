@@ -17,8 +17,6 @@ namespace CZBK.ItcastOA.Model
         public T_ChanPinName()
         {
             this.YXB_Baojia = new HashSet<YXB_Baojia>();
-            this.YXB_Baojia1 = new HashSet<YXB_Baojia>();
-            this.YXB_Baojia11 = new HashSet<YXB_Baojia>();
         }
     
         public long ID { get; set; }
@@ -27,10 +25,9 @@ namespace CZBK.ItcastOA.Model
         public Nullable<int> CreatePerson { get; set; }
         public Nullable<short> Del { get; set; }
         public string MyColums { get; set; }
+        public Nullable<long> T_ID { get; set; }
     
-        public virtual ICollection<YXB_Baojia> YXB_Baojia { get; set; }
         public virtual UserInfo UserInfo { get; set; }
-        public virtual ICollection<YXB_Baojia> YXB_Baojia1 { get; set; }
-        public virtual ICollection<YXB_Baojia> YXB_Baojia11 { get; set; }
+        public virtual ICollection<YXB_Baojia> YXB_Baojia { get; set; }
     }
 }
