@@ -226,8 +226,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             bj.ZhuangTai = 0;
             //bj.CPname =Convert.ToInt64( Request["CPname"]);
             //bj.CPXingHao = Convert.ToInt64(Request["CPXingHao"]);
-            bj.CPname = Request["CPname"];
-            bj.CPXingHao = Request["CPXingHao"];
+            bj.CPname = Convert.ToInt64( Request["CPname"]);
+            bj.CPXingHao = Convert.ToInt64(Request["CPXingHao"]);
             bj.CPShuLiang =Convert.ToDecimal(Request["CPShuLiang"]);
             bj.BaoJiaTop_id = Convert.ToInt64(Request["editID"]);
             bj.WIN = 0;

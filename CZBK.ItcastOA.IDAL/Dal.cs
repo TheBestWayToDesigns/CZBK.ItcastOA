@@ -165,4 +165,9 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IYXB_WinCanPinDal :IBaseDal<YXB_WinCanPin>
+    {
+      
+    }
+	
 }

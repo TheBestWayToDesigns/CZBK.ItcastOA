@@ -418,6 +418,19 @@ namespace CZBK.ItcastOA.DALFactory
 
             return obj as IYXB_Kh_listDal;
         }
+		
+	    public static IYXB_WinCanPinDal CreateYXB_WinCanPinDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".YXB_WinCanPinDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IYXB_WinCanPinDal;
+        }
 	}
 	
 }

@@ -22,7 +22,7 @@ namespace CZBK.ItcastOA.Model
     
         public long id { get; set; }
         public int Kh_List_id { get; set; }
-        public Nullable<System.DateTime> GhTime { get; set; }
+        public System.DateTime GhTime { get; set; }
         public string JiShuYaoQiu { get; set; }
         public string Addess { get; set; }
         public string DaiBanYunShu { get; set; }
@@ -33,6 +33,7 @@ namespace CZBK.ItcastOA.Model
         public string KHComname { get; set; }
         public Nullable<long> HanShuiID { get; set; }
         public Nullable<long> PiaoJuID { get; set; }
+        public Nullable<System.DateTime> StopTime { get; set; }
     
         public virtual T_BoolItem T_BoolItem { get; set; }
         public virtual T_YSItems T_YSItems { get; set; }

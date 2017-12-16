@@ -479,5 +479,20 @@ namespace CZBK.ItcastOA.DALFactory
             }
             set { _YXB_Kh_listDal = value; }
         }
+	
+		private IYXB_WinCanPinDal _YXB_WinCanPinDal;
+        public IYXB_WinCanPinDal YXB_WinCanPinDal
+        {
+            get
+            {
+                if(_YXB_WinCanPinDal == null)
+                {
+                   // _YXB_WinCanPinDal = new YXB_WinCanPinDal();
+				    _YXB_WinCanPinDal =AbstractFactory.CreateYXB_WinCanPinDal();
+                }
+                return _YXB_WinCanPinDal;
+            }
+            set { _YXB_WinCanPinDal = value; }
+        }
 	}	
 }

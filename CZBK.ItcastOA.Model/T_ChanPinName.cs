@@ -16,7 +16,11 @@ namespace CZBK.ItcastOA.Model
     {
         public T_ChanPinName()
         {
+            this.YXB_WinCanPin = new HashSet<YXB_WinCanPin>();
+            this.YXB_WinCanPin1 = new HashSet<YXB_WinCanPin>();
             this.YXB_Baojia = new HashSet<YXB_Baojia>();
+            this.YXB_Baojia1 = new HashSet<YXB_Baojia>();
+            this.YXB_Baojia2 = new HashSet<YXB_Baojia>();
         }
     
         public long ID { get; set; }
@@ -28,6 +32,10 @@ namespace CZBK.ItcastOA.Model
         public Nullable<long> T_ID { get; set; }
     
         public virtual UserInfo UserInfo { get; set; }
+        public virtual ICollection<YXB_WinCanPin> YXB_WinCanPin { get; set; }
+        public virtual ICollection<YXB_WinCanPin> YXB_WinCanPin1 { get; set; }
         public virtual ICollection<YXB_Baojia> YXB_Baojia { get; set; }
+        public virtual ICollection<YXB_Baojia> YXB_Baojia1 { get; set; }
+        public virtual ICollection<YXB_Baojia> YXB_Baojia2 { get; set; }
     }
 }

@@ -73,5 +73,7 @@ namespace CZBK.ItcastOA.IDAL
 		IYXB_BaoJiaEidtMoneyDal YXB_BaoJiaEidtMoneyDal{get;set;}
 	
 		IYXB_Kh_listDal YXB_Kh_listDal{get;set;}
+	
+		IYXB_WinCanPinDal YXB_WinCanPinDal{get;set;}
 	}	
 }

@@ -165,4 +165,9 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IYXB_WinCanPinService : IBaseService<YXB_WinCanPin>
+    {
+       
+    }   
+	
 }

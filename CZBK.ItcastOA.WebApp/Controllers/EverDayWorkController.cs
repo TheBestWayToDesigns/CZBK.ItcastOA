@@ -29,7 +29,21 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             return null;
         }
-
+        //获取部门下级用户名称
+        public ActionResult GetDownBuMenalluser()
+        {
+            int a = Convert.ToInt32(Request["DBMid"]);
+            List<Uidorname> uid = new List<Uidorname>();
+            var temp = UserInfoService.LoadEntities(x => x.BuMenID == a).DefaultIfEmpty();
+            foreach (var s in temp)
+            {
+                Uidorname uon = new Uidorname();
+                uon.ID = s.ID;
+                uon.name = s.PerSonName;
+                uid.Add(uon);
+            }
+            return Json(uid, JsonRequestBehavior.AllowGet);
+        }
         //获取下级用户名称
         public ActionResult GetDownUserall()
         {
@@ -57,10 +71,6 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var localID = Convert.ToInt64(LoginUser.ID);
             var tempSUser = ScheduleUserService.LoadEntities(x => x.UpID == localID).DefaultIfEmpty();
             List<Uidorname> Luin = new List<Uidorname>();
-            Uidorname uid1 = new Uidorname();
-            uid1.ID = -1;
-            uid1.name = "全部";
-            Luin.Add(uid1);
             ForUser(tempSUser, Luin);
             return Luin;
         }
@@ -89,7 +99,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //获取下级用户日程
         public ActionResult GetDownUser()
         {
-            var DownUserID = Request["AdduserID"] != null ? Convert.ToInt64(Request["AdduserID"]) : 0;
+            var DownUserID = Request["DownUser"] != null ? Convert.ToInt64(Request["DownUser"]) : 0;
             int PageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int PageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 10;
             int TotalCount = 0;
@@ -148,6 +158,23 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             
         }
+
+        //获取下级部门的所属员工
+        public ActionResult GetDBMUser()
+        {
+            int a = Convert.ToInt32(Request["DBMid"]);
+            List<Uidorname> list = new List<Uidorname>();
+            var s = UserInfoService.LoadEntities(x => x.BuMenID == a).DefaultIfEmpty().ToList();
+            foreach(var o in s)
+            {
+                Uidorname uid = new Uidorname();
+                uid.ID = o.ID;
+                uid.name = o.PerSonName;
+                list.Add(uid);
+            }
+            return Json(list,JsonRequestBehavior.AllowGet);
+        }
+       
         //获取所有下级部门
         public List<BuMen> GetAllDownBuMen()
         {
@@ -160,14 +187,32 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             {
                 var z = UserInfoService.LoadEntities(x => x.ID == a.ID).FirstOrDefault();
                 BuMen bm = new BuMen();
-                bm.ID = Convert.ToInt32(z.BuMenID);
-                var y = BumenInfoSetService.LoadEntities(x => x.ID == bm.ID).FirstOrDefault();
-                bm.Name = y.Name;
-                Luinfo.Add(bm);
+                bm.BMID = Convert.ToInt32(z.BuMenID);
+                if (Luinfo.Count != 0)
+                {
+                    for (int i = 0;i<Luinfo.Count;i++)
+                    {
+                        if (bm.BMID == Luinfo[i].BMID)
+                        {
+                            continue;
+                        }
+                        else if(i == Luinfo.Count-1)
+                        {
+                            var y = BumenInfoSetService.LoadEntities(x => x.ID == bm.BMID).FirstOrDefault();
+                            bm.Name = y.Name;
+                            Luinfo.Add(bm);
+                        }else
+                        {
+                            continue;
+                        }
+                    }
+                }else
+                {
+                    var y = BumenInfoSetService.LoadEntities(x => x.ID == bm.BMID).FirstOrDefault();
+                    bm.Name = y.Name;
+                    Luinfo.Add(bm);
+                }
             }
-            HashSet<BuMen> hs = new HashSet<BuMen>(Luinfo);
-            Luinfo.Clear();
-            Luinfo.AddRange(hs);
             return Luinfo;
         }
         //获取下级部门名称
@@ -264,7 +309,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             else
             {
-                return Content("no:请上传文件");
+                return Content("no:请选择文件再上传");
             }
         }
 
@@ -272,18 +317,32 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public ActionResult AddUploadFile()
         {
             string url = Request["Url"];
-            string beizhu = Request["BeiZhu"];
+            string beizhu = Request["BeiZhu"]; 
+            int schid = Convert.ToInt32(Request["SchID"]);
             if (url != null && url != "")
             {
                 int addSchID = Convert.ToInt32(Request["AddUploadScheduleName"]);
-                int addFirstID = Convert.ToInt32(Request["FirstFileName"]);
                 FileItem fi = new FileItem();
-                fi.Url = url;
-                fi.BeiZhu = beizhu;
-                fi.AddTime = DateTime.Now;
-                fi.Del = 0;
-                fi.FileFirstID = addFirstID;
-                FileItemService.AddEntity(fi);
+                if (Request["FirstFileName"] != null && Request["FirstFileName"] != "" && Request["FirstFileName"] != "null")
+                {
+                    int addFirstID = Convert.ToInt32(Request["FirstFileName"]);
+                    fi.FileFirstID = addFirstID;
+                    fi.Url = url;
+                    fi.BeiZhu = beizhu;
+                    fi.AddTime = DateTime.Now;
+                    fi.Del = 0;
+                    FileItemService.AddEntity(fi);
+                }else
+                {
+                    fi.Url = url;
+                    fi.BeiZhu = beizhu;
+                    fi.AddTime = DateTime.Now;
+                    fi.Del = 0;
+                    var s = FileItemService.AddEntity(fi);
+                    var temp = ScheduleService.LoadEntities(x => x.ID == schid).FirstOrDefault();
+                    temp.FileItemID = s.ID;
+                    ScheduleService.EditEntity(temp);
+                }
                 return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
             }
             else {
@@ -328,7 +387,28 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             string s = "";
             foreach(var b in fileItems)
             {
-                s = s + b.BeiZhu +","+b.Url+",";
+                if (b != null) {
+                    if ((b.Url == null || b.Url == "") && (b.BeiZhu != null || b.BeiZhu != ""))
+                    {
+                        s = s + b.BeiZhu + ",无文件相关路径(可能未上传文件),";
+                    }
+                    else if ((b.Url != null || b.Url != "") && (b.BeiZhu == null || b.BeiZhu == ""))
+                    {
+                        s = s + "无备注信息," + b.Url + ",";
+                    }
+                    else if ((b.Url == null || b.Url == "") && (b.BeiZhu == null || b.BeiZhu == ""))
+                    {
+                        s = s + "无备注信息,无文件相关路径(可能未上传文件),";
+                    }
+                    else
+                    {
+                        s = s + b.BeiZhu + "," + b.Url + ",";
+                    }
+                }
+                else
+                {
+                    continue;
+                }
             }
             return Json(s , JsonRequestBehavior.AllowGet);
         }
@@ -419,7 +499,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
 
     public class BuMen
     {
-        public int ID { get; set; }
+        public int BMID { get; set; }
         public string Name { get; set; }
     }
 }

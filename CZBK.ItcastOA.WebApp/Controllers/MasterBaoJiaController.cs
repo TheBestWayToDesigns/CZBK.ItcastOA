@@ -59,8 +59,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            select new SlcClass
                            {
                                ID = a.id,
-                               CPname = a.CPname,
-                               CPXingHao = a.CPXingHao,
+                               CPname = a.T_ChanPinName1.MyTexts,
+                               CPXingHao = a.T_ChanPinName2.MyTexts,
                                CPShuLiang = a.CPShuLiang,
                                AddTime = a.AddTime,
                                ZhuangTai = a.ZhuangTai,
@@ -252,8 +252,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             uim.addess = Request["addess"];
             uim.Person = Request["Person"]==null?0 : Request["Person"].Length <= 0 ? 0 : int.Parse( Request["Person"]);
             uim.KHname = Request["KHname"] == null ? 0 : Request["KHname"].Length<=0?0: int.Parse(Request["KHname"]);
-            uim.CPname = Request["CPname"] == null ? "" : Request["CPname"].Length <= 0 ?"": Request["CPname"];
-            uim.CPxh = Request["CPxh"] == null ? "" : Request["CPxh"].Length <= 0 ?"": Request["CPxh"];
+            uim.CPname = Request["CPname"] == null ? 0 : Request["CPname"].Length <= 0 ?0 : int.Parse(Request["CPname"]);
+            uim.CPxh = Request["CPxh"] == null ? 0 : Request["CPxh"].Length <= 0 ?0 : int.Parse(Request["CPxh"]);
             uim.PageIndex = pageIndex;
             uim.PageSize = pageSize;
             uim.TotalCount = 0;
@@ -262,8 +262,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                        select new SlcClass
                        {
                            ID = a.id,
-                           CPname = a.CPname,
-                           CPXingHao = a.CPXingHao,
+                           CPname = a.T_ChanPinName1.MyTexts,
+                           CPXingHao = a.T_ChanPinName2.MyTexts,
                            CPShuLiang = a.CPShuLiang,
                            AddTime = a.AddTime,
                            ZhuangTai = a.ZhuangTai,
@@ -399,8 +399,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             uim.addess = Request["addess"];
             uim.Person = Request["Person"] == null ? 0 : Request["Person"].Length <= 0 ? 0 : int.Parse(Request["Person"]);
             uim.KHname = Request["KHname"] == null ? 0 : Request["KHname"].Length <= 0 ? 0 : int.Parse(Request["KHname"]);
-            uim.CPname = Request["CPname"] == null ? "" : Request["CPname"].Length <= 0 ?"": Request["CPname"];
-            uim.CPxh = Request["CPxh"] == null ? "" : Request["CPxh"].Length <= 0 ? "" : Request["CPxh"];
+            uim.CPname = Request["CPname"] == null ? 0 : Request["CPname"].Length <= 0 ?0 : int.Parse(Request["CPname"]);
+            uim.CPxh = Request["CPxh"] == null ? 0 : Request["CPxh"].Length <= 0 ? 0 : int.Parse(Request["CPxh"]);
             uim.PageIndex = pageIndex;
             uim.PageSize = pageSize;
             uim.TotalCount = 0;

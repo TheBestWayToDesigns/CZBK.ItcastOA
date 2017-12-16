@@ -77,9 +77,14 @@
         <AssociationConnector Association="OAModel.FK_GongLuBaoXiaoBill_UserInfo" />
         <EntityTypeShape EntityType="OAModel.YXB_BaoJiaEidtMoney" Width="1.5" PointX="23.7500005" PointY="1.2838643391927067" />
         <AssociationConnector Association="OAModel.FK_YXB_BaoJiaEidtMoney_UserInfo" />
-        <EntityTypeShape EntityType="OAModel.YXB_Baojia" Width="1.5" PointX="18.5000005" PointY="2.8103179069009161" />
+        <EntityTypeShape EntityType="OAModel.YXB_WinCanPin" Width="1.5" PointX="13.125" PointY="6.1685689290364589" />
+        <AssociationConnector Association="OAModel.FK_YXB_WinCanPin_name" />
+        <AssociationConnector Association="OAModel.FK_YXB_WinCanPin_xinghao" />
+        <EntityTypeShape EntityType="OAModel.YXB_Baojia" Width="1.5" PointX="18.5000005" PointY="2.90582275390625" />
         <AssociationConnector Association="OAModel.FK_YXB_Baojia_T_BaoJiaToP1" />
         <AssociationConnector Association="OAModel.FK_YXB_Baojia_CanPinDengji" />
+        <AssociationConnector Association="OAModel.FK_YXB_Baojia_cpname" />
+        <AssociationConnector Association="OAModel.FK_YXB_Baojia_xinghao" />
         <AssociationConnector Association="OAModel.FK_T_WinBakFaHuo_BaoJia" />
         <AssociationConnector Association="OAModel.FK_YXBBaojia_Userinf" />
         <AssociationConnector Association="OAModel.FK_YXB_BaoJiaEidtMoney_YXB_Baojia" />
