@@ -35,6 +35,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IFileTypeDal :IBaseDal<FileType>
+    {
+      
+    }
+	
 	public partial interface IGongLuBaoXiaoBillDal :IBaseDal<GongLuBaoXiaoBill>
     {
       
@@ -66,6 +71,16 @@ namespace CZBK.ItcastOA.IDAL
     }
 	
 	public partial interface IScheduleUserDal :IBaseDal<ScheduleUser>
+    {
+      
+    }
+	
+	public partial interface IShareFileOrNoticeDal :IBaseDal<ShareFileOrNotice>
+    {
+      
+    }
+	
+	public partial interface IShareTypeDal :IBaseDal<ShareType>
     {
       
     }

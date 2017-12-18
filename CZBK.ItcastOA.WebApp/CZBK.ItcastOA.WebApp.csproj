@@ -193,6 +193,7 @@
     <Compile Include="Controllers\NewChanPinController.cs" />
     <Compile Include="Controllers\RoleInfoController.cs" />
     <Compile Include="Controllers\SczzAdminController.cs" />
+    <Compile Include="Controllers\ShareFileOrNotice.cs" />
     <Compile Include="Controllers\ShengchanzhizaoController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserInfoController.cs" />
@@ -1315,6 +1316,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\BillPrint\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ShareFileOrNotice\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

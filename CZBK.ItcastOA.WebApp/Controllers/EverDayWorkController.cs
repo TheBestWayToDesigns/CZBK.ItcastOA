@@ -20,6 +20,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IScheduleUserService ScheduleUserService { get; set; }
         IBLL.IUserInfoService UserInfoService { get; set; }
         IBLL.IBumenInfoSetService BumenInfoSetService { get; set; }
+        IBLL.IFileTypeService FileTypeService { get; set; }
         public ActionResult Index()
         {
             return View();
@@ -192,7 +193,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 {
                     for (int i = 0;i<Luinfo.Count;i++)
                     {
-                        if (bm.BMID == Luinfo[i].BMID)
+                        if (bm.BMID == Luinfo[i].BMID || bm.BMID == 3)
                         {
                             continue;
                         }
@@ -208,9 +209,15 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     }
                 }else
                 {
-                    var y = BumenInfoSetService.LoadEntities(x => x.ID == bm.BMID).FirstOrDefault();
-                    bm.Name = y.Name;
-                    Luinfo.Add(bm);
+                    if (bm.BMID != 3) {
+                        var y = BumenInfoSetService.LoadEntities(x => x.ID == bm.BMID).FirstOrDefault();
+                        bm.Name = y.Name;
+                        Luinfo.Add(bm);
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
             }
             return Luinfo;
@@ -293,19 +300,24 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             {
                 string filename = Path.GetFileName(file.FileName);//获取上传的文件名
                 string fileExt = Path.GetExtension(filename);//获取扩展名
-                if (fileExt == ".jpg" || fileExt == ".png" || fileExt == ".txt" || fileExt == ".xls" || fileExt == ".xlsx" || fileExt == ".ppt" || fileExt == ".doc" || fileExt == ".docx" || fileExt == ".wps")
+                var temp = FileTypeService.LoadEntities(x => x.ID > 0).DefaultIfEmpty().ToList();
+                for (int a = 0;a < temp.Count();a++)
                 {
-                    string dir = "/files/ScheduleFiles/" + DateTime.Now.Year + "/" + DateTime.Now.Month + "/" + DateTime.Now.Day + "/";
-                    Directory.CreateDirectory(Path.GetDirectoryName(Request.MapPath(dir)));
-                    string filenewName = Guid.NewGuid().ToString();
-                    string fulldir = dir + filenewName + fileExt;
-                    file.SaveAs(Request.MapPath(fulldir));
-                    return Content("yes:" + fulldir);
+                    if (fileExt == temp[a].FileTypeENGName)
+                    {
+                        string dir = "/files/ScheduleFiles/" + DateTime.Now.Year + "/" + DateTime.Now.Month + "/" + DateTime.Now.Day + "/";
+                        Directory.CreateDirectory(Path.GetDirectoryName(Request.MapPath(dir)));
+                        string filenewName = Guid.NewGuid().ToString();
+                        string fulldir = dir + filenewName + fileExt;
+                        file.SaveAs(Request.MapPath(fulldir));
+                        return Content("yes:" + fulldir);
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
-                else
-                {
-                    return Content("no:文件类型错误或不支持，文件扩展名错误！");
-                }
+                return Content("no:文件类型错误或不支持，文件扩展名错误！");
             }
             else
             {
@@ -413,6 +425,26 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return Json(s , JsonRequestBehavior.AllowGet);
         }
 
+        //获取文件类型信息
+        public ActionResult GetFileType()
+        {
+            var temp = FileTypeService.LoadEntities(x => x.ID > 0).DefaultIfEmpty();
+            var Rtmp = from a in temp
+                       select new
+                       {
+                           ID = a.ID,
+                           FileTypeENGName = a.FileTypeENGName,
+                           FileTypeCHNName = a.FileTypeCHNName
+                       };
+            return Json(Rtmp, JsonRequestBehavior.AllowGet);
+        }
+        //添加文件类型
+        public ActionResult AddFileType(FileType ft)
+        {
+            FileTypeService.AddEntity(ft);
+            return Json(new { ret = "ok"}, JsonRequestBehavior.AllowGet);
+        }
+
         //修改日程
         public ActionResult UpdateSchedule(Schedule sd)
         {
@@ -448,6 +480,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             ScheduleTypeService.AddEntity(sdt);
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
+
         //删除日程状态
         public ActionResult DelType()
         {
@@ -468,7 +501,25 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
         }
 
-
+        //删除文件类型
+        public ActionResult DelFileType()
+        {
+            var id = Convert.ToInt32(Request["id"]);
+            var temp = FileTypeService.LoadEntities(x => x.ID == id).FirstOrDefault();
+            if (temp == null)
+            { return Json(new { msg = "数据库中无要删除的信息！" }, JsonRequestBehavior.AllowGet); }
+            else
+            {
+                if (FileTypeService.DeleteEntity(temp))
+                {
+                    return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { msg = "操作错误，没有删除成功！" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
         //查阅下级用户
         public ActionResult ReviewSchedule(Schedule sc)
         {

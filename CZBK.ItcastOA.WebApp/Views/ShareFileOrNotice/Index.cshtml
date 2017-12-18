@@ -1,0 +1,256 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+@using CZBK.ItcastOA.Model
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>共享文件和通知</title>
+
+    <link href="~/Content/themes/icon.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
+
+    <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
+    <link href="~/Content/themes/icon.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.easyui.min.js"></script>
+    <script src="~/Scripts/easyui-lang-zh_CN.js"></script>
+    <script src="~/Scripts/datapattern.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/MyAjaxForm.js"></script>
+    <script src="~/Scripts/MyNewJS.js"></script>
+    <script src="~/Scripts/jquery.jqprint-0.3.js"></script>
+    <script type="text/javascript">
+        $.fn.extend({
+            resizeDataGrid: function (heightMargin, widthMargin, minHeight, minWidth) {
+
+                var height = $("#dgdiv").height() - heightMargin;
+                var width = $("#dgdiv").width() - widthMargin;
+                height = height < minHeight ? minHeight : height;
+                width = width < minWidth ? minWidth : width;
+                $(this).datagrid('resize', {
+                    height: height,
+                    width: width
+                });
+            }
+        });
+
+        // 当窗口大小发生变化时，调整DataGrid的大小211434
+        $(function () {
+            $(window).resize(function () {
+                $('#tt').resizeDataGrid(0, 0, 200, 500);
+            });
+
+            $("#AddShareFileDIV").css("display", "none");
+
+            loadFileData();
+
+            $("#divBtn a").click(function () {
+                var ClickA = $(this).attr("id");
+                if (ClickA == "MenuShareFile") {
+                    loadFileData();
+                }
+                else if (ClickA == "MenuNotice") {
+                    loadNoticeData();
+                }
+            });
+
+            $("#AddShareFileBtn").click(function () {
+                AddSchareFile();
+            });
+        });
+        //清空datagrid数据
+        function cleanDatagrid() {
+            var item = $('#tt').datagrid('getRows');
+            if (item) {
+                for (var i = item.length - 1; i >= 0; i--) {
+                    var index = $('#tt').datagrid('getRowIndex', item[i]);
+                    $('#tt').datagrid('deleteRow', index);
+                }
+            }
+        }
+        //将序列化成json格式后日期(毫秒数)转成日期格式
+        function ChangeDateFormat(cellval) {
+            var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+            var hour = date.getHours()< 10 ? "0" +date.getHours():date.getHours();
+            var minutes = date.getMinutes()<10?"0"+date.getMinutes():date.getMinutes();
+            var seconds = date.getSeconds()<10?"0"+date.getSeconds():date.getSeconds();
+            return date.getFullYear() + "-" + month + "-" + currentDate + " " + hour + ":" + minutes + ":" + seconds;
+        }
+        //加载共享文件页面
+        function loadFileData(pars) {
+            $('#tt').datagrid({
+                url: '/ShareFileOrNotice/GetShareFile',
+                title: '文件共享',
+                height: $("#dgdiv").height() - 20,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                //onClickCell: onClickCell,
+                //onAfterEdit: onAfterEdit,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[
+                    { field: 'ck', checkbox: true, title: '', width: 30 },
+                    { field: 'ID', title: '编号', align: 'center' },
+                    { field: 'TypeID', title: '日程状态种类', align: 'center' },
+                    { field: 'FileTypeID', title: '文件类型', align: 'center' },
+                    { field: 'BeiZhu', title: '日程状态种类', align: 'center' },
+                    { field: 'FileURL', title: '文件下载', align: 'center' },
+                    { field: 'UploadFileTime', title: '文件上传时间', align: 'center' },
+                    { field: 'ShareUser', title: '上传用户', align: 'center' },
+                    { field: 'ShareToUser', title: '能查阅的用户', align: 'center' },
+                    {
+                        field: 'Del', title: '编辑栏', align: 'center',
+                        formatter: function (value, row, index) {
+                            return "<a href='#' class='l-btn' style='margin:0px 5px;padding:2px 8px ' onclick='deldata()' >删除</a>";
+                        }
+                    },
+                ]],
+                toolbar:"#AddShareFileBtnDIV",
+                onLoadSuccess: function () {
+                }
+            });
+        }
+
+        //添加共享文件
+        function AddSchareFile() {
+            $("#AddShareFileDIV").css("display", "block");
+            $('#AddShareFileDIV').dialog({
+                title: "添加共享文件",
+                width: 450,
+                height: 400,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '确定',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+                        if ($("#ItemText").val().trim().length <= 0) {
+                            $.messager.alert("提示", "值不可以为空！");
+                            return;
+                        }
+                        $("#addsharefrom").submit();//提交表单
+                    }
+                }, {
+                    text: '取消',
+                    handler: function () {
+                        $('#AddSchareFileDIV').dialog('close');
+                    }
+                }]
+            });
+        }
+
+        //把允许查看共享的用户id存到隐藏空间里
+        function addSTUsstr() {
+            var str = ",";
+            var SUId = $("#STUInput").combobox("getValue");
+            if (!isNaN(parseInt(SUId))) {
+                str = str + SUId + ",";
+                var a = $("#STUstrName").val;
+                $("#STUstrName").val(a+str);
+            } else {
+
+            }
+            
+        }
+
+        //添加共享文件以后调用
+        function afterAddShareFileDIV(data) {
+            if (data.ret == "ok") {
+                try {
+                    $('#tt').datagrid('reload');
+                    $('#AddSchareFileDIV').dialog('close');
+                }
+                catch (e) {
+
+                }
+
+            } else if (data.ret == "no") {
+                $.messager.alert("提示", data.msg, "error");
+            } else {
+                $.messager.alert("提醒", "修改数据错误!!", "error");
+            }
+        }
+
+   </script>
+
+</head>
+<body class="easyui-layout">
+    <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink " style="width:150px; padding:8px;">
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuShareFile" style="width:98%;margin:10px auto">文件共享</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuNotice" style="width:98%;margin:10px auto">下发通知</a>
+    </div>
+    <div data-options="region:'center',title:'数据报表'" id="dgdiv">
+        <div id="TTdiv">
+            <table id="tt" class="easyui-datagrid" title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit">
+                <!--插入表格数据-->
+            </table>
+        </div>
+        <!---------------添加共享文件按钮-------------------->
+        <div id="AddShareFileBtnDIV" style="padding:5px;height:auto">
+            <div style="margin-bottom:5px">
+                <a href="#" class="easyui-linkbutton" id="AddShareFileBtn" iconCls="icon-add" plain="true">添加共享文件</a>
+            </div>
+        </div>
+    </div>
+
+    <!---------------添加共享文件--------------------->
+    <div id="AddShareFileDIV" style="height:100%; width:100%;">
+        @using (Ajax.BeginForm("AddShareFileDIV", "ShareFileOrNotice", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddShareFileDIV" }, new { id = "addsharefilefrom" }))
+        {<table>
+             <tr>
+                <td>文件类型</td>
+                <td><input type="text" name="TypeName" id="TypeId" /></td>
+             </tr>
+             <tr>
+                <td>文件备注</td>
+                <td><input type="text" name="BeiZhuName" id="BeiZhuId" /></td>
+             </tr>
+             <tr><td colspan="3"><h1>分享给：</h1></td></tr>
+             <tr>
+                <td>部门</td>
+                <td><input id="BMSTUInput" class="easyui-combobox" name="BuMenName"
+                           url="/ShareFileOrNotice/GetAllBuMen"
+                           valueField="ID"
+                           textField="Name"
+                           panelHeight="auto"
+                           style="width:100px" />
+                </td>
+                <td></td>
+             </tr>
+             <tr>
+                <td>部门用户</td>
+                <td><input id="STUInput" class="easyui-combobox" name="ShareToUserName"
+                           url="/ShareFileOrNotice/GetShareToUser"
+                           valueField="ID"
+                           textField="Name"
+                           panelHeight="auto"
+                           style="width:100px" />
+                 </td>
+                 <td><a href='javascript:addSTUsstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a></td>
+             </tr>
+             <tr>
+                 <td><input type="hidden" name="FileUrlName" id="FileUrlID" /></td>
+                 <td><input type="hidden" name="STUstrName" id="STUstrID" /></td>
+             </tr>
+        </table>
+        <table>
+            <tbody id="Selebody"></tbody>
+        </table>
+        }
+    </div>
+</body>
+</html>
+
+
+
+

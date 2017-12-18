@@ -35,6 +35,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IFileTypeService : IBaseService<FileType>
+    {
+       
+    }   
+	
 	public partial interface IGongLuBaoXiaoBillService : IBaseService<GongLuBaoXiaoBill>
     {
        
@@ -66,6 +71,16 @@ namespace CZBK.ItcastOA.IBLL
     }   
 	
 	public partial interface IScheduleUserService : IBaseService<ScheduleUser>
+    {
+       
+    }   
+	
+	public partial interface IShareFileOrNoticeService : IBaseService<ShareFileOrNotice>
+    {
+       
+    }   
+	
+	public partial interface IShareTypeService : IBaseService<ShareType>
     {
        
     }   

@@ -51,6 +51,14 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class FileTypeService :BaseService<FileType>,IFileTypeService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.FileTypeDal;
+        }
+    }   
+	
 	public partial class GongLuBaoXiaoBillService :BaseService<GongLuBaoXiaoBill>,IGongLuBaoXiaoBillService
     {
         public override void SetCurretnDal()
@@ -104,6 +112,22 @@ namespace CZBK.ItcastOA.BLL
         public override void SetCurretnDal()
         {
             CurrentDal = this.GetCurrentDbSession.ScheduleUserDal;
+        }
+    }   
+	
+	public partial class ShareFileOrNoticeService :BaseService<ShareFileOrNotice>,IShareFileOrNoticeService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.ShareFileOrNoticeDal;
+        }
+    }   
+	
+	public partial class ShareTypeService :BaseService<ShareType>,IShareTypeService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.ShareTypeDal;
         }
     }   
 	

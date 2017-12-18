@@ -75,6 +75,14 @@
           <Property Name="BeiZhu" Type="nvarchar(max)" />
           <Property Name="FileFirstID" Type="int" />
         </EntityType>
+        <EntityType Name="FileType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileTypeENGName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FileTypeCHNName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="GongLuBaoXiaoBill">
           <Key>
             <PropertyRef Name="ID" />
@@ -160,6 +168,27 @@
           <Property Name="UserID" Type="int" />
           <Property Name="UpID" Type="int" />
           <Property Name="Del" Type="smallint" />
+        </EntityType>
+        <EntityType Name="ShareFileOrNotice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeID" Type="int" Nullable="false" />
+          <Property Name="FileTypeID" Type="int" />
+          <Property Name="BeiZhu" Type="nvarchar(max)" />
+          <Property Name="FileURL" Type="nvarchar(max)" />
+          <Property Name="UploadFileTime" Type="datetime" />
+          <Property Name="ShareUser" Type="int" Nullable="false" />
+          <Property Name="ShareToUser" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ModelList" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ShareType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -740,6 +769,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ShareFileOrNotice_FileType">
+          <End Role="FileType" Type="Self.FileType" Multiplicity="0..1" />
+          <End Role="ShareFileOrNotice" Type="Self.ShareFileOrNotice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FileType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ShareFileOrNotice">
+              <PropertyRef Name="FileTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShareFileOrNotice_ShareType">
+          <End Role="ShareType" Type="Self.ShareType" Multiplicity="1" />
+          <End Role="ShareFileOrNotice" Type="Self.ShareFileOrNotice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShareType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ShareFileOrNotice">
+              <PropertyRef Name="TypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShareFileOrNotice_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="ShareFileOrNotice" Type="Self.ShareFileOrNotice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ShareFileOrNotice">
+              <PropertyRef Name="ShareUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ShenChanSheHe">
           <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="0..1" />
           <End Role="T_SczzDanju" Type="Self.T_SczzDanju" Multiplicity="*" />
@@ -1182,6 +1247,7 @@
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DepartmentActionInfo" EntityType="Self.DepartmentActionInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileItem" EntityType="Self.FileItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FileType" EntityType="Self.FileType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GongLuBaoXiaoBill" EntityType="Self.GongLuBaoXiaoBill" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Login_list" EntityType="Self.Login_list" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="R_UserInfo_ActionInfo" EntityType="Self.R_UserInfo_ActionInfo" Schema="dbo" store:Type="Tables" />
@@ -1190,6 +1256,8 @@
           <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScheduleType" EntityType="Self.ScheduleType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScheduleUser" EntityType="Self.ScheduleUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShareFileOrNotice" EntityType="Self.ShareFileOrNotice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShareType" EntityType="Self.ShareType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SysField" EntityType="Self.SysField" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_BaoJiaToP" EntityType="Self.T_BaoJiaToP" Schema="dbo" store:Type="Tables" />
@@ -1299,6 +1367,18 @@
           <AssociationSet Name="FK_SczzItemsID" Association="Self.FK_SczzItemsID">
             <End Role="T_SczzItem" EntitySet="T_SczzItem" />
             <End Role="T_CanPan" EntitySet="T_CanPan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShareFileOrNotice_FileType" Association="Self.FK_ShareFileOrNotice_FileType">
+            <End Role="FileType" EntitySet="FileType" />
+            <End Role="ShareFileOrNotice" EntitySet="ShareFileOrNotice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShareFileOrNotice_ShareType" Association="Self.FK_ShareFileOrNotice_ShareType">
+            <End Role="ShareType" EntitySet="ShareType" />
+            <End Role="ShareFileOrNotice" EntitySet="ShareFileOrNotice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShareFileOrNotice_UserInfo" Association="Self.FK_ShareFileOrNotice_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="ShareFileOrNotice" EntitySet="ShareFileOrNotice" />
           </AssociationSet>
           <AssociationSet Name="FK_ShenChanSheHe" Association="Self.FK_ShenChanSheHe">
             <End Role="UserInfo" EntitySet="UserInfo" />
@@ -1704,6 +1784,21 @@
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
             <End Role="YXB_BaoJiaEidtMoney" EntitySet="YXB_BaoJiaEidtMoney" />
           </AssociationSet>
+          <EntitySet Name="FileTypes" EntityType="OAModel.FileType" />
+          <EntitySet Name="ShareTypes" EntityType="OAModel.ShareType" />
+          <EntitySet Name="ShareFileOrNotices" EntityType="OAModel.ShareFileOrNotice" />
+          <AssociationSet Name="FK_ShareFileOrNotice_FileType" Association="OAModel.FK_ShareFileOrNotice_FileType">
+            <End Role="FileType" EntitySet="FileTypes" />
+            <End Role="ShareFileOrNotice" EntitySet="ShareFileOrNotices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShareFileOrNotice_ShareType" Association="OAModel.FK_ShareFileOrNotice_ShareType">
+            <End Role="ShareType" EntitySet="ShareTypes" />
+            <End Role="ShareFileOrNotice" EntitySet="ShareFileOrNotices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShareFileOrNotice_UserInfo" Association="OAModel.FK_ShareFileOrNotice_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="ShareFileOrNotice" EntitySet="ShareFileOrNotices" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ActionInfo">
           <Key>
@@ -2041,6 +2136,7 @@
           <NavigationProperty Name="GongLuBaoXiaoBills" Relationship="OAModel.FK_GongLuBaoXiaoBill_UserInfo" FromRole="UserInfo" ToRole="GongLuBaoXiaoBill" />
           <NavigationProperty Name="YXB_BaoJiaEidtMoney" Relationship="OAModel.FK_YXB_BaoJiaEidtMoney_UserInfo" FromRole="UserInfo" ToRole="YXB_BaoJiaEidtMoney" />
           <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_YXBBaojia_Userinf" FromRole="UserInfo" ToRole="YXB_Baojia" />
+          <NavigationProperty Name="ShareFileOrNotices" Relationship="OAModel.FK_ShareFileOrNotice_UserInfo" FromRole="UserInfo" ToRole="ShareFileOrNotice" />
         </EntityType>
         <Association Name="FK_Bumen">
           <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
@@ -2837,6 +2933,76 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="FileType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileTypeENGName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FileTypeCHNName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ShareFileOrNotices" Relationship="OAModel.FK_ShareFileOrNotice_FileType" FromRole="FileType" ToRole="ShareFileOrNotice" />
+        </EntityType>
+        <EntityType Name="ShareType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ShareFileOrNotices" Relationship="OAModel.FK_ShareFileOrNotice_ShareType" FromRole="ShareType" ToRole="ShareFileOrNotice" />
+        </EntityType>
+        <EntityType Name="ShareFileOrNotice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeID" Type="Int32" Nullable="false" />
+          <Property Name="FileTypeID" Type="Int32" />
+          <Property Name="BeiZhu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FileURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UploadFileTime" Type="DateTime" Precision="3" />
+          <Property Name="ShareUser" Type="Int32" Nullable="false" />
+          <Property Name="ShareToUser" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="FileType" Relationship="OAModel.FK_ShareFileOrNotice_FileType" FromRole="ShareFileOrNotice" ToRole="FileType" />
+          <NavigationProperty Name="ShareType" Relationship="OAModel.FK_ShareFileOrNotice_ShareType" FromRole="ShareFileOrNotice" ToRole="ShareType" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_ShareFileOrNotice_UserInfo" FromRole="ShareFileOrNotice" ToRole="UserInfo" />
+          <Property Name="ModelList" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_ShareFileOrNotice_FileType">
+          <End Type="OAModel.FileType" Role="FileType" Multiplicity="0..1" />
+          <End Type="OAModel.ShareFileOrNotice" Role="ShareFileOrNotice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FileType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ShareFileOrNotice">
+              <PropertyRef Name="FileTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShareFileOrNotice_ShareType">
+          <End Type="OAModel.ShareType" Role="ShareType" Multiplicity="1" />
+          <End Type="OAModel.ShareFileOrNotice" Role="ShareFileOrNotice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShareType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ShareFileOrNotice">
+              <PropertyRef Name="TypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShareFileOrNotice_UserInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+          <End Type="OAModel.ShareFileOrNotice" Role="ShareFileOrNotice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ShareFileOrNotice">
+              <PropertyRef Name="ShareUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3361,6 +3527,38 @@
                 <ScalarProperty Name="CPname" ColumnName="CPname" />
                 <ScalarProperty Name="BaoJiaTop_id" ColumnName="BaoJiaTop_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FileTypes">
+            <EntityTypeMapping TypeName="OAModel.FileType">
+              <MappingFragment StoreEntitySet="FileType">
+                <ScalarProperty Name="FileTypeCHNName" ColumnName="FileTypeCHNName" />
+                <ScalarProperty Name="FileTypeENGName" ColumnName="FileTypeENGName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShareTypes">
+            <EntityTypeMapping TypeName="OAModel.ShareType">
+              <MappingFragment StoreEntitySet="ShareType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShareFileOrNotices">
+            <EntityTypeMapping TypeName="OAModel.ShareFileOrNotice">
+              <MappingFragment StoreEntitySet="ShareFileOrNotice">
+                <ScalarProperty Name="ModelList" ColumnName="ModelList" />
+                <ScalarProperty Name="ShareToUser" ColumnName="ShareToUser" />
+                <ScalarProperty Name="ShareUser" ColumnName="ShareUser" />
+                <ScalarProperty Name="UploadFileTime" ColumnName="UploadFileTime" />
+                <ScalarProperty Name="FileURL" ColumnName="FileURL" />
+                <ScalarProperty Name="BeiZhu" ColumnName="BeiZhu" />
+                <ScalarProperty Name="FileTypeID" ColumnName="FileTypeID" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -22,6 +22,8 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IFileItemDal FileItemDal{get;set;}
 	
+		IFileTypeDal FileTypeDal{get;set;}
+	
 		IGongLuBaoXiaoBillDal GongLuBaoXiaoBillDal{get;set;}
 	
 		ILogin_listDal Login_listDal{get;set;}
@@ -35,6 +37,10 @@ namespace CZBK.ItcastOA.IDAL
 		IScheduleTypeDal ScheduleTypeDal{get;set;}
 	
 		IScheduleUserDal ScheduleUserDal{get;set;}
+	
+		IShareFileOrNoticeDal ShareFileOrNoticeDal{get;set;}
+	
+		IShareTypeDal ShareTypeDal{get;set;}
 	
 		IsysdiagramDal sysdiagramDal{get;set;}
 	

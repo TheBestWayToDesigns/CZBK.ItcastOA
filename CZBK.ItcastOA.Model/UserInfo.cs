@@ -42,6 +42,7 @@ namespace CZBK.ItcastOA.Model
             this.GongLuBaoXiaoBills = new HashSet<GongLuBaoXiaoBill>();
             this.YXB_BaoJiaEidtMoney = new HashSet<YXB_BaoJiaEidtMoney>();
             this.YXB_Baojia = new HashSet<YXB_Baojia>();
+            this.ShareFileOrNotices = new HashSet<ShareFileOrNotice>();
         }
     
         public int ID { get; set; }
@@ -63,7 +64,7 @@ namespace CZBK.ItcastOA.Model
         public string PerSonName { get; set; }
         public Nullable<int> QuXian { get; set; }
         public Nullable<int> BuMenID { get; set; }
-
+    
         [JsonIgnore]
         public virtual BumenInfoSet BumenInfoSet { get; set; }
         [JsonIgnore]
@@ -116,5 +117,7 @@ namespace CZBK.ItcastOA.Model
         public virtual ICollection<YXB_BaoJiaEidtMoney> YXB_BaoJiaEidtMoney { get; set; }
         [JsonIgnore]
         public virtual ICollection<YXB_Baojia> YXB_Baojia { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<ShareFileOrNotice> ShareFileOrNotices { get; set; }
     }
 }

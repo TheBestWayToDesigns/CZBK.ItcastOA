@@ -36,6 +36,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class FileTypeDal :BaseDal<FileType>,IFileTypeDal
+    {
+
+    }
+		
 	public partial class GongLuBaoXiaoBillDal :BaseDal<GongLuBaoXiaoBill>,IGongLuBaoXiaoBillDal
     {
 
@@ -67,6 +72,16 @@ namespace CZBK.ItcastOA.DAL
     }
 		
 	public partial class ScheduleUserDal :BaseDal<ScheduleUser>,IScheduleUserDal
+    {
+
+    }
+		
+	public partial class ShareFileOrNoticeDal :BaseDal<ShareFileOrNotice>,IShareFileOrNoticeDal
+    {
+
+    }
+		
+	public partial class ShareTypeDal :BaseDal<ShareType>,IShareTypeDal
     {
 
     }
