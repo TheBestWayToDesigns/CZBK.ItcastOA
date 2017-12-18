@@ -89,6 +89,11 @@
     <property name="T_JieKuanBillService" ref="T_JieKuanBillService" />
     <property name="BumenInfoSetService" ref="BumenInfoSetService" />
   </object>
+  <object type="CZBK.ItcastOA.WebApp.Controllers.ShareFileOrNoticeController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="UserInfoService" ref="UserInfoService" />
+    <property name="BumenInfoSetService" ref="BumenInfoSetService" />
+    <property name="FileTypeService" ref="FileTypeService" />
+  </object>
 
 
 

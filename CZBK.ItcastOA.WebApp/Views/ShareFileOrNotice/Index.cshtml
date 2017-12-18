@@ -54,6 +54,14 @@
                 }
             });
 
+            $("#BMSTUInput").combobox({
+                onChange: function () {
+                    var BMID = $("#BMSTUInput").combobox("getValue");
+                    $("#STUInput").combobox("setValue", "");
+                    $("#STUInput").combobox("reload", "/ShareFileOrNotice/GetShareToUser?BMID=" + BMID);
+                }
+            })
+
             $("#AddShareFileBtn").click(function () {
                 AddSchareFile();
             });
@@ -209,13 +217,19 @@
         {<table>
              <tr>
                 <td>文件类型</td>
-                <td><input type="text" name="TypeName" id="TypeId" /></td>
+                <td><input id="FileTypeInput" class="easyui-combobox" name="FileTypeName"
+                    url="/ShareFileOrNotice/GetAllFileType"
+                    valueField="ID"
+                    textField="Name"
+                    panelHeight="auto"
+                    style="width:100px" />
+                </td>
              </tr>
              <tr>
                 <td>文件备注</td>
                 <td><input type="text" name="BeiZhuName" id="BeiZhuId" /></td>
              </tr>
-             <tr><td colspan="3"><h1>分享给：</h1></td></tr>
+             <tr><td colspan="3"><h3>分享给：</h3></td></tr>
              <tr>
                 <td>部门</td>
                 <td><input id="BMSTUInput" class="easyui-combobox" name="BuMenName"
@@ -230,7 +244,6 @@
              <tr>
                 <td>部门用户</td>
                 <td><input id="STUInput" class="easyui-combobox" name="ShareToUserName"
-                           url="/ShareFileOrNotice/GetShareToUser"
                            valueField="ID"
                            textField="Name"
                            panelHeight="auto"
