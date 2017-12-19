@@ -29,19 +29,161 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public ActionResult GetShareFile()
         {
             int userID = LoginUser.ID;
-
-            return Json(null,JsonRequestBehavior.AllowGet);
+            var temp = ShareFileOrNoticeService.LoadEntities(x => x.ID > 0).DefaultIfEmpty().ToList();
+            List<ShareFileOrNotice> sfon = new List<ShareFileOrNotice>();
+            if (temp[0] != null)
+            {
+                foreach (var a in temp)
+                {
+                    if (a.TypeID == 1) {
+                         if (a.ShareUser == userID)
+                         {
+                             sfon.Add(a);
+                             continue;
+                         }
+                         else
+                         {
+                             Array ay = (a.ShareToUser).Split(',');
+                             foreach (var b in ay)
+                             {
+                                 int c = Convert.ToInt32(b);
+                                 if (c == userID)
+                                 {
+                                     sfon.Add(a);
+                                     break;
+                                 }
+                                 else
+                                 {
+                                     continue;
+                                 }
+                             }
+                         }
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                var Rtmp = from d in sfon
+                           select new
+                           {
+                               ID = d.ID,
+                               TypeID = d.ShareType.Name,
+                               FileTypeID = d.FileType.FileTypeCHNName,
+                               BeiZhu = d.BeiZhu,
+                               FileURL = d.FileURL,
+                               UploadFileTime = d.UploadFileTime,
+                               ShareUser = d.UserInfo.PerSonName,
+                           };
+                return Json(Rtmp, JsonRequestBehavior.AllowGet);
+            }
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+        //获取公告通知
+        public ActionResult GetNotice()
+        {
+            int userID = LoginUser.ID;
+            var temp = ShareFileOrNoticeService.LoadEntities(x => x.ID > 0).DefaultIfEmpty().ToList();
+            List<ShareFileOrNotice> sfon = new List<ShareFileOrNotice>();
+            if (temp[0] != null)
+            {
+                foreach (var a in temp)
+                {
+                    if (a.TypeID == 2) {
+                        if (a.ShareUser == userID)
+                        {
+                            sfon.Add(a);
+                            continue;
+                        }
+                        else
+                        {
+                            Array ay = (a.ShareToUser).Split(',');
+                            foreach (var b in ay)
+                            {
+                                int c = Convert.ToInt32(b);
+                                if (c == userID)
+                                {
+                                    sfon.Add(a);
+                                    break;
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                var Rtmp = from d in sfon
+                           select new
+                           {
+                               ID = d.ID,
+                               TypeID = d.ShareType.Name,
+                               NoticeText = d.BeiZhu,
+                               UpNoticeTime = d.UploadFileTime,
+                               NoticeUser = d.UserInfo.PerSonName
+                           };
+                return Json(Rtmp, JsonRequestBehavior.AllowGet);
+            }
+            return Json(null, JsonRequestBehavior.AllowGet);
         }
         //添加共享文件
-        public ActionResult AddShareFileDIV(ShareFileOrNotice sfon)
+        public ActionResult AddShareFile(ShareFileOrNotice sfon)
         {
             sfon.ShareUser = LoginUser.ID;
             sfon.ShareToUser = Request["STUstrName"];
-            sfon.FileURL = Request["FileUrlID"];
+            sfon.FileURL = Request["fileUrlName"];
             sfon.UploadFileTime = DateTime.Now;
             sfon.TypeID = 1;
-            ShareFileOrNoticeService.AddEntity(sfon);
+            var sn = ShareFileOrNoticeService.AddEntity(sfon);
             return Json(new { ret = "ok"}, JsonRequestBehavior.AllowGet);
+        }
+        //添加通知公告
+        public ActionResult AddNotice(ShareFileOrNotice sfon)
+        {
+            sfon.ShareUser = LoginUser.ID;
+            sfon.ShareToUser = Request["NoticestrName"]; 
+            sfon.BeiZhu = Request["NoticeText"];
+            sfon.UploadFileTime = DateTime.Now;
+            sfon.TypeID = 2;
+            var sn = ShareFileOrNoticeService.AddEntity(sfon);
+            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+        }
+        //获取上传文件
+        public ActionResult FileUpload()
+        {
+            HttpPostedFileBase file = Request.Files["uploadShareFileName"];
+            if (file != null)
+            {
+                string filename = Path.GetFileName(file.FileName);//获取上传的文件名
+                string fileExt = Path.GetExtension(filename);//获取扩展名
+                var temp = FileTypeService.LoadEntities(x => x.ID > 0).DefaultIfEmpty().ToList();
+                for (int a = 0; a < temp.Count(); a++)
+                {
+                    if (fileExt == temp[a].FileTypeENGName)
+                    {
+                        string dir = "/files/ShareFiles/" + DateTime.Now.Year + "/" + DateTime.Now.Month + "/" + DateTime.Now.Day + "/";
+                        Directory.CreateDirectory(Path.GetDirectoryName(Request.MapPath(dir)));
+                        string filenewName = Guid.NewGuid().ToString();
+                        string fulldir = dir + filenewName + fileExt;
+                        file.SaveAs(Request.MapPath(fulldir));
+                        return Content("yes:" + fulldir);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                return Content("no:文件类型错误或不支持，文件扩展名错误！");
+            }
+            else
+            {
+                return Content("no:请选择文件再上传");
+            }
         }
         //获取所有部门名称
         public ActionResult GetAllBuMen()
@@ -72,6 +214,21 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             return Json(list, JsonRequestBehavior.AllowGet);
         }
+        //获取允许查看的用户ID
+        public ActionResult ReturnUserID()
+        {
+            string uname = Request["personName"];
+            int bmid = Convert.ToInt32(Request["BMID"]);
+            var temp = UserInfoService.LoadEntities(x => x.PerSonName == uname && x.BuMenID == bmid).FirstOrDefault();
+            if(temp == null){
+                return Json(new { ret = "no"}, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                int a = temp.ID;
+                return Json(new { ret = "ok",val = a}, JsonRequestBehavior.AllowGet);
+            }
+        }
         //获取所有文件类型
         public ActionResult GetAllFileType()
         {
@@ -85,6 +242,42 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 list.Add(ftp);
             }
             return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        //删除共享文件
+        public ActionResult DelShareFile()
+        {
+            var uid = LoginUser.ID;
+            var id = Convert.ToInt32(Request["id"]);
+            var temp = ShareFileOrNoticeService.LoadEntities(x => x.ID == id).FirstOrDefault();
+            if (temp == null)
+            { return Json(new { msg = "数据库中无要修改的信息！" }, JsonRequestBehavior.AllowGet); }
+            else
+            {
+                if (temp.ShareUser == uid) {
+                    if (ShareFileOrNoticeService.DeleteEntity(temp))
+                    {
+                        return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { msg = "操作错误，没有删除成功！" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { msg = "操作错误，你没有权限删除此共享文件！" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+        //获取文件下载路径
+        public ActionResult GetFileUrl()
+        {
+            var id = Convert.ToInt32(Request["id"]);
+            var temp = ShareFileOrNoticeService.LoadEntities(x => x.ID == id).FirstOrDefault();
+            var url = temp.FileURL;
+            return Json(new { ret = url},JsonRequestBehavior.AllowGet);
         }
 
         public class STUBuMen
