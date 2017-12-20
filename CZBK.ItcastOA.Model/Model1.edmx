@@ -193,7 +193,8 @@
           </Key>
           <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Kh_List_id" Type="int" Nullable="false" />
-          <Property Name="GhTime" Type="datetime" />
+          <Property Name="GhTime" Type="datetime" Nullable="false" />
+          <Property Name="StopTime" Type="datetime" />
           <Property Name="JiShuYaoQiu" Type="nvarchar" MaxLength="500" />
           <Property Name="Addess" Type="nvarchar" MaxLength="500" />
           <Property Name="DaiBanYunShu" Type="nvarchar" MaxLength="500" />
@@ -260,7 +261,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MyTexts" Type="nvarchar" MaxLength="350" Nullable="false" />
           <Property Name="CreateTime" Type="datetime" />
           <Property Name="CreatePerson" Type="int" />
@@ -410,8 +411,8 @@
           </Key>
           <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BaoJiaTop_id" Type="bigint" Nullable="false" />
-          <Property Name="CPname" Type="nvarchar" MaxLength="650" />
-          <Property Name="CPXingHao" Type="nvarchar" MaxLength="650" />
+          <Property Name="CPname" Type="bigint" Nullable="false" />
+          <Property Name="CPXingHao" Type="bigint" Nullable="false" />
           <Property Name="CPGuiGe" Type="nvarchar" MaxLength="150" />
           <Property Name="CPShuLiang" Type="decimal" Precision="18" Scale="3" Nullable="false" />
           <Property Name="AddTime" Type="datetime" Nullable="false" />
@@ -419,7 +420,6 @@
           <Property Name="BaoJiaMoney" Type="decimal" Precision="18" Scale="2" />
           <Property Name="BaoJiaPerson" Type="int" />
           <Property Name="BaoJiaTime" Type="datetime" />
-          <Property Name="GhOverTime" Type="datetime" />
           <Property Name="WIN" Type="float" />
           <Property Name="DelFlag" Type="smallint" Nullable="false" />
           <Property Name="EditQianMoney" Type="decimal" Precision="18" Scale="2" />
@@ -460,6 +460,15 @@
           <Property Name="NewTime" Type="datetime" Nullable="false" />
           <Property Name="AddUser" Type="int" Nullable="false" />
           <Property Name="All_I" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="YXB_WinCanPin">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TCanpinID" Type="bigint" Nullable="false" />
+          <Property Name="TXingHao" Type="bigint" Nullable="false" />
+          <Property Name="Del" Type="smallint" />
         </EntityType>
         <Association Name="FK_ActionInfoR_UserInfo_ActionInfo">
           <End Role="ActionInfo" Type="Self.ActionInfo" Multiplicity="1" />
@@ -1025,6 +1034,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_YXB_Baojia_cpname">
+          <End Role="T_ChanPinName" Type="Self.T_ChanPinName" Multiplicity="1" />
+          <End Role="YXB_Baojia" Type="Self.YXB_Baojia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_Baojia">
+              <PropertyRef Name="CPname" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_YXB_Baojia_T_BaoJiaToP1">
           <End Role="T_BaoJiaToP" Type="Self.T_BaoJiaToP" Multiplicity="1" />
           <End Role="YXB_Baojia" Type="Self.YXB_Baojia" Multiplicity="*" />
@@ -1034,6 +1055,18 @@
             </Principal>
             <Dependent Role="YXB_Baojia">
               <PropertyRef Name="BaoJiaTop_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YXB_Baojia_xinghao">
+          <End Role="T_ChanPinName" Type="Self.T_ChanPinName" Multiplicity="1" />
+          <End Role="YXB_Baojia" Type="Self.YXB_Baojia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_Baojia">
+              <PropertyRef Name="CPXingHao" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1072,6 +1105,30 @@
             </Principal>
             <Dependent Role="YXB_Kh_list">
               <PropertyRef Name="AddUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YXB_WinCanPin_name">
+          <End Role="T_ChanPinName" Type="Self.T_ChanPinName" Multiplicity="1" />
+          <End Role="YXB_WinCanPin" Type="Self.YXB_WinCanPin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_WinCanPin">
+              <PropertyRef Name="TCanpinID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YXB_WinCanPin_xinghao">
+          <End Role="T_ChanPinName" Type="Self.T_ChanPinName" Multiplicity="1" />
+          <End Role="YXB_WinCanPin" Type="Self.YXB_WinCanPin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_WinCanPin">
+              <PropertyRef Name="TXingHao" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1154,6 +1211,7 @@
           <EntitySet Name="YXB_Baojia" EntityType="Self.YXB_Baojia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YXB_BaoJiaEidtMoney" EntityType="Self.YXB_BaoJiaEidtMoney" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YXB_Kh_list" EntityType="Self.YXB_Kh_list" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="YXB_WinCanPin" EntityType="Self.YXB_WinCanPin" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_ActionInfoR_UserInfo_ActionInfo" Association="Self.FK_ActionInfoR_UserInfo_ActionInfo">
             <End Role="ActionInfo" EntitySet="ActionInfo" />
             <End Role="R_UserInfo_ActionInfo" EntitySet="R_UserInfo_ActionInfo" />
@@ -1338,8 +1396,16 @@
             <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
           </AssociationSet>
+          <AssociationSet Name="FK_YXB_Baojia_cpname" Association="Self.FK_YXB_Baojia_cpname">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
+          </AssociationSet>
           <AssociationSet Name="FK_YXB_Baojia_T_BaoJiaToP1" Association="Self.FK_YXB_Baojia_T_BaoJiaToP1">
             <End Role="T_BaoJiaToP" EntitySet="T_BaoJiaToP" />
+            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YXB_Baojia_xinghao" Association="Self.FK_YXB_Baojia_xinghao">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
           </AssociationSet>
           <AssociationSet Name="FK_YXB_BaoJiaEidtMoney_UserInfo" Association="Self.FK_YXB_BaoJiaEidtMoney_UserInfo">
@@ -1353,6 +1419,14 @@
           <AssociationSet Name="FK_YXB_Kh_list_UserInfo" Association="Self.FK_YXB_Kh_list_UserInfo">
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="YXB_Kh_list" EntitySet="YXB_Kh_list" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YXB_WinCanPin_name" Association="Self.FK_YXB_WinCanPin_name">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="YXB_WinCanPin" EntitySet="YXB_WinCanPin" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YXB_WinCanPin_xinghao" Association="Self.FK_YXB_WinCanPin_xinghao">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="YXB_WinCanPin" EntitySet="YXB_WinCanPin" />
           </AssociationSet>
           <AssociationSet Name="FK_YXBBaojia_Userinf" Association="Self.FK_YXBBaojia_Userinf">
             <End Role="UserInfo" EntitySet="UserInfo" />
@@ -1593,6 +1667,7 @@
             <End Role="YXB_BaoJiaEidtMoney" EntitySet="YXB_BaoJiaEidtMoney" />
           </AssociationSet>
           <EntitySet Name="YXB_Baojia" EntityType="OAModel.YXB_Baojia" />
+          <EntitySet Name="YXB_WinCanPin" EntityType="OAModel.YXB_WinCanPin" />
           <AssociationSet Name="FK_YXB_Baojia_T_BaoJiaToP1" Association="OAModel.FK_YXB_Baojia_T_BaoJiaToP1">
             <End Role="T_BaoJiaToP" EntitySet="T_BaoJiaToP" />
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
@@ -1600,6 +1675,22 @@
           <AssociationSet Name="FK_YXB_Baojia_CanPinDengji" Association="OAModel.FK_YXB_Baojia_CanPinDengji">
             <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YXB_Baojia_cpname" Association="OAModel.FK_YXB_Baojia_cpname">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YXB_Baojia_xinghao" Association="OAModel.FK_YXB_Baojia_xinghao">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YXB_WinCanPin_name" Association="OAModel.FK_YXB_WinCanPin_name">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="YXB_WinCanPin" EntitySet="YXB_WinCanPin" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YXB_WinCanPin_xinghao" Association="OAModel.FK_YXB_WinCanPin_xinghao">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="YXB_WinCanPin" EntitySet="YXB_WinCanPin" />
           </AssociationSet>
           <AssociationSet Name="FK_T_WinBakFaHuo_BaoJia" Association="OAModel.FK_T_WinBakFaHuo_BaoJia">
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
@@ -2130,6 +2221,10 @@
           <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_T_ChanPinName_T_ChanPinName" FromRole="T_ChanPinName" ToRole="UserInfo" />
           <Property Name="T_ID" Type="Int64" />
           <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_YXB_Baojia_CanPinDengji" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
+          <NavigationProperty Name="YXB_Baojia1" Relationship="OAModel.FK_YXB_Baojia_cpname" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
+          <NavigationProperty Name="YXB_Baojia2" Relationship="OAModel.FK_YXB_Baojia_xinghao" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
+          <NavigationProperty Name="YXB_WinCanPin" Relationship="OAModel.FK_YXB_WinCanPin_name" FromRole="T_ChanPinName" ToRole="YXB_WinCanPin" />
+          <NavigationProperty Name="YXB_WinCanPin1" Relationship="OAModel.FK_YXB_WinCanPin_xinghao" FromRole="T_ChanPinName" ToRole="YXB_WinCanPin" />
         </EntityType>
         <Association Name="FK_T_ChanPinName_T_ChanPinName">
           <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
@@ -2149,7 +2244,7 @@
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Kh_List_id" Type="Int32" Nullable="false" />
-          <Property Name="GhTime" Type="DateTime" Precision="3" />
+          <Property Name="GhTime" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="JiShuYaoQiu" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Addess" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="DaiBanYunShu" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
@@ -2165,6 +2260,7 @@
           <NavigationProperty Name="YXB_Kh_list" Relationship="OAModel.FK_T_BaoJiaToP_YXB_Kh_list" FromRole="T_BaoJiaToP" ToRole="YXB_Kh_list" />
           <NavigationProperty Name="T_WinBak" Relationship="OAModel.FK_T_WinBak_YXB_Baojia" FromRole="T_BaoJiaToP" ToRole="T_WinBak" />
           <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_YXB_Baojia_T_BaoJiaToP1" FromRole="T_BaoJiaToP" ToRole="YXB_Baojia" />
+          <Property Name="StopTime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="T_BoolItem">
           <Key>
@@ -2593,8 +2689,8 @@
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="BaoJiaTop_id" Type="Int64" Nullable="false" />
-          <Property Name="CPname" Type="String" MaxLength="650" FixedLength="false" Unicode="true" />
-          <Property Name="CPXingHao" Type="String" MaxLength="650" FixedLength="false" Unicode="true" />
+          <Property Name="CPname" Type="Int64" Nullable="false" />
+          <Property Name="CPXingHao" Type="Int64" Nullable="false" />
           <Property Name="CPGuiGe" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="CPShuLiang" Type="Decimal" Nullable="false" Precision="18" Scale="3" />
           <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
@@ -2616,10 +2712,22 @@
           <Property Name="CheckMoney" Type="Int16" />
           <NavigationProperty Name="T_BaoJiaToP" Relationship="OAModel.FK_YXB_Baojia_T_BaoJiaToP1" FromRole="YXB_Baojia" ToRole="T_BaoJiaToP" />
           <NavigationProperty Name="T_ChanPinName" Relationship="OAModel.FK_YXB_Baojia_CanPinDengji" FromRole="YXB_Baojia" ToRole="T_ChanPinName" />
+          <NavigationProperty Name="T_ChanPinName1" Relationship="OAModel.FK_YXB_Baojia_cpname" FromRole="YXB_Baojia" ToRole="T_ChanPinName" />
+          <NavigationProperty Name="T_ChanPinName2" Relationship="OAModel.FK_YXB_Baojia_xinghao" FromRole="YXB_Baojia" ToRole="T_ChanPinName" />
           <NavigationProperty Name="T_WinBakFaHuo" Relationship="OAModel.FK_T_WinBakFaHuo_BaoJia" FromRole="YXB_Baojia" ToRole="T_WinBakFaHuo" />
           <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_YXBBaojia_Userinf" FromRole="YXB_Baojia" ToRole="UserInfo" />
           <NavigationProperty Name="YXB_BaoJiaEidtMoney" Relationship="OAModel.FK_YXB_BaoJiaEidtMoney_YXB_Baojia" FromRole="YXB_Baojia" ToRole="YXB_BaoJiaEidtMoney" />
-          <Property Name="GhOverTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="YXB_WinCanPin">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TCanpinID" Type="Int64" Nullable="false" />
+          <Property Name="TXingHao" Type="Int64" Nullable="false" />
+          <Property Name="Del" Type="Int16" />
+          <NavigationProperty Name="T_ChanPinName" Relationship="OAModel.FK_YXB_WinCanPin_name" FromRole="YXB_WinCanPin" ToRole="T_ChanPinName" />
+          <NavigationProperty Name="T_ChanPinName1" Relationship="OAModel.FK_YXB_WinCanPin_xinghao" FromRole="YXB_WinCanPin" ToRole="T_ChanPinName" />
         </EntityType>
         <Association Name="FK_YXB_Baojia_T_BaoJiaToP1">
           <End Type="OAModel.T_BaoJiaToP" Role="T_BaoJiaToP" Multiplicity="1" />
@@ -2642,6 +2750,54 @@
             </Principal>
             <Dependent Role="YXB_Baojia">
               <PropertyRef Name="CPDengJiID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YXB_Baojia_cpname">
+          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
+          <End Type="OAModel.YXB_Baojia" Role="YXB_Baojia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_Baojia">
+              <PropertyRef Name="CPname" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YXB_Baojia_xinghao">
+          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
+          <End Type="OAModel.YXB_Baojia" Role="YXB_Baojia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_Baojia">
+              <PropertyRef Name="CPXingHao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YXB_WinCanPin_name">
+          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
+          <End Type="OAModel.YXB_WinCanPin" Role="YXB_WinCanPin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_WinCanPin">
+              <PropertyRef Name="TCanpinID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YXB_WinCanPin_xinghao">
+          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
+          <End Type="OAModel.YXB_WinCanPin" Role="YXB_WinCanPin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_WinCanPin">
+              <PropertyRef Name="TXingHao" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2959,6 +3115,7 @@
           <EntitySetMapping Name="T_BaoJiaToP">
             <EntityTypeMapping TypeName="OAModel.T_BaoJiaToP">
               <MappingFragment StoreEntitySet="T_BaoJiaToP">
+                <ScalarProperty Name="StopTime" ColumnName="StopTime" />
                 <ScalarProperty Name="PiaoJuID" ColumnName="PiaoJuID" />
                 <ScalarProperty Name="HanShuiID" ColumnName="HanShuiID" />
                 <ScalarProperty Name="KHComname" ColumnName="KHComname" />
@@ -3171,7 +3328,6 @@
           <EntitySetMapping Name="YXB_Baojia">
             <EntityTypeMapping TypeName="OAModel.YXB_Baojia">
               <MappingFragment StoreEntitySet="YXB_Baojia">
-                <ScalarProperty Name="GhOverTime" ColumnName="GhOverTime" />
                 <ScalarProperty Name="CheckMoney" ColumnName="CheckMoney" />
                 <ScalarProperty Name="CPDengJiID" ColumnName="CPDengJiID" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
@@ -3195,6 +3351,16 @@
                 <ScalarProperty Name="CPname" ColumnName="CPname" />
                 <ScalarProperty Name="BaoJiaTop_id" ColumnName="BaoJiaTop_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="YXB_WinCanPin">
+            <EntityTypeMapping TypeName="OAModel.YXB_WinCanPin">
+              <MappingFragment StoreEntitySet="YXB_WinCanPin">
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="TXingHao" ColumnName="TXingHao" />
+                <ScalarProperty Name="TCanpinID" ColumnName="TCanpinID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

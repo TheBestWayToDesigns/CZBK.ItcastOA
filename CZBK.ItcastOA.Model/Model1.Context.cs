@@ -59,6 +59,7 @@ namespace CZBK.ItcastOA.Model
         public DbSet<GongLuBaoXiaoBill> GongLuBaoXiaoBills { get; set; }
         public DbSet<YXB_BaoJiaEidtMoney> YXB_BaoJiaEidtMoney { get; set; }
         public DbSet<YXB_Baojia> YXB_Baojia { get; set; }
+        public DbSet<YXB_WinCanPin> YXB_WinCanPin { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

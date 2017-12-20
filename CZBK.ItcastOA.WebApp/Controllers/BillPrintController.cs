@@ -130,7 +130,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             else
             {
-                if (T_BaoXiaoBillService.EditEntity(jkb))
+                var temp = T_BaoXiaoBillService.LoadEntities(x => x.ID == jkb.ID).FirstOrDefault();
+                temp.Del = 1;
+                if (T_BaoXiaoBillService.EditEntity(temp))
                 {
                     return Json(new { ret = "ok", msg = "修改成功！" }, JsonRequestBehavior.AllowGet);
                 }

@@ -259,4 +259,12 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class YXB_WinCanPinService :BaseService<YXB_WinCanPin>,IYXB_WinCanPinService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.YXB_WinCanPinDal;
+        }
+    }   
+	
 }

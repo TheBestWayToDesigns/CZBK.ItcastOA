@@ -34,11 +34,11 @@ namespace CZBK.ItcastOA.BLL
             {
                 temp = temp.Where<YXB_Baojia>(u => u.T_BaoJiaToP.Kh_List_id == sisp.KHname);
             }
-            if (sisp.CPname.Trim().Length > 0)
+            if (sisp.CPname!=0)
             {
                 temp = temp.Where<YXB_Baojia>(u => u.CPname == sisp.CPname);
             }
-            if (sisp.CPxh.Trim().Length > 0)
+            if (sisp.CPxh!= 0)
             {
                 temp = temp.Where<YXB_Baojia>(u => u.CPXingHao == sisp.CPxh);
             }

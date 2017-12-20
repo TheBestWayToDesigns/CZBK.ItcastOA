@@ -14,8 +14,11 @@
     <link href="~/Content/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="~/bootsarp/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/mobile-calendar-master/src/calendar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/guodu/modernizr.js">
+    <link rel="stylesheet" href="~/Content/guodu/style.css" media="screen" type="text/css" />
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="~/bootsarp/js/bootstrap.min.js"></script>
+    <script src="~/Content/guodu/modernizr.js"></script>
     <style>
         .font { font-size:10px
         }
@@ -74,7 +77,7 @@
                         return;
                     }
                 }
-
+               
                 $.ajax({
                     url: "/YXBJ/AddYXB_KH_list",
                     data: { KHname: ay[0].val(),  KHperson: ay[1].val(), KHzhiwu: ay[2].val(), KHphoto: ay[3].val(), KHfaren: ay[4].val() },
@@ -94,7 +97,7 @@
                             alertshow("客户名称不可重复");
                         }
                         else {
-                            alertshow("系统错误联系管理员");
+                            alertshow("系统错误联系管理员"+serverData);
                         };
                     },
                     complete: function () {
@@ -136,6 +139,7 @@
             $("body").delegate('#add_abaojia', 'click', function () {
                 // $("#resrc").click();
                 $("#resrc").show();
+                $("#Loading").show();
                 $.post("/YXBJ/GetKhList", {}, function (serverData) {
                     $("#khidselect option").remove();
                     for (var i = 0; i < serverData.rows.length; i++) {
@@ -159,6 +163,7 @@
                     })
                     
                 });
+                $("#Loading").hide();
             });
             $("body").delegate('.editdiv', 'click', function () {
                 var cpdiv = $("#CPBJ_div1").css("display");
@@ -171,6 +176,7 @@
                     }
                     //进行报价头写入数据
                     var ghtime = document.getElementById("GhTime").value;
+                    var stoptime = document.getElementById("stopTime").value;
                     var addess_1 = $("#Province").val();
                     var addess_2 = $("#City").val();
                     var addess_3 = $("#Village").val();                  
@@ -183,12 +189,17 @@
                         return;
                     }
                     if (addess_3 == "-1") {
-                        alertshow("没有选中区域！");
+                        alertshow("没有选中区县！");
                         return;
                     }
                     if (ghtime.trim().length <= 0) {
-                        alertshow("供货时间不可为空！")
+                        alertshow("开始供货时间不可为空！")
                         document.getElementById("GhTime").focus();
+                        return;
+                    }
+                    if (stoptime.trim().length <= 0) {
+                        alertshow("结束供货时间不可为空！")
+                        document.getElementById("stopTime").focus();
                         return;
                     }
                     if ($("#KHComname").val().trim().length <= 0)
@@ -197,6 +208,7 @@
                         document.getElementById("KHComname").focus();
                         return;
                     }
+                    $("#Loading").show();
                     $.post("/YXBJ/AddBaoJiaoTOP", {
                         "editID": editID,
                         "GhTime": ghtime,
@@ -210,7 +222,8 @@
                         "City": addess_2,
                         "Village": addess_3,
                         "HanShuiID": $("#OrHanSui").val(),
-                        "PiaojiuID": $("#PiaoJiu").val()
+                        "PiaojiuID": $("#PiaoJiu").val(),
+                        "stoptime": stoptime
                     }, function (serverData) {
                         if (serverData.ret == "ok") {
                             editID = serverData.ID;
@@ -220,7 +233,6 @@
                                                       
                         }
                         else if (serverData.ret == "load") {
-
                             $("#CPBJ_div1").css("display", cpdiv == "block" ? "none" : "");
                             $("#CPBJ_div2").css("display", cpdiv1 == "block" ? "none" : "");
                         }
@@ -229,7 +241,6 @@
                         };
                        
                     });
-
                     //获取列表
                     $.post("/YXBJ/GetysbBaojia", {
                         "BaoJiaTop_id": editID,
@@ -239,6 +250,7 @@
                             loadkis(sdta)
                         }
                     });
+                    $("#Loading").hide();
                 }
                 else {
                     $("#CPBJ_div1").css("display", cpdiv == "block" ? "none" : "");
@@ -279,7 +291,6 @@
             $("body").delegate('#save_sumbit', 'click', function () {
                 var dd = $("#khidselect").val();
                 var cc = $("#GhTime").val();
-                alert(cc);
             });
             //创建报价名称、型号、数量
             $("body").delegate('#AddBaojiaoOne', 'click', function () {               
@@ -311,7 +322,7 @@
                         document.getElementById("CPShuLiang").focus();
                         return;
                     }
-                   
+                    $("#Loading").show();
                     $.post("/YXBJ/AddBaoJiaoOne", {
                         "editID": editID,
                         "CPname": $("#CPname").val(),
@@ -323,11 +334,8 @@
                         if (serverData.ret == "ok") {
                             loadkis(serverData)
                         }
-                        else {
-
-                        }
-                    }
-                 )
+                    })
+                    $("#Loading").hide();
                 }
             })
             $("body").delegate('#Tbvlo tr td a', 'click', function () {
@@ -336,6 +344,7 @@
                     alertshow("该信息已报价，不可删除！");
                     return
                 }
+                $("#Loading").show();
                 $.post("/YXBJ/deletebaojia", {
                     "editID": editID,
                     "delID": $(this).attr("id")
@@ -343,14 +352,12 @@
                     if (serverData.ret == "ok") {                       
                         loadkis(serverData)
                     }
-                    else {
-
-                    }
                 })
+                $("#Loading").hide();
             })
             //查看报价数据
             $("body").delegate('#TbToplist tr td a', 'click', function () {
-              
+                $("#Loading").show();
                 if (this.name == "Seetop")
                 {
                     $.post("/YXBJ/GetBaoJiaMoney", {
@@ -390,6 +397,7 @@
                             PiaoJiu = sdata.temp[0].PiaoJuID;
                             Shkhidselect = sdata.temp[0].Kh_List_id;
                             $("#GhTime").val(ChangeDateFormat(sdata.temp[0].GhTime));
+                            $("#stopTime").val(ChangeDateFormat(sdata.temp[0].stoptime));
                             $("#Province").val(sdata.Province)
 
                             var provice = sdata.Province;
@@ -433,6 +441,7 @@
                         }
                     })
                 }
+                $("#Loading").hide();
             })
             //显示客户信息
             $("body").delegate('#tb tr td a', 'click', function () {
@@ -440,6 +449,7 @@
                 loadBaojiadata(1);
             })
             function loadkis(serverData) {
+                $("#Loading").show();
                 $("#Tbvlo tr:not(:first)").empty();
                 for (var i = 0; i < serverData.rows.length; i++) {
                     var trHTML = "<tr><td>" + serverData.rows[i].ID + "</td><td>" + serverData.rows[i].CPname + "</td><td>" + serverData.rows[i].CPXingHao + "</td><td>" + serverData.rows[i].CPShuLiang + "</td><td>" + ChangeDateFormat(serverData.rows[i].addTime) + "</td><td ><a class='btn  btn-info btn-sm' role='button'  id='" + serverData.rows[i].ID + "' name='" + serverData.rows[i].CPzt + "' >删除</a></td><tr>"
@@ -447,10 +457,13 @@
                     var trdhtml = "<tr><td></td><td>产品等级：</td><td style='text-align:left'>" + serverData.rows[i].CPdanjiu + "</td><td colspan='3'  style='text-align:left'>产品备注：" + serverData.rows[i].Remark + "</td></tr>";
                     $("#Tbvlo").append(trdhtml);
                 }
+                $("#Loading").hide();
             }
+            
         })
       
-        function ProviceBind(obj) {            
+        function ProviceBind(obj) {
+            $("#Loading").show();
             //清空下拉数据
             $("#Province").html("");
             var str = "<option value='-1'>==请选择省份===</option>";
@@ -464,8 +477,10 @@
                $("#Province").append(str);
                 
             })
+            $("#Loading").hide();
         }
         function CityBind() {
+            $("#Loading").show();
             var provice = $("#Province").val();
             //判断省份这个下拉框选中的值是否为空
             if (provice == "") {
@@ -481,18 +496,20 @@
                 //将数据添加到省份这个下拉框里面
                 $("#City").append(str);
             })
+            $("#Loading").hide();
         }
         function VillageBind() {
-            var provice = $("#City").val();
            
+            var provice = $("#City").val();           
             //判断市这个下拉框选中的值是否为空
             if (provice == "") {
                 return;
             }
+           
             $("#Village").html("");
             var str = "<option  value='-1'>==请选择区域===</option>";
             //将市的ID拿到数据库进行查询，查询出他的下级进行绑定
-
+            $("#Loading").show();
             $.post("/YXBJ/GetAddress", { "parentiD": provice, "MyColums": "Village" }, function (serverData) {
                 //从服务器获取数据进行绑定                    
                 $.each(serverData, function (i, item) {
@@ -501,14 +518,15 @@
                 })
                 //将数据添加到省份这个下拉框里面
                 $("#Village").append(str);
-            })          
+            })
+            $("#Loading").hide();
         }
-
         function alertshow(text) {
             $("#alertShow").text(text);
             $('#Hiddenalert').click();
         }
         function loadBaojiadata(artPage) {
+            $("#Loading").show();
             $.post("/YXBJ/GetKhDataId", {
                 "khid": khid,
                 "page": artPage,
@@ -554,6 +572,7 @@
                     $('#selectMOD').modal('show');
                 }
             })
+            $("#Loading").hide();
         }
         function loaddata(artPage) {
             $("#tb tr:not(:first)").empty();
@@ -599,30 +618,33 @@
             var strXingh = "<option  value='-1'>==请选择产品型号===</option>";
             var strcpdj = "<option  value='-1'>==请选择产品等级===</option>";
             $.post("/YXBJ/GetChanPinList", {}, function (TempD) {
-                if (TempD.ret == "ok") {
-                    //从服务器获取数据进行绑定                    
-                    $.each(TempD.tempName, function (i, item) {
-                        strName += "<option value=" + item.ID + ">" + item.MyText + "</option>";
-                    })
-                    //从服务器获取数据进行绑定                    
-                    $.each(TempD.tempXingH, function (i, item) {
-                        strXingh += "<option value=" + item.ID + ">" + item.MyText + "</option>";
-                    })
+                if (TempD.ret == "ok") {       
                     $.each(TempD.tempDengji, function (i, item) {
                         strcpdj += "<option value=" + item.ID + ">" + item.MyText + "</option>";
                     })
                 }
                 else {
                     alertshow("读取产品名称与型号失败！~请联系管理员！~")
-                }                
-                $("#CPname").append(strName);
-                $("#CPXingHao").append(strXingh);
+                }      
+                //$("#CPXingHao").append(strXingh);
                 $("#CPDengji").append(strcpdj);
             })
+            //获取产品名称
+            $.post("/YXBJ/GetChanPinName", {}, function (data) {
+                 $.each(data, function (i, item) {
+                      strName += "<option value=" + item.ID + ">" + item.MyText + "</option>";
+                  })                
+                $("#CPname").append(strName);
+            })
+            $("#Loading").hide();
           
         }
         //将序列化成json格式后日期(毫秒数)转成日期格式
         function ChangeDateFormat(cellval) {
+            if (cellval == null)
+            {
+                return "";
+            }
             var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
             var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
             var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
@@ -641,9 +663,29 @@
                 alertshow("异常错误")
             }
         }
+
+        //下拉选中产品名称触发事件
+     
+        function Onchanges() {
+            $("#Loading").show();
+            var cpnameid = $("#CPname").val();
+            $.post("/YXBJ/GetCpname_xinghao", { "cpid": cpnameid }, function (data) {
+               
+                    $("#CPXingHao").html("");
+                    var strXingh = "<option  value='-1'>==请选择产品型号===</option>";
+                    //从服务器获取数据进行绑定                    
+                    $.each(data, function (i, item) {
+                        strXingh += "<option value=" + item.ID + ">" + item.MyText + "</option>";
+                    })
+                   $("#CPXingHao").append(strXingh);
+                
+            })
+            $("#Loading").hide();
+        }
     </script>
 </head>
 <body>
+    <div class="loader" id="Loading">努力加载中！</div>
 
     <div>
         <!-- Nav tabs -->
@@ -677,10 +719,7 @@
                 <nav aria-label="Page navigation">
                     <ul class="pager" id="Pageul"></ul>
                 </nav>
-
             </div>
-
-
             <div id="addList" role="tabpanel" class="tab-pane">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content" id="CPBJ_div1">
@@ -699,7 +738,14 @@
                                         <span class="input-group-addon" id="basic-addon1">票据</span>
                                         <select class="form-control PiaoJiu" id="PiaoJiu" name="PiaoJiu" aria-describedby="basic-addon1"></select>
                                     </div>
-                                    <input type="text" class="calendars form-control" format="dd/MM/yyyy" placeholder="供货期" id="GhTime" name="GhTime">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="basic-startime">开始供货期</span>
+                                        <input type="text"  aria-describedby="basic-startime" class="calendars form-control" format="dd/MM/yyyy" placeholder="开始供货期" id="GhTime" name="GhTime">
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="basic-stoptime">结束供货期</span>
+                                        <input type="text"  aria-describedby="basic-stoptime"  class="calendars form-control" format="dd/MM/yyyy" placeholder="结束供货期" id="stopTime" name="stopTime">
+                                    </div>
                                     <select class="form-control Province" name="Province" id="Province">
                                         <option value="-1">==请选择省份===</option>
                                     </select>
@@ -707,7 +753,7 @@
                                         <option value="-1">==请选择城市===</option>
                                     </select>
                                     <select class="form-control" name="Village" id="Village">
-                                        <option value="-1">==请选择区域===</option>
+                                        <option value="-1">==请选择区县===</option>
                                     </select>
                                     <select class="form-control" id="khidselect" name="Kh_List_id"></select>
                                     <div class="input-group">
@@ -719,8 +765,8 @@
                                         <input placeholder="技术要求" class="form-control" type="text" name="JiShuYaoQiu" id="JiShuYaoQiu"  aria-describedby="ba3" />
                                     </div>
                                     <div class="input-group">
-                                        <span class="input-group-addon" id="ba4">代办运输</span>
-                                        <input placeholder="代办运输" class="form-control" type="text" name="DaiBanYunShu" id="DaiBanYunShu" aria-describedby="ba4" />
+                                        <span class="input-group-addon" id="ba4">运输方式</span>
+                                        <input placeholder="运输方式" class="form-control" type="text" name="DaiBanYunShu" id="DaiBanYunShu" aria-describedby="ba4" />
                                     </div>
                                     <div class="input-group">
                                        <span class="input-group-addon" id="ba5">结算方式</span>
@@ -749,7 +795,7 @@
 
                         <div class="modal-body">
                             <div class="form-group ">
-                                <select class="form-control" name="CPname" id="CPname">
+                                <select class="form-control" name="CPname" id="CPname" onchange="Onchanges()">
                                     <option value="-1">==请选择产品名称===</option>
                                 </select>
                                 <select class="form-control" name="CPXingHao" id="CPXingHao">

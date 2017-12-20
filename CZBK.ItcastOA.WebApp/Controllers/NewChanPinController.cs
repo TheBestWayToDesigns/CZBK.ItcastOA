@@ -12,6 +12,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //
         // GET: /NewChanPin/
         IBLL.IT_ChanPinNameService T_ChanPinNameService { get; set; }
+        IBLL.IYXB_WinCanPinService YXB_WinCanPinService { get; set; }
 
         public ActionResult Index()
         {
@@ -73,6 +74,38 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 else
                 { return Json("no", JsonRequestBehavior.AllowGet); }
             }            
+        }
+        //获取产品型号列表
+        public ActionResult GetWinCpXh() {
+
+            int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 10;
+            int totalCount;
+
+            var actioninfolist = YXB_WinCanPinService.LoadPageEntities<long>(pageIndex, pageSize, out totalCount, a =>  a.Del ==null, a => a.ID, false);
+            var temp = from a in actioninfolist
+                       select new
+                       {
+                           ID=a.ID,
+                           CPname = a.T_ChanPinName.MyTexts,
+                           Cpxinghao = a.T_ChanPinName1.MyTexts
+                       };
+            return Json(new { rows = temp, total = totalCount }, JsonRequestBehavior.AllowGet);
+        }
+        //新增产品信息组合 
+        public ActionResult addwinchanpin() {
+            var cpnameid = Request["cpname"] == null ? 0 : int.Parse(Request["cpname"]);
+            var cpxhid = Request["cpxh"] == null ? 0 : int.Parse(Request["cpxh"]);
+            YXB_WinCanPin ywcp = new YXB_WinCanPin();
+            ywcp.TCanpinID = cpnameid;
+            ywcp.TXingHao = cpxhid;
+            var IsNotNUll= YXB_WinCanPinService.LoadEntities(x => x.TCanpinID == cpnameid && x.TXingHao == cpxhid).FirstOrDefault();
+            if (IsNotNUll != null)
+            {
+                return Json("数据库中已存在要添加的信息，请核对信息！", JsonRequestBehavior.AllowGet);
+            }
+            YXB_WinCanPinService.AddEntity(ywcp);
+            return Json("ok", JsonRequestBehavior.AllowGet);
         }
     }
 }

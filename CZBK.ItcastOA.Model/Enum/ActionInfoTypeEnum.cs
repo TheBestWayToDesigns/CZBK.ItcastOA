@@ -15,6 +15,6 @@ namespace CZBK.ItcastOA.Model.Enum
         /// <summary>
         /// 菜单权限
         /// </summary>
-        MenuActionTypeEnum = 1
+        MenuActionTypeEnum = 1,
     }
 }

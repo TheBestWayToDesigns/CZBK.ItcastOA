@@ -27,7 +27,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             if (LoginUser != null)
             {
-                ViewData["userName"] = LoginUser.UName;
+                ViewData["userName"] = LoginUser.PerSonName;
+                ViewBag.id = LoginUser.ID;
             }
             return View();
         }

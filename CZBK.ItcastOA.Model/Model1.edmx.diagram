@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="38639b506e3a4aa591ee5f325d6e102d" Name="关系图1" ZoomLevel="88" ShowGrid="false" SnapToGrid="false">
+      <Diagram DiagramId="38639b506e3a4aa591ee5f325d6e102d" Name="关系图1" ZoomLevel="73" ShowGrid="false" SnapToGrid="false">
         <EntityTypeShape EntityType="OAModel.ActionInfo" Width="1.5" PointX="4.2151268643808839" PointY="0.68115941700352467" />
         <EntityTypeShape EntityType="OAModel.Department" Width="1.5" PointX="6.268568933213146" PointY="0.771739125505287" />
         <EntityTypeShape EntityType="OAModel.R_UserInfo_ActionInfo" Width="2.625" PointX="0.82653989676778039" PointY="3.4424818805662452" />
@@ -77,9 +77,14 @@
         <AssociationConnector Association="OAModel.FK_GongLuBaoXiaoBill_UserInfo" />
         <EntityTypeShape EntityType="OAModel.YXB_BaoJiaEidtMoney" Width="1.5" PointX="23.7500005" PointY="1.2838643391927067" />
         <AssociationConnector Association="OAModel.FK_YXB_BaoJiaEidtMoney_UserInfo" />
-        <EntityTypeShape EntityType="OAModel.YXB_Baojia" Width="1.5" PointX="18.5000005" PointY="2.8103179069009161" />
+        <EntityTypeShape EntityType="OAModel.YXB_Baojia" Width="1.5" PointX="18.5000005" PointY="2.9058277539061237" />
+        <EntityTypeShape EntityType="OAModel.YXB_WinCanPin" Width="1.5" PointX="13.125" PointY="6.1685739290363326" />
         <AssociationConnector Association="OAModel.FK_YXB_Baojia_T_BaoJiaToP1" />
         <AssociationConnector Association="OAModel.FK_YXB_Baojia_CanPinDengji" />
+        <AssociationConnector Association="OAModel.FK_YXB_Baojia_cpname" />
+        <AssociationConnector Association="OAModel.FK_YXB_Baojia_xinghao" />
+        <AssociationConnector Association="OAModel.FK_YXB_WinCanPin_name" />
+        <AssociationConnector Association="OAModel.FK_YXB_WinCanPin_xinghao" />
         <AssociationConnector Association="OAModel.FK_T_WinBakFaHuo_BaoJia" />
         <AssociationConnector Association="OAModel.FK_YXBBaojia_Userinf" />
         <AssociationConnector Association="OAModel.FK_YXB_BaoJiaEidtMoney_YXB_Baojia" />

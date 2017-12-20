@@ -165,5 +165,10 @@ namespace CZBK.ItcastOA.DAL
     {
 
     }
+		
+	public partial class YXB_WinCanPinDal :BaseDal<YXB_WinCanPin>,IYXB_WinCanPinDal
+    {
+
+    }
 	
 }

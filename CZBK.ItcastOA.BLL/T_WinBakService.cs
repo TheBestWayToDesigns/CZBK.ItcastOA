@@ -39,11 +39,11 @@ namespace CZBK.ItcastOA.BLL
             {
                 temp = temp.Where<T_WinBak>(u => u.T_BaoJiaToP.Kh_List_id== sisp.KHname);
             }
-            if (sisp.CPname.Trim().Length>0)
+            if (sisp.CPname!=0)
             {
                 temp = temp.Where<T_WinBak>(u => u.T_BaoJiaToP.YXB_Baojia.Where(m => m.CPname == sisp.CPname).DefaultIfEmpty() != null?Convert.ToBoolean( u.T_BaoJiaToP.YXB_Baojia.Select(m=>m.CPname==sisp.CPname)): Convert.ToBoolean(u.T_BaoJiaToP.YXB_Baojia.Select(m => m.ZhuangTai == 1)));
             }
-            if (sisp.CPxh.Trim().Length > 0)
+            if (sisp.CPxh!= 0)
             {
                 temp = temp.Where<T_WinBak>(u => u.T_BaoJiaToP.YXB_Baojia.Where(m => m.CPXingHao == sisp.CPxh).DefaultIfEmpty() != null ? Convert.ToBoolean(u.T_BaoJiaToP.YXB_Baojia.Select(m => m.CPXingHao == sisp.CPxh)) : Convert.ToBoolean(u.T_BaoJiaToP.YXB_Baojia.Select(m => m.ZhuangTai == 1)));
             }
@@ -56,6 +56,13 @@ namespace CZBK.ItcastOA.BLL
             foreach (var lb in Lybj)
             {
                 GetCurrentDbSession.YXB_BaojiaDal.EditEntity(lb);
+                YXB_BaoJiaEidtMoney bjm = new YXB_BaoJiaEidtMoney();
+                bjm.YXB_BJ_ID = lb.id;
+                bjm.EidtUser_ID =Convert.ToInt32(lb.UpdataUserID);
+                bjm.EidtTime = DateTime.Now;
+                bjm.EditBJMoney =Convert.ToDecimal( lb.WinMoney);
+                bjm.EditYFMoney = Convert.ToDecimal(lb.WinYunFei);
+                GetCurrentDbSession.YXB_BaoJiaEidtMoneyDal.AddEntity(bjm);
             }
             GetCurrentDbSession.T_WinBakDal.AddEntity(twb);
             if (GetCurrentDbSession.SaveChanges())
