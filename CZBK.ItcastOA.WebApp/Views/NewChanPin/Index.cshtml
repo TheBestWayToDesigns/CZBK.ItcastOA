@@ -35,34 +35,110 @@
         var Rows = 10;
         var MyColums = "CPname";
         var Del;
+        var Tpage = true;
         $(function () {
             //读取产品名称
-            loaddata();
+            loadCpxh()
             //页面跳转
             $("body").delegate('#Pageul li', 'click', function () {
                 //alert($(this).text().trim()); //弹出点击的li标签的value值
                 if ($(this).text().trim() == "首页") {
-                    loaddata('1', Rows);
+                    if (Tpage)
+                    { loadCpxh('1', Rows); }
+                    else {
+                        loaddata('1', Rows);
+                    }
+                    
                 }
                 else if ($(this).text().trim() == "末页") {
-                    loaddata(MaxPage, Rows);
+                    if (Tpage) {
+                        loadCpxh(MaxPage, Rows);
+                    }
+                    else {
+                        loaddata(MaxPage, Rows);
+                    }
                 }
                 else {
-                    loaddata($(this).text(), Rows)
+                    if (Tpage) {
+                        loadCpxh($(this).text(), Rows);
+                    }
+                    else {
+                        loaddata($(this).text(), Rows)
+                    }
+                 
                 }
 
             });
+            //点击产品名称
             $("body").delegate("#GetNamelist", 'click', function () {
+                Tpage = false;
                 MyColums = "CPname";
-                $("#TdText").html("产品名称");
-               
+                $("#TdText").html("产品名称");               
                 loaddata();
             })
+            //点击产品型号
             $("body").delegate("#GetXHlist", 'click', function () {
+                Tpage = false;
                 MyColums = "CPxinghao";
                 $("#TdText").html("产品型号");
                 loaddata();
             })
+            //显示产品最终信息
+            $("body").delegate("#GetNamehxlist", 'click', function () {
+                Tpage = true
+                $("#TdText").html("产品信息");
+                loadCpxh();
+            })
+            $("body").delegate("#CkGetnamehx", 'click', function () {
+
+                $.post("/YXBJ/GetChanPinList", {}, function (TempD) {
+                    $("#StCpName").html("");
+                    $("#StCpxingh").html("");
+                    var strName, strXingh;
+                    if (TempD.ret == "ok") {
+                        //从服务器获取数据进行绑定                    
+                        $.each(TempD.tempName, function (i, item) {
+                            strName += "<option value=" + item.ID + ">" + item.MyText + "</option>";
+                        })
+
+                        //从服务器获取数据进行绑定                    
+                        $.each(TempD.tempXingH, function (i, item) {
+                            strXingh += "<option value=" + item.ID + ">" + item.MyText + "</option>";
+                        })                        
+                    }
+                    else {
+                        alertshow("读取产品名称与型号失败！~请联系管理员！~")
+                    }
+                    $("#StCpName").append(strName);
+                    $("#StCpxingh").append(strXingh);
+                })
+            })
+            //添加最终产品组合
+            $("body").delegate("#NewAddcp",'click',function(){
+                var cpname = $("#StCpName").val();
+                var cpxh = $("#StCpxingh").val();
+                if (cpname <= 0)
+                {
+                    alertshow("产品名称不了为空！");
+                    return;
+                }
+                if (cpxh <= 0)
+                {
+                    alertshow("产品型号不了为空！");
+                    return;
+                }
+                $.post("/NewChanPin/addwinchanpin", {"cpname":cpname,"cpxh":cpxh}, function (data) {
+                    if (data === "ok") {
+                        alertshow("添加成功！");
+                        loadCpxh();
+                    }
+                    else {
+                        alertshow(data);
+                    }
+                })
+            })
+            
+          
             //删除信息
             $("body").delegate('#tb tr td a', 'click', function () {
                 Del = $(this).attr("id");
@@ -180,7 +256,41 @@
                 }
             });
         }
-        
+        //获取产品最终信息列表
+        function loadCpxh(artPage) {
+            $("#tb tr:not(:first)").empty();
+            $('#Pageul').children().filter('li').remove(); //动态删除
+            $.post("/NewChanPin/GetWinCpXh", { "page": artPage, "rows": Rows}, function (serverData) {
+                for (var i = 0; i < serverData.rows.length; i++) {
+                    var trHTML = "<tr  ><td>产品名称：【" + serverData.rows[i].CPname + "】 —产品型号：【" + serverData.rows[i].Cpxinghao + "】</td><td><a  class='btn  btn-info btn-sm' role='button' href='#'  id='" + serverData.rows[i].ID + "' name=''>删除</a></td></tr>"
+                    $("#tb").append(trHTML);
+                }
+                Aconunt = serverData.total;
+                MaxPage = Math.ceil(Aconunt / Rows);
+                artPage = artPage == null ? 0 : artPage.length <= 0 ? 0 : artPage;
+                for (var s = 0; s < 7; s++) {
+                    var hm;
+                    if (s == 0) {
+                        hm = "<li id='f' class='previous'><a href='#'  ><span aria-hidden='true'>首页</a> </li>";
+                    } else if (s == 6) {
+                        hm = "<li class='next'><a href='#' > <span aria-hidden='true'>末页</a> </li>";
+                    }
+                    else {
+                        var sx = s;
+                        if (artPage > 3) {
+                            sx = (artPage - 2) + (s - 1);
+                        }
+                        if (sx <= MaxPage) {
+                            hm = "<li><a href='#'> " + sx + " </a> </li>";
+                        }
+                        else {
+                            hm = "";
+                        }
+                    }
+                    $("#Pageul").append(hm);
+                }
+            });
+        }
     </script>
 </head>
 <body>
@@ -193,9 +303,11 @@
                 <ul class="dropdown-menu">
                     <li><a href="#" data-toggle="modal" data-target=".CpName">添加名称</a></li>
                     <li><a href="#" data-toggle="modal" data-target=".CpXingHao">添加规格</a></li>
+                    <li><a href="#" data-toggle="modal" id="CkGetnamehx" data-target=".WinNameXH">新增产品</a></li>
                 </ul>
             </li>
-            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" id="GetNamelist" data-toggle="tab">名称列表</a></li>
+            <li role="presentation"  class="active"><a href="#home"  role="tab"  aria-controls="#home" id="GetNamehxlist" data-toggle="tab">产品信息</a></li>
+            <li role="presentation"><a href="home" role="tab"   aria-controls="home"  id="GetNamelist" data-toggle="tab">名称列表</a></li>
             <li role="presentation"><a href="#home" aria-controls="home" role="tab" id="GetXHlist" data-toggle="tab">型号列表</a></li>
             
         </ul>
@@ -254,6 +366,33 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                     <button type="button" class="btn btn-primary" id="addXH">确定</button>
+                </div>
+
+            </div><!-- /.modal-content -->
+
+        </div><!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal fade bs-example-modal-sm WinNameXH" tabindex="1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加产品信息</h4>
+                </div>
+                <div class="modal-body">
+                    <select class="form-control" name="" id="StCpName" >
+                        <option value="-1">==请选择产品名称===</option>
+                    </select>
+                    <select class="form-control" name="" id="StCpxingh">
+                        <option value="-1">==请选择产品型号===</option>
+                    </select>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="NewAddcp">新增</button>
                 </div>
 
             </div><!-- /.modal-content -->

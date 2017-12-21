@@ -56,6 +56,13 @@ namespace CZBK.ItcastOA.BLL
             foreach (var lb in Lybj)
             {
                 GetCurrentDbSession.YXB_BaojiaDal.EditEntity(lb);
+                YXB_BaoJiaEidtMoney bjm = new YXB_BaoJiaEidtMoney();
+                bjm.YXB_BJ_ID = lb.id;
+                bjm.EidtUser_ID =Convert.ToInt32(lb.UpdataUserID);
+                bjm.EidtTime = DateTime.Now;
+                bjm.EditBJMoney =Convert.ToDecimal( lb.WinMoney);
+                bjm.EditYFMoney = Convert.ToDecimal(lb.WinYunFei);
+                GetCurrentDbSession.YXB_BaoJiaEidtMoneyDal.AddEntity(bjm);
             }
             GetCurrentDbSession.T_WinBakDal.AddEntity(twb);
             if (GetCurrentDbSession.SaveChanges())

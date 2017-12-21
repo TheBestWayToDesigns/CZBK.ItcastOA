@@ -64,7 +64,14 @@
                     buttons: [{
                         text: '确定',
                         iconCls: 'icon-ok',
-                        handler: function () {     
+                        handler: function () {
+                            if ($("#Jkperson").val().length <= 0)
+                            {
+                                $.messager.alert("提示","借款人不可为空！")
+                            }
+                            if ($("#Jkdanwei").val().length <= 0) {
+                                $.messager.alert("提示", "借款单位不可为空！")
+                            }
                             $("#JKBillFrom").submit();//提交表单                            
                         }
                     }, {
@@ -91,7 +98,8 @@
                         text: '确定',
                         iconCls: 'icon-ok',
                         handler: function () {
-                            $("#BXBillFrom").submit();//提交表单                            
+                            $("#BXBillFrom").submit();//提交表单     
+                            $('#AddBxBill').dialog('close');
                         }
                     }, {
                         text: '取消',
@@ -153,7 +161,7 @@
                      },
                      {
                          field: "Zuofei", title: "作废", formatter: function (value, row, index) {
-                           return "<a href='javascript:DigPrint()' class='l-btn' style='padding:2px 5px;'>作废</a>";
+                           return "<a href='javascript:jkdzf()' class='l-btn' style='padding:2px 5px;'>作废</a>";
                      }
         }
 
@@ -204,7 +212,7 @@
                      },
                      {
                          field: "ddz", title: "作废", formatter: function (value, row, index) {
-                             return "<a href='javascript:' class='l-btn' style='padding:2px 5px;'>作废</a>";
+                             return "<a href='javascript:bxpzdel()' class='l-btn' style='padding:2px 5px;'>作废</a>";
                          }
                      }
 
@@ -264,7 +272,10 @@
             $("#Money").text("￥" + Moneyd);
             $("#BigMoney").text("ⓧ" + Arabia_to_Chinese(strM));
             $("#KHH").text(rows[0].OpenHang);
-            $("#CardNumber").text(rows[0].CardNumber);
+
+            var carnum = rows[0].CardNumber;
+            carnum = carnum.replace(/(\d{4})/g, '$1 ').replace(/\s*$/, ' ');
+            $("#CardNumber").text(carnum);
             $("#JKyy").text(rows[0].JieKuanYuanYin);
             $("#baktd").text(rows[0].Bak);
             var Dtime = ChangeDateFormat(rows[0].BillTime).split("-");
@@ -387,7 +398,6 @@
                     $.messager.alert("提示", data.msg);
                 }
             })
-            alert(rows[0].ID)
         }
         function Remc() {
             $("#BxDanwei").text('');
@@ -512,7 +522,47 @@
             
             $('#BXLaFrom').submit();
         }
+        //借款单作废
+        function jkdzf() {
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+            $.messager.confirm('提醒', '是否作废借款单！', function (r) {
+                if (r) {
+                    $.post("/BillPrint/DELJiekuan", { "id": rows[0].ID }, function (data) {
+                        if (data.ret == "ok")
+                        {
+                            $("#tt").datagrid("reload");
+                            $.messager.alert("提醒", data.msg, "error");
+                            
+                        }
+                    })
+                }
+            }); 
+        }
+        //报销凭证作废
+        function bxpzdel() {
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+            $.messager.confirm('提醒', '是否作废报销凭证！', function (r) {
+                if (r) {
+                    $.post("/BillPrint/AddOrEditBxBill", { "ID": rows[0].ID }, function (data) {
+                        if (data.ret == "ok") {
+                            $("#tt").datagrid("reload");
+                            $.messager.alert("提醒", data.msg, "error");
 
+                        }
+                    })
+                }
+            });
+        }
     </script>
     <style>
         html, body {
@@ -575,8 +625,8 @@
                                        textField="MyTexts"
                                        panelHeight="auto" style="width:100px" />
                              </td></tr>
-                        <tr><td>借款人</td><td><input type="text" name="JieKuanPerson" id="FaHuoBak" /></td></tr>
-                        <tr><td>收款单位</td><td><input type="text" name="SkdwName" id="FaHuoBak" /></td></tr>
+                        <tr><td>借款人</td><td><input type="text" name="JieKuanPerson" id="Jkperson" /></td></tr>
+                        <tr><td>收款单位</td><td><input type="text" name="SkdwName" id="Jkdanwei" /></td></tr>
                         <tr><td>借款金额</td><td><input type="text" name="JieKuanMoney" id="FaHuoBak" onkeyup="num(this)" /></td></tr>
                         <tr><td>开户行</td><td><input type="text" name="OpenHang" id="FaHuoBak" /></td></tr>
                         <tr><td>账号（卡号）</td><td><input type="text" name="CardNumber" id="FaHuoBak" onkeyup="num(this)"  /></td></tr>

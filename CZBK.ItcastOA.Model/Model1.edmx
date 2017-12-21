@@ -1756,19 +1756,12 @@
             <End Role="YXB_WinCanPin" EntitySet="YXB_WinCanPin" />
           </AssociationSet>
           <EntitySet Name="YXB_Baojia" EntityType="OAModel.YXB_Baojia" />
+          <EntitySet Name="YXB_WinCanPin" EntityType="OAModel.YXB_WinCanPin" />
           <AssociationSet Name="FK_YXB_Baojia_T_BaoJiaToP1" Association="OAModel.FK_YXB_Baojia_T_BaoJiaToP1">
             <End Role="T_BaoJiaToP" EntitySet="T_BaoJiaToP" />
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
           </AssociationSet>
           <AssociationSet Name="FK_YXB_Baojia_CanPinDengji" Association="OAModel.FK_YXB_Baojia_CanPinDengji">
-            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
-            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_YXB_Baojia_cpname" Association="OAModel.FK_YXB_Baojia_cpname">
-            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
-            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_YXB_Baojia_xinghao" Association="OAModel.FK_YXB_Baojia_xinghao">
             <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
           </AssociationSet>
@@ -2319,8 +2312,6 @@
           <NavigationProperty Name="YXB_WinCanPin" Relationship="OAModel.FK_YXB_WinCanPin_name" FromRole="T_ChanPinName" ToRole="YXB_WinCanPin" />
           <NavigationProperty Name="YXB_WinCanPin1" Relationship="OAModel.FK_YXB_WinCanPin_xinghao" FromRole="T_ChanPinName" ToRole="YXB_WinCanPin" />
           <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_YXB_Baojia_CanPinDengji" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
-          <NavigationProperty Name="YXB_Baojia1" Relationship="OAModel.FK_YXB_Baojia_cpname" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
-          <NavigationProperty Name="YXB_Baojia2" Relationship="OAModel.FK_YXB_Baojia_xinghao" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
         </EntityType>
         <Association Name="FK_T_ChanPinName_T_ChanPinName">
           <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
@@ -2848,6 +2839,7 @@
           <NavigationProperty Name="T_WinBakFaHuo" Relationship="OAModel.FK_T_WinBakFaHuo_BaoJia" FromRole="YXB_Baojia" ToRole="T_WinBakFaHuo" />
           <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_YXBBaojia_Userinf" FromRole="YXB_Baojia" ToRole="UserInfo" />
           <NavigationProperty Name="YXB_BaoJiaEidtMoney" Relationship="OAModel.FK_YXB_BaoJiaEidtMoney_YXB_Baojia" FromRole="YXB_Baojia" ToRole="YXB_BaoJiaEidtMoney" />
+          <Property Name="GhOverTime" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK_YXB_Baojia_T_BaoJiaToP1">
           <End Type="OAModel.T_BaoJiaToP" Role="T_BaoJiaToP" Multiplicity="1" />
@@ -2870,30 +2862,6 @@
             </Principal>
             <Dependent Role="YXB_Baojia">
               <PropertyRef Name="CPDengJiID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_YXB_Baojia_cpname">
-          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
-          <End Type="OAModel.YXB_Baojia" Role="YXB_Baojia" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="T_ChanPinName">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="YXB_Baojia">
-              <PropertyRef Name="CPname" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_YXB_Baojia_xinghao">
-          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
-          <End Type="OAModel.YXB_Baojia" Role="YXB_Baojia" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="T_ChanPinName">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="YXB_Baojia">
-              <PropertyRef Name="CPXingHao" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3527,38 +3495,6 @@
                 <ScalarProperty Name="CPname" ColumnName="CPname" />
                 <ScalarProperty Name="BaoJiaTop_id" ColumnName="BaoJiaTop_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="FileTypes">
-            <EntityTypeMapping TypeName="OAModel.FileType">
-              <MappingFragment StoreEntitySet="FileType">
-                <ScalarProperty Name="FileTypeCHNName" ColumnName="FileTypeCHNName" />
-                <ScalarProperty Name="FileTypeENGName" ColumnName="FileTypeENGName" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ShareTypes">
-            <EntityTypeMapping TypeName="OAModel.ShareType">
-              <MappingFragment StoreEntitySet="ShareType">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ShareFileOrNotices">
-            <EntityTypeMapping TypeName="OAModel.ShareFileOrNotice">
-              <MappingFragment StoreEntitySet="ShareFileOrNotice">
-                <ScalarProperty Name="ModelList" ColumnName="ModelList" />
-                <ScalarProperty Name="ShareToUser" ColumnName="ShareToUser" />
-                <ScalarProperty Name="ShareUser" ColumnName="ShareUser" />
-                <ScalarProperty Name="UploadFileTime" ColumnName="UploadFileTime" />
-                <ScalarProperty Name="FileURL" ColumnName="FileURL" />
-                <ScalarProperty Name="BeiZhu" ColumnName="BeiZhu" />
-                <ScalarProperty Name="FileTypeID" ColumnName="FileTypeID" />
-                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

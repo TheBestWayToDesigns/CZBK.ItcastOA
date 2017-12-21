@@ -38,7 +38,7 @@ namespace CZBK.ItcastOA.BLL
             {
                 temp = temp.Where<YXB_Baojia>(u => u.CPname == sisp.CPname);
             }
-            if (sisp.CPxh!=0)
+            if (sisp.CPxh!= 0)
             {
                 temp = temp.Where<YXB_Baojia>(u => u.CPXingHao == sisp.CPxh);
             }
