@@ -90,6 +90,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _FileItemDal = value; }
         }
 	
+		private IFileTypeDal _FileTypeDal;
+        public IFileTypeDal FileTypeDal
+        {
+            get
+            {
+                if(_FileTypeDal == null)
+                {
+                   // _FileTypeDal = new FileTypeDal();
+				    _FileTypeDal =AbstractFactory.CreateFileTypeDal();
+                }
+                return _FileTypeDal;
+            }
+            set { _FileTypeDal = value; }
+        }
+	
 		private IGongLuBaoXiaoBillDal _GongLuBaoXiaoBillDal;
         public IGongLuBaoXiaoBillDal GongLuBaoXiaoBillDal
         {
@@ -193,6 +208,36 @@ namespace CZBK.ItcastOA.DALFactory
                 return _ScheduleUserDal;
             }
             set { _ScheduleUserDal = value; }
+        }
+	
+		private IShareFileOrNoticeDal _ShareFileOrNoticeDal;
+        public IShareFileOrNoticeDal ShareFileOrNoticeDal
+        {
+            get
+            {
+                if(_ShareFileOrNoticeDal == null)
+                {
+                   // _ShareFileOrNoticeDal = new ShareFileOrNoticeDal();
+				    _ShareFileOrNoticeDal =AbstractFactory.CreateShareFileOrNoticeDal();
+                }
+                return _ShareFileOrNoticeDal;
+            }
+            set { _ShareFileOrNoticeDal = value; }
+        }
+	
+		private IShareTypeDal _ShareTypeDal;
+        public IShareTypeDal ShareTypeDal
+        {
+            get
+            {
+                if(_ShareTypeDal == null)
+                {
+                   // _ShareTypeDal = new ShareTypeDal();
+				    _ShareTypeDal =AbstractFactory.CreateShareTypeDal();
+                }
+                return _ShareTypeDal;
+            }
+            set { _ShareTypeDal = value; }
         }
 	
 		private IsysdiagramDal _sysdiagramDal;

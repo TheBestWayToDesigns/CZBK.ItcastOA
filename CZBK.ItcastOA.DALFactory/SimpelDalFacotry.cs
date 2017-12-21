@@ -81,6 +81,19 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IFileItemDal;
         }
 		
+	    public static IFileTypeDal CreateFileTypeDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".FileTypeDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IFileTypeDal;
+        }
+		
 	    public static IGongLuBaoXiaoBillDal CreateGongLuBaoXiaoBillDal()
         {
 
@@ -170,6 +183,32 @@ namespace CZBK.ItcastOA.DALFactory
 
 
             return obj as IScheduleUserDal;
+        }
+		
+	    public static IShareFileOrNoticeDal CreateShareFileOrNoticeDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".ShareFileOrNoticeDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IShareFileOrNoticeDal;
+        }
+		
+	    public static IShareTypeDal CreateShareTypeDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".ShareTypeDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IShareTypeDal;
         }
 		
 	    public static IsysdiagramDal CreatesysdiagramDal()

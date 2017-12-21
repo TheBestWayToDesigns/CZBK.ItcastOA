@@ -69,6 +69,9 @@
     <Compile Include="FileItem.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="FileType.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="GongLuBaoXiaoBill.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -110,6 +113,12 @@
     <Compile Include="SearchParam\Month.cs" />
     <Compile Include="SearchParam\SlcClass.cs" />
     <Compile Include="SearchParam\UserInfoParam.cs" />
+    <Compile Include="ShareFileOrNotice.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShareType.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

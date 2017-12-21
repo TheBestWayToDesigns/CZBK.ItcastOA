@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>日程列表</title>
+    <title>日程信息</title>
 
     <link href="~/Content/themes/icon.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.7.1.min.js"></script>
@@ -45,33 +45,56 @@
             $("#UpdateScheduleDIV").css("display", "none");
             $("#ReviewScheduleDIV").css("display", "none");
             $("#CheckFileDIV").css("display", "none");
-            $("#AddScheduleTypeBtnDIV").css("display", "none");
+            $("#AddScheduleTypeBtnDIV").css("display", "none"); 
+            $("#ChooseSerchTypeDIV").css("display", "none");
             $("#AddScheduleBtnDIV").css("display", "none");
             $("#DownUserCombox").css("display", "none");
+            $("#DownBuMenCombox").css("display", "none");
             $("#AddUploadFileDIV").css("display", "none");
+            $("#AddFileTypeBtnDIV").css("display", "none");
+            $("#AddFileTypeDIV").css("display", "none");
+            
             loadData();
 
-           
             $("#divBtn a").click(function () {
                 var ClickA = $(this).attr("id");
                 if (ClickA == "MenuScheduleType")
                 {
                     $("#AddScheduleBtnDIV").css("display", "none");
                     $("#DownUserCombox").css("display", "none");
+                    $("#DownBuMenCombox").css("display", "none");
+                    $("#ChooseSerchTypeDIV").css("display", "none");
+                    $("#AddFileTypeBtnDIV").css("display", "none");
+                    $("#AddFileTypeDIV").css("display", "none");
                     loadData();
                 }
                 else if (ClickA == "MenuSchedule")
                 {
                     $("#AddScheduleTypeBtnDIV").css("display", "none");
                     $("#DownUserCombox").css("display", "none");
+                    $("#DownBuMenCombox").css("display", "none");
+                    $("#ChooseSerchTypeDIV").css("display", "none");
+                    $("#AddFileTypeBtnDIV").css("display", "none");
+                    $("#AddFileTypeDIV").css("display", "none");
                     loadSchedule();
                 }
                 else if (ClickA == "MenuDownUser") {
                     $("#AddScheduleTypeBtnDIV").css("display", "none");
                     $("#AddScheduleBtnDIV").css("display", "none");
-                    $("#DUInput").combobox("setValue", -1);
+                    $("#DownUserCombox").css("display", "none");
+                    $("#DownBuMenCombox").css("display", "none");
+                    $("#AddFileTypeBtnDIV").css("display", "none");
+                    $("#AddFileTypeDIV").css("display", "none");
                     loadDownUser();
-                } 
+                } else if (ClickA == "MenuFileType") {
+                    $("#AddScheduleTypeBtnDIV").css("display", "none");
+                    $("#AddScheduleBtnDIV").css("display", "none");
+                    $("#DownUserCombox").css("display", "none");
+                    $("#DownBuMenCombox").css("display", "none");
+                    $("#ChooseSerchTypeDIV").css("display", "none");
+                    $("#AddFileTypeDIV").css("display", "none");
+                    loadFileType();
+                }
             })
             $("#AddScheduleBtn").click(function () {
                 AddScheduleFc();
@@ -80,6 +103,7 @@
                 AddScheduleTypeFc();
             })
             $("#AddupLoadFileBtn").click(function () {
+
                 addUploadFileClick();
             })
             $("#uploadFileBtn").click(function () {
@@ -89,11 +113,44 @@
                 var downurl = document.getElementById("hiddenUrl").value;
                 window.open(downurl);
             })
-            $("#DUInput").combobox({
-                onChange:function(){  
-                    var idval = $("#DUInput").combobox("getValue");                  
-                    var pars = { AdduserID: idval };
+            $("#ByDBMid").click(function () {
+                $("#DownBuMenCombox").css("display", "block");
+                $("#DownUserCombox").css("display", "none");
+                $("#tt").datagrid({ toolbar: "#ChooseSerchTypeDIV,#DownBuMenCombox" });
+            })
+            $("#ByDUid").click(function () {
+                $("#DownUserCombox").css("display", "block");
+                $("#DownBuMenCombox").css("display", "none");
+                $("#tt").datagrid({ toolbar: "#ChooseSerchTypeDIV,#DownUserCombox" });
+            })
+            $("#AddFileTypeBtn").click(function () {
+                $("#AddFileTypeTab input").val("");
+                AddFileType();
+            })
+            $("#DBMUserInput").combobox({
+                onChange: function () {
+                    var DBMidval = $("#DBMInput").combobox("getValue");
+                    var idval = $("#DBMUserInput").combobox("getValue");
+                    var pars = {DownUser:idval};
                     loadDownUser(pars);
+                }
+            })
+            $("#DBMInput").combobox({
+                onChange: function () {
+                    var DBMidval = $("#DBMInput").combobox("getValue");
+                    $("#DBMUserInput").combobox("setValue","");
+                    if (DBMidval == -1) {
+                        cleanDatagrid();
+                    } else {
+                        $("#DBMUserInput").combobox("reload", "/EverDayWork/GetDownBuMenalluser?DBMid=" + DBMidval);
+                    }
+                }
+            })
+            $("#DUInput").combobox({
+                onChange: function () {
+                     var idval = $("#DUInput").combobox("getValue");
+                     var pars = { DownUser: idval };
+                     loadDownUser(pars);
                 }
             })
             
@@ -141,6 +198,45 @@
                 ]],
                 toolbar:"#AddScheduleTypeBtnDIV",
                 onLoadSuccess: function () {
+                }
+            });
+        }
+
+        //加载文件类型页面
+        function loadFileType(pars) {
+            cleanDatagrid();
+            $('#tt').datagrid({
+                url: '/EverDayWork/GetFileType',
+                title: '文件类型',
+                height: $("#dgdiv").height() - 20,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                //onClickCell: onClickCell,
+                //onAfterEdit: onAfterEdit,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[
+                    { field: 'ck', checkbox: true, title: '', width: 30 },
+                    { field: 'ID', title: '文件类型编号', align: 'center' },
+                    { field: 'FileTypeENGName', title: '文件扩展名', align: 'center' },
+                    { field: 'FileTypeCHNName', title: '文件类型', align: 'center' },
+                    {
+                        field: 'Del', title: '编辑栏', align: 'center',
+                        formatter: function (value, row, index) {
+                            return "<a href='#' class='l-btn' style='margin:0px 5px;padding:2px 8px ' onclick='delfiletype()' >删除</a>";
+                        }
+                    },
+                ]],
+                toolbar: "#AddFileTypeBtnDIV",
+                onLoadSuccess: function () {
+
                 }
             });
         }
@@ -215,7 +311,7 @@
             });
         }
        
-        //加载下级日程用户页面
+        //加载下级用户日程页面
         function loadDownUser(pars) {
             cleanDatagrid();
             $('#tt').datagrid({
@@ -274,7 +370,7 @@
                         }
                     }
                 ]],
-                toolbar: "#DownUserCombox",
+                toolbar:"#ChooseSerchTypeDIV",
                 onLoadSuccess: function () {
 
                 }
@@ -283,6 +379,7 @@
         //查阅下级日程
         function reviewSchedule() {
             var row = $('#tt').datagrid('getSelected');
+            if (row.TextReadBak == "未审核") {
             $("#ReviewScheduleID").val(row.ID);
             $("#ReviewScheduleDIV").css("display", "block");
             $('#ReviewScheduleDIV').dialog({
@@ -305,6 +402,9 @@
                     }
                 } ]
             });
+        }else{
+                $.messager.alert("提示","已审核过，不能重复审核！");
+        }
         }
 
         //将序列化成json格式后日期(毫秒数)转成日期格式
@@ -323,6 +423,8 @@
                 try {
                     $('#tt').datagrid('reload');
                     $('#AddUploadFileDIV').dialog('close');
+                    $("#Upfiletab  input").val(""); 
+                    $("#Upfiletab  textarea").val("");
                 }
                 catch (e) {
 
@@ -386,6 +488,21 @@
             } else {
                 $.messager.alert("提醒", "修改数据错误!!", "error");
             }
+        } 
+        //添加文件类型之后调用
+        function afterAddFileType(data) {
+            if (data.ret == "ok") {
+                try {
+                    $('#tt').datagrid('reload');
+                    $('#AddFileTypeDIV').dialog('close');
+                }
+                catch (e) {
+
+                }
+
+            } else {
+                $.messager.alert("提醒", "修改数据错误!!", "error");
+            }
         }
         //查阅下级日程后调用
         function afterReviewSchedule(data) {
@@ -442,35 +559,80 @@
                 }]
             });
         }
+        //添加文件类型
+        function AddFileType() {
+            $("#AddFileTypeDIV").css("display", "block");
+            $('#AddFileTypeDIV').dialog({
+                title: "添加日程状态",
+                width: 450,
+                height: 400,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '确定',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+                        if ($("#FileTypeEName").val().trim().length <= 0) {
+                            $.messager.alert("提示", "文件扩展名不可以为空！");
+                            return;
+                        } if ($("#FileTypeCName").val().trim().length <= 0) {
+                            if (!confirm("文件类型说明最好备注一下，方便理解！如备注，请点击取消！如不备注，请点击确定！")) {
+                                return;
+                            }
+                        }
+                        $("#addfiletypefrom").submit();//提交表单
+                    }
+                }, {
+                    text: '取消',
+                    handler: function () {
+                        $('#AddFileTypeDIV').dialog('close');
+                    }
+                }]
+            });
+        }
        
         //查看文件
         function checkFiles() {
             var row = $('#tt').datagrid('getSelected');
             if (row.FileItemID != null) {
                 $.post("/EverDayWork/checkFile", { "id": row.FileItemID }, function (fileInfo) {
-                document.getElementById("CheckID").value = fileInfo.ID;
-                document.getElementById("CheckID").setAttribute('readOnly', true);
-                document.getElementById("hiddenUrl").value = fileInfo.Url;
-                document.getElementById("CheckAddTime").value = fileInfo.AddTime;
-                document.getElementById("CheckAddTime").setAttribute('readOnly', true);
-                document.getElementById("CheckBeiZhuArea").value = fileInfo.BeiZhu;
-                document.getElementById("CheckBeiZhuArea").setAttribute('readOnly', true);
-                $("#CheckFileDIV").css("display", "block");
-                $('#CheckFileDIV').dialog({
-                    title: "查看文件",
-                    width: 450,
-                    height: 450,
-                    collapsible: true,
-                    resizable: true,
-                    modal: true,
-                    buttons: [{
-                        text: '确定',
-                        handler: function () {
-                            $('#CheckFileDIV').dialog('close');
+                    var ay = new Array();
+                    ay = fileInfo.split(",");
+                    var t = 1;
+                    var u = 1;
+                    for (var i = 0; i < ay.length; i++) {
+                        if (i == 0 || i % 2 == 0) {
+                            if(ay[i+1]==undefined){
+                                $("#CheckFileTab").append("<tr class='tr5'><td>文件" + (t++) + "备注：</td><td><label>无备注信息</label></td></tr><tr class='tr5'><td>文件" + (u++) + "下载路径：</td><td><label style='color:darkgrey'>无文件相关路径(可能未上传文件)</label></td></tr><tr class='tr5'><td colspan='2'>&nbsp;&nbsp;&nbsp;</td></tr>");
+                            }else{
+                                $("#CheckFileTab").append("<tr class='tr5'><td>文件" + (t++) + "备注：</td><td><label>" + ay[i] + "</label></td><td><a href='" + ay[i + 1] + "' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>下载</a></td></tr><td colspan='2'>&nbsp;&nbsp;&nbsp;</td></tr>");
+                            }
                         }
-                    }]
+                        else {
+                            continue;
+                        }
+                    }
+                    $("#CheckFileDIV").css("display", "block");
+                    $('#CheckFileDIV').dialog({
+                        title: "查看文件",
+                        width: 500,
+                        height: 500,
+                        collapsible: true,
+                        resizable: true,
+                        modal: true,
+                        buttons: [{
+                            text: '确定',
+                            handler: function () {
+                                $('#CheckFileDIV').dialog('close');
+                                $("#CheckFileTab").html("");
+                            }
+                        }],
+                        onClose: function () {
+                            $("#CheckFileTab").html("");
+                        }
+                    });
                 });
-            });
             } else {
                 $.messager.alert("提示", "无文件！！！");
             };
@@ -481,10 +643,10 @@
             var row = $('#tt').datagrid('getSelected');
             var schid = row.ID;
             var fileitemid = row.FileItemID;
-            alert(schid);
-            alert(fileitemid);
+            var scheduleid = row.ID;
             $("#AddUploadScheduleID").val(schid);
-            $("#FirstFileID").val(fileitemid);
+            $("#FirstFileID").val(fileitemid); 
+            $("#AddupLoadSchID").val(scheduleid);
             $("#AddUploadFileDIV").css("display", "block");
             $('#AddUploadFileDIV').dialog({
                 title: "补充上传文件",
@@ -533,7 +695,7 @@
                 success: function (data) {
                     var serverData = data.split(":");
                     if (serverData[0] == "yes") {
-                        $("#Url").val(serverData[1]);//将上传成功的图片地址放在隐藏input中
+                        $("#Url").val(serverData[1]);//将上传成功的文件地址放在隐藏input中
                         $.messager.alert("提示","上传文件成功！");
                     }
                     else {
@@ -559,7 +721,14 @@
                     iconCls: 'icon-ok',
                     handler: function () {
                         document.getElementById("BeiZhu").value = document.getElementById("BeiZhuArea").value;
-                        $("#addschedulefrom").submit();//提交表单
+                        var fileup = document.getElementById("fileupid").value;
+                        var fileupurl = document.getElementById("Url").value;
+                        alert(fileup);
+                        if ((fileup != null || fileup != "") && (fileupurl == null || fileupurl == "")) {
+                            $.messager.alert("提示", "选择的文件还未上传，请先点击上传再点击确认！");
+                        } else {
+                            $("#addschedulefrom").submit();//提交表单
+                        }
                     }
                 }, {
                     text: '取消',
@@ -622,6 +791,26 @@
             });
         }
 
+        //删除文件类型
+        function delfiletype() {
+            //弹窗提示
+            if (confirm('确定要执行删除操作吗?')) {
+                var rows = $('#tt').datagrid('getSelections');
+                if (rows.length != 1) {
+                    $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                    return;
+                }
+                $.post("/EverDayWork/DelFileType", { "id": rows[0].ID }, function (data) {
+                    if (data.ret == "ok") {
+                        $('#tt').datagrid("reload");
+                    }
+                    else {
+                        $.messager.alert("提示", data.msg);
+                    }
+                })
+            }
+            return;
+        }
 
         //删除日程
         function delSchedule() {
@@ -672,6 +861,7 @@
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuSchedule" style="width:98%;margin:10px auto">日程信息</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuDownUser" style="width:98%;margin:10px auto">下级日程信息</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuScheduleType" style="width:98%;margin:10px auto">日程状态</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuFileType" style="width:98%;margin:10px auto">管理上传文件类型</a>
     </div>
     <div data-options="region:'center',title:'数据报表'" id="dgdiv">
         
@@ -692,14 +882,48 @@
                 <a href="#" class="easyui-linkbutton" id="AddScheduleTypeBtn"  iconCls="icon-add" plain="true">添加日程状态</a>               
             </div>
         </div>
+        <div id="ChooseSerchTypeDIV">
+            <div><label>请选择查找类型：</label></div>
+            <div>
+                <label><input type="radio" name="SerchType" id="ByDBMid"/>根据下级部门查询</label>
+                <label><input type="radio" name="SerchType" id="ByDUid"/>根据下级员工</label>
+            </div>
+        </div>
+        <!---------------下级部门下拉框-------------------->
+        <div id="DownBuMenCombox" style="padding:5px;height:auto">
+            <div>
+                    <label>下级部门：</label>
+                    <input id="DBMInput" class="easyui-combobox" name="DownBuMenName"
+                           url="/EverDayWork/GetDownBuMenall"
+                           valueField="BMID"
+                           textField="Name"
+                           panelHeight="auto"
+                           style="width:100px" />
+                    <label>下级部门所有成员</label>
+                    <input id="DBMUserInput" class="easyui-combobox" name="DownBuMenUserName"
+                           valueField="ID"
+                           textField="name"
+                           panelHeight="auto"
+                           style="width:100px" />
+            </div>
+        </div>
         <!---------------下级用户下拉框-------------------->
         <div id="DownUserCombox" style="padding:5px;height:auto">
+            <div><label>下级部门成员：</label></div>
             <div>
-                <input id="DUInput" class="easyui-combobox" name="DownUserName"
+                <input id="DUInput" name="DownUserName"
+                       class="easyui-combobox"
                        url="/EverDayWork/GetDownUserall"
                        valueField="ID"
-                       textField="name" 
-                       panelHeight="auto" style="width:100px" />
+                       textField="name"
+                       panelHeight="auto"
+                       style="width:100px" />
+            </div>
+        </div>
+        <!--------添加文件类型按钮-------->
+        <div id="AddFileTypeBtnDIV" style="padding:5px;height:auto">
+            <div style="margin-bottom:5px">
+                <a href="#" class="easyui-linkbutton" id="AddFileTypeBtn" iconCls="icon-add" plain="true">添加文件扩展类型</a>
             </div>
         </div>
     </div>
@@ -707,7 +931,7 @@
     <!---------------补充上传文件--------------------->
     <div id="AddUploadFileDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddUploadFile", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddUploadFileEdit" }, new { id = "adduploadfilefrom" }))
-        {<table>
+        {<table id="Upfiletab">
              <tr>
                  <td colspan="2"><b style="font-size:50px;margin:10px auto">补充上传文件</b></td>
              </tr>
@@ -721,7 +945,7 @@
              </tr>
              <tr>
                  <td><input type="hidden" id="AddupLoadUrl" name="Url" /><input type="hidden" id="AddUploadScheduleID" name="AddUploadScheduleName"/><input type="hidden" id="FirstFileID" name="FirstFileName" /></td>
-                 <td><input type="hidden" id="AddupLoadBeiZhu" name="BeiZhu" /></td>
+                 <td><input type="hidden" id="AddupLoadBeiZhu" name="BeiZhu" /><input type="hidden" id="AddupLoadSchID" name="SchID" /></td>
              </tr>
         </table>
         <table>
@@ -782,25 +1006,24 @@
         }
     </div>
 
+    <!---------------添加文件类型----------------->
+    <div id="AddFileTypeDIV" style="height:100%; width:100%;">
+        @using (Ajax.BeginForm("AddFileType", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddFileType" }, new { id = "addfiletypefrom" }))
+        {<table id="AddFileTypeTab">
+            <tr><td>文件扩展名</td><td><input type="text" class="easyui-textbox" name="FileTypeENGName" id="FileTypeEName" /></td></tr>
+            <tr><td>文件类型说明</td><td><input type="text" class="easyui-textbox" name="FileTypeCHNName" id="FileTypeCName" /></td></tr>
+        </table>
+        <table>
+            <tbody id="Selebody"></tbody>
+        </table>
+
+        }
+    </div>
+
     <!-------------查看文件--------------->
     <div id="CheckFileDIV" style="height:100%; width:100%;">
         <table id="CheckFileTab">
-            <tr>
-                <td>文件编号</td>
-                <td><input type="text" id="CheckID" name="CheckID" /></td>
-            </tr>
-            <tr>
-                <td>上传文件时间</td>
-                <td><input type="text" id="CheckAddTime" name="CheckAddTime" /></td>
-            </tr>
-            <tr>
-                <td>文件备注</td>
-                <td><textarea id="CheckBeiZhuArea" name="CheckBeiZhuArea" style="width:302px"></textarea></td>
-            </tr>
-            <tr>
-                <td><input type="hidden" id="hiddenUrl" name="hiddenUrl" /></td>
-                <td><input type="button" id="downloadFile" name="downloadFile" value="下载文件"/></td>
-            </tr>
+            
         </table>
         <table>
             <tbody id="Selebody"></tbody>
@@ -839,7 +1062,7 @@
         }
     </div>
 
-    <!--------------审核下级日程-------------------->
+    <!--------------查阅下级日程-------------------->
     <div id="ReviewScheduleDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("ReviewSchedule", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterReviewSchedule" }, new { id = "reviewschedulefrom" }))
         {<table id="ReviewScheduleTab">        
