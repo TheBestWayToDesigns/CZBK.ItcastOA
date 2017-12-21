@@ -48,6 +48,12 @@
             $("#BtnJkd").click(function () {
                 loadData();
             })
+            $("#BaoXiaoName").combobox({
+                onChange: function () {
+                    $("#DanJinInt").val(0);
+                    $("#BaoXiaoMoney").val("");
+                }
+            })
             //打印月预览总汇
             $("#PrintMonth").click(function () {
                 $("#PrintDIV").jqprint();
@@ -506,7 +512,7 @@
         }
         function addbxlist() {
             
-            if ($('#BaoXiaoName').val().trim().length <= 0)
+            if ($('#BaoXiaoName').combobox("getValue") == "")
             {
                 $.messager.alert("", "报销内容不可为空");
                 return;
@@ -519,7 +525,7 @@
                 $.messager.alert("", "报销金额不可为空");
                 return;
             }
-            
+            $("#BaoXiaoHidden").val($("#BaoXiaoName").combobox("getValue"));
             $('#BXLaFrom').submit();
         }
         //借款单作废
@@ -562,6 +568,22 @@
                     })
                 }
             });
+        }
+        function addDJI() {
+            var a = parseInt($("#DanJiuInt").val());
+            a += 1;
+            alert(a);
+            $("#DanJiuInt").val(a);
+        }
+        function plusDJI() {
+            var a = parseInt($("#DanJiuInt").val());
+            if(a != 0){
+                a -= 1;
+                alert(a);
+            } else {
+                alert(a);
+            }
+            $("#DanJiuInt").val(a);
         }
     </script>
     <style>
@@ -759,11 +781,17 @@
 @using (Ajax.BeginForm("AddOrEditBxlistBill", "BillPrint", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "BXLaFrom" }))
 {              <input type="hidden" id="BaoXianID" name="BaoXiaoID"  />
         <div style="font-size:16px;">
-            报销内容：<input class="easyui-linkbutton" name="BaoXiaoName" id="BaoXiaoName" style="width:400px" />
+            报销内容：<input class="easyui-combobox" id="BaoXiaoName"
+                       name="BaoXiaoName1"
+                       url="/BillPrint/GetBaoXiaoall"
+                       valueField="ID"
+                       textField="Text"
+                       panelHeight="auto" style="width:400px" />
+            <input type="hidden" name="BaoXiaoName" id="BaoXiaoHidden"/>
         </div>
         <div style="font-size:16px;">
           
-            单据张数：<input class="easyui-linkbutton" name="DanJiuInt" id="DanJiuInt" style="width:80px" onkeyup="num(this)" />
+            单据张数：<a href="#" onclick="addDJI()" class="easyui-linkbutton">+</a><input class="easyui-linkbutton" name="DanJiuInt" id="DanJiuInt" style="width:80px;height:26px" onkeyup="num(this)" value="0"/><a href="#" onclick="plusDJI()" class="easyui-linkbutton">-</a>
             报销金额：<input class="easyui-linkbutton" name="BaoXiaoMoeny" id="BaoXiaoMoeny" style="width:100px" onkeyup="num(this)"/>
             <a href="#" onclick="addbxlist()" class="easyui-linkbutton" iconCls="icon-add">新增</a>
         </div>
