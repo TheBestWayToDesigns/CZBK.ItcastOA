@@ -131,6 +131,83 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             return Json(null, JsonRequestBehavior.AllowGet);
         }
+        //获取通知全部内容
+        public ActionResult GetNoticeAllText()
+        {
+            int id = Convert.ToInt32(Request["id"]);
+            var temp = ShareFileOrNoticeService.LoadEntities(x => x.ID == id).FirstOrDefault();
+            string beizhu = temp.BeiZhu;
+            return Json(beizhu,JsonRequestBehavior.AllowGet);
+        }
+        //获取当前用户所有模型
+        public ActionResult GetAllModel()
+        {
+            var uid = LoginUser.ID;
+            var temp = ShareFileOrNoticeService.LoadEntities(x => x.ShareUser == uid && x.TypeID == 1).DefaultIfEmpty().ToList();
+            List<ModelSF> list = new List<ModelSF>();
+            if (temp.Count != 0 && temp[0] != null)
+            {
+                if (list.Count != 0)
+                {
+                    foreach (var a in temp)
+                    {
+                        foreach (var b in list)
+                        {
+                            if (a.ModelList == b.StrID)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                ModelSF msf = new ModelSF();
+                                msf.StrID = a.ModelList;
+                                var str = (a.ModelList).Split(',');
+                                var strs = "";
+                                foreach (var c in str)
+                                {
+                                    if (c == "")
+                                    {
+                                        continue;
+                                    }
+                                    var b1 = Convert.ToInt32(c);
+                                    var u = UserInfoService.LoadEntities(x => x.ID == b1).FirstOrDefault();
+                                    strs = strs + u.PerSonName + ",";
+                                }
+                                msf.StrName = strs;
+                                list.Add(msf);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var a in temp)
+                    {
+                        ModelSF msf = new ModelSF();
+                        msf.StrID = a.ModelList;
+                        var str = (a.ModelList).Split(',');
+                        var strs = "";
+                        foreach (var b in str)
+                        {
+                            if (b == "")
+                            {
+                                continue;
+                            }
+                            var b1 = Convert.ToInt32(b);
+                            var u = UserInfoService.LoadEntities(x => x.ID == b1).FirstOrDefault();
+                            strs = strs + u.PerSonName + ",";
+                        }
+                        msf.StrName = strs;
+                        list.Add(msf);
+                    }
+                }
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
+        }
         //添加共享文件
         public ActionResult AddShareFile(ShareFileOrNotice sfon)
         {
@@ -139,6 +216,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             sfon.FileURL = Request["fileUrlName"];
             sfon.UploadFileTime = DateTime.Now;
             sfon.TypeID = 1;
+            sfon.ModelList = Request["STUstrName"];
             var sn = ShareFileOrNoticeService.AddEntity(sfon);
             return Json(new { ret = "ok"}, JsonRequestBehavior.AllowGet);
         }
@@ -294,6 +372,11 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             public int ID { get; set; }
             public string Name { get; set; }
+        }
+        public class ModelSF
+        {
+            public String StrID { get; set; }
+            public string StrName { get; set; }
         }
     }
 }
