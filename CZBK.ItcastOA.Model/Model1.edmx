@@ -75,6 +75,14 @@
           <Property Name="BeiZhu" Type="nvarchar(max)" />
           <Property Name="FileFirstID" Type="int" />
         </EntityType>
+        <EntityType Name="FileType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileTypeENGName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FileTypeCHNName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="GongLuBaoXiaoBill">
           <Key>
             <PropertyRef Name="ID" />
@@ -160,6 +168,27 @@
           <Property Name="UserID" Type="int" />
           <Property Name="UpID" Type="int" />
           <Property Name="Del" Type="smallint" />
+        </EntityType>
+        <EntityType Name="ShareFileOrNotice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeID" Type="int" Nullable="false" />
+          <Property Name="FileTypeID" Type="int" />
+          <Property Name="BeiZhu" Type="nvarchar(max)" />
+          <Property Name="FileURL" Type="nvarchar(max)" />
+          <Property Name="UploadFileTime" Type="datetime" />
+          <Property Name="ShareUser" Type="int" Nullable="false" />
+          <Property Name="ShareToUser" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ModelList" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ShareType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -740,6 +769,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ShareFileOrNotice_FileType">
+          <End Role="FileType" Type="Self.FileType" Multiplicity="0..1" />
+          <End Role="ShareFileOrNotice" Type="Self.ShareFileOrNotice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FileType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ShareFileOrNotice">
+              <PropertyRef Name="FileTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShareFileOrNotice_ShareType">
+          <End Role="ShareType" Type="Self.ShareType" Multiplicity="1" />
+          <End Role="ShareFileOrNotice" Type="Self.ShareFileOrNotice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShareType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ShareFileOrNotice">
+              <PropertyRef Name="TypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShareFileOrNotice_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="ShareFileOrNotice" Type="Self.ShareFileOrNotice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ShareFileOrNotice">
+              <PropertyRef Name="ShareUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ShenChanSheHe">
           <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="0..1" />
           <End Role="T_SczzDanju" Type="Self.T_SczzDanju" Multiplicity="*" />
@@ -1182,6 +1247,7 @@
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DepartmentActionInfo" EntityType="Self.DepartmentActionInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileItem" EntityType="Self.FileItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FileType" EntityType="Self.FileType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GongLuBaoXiaoBill" EntityType="Self.GongLuBaoXiaoBill" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Login_list" EntityType="Self.Login_list" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="R_UserInfo_ActionInfo" EntityType="Self.R_UserInfo_ActionInfo" Schema="dbo" store:Type="Tables" />
@@ -1190,6 +1256,8 @@
           <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScheduleType" EntityType="Self.ScheduleType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScheduleUser" EntityType="Self.ScheduleUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShareFileOrNotice" EntityType="Self.ShareFileOrNotice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShareType" EntityType="Self.ShareType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SysField" EntityType="Self.SysField" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_BaoJiaToP" EntityType="Self.T_BaoJiaToP" Schema="dbo" store:Type="Tables" />
@@ -1299,6 +1367,18 @@
           <AssociationSet Name="FK_SczzItemsID" Association="Self.FK_SczzItemsID">
             <End Role="T_SczzItem" EntitySet="T_SczzItem" />
             <End Role="T_CanPan" EntitySet="T_CanPan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShareFileOrNotice_FileType" Association="Self.FK_ShareFileOrNotice_FileType">
+            <End Role="FileType" EntitySet="FileType" />
+            <End Role="ShareFileOrNotice" EntitySet="ShareFileOrNotice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShareFileOrNotice_ShareType" Association="Self.FK_ShareFileOrNotice_ShareType">
+            <End Role="ShareType" EntitySet="ShareType" />
+            <End Role="ShareFileOrNotice" EntitySet="ShareFileOrNotice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShareFileOrNotice_UserInfo" Association="Self.FK_ShareFileOrNotice_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="ShareFileOrNotice" EntitySet="ShareFileOrNotice" />
           </AssociationSet>
           <AssociationSet Name="FK_ShenChanSheHe" Association="Self.FK_ShenChanSheHe">
             <End Role="UserInfo" EntitySet="UserInfo" />
@@ -1666,6 +1746,15 @@
             <End Role="UserInfo" EntitySet="UserInfoes" />
             <End Role="YXB_BaoJiaEidtMoney" EntitySet="YXB_BaoJiaEidtMoney" />
           </AssociationSet>
+          <EntitySet Name="YXB_WinCanPin" EntityType="OAModel.YXB_WinCanPin" />
+          <AssociationSet Name="FK_YXB_WinCanPin_name" Association="OAModel.FK_YXB_WinCanPin_name">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="YXB_WinCanPin" EntitySet="YXB_WinCanPin" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YXB_WinCanPin_xinghao" Association="OAModel.FK_YXB_WinCanPin_xinghao">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="YXB_WinCanPin" EntitySet="YXB_WinCanPin" />
+          </AssociationSet>
           <EntitySet Name="YXB_Baojia" EntityType="OAModel.YXB_Baojia" />
           <EntitySet Name="YXB_WinCanPin" EntityType="OAModel.YXB_WinCanPin" />
           <AssociationSet Name="FK_YXB_Baojia_T_BaoJiaToP1" Association="OAModel.FK_YXB_Baojia_T_BaoJiaToP1">
@@ -1675,22 +1764,6 @@
           <AssociationSet Name="FK_YXB_Baojia_CanPinDengji" Association="OAModel.FK_YXB_Baojia_CanPinDengji">
             <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_YXB_Baojia_cpname" Association="OAModel.FK_YXB_Baojia_cpname">
-            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
-            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_YXB_Baojia_xinghao" Association="OAModel.FK_YXB_Baojia_xinghao">
-            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
-            <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_YXB_WinCanPin_name" Association="OAModel.FK_YXB_WinCanPin_name">
-            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
-            <End Role="YXB_WinCanPin" EntitySet="YXB_WinCanPin" />
-          </AssociationSet>
-          <AssociationSet Name="FK_YXB_WinCanPin_xinghao" Association="OAModel.FK_YXB_WinCanPin_xinghao">
-            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
-            <End Role="YXB_WinCanPin" EntitySet="YXB_WinCanPin" />
           </AssociationSet>
           <AssociationSet Name="FK_T_WinBakFaHuo_BaoJia" Association="OAModel.FK_T_WinBakFaHuo_BaoJia">
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
@@ -1703,6 +1776,21 @@
           <AssociationSet Name="FK_YXB_BaoJiaEidtMoney_YXB_Baojia" Association="OAModel.FK_YXB_BaoJiaEidtMoney_YXB_Baojia">
             <End Role="YXB_Baojia" EntitySet="YXB_Baojia" />
             <End Role="YXB_BaoJiaEidtMoney" EntitySet="YXB_BaoJiaEidtMoney" />
+          </AssociationSet>
+          <EntitySet Name="FileTypes" EntityType="OAModel.FileType" />
+          <EntitySet Name="ShareTypes" EntityType="OAModel.ShareType" />
+          <EntitySet Name="ShareFileOrNotices" EntityType="OAModel.ShareFileOrNotice" />
+          <AssociationSet Name="FK_ShareFileOrNotice_FileType" Association="OAModel.FK_ShareFileOrNotice_FileType">
+            <End Role="FileType" EntitySet="FileTypes" />
+            <End Role="ShareFileOrNotice" EntitySet="ShareFileOrNotices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShareFileOrNotice_ShareType" Association="OAModel.FK_ShareFileOrNotice_ShareType">
+            <End Role="ShareType" EntitySet="ShareTypes" />
+            <End Role="ShareFileOrNotice" EntitySet="ShareFileOrNotices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShareFileOrNotice_UserInfo" Association="OAModel.FK_ShareFileOrNotice_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="ShareFileOrNotice" EntitySet="ShareFileOrNotices" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ActionInfo">
@@ -2041,6 +2129,7 @@
           <NavigationProperty Name="GongLuBaoXiaoBills" Relationship="OAModel.FK_GongLuBaoXiaoBill_UserInfo" FromRole="UserInfo" ToRole="GongLuBaoXiaoBill" />
           <NavigationProperty Name="YXB_BaoJiaEidtMoney" Relationship="OAModel.FK_YXB_BaoJiaEidtMoney_UserInfo" FromRole="UserInfo" ToRole="YXB_BaoJiaEidtMoney" />
           <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_YXBBaojia_Userinf" FromRole="UserInfo" ToRole="YXB_Baojia" />
+          <NavigationProperty Name="ShareFileOrNotices" Relationship="OAModel.FK_ShareFileOrNotice_UserInfo" FromRole="UserInfo" ToRole="ShareFileOrNotice" />
         </EntityType>
         <Association Name="FK_Bumen">
           <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
@@ -2220,11 +2309,9 @@
           <Property Name="MyColums" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_T_ChanPinName_T_ChanPinName" FromRole="T_ChanPinName" ToRole="UserInfo" />
           <Property Name="T_ID" Type="Int64" />
-          <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_YXB_Baojia_CanPinDengji" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
-          <NavigationProperty Name="YXB_Baojia1" Relationship="OAModel.FK_YXB_Baojia_cpname" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
-          <NavigationProperty Name="YXB_Baojia2" Relationship="OAModel.FK_YXB_Baojia_xinghao" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
           <NavigationProperty Name="YXB_WinCanPin" Relationship="OAModel.FK_YXB_WinCanPin_name" FromRole="T_ChanPinName" ToRole="YXB_WinCanPin" />
           <NavigationProperty Name="YXB_WinCanPin1" Relationship="OAModel.FK_YXB_WinCanPin_xinghao" FromRole="T_ChanPinName" ToRole="YXB_WinCanPin" />
+          <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_YXB_Baojia_CanPinDengji" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
         </EntityType>
         <Association Name="FK_T_ChanPinName_T_ChanPinName">
           <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
@@ -2683,6 +2770,41 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="YXB_WinCanPin">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TCanpinID" Type="Int64" Nullable="false" />
+          <Property Name="TXingHao" Type="Int64" Nullable="false" />
+          <Property Name="Del" Type="Int16" />
+          <NavigationProperty Name="T_ChanPinName" Relationship="OAModel.FK_YXB_WinCanPin_name" FromRole="YXB_WinCanPin" ToRole="T_ChanPinName" />
+          <NavigationProperty Name="T_ChanPinName1" Relationship="OAModel.FK_YXB_WinCanPin_xinghao" FromRole="YXB_WinCanPin" ToRole="T_ChanPinName" />
+        </EntityType>
+        <Association Name="FK_YXB_WinCanPin_name">
+          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
+          <End Type="OAModel.YXB_WinCanPin" Role="YXB_WinCanPin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_WinCanPin">
+              <PropertyRef Name="TCanpinID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YXB_WinCanPin_xinghao">
+          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
+          <End Type="OAModel.YXB_WinCanPin" Role="YXB_WinCanPin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YXB_WinCanPin">
+              <PropertyRef Name="TXingHao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="YXB_Baojia">
           <Key>
             <PropertyRef Name="id" />
@@ -2717,17 +2839,7 @@
           <NavigationProperty Name="T_WinBakFaHuo" Relationship="OAModel.FK_T_WinBakFaHuo_BaoJia" FromRole="YXB_Baojia" ToRole="T_WinBakFaHuo" />
           <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_YXBBaojia_Userinf" FromRole="YXB_Baojia" ToRole="UserInfo" />
           <NavigationProperty Name="YXB_BaoJiaEidtMoney" Relationship="OAModel.FK_YXB_BaoJiaEidtMoney_YXB_Baojia" FromRole="YXB_Baojia" ToRole="YXB_BaoJiaEidtMoney" />
-        </EntityType>
-        <EntityType Name="YXB_WinCanPin">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TCanpinID" Type="Int64" Nullable="false" />
-          <Property Name="TXingHao" Type="Int64" Nullable="false" />
-          <Property Name="Del" Type="Int16" />
-          <NavigationProperty Name="T_ChanPinName" Relationship="OAModel.FK_YXB_WinCanPin_name" FromRole="YXB_WinCanPin" ToRole="T_ChanPinName" />
-          <NavigationProperty Name="T_ChanPinName1" Relationship="OAModel.FK_YXB_WinCanPin_xinghao" FromRole="YXB_WinCanPin" ToRole="T_ChanPinName" />
+          <Property Name="GhOverTime" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK_YXB_Baojia_T_BaoJiaToP1">
           <End Type="OAModel.T_BaoJiaToP" Role="T_BaoJiaToP" Multiplicity="1" />
@@ -2750,54 +2862,6 @@
             </Principal>
             <Dependent Role="YXB_Baojia">
               <PropertyRef Name="CPDengJiID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_YXB_Baojia_cpname">
-          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
-          <End Type="OAModel.YXB_Baojia" Role="YXB_Baojia" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="T_ChanPinName">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="YXB_Baojia">
-              <PropertyRef Name="CPname" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_YXB_Baojia_xinghao">
-          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
-          <End Type="OAModel.YXB_Baojia" Role="YXB_Baojia" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="T_ChanPinName">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="YXB_Baojia">
-              <PropertyRef Name="CPXingHao" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_YXB_WinCanPin_name">
-          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
-          <End Type="OAModel.YXB_WinCanPin" Role="YXB_WinCanPin" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="T_ChanPinName">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="YXB_WinCanPin">
-              <PropertyRef Name="TCanpinID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_YXB_WinCanPin_xinghao">
-          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
-          <End Type="OAModel.YXB_WinCanPin" Role="YXB_WinCanPin" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="T_ChanPinName">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="YXB_WinCanPin">
-              <PropertyRef Name="TXingHao" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2834,6 +2898,76 @@
             </Principal>
             <Dependent Role="YXB_BaoJiaEidtMoney">
               <PropertyRef Name="YXB_BJ_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FileType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileTypeENGName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FileTypeCHNName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ShareFileOrNotices" Relationship="OAModel.FK_ShareFileOrNotice_FileType" FromRole="FileType" ToRole="ShareFileOrNotice" />
+        </EntityType>
+        <EntityType Name="ShareType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ShareFileOrNotices" Relationship="OAModel.FK_ShareFileOrNotice_ShareType" FromRole="ShareType" ToRole="ShareFileOrNotice" />
+        </EntityType>
+        <EntityType Name="ShareFileOrNotice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeID" Type="Int32" Nullable="false" />
+          <Property Name="FileTypeID" Type="Int32" />
+          <Property Name="BeiZhu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FileURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UploadFileTime" Type="DateTime" Precision="3" />
+          <Property Name="ShareUser" Type="Int32" Nullable="false" />
+          <Property Name="ShareToUser" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="FileType" Relationship="OAModel.FK_ShareFileOrNotice_FileType" FromRole="ShareFileOrNotice" ToRole="FileType" />
+          <NavigationProperty Name="ShareType" Relationship="OAModel.FK_ShareFileOrNotice_ShareType" FromRole="ShareFileOrNotice" ToRole="ShareType" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_ShareFileOrNotice_UserInfo" FromRole="ShareFileOrNotice" ToRole="UserInfo" />
+          <Property Name="ModelList" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_ShareFileOrNotice_FileType">
+          <End Type="OAModel.FileType" Role="FileType" Multiplicity="0..1" />
+          <End Type="OAModel.ShareFileOrNotice" Role="ShareFileOrNotice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FileType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ShareFileOrNotice">
+              <PropertyRef Name="FileTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShareFileOrNotice_ShareType">
+          <End Type="OAModel.ShareType" Role="ShareType" Multiplicity="1" />
+          <End Type="OAModel.ShareFileOrNotice" Role="ShareFileOrNotice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShareType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ShareFileOrNotice">
+              <PropertyRef Name="TypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShareFileOrNotice_UserInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+          <End Type="OAModel.ShareFileOrNotice" Role="ShareFileOrNotice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ShareFileOrNotice">
+              <PropertyRef Name="ShareUser" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3325,6 +3459,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="YXB_WinCanPin">
+            <EntityTypeMapping TypeName="OAModel.YXB_WinCanPin">
+              <MappingFragment StoreEntitySet="YXB_WinCanPin">
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="TXingHao" ColumnName="TXingHao" />
+                <ScalarProperty Name="TCanpinID" ColumnName="TCanpinID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="YXB_Baojia">
             <EntityTypeMapping TypeName="OAModel.YXB_Baojia">
               <MappingFragment StoreEntitySet="YXB_Baojia">
@@ -3351,16 +3495,6 @@
                 <ScalarProperty Name="CPname" ColumnName="CPname" />
                 <ScalarProperty Name="BaoJiaTop_id" ColumnName="BaoJiaTop_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="YXB_WinCanPin">
-            <EntityTypeMapping TypeName="OAModel.YXB_WinCanPin">
-              <MappingFragment StoreEntitySet="YXB_WinCanPin">
-                <ScalarProperty Name="Del" ColumnName="Del" />
-                <ScalarProperty Name="TXingHao" ColumnName="TXingHao" />
-                <ScalarProperty Name="TCanpinID" ColumnName="TCanpinID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
