@@ -50,10 +50,46 @@
             })
             $("#BaoXiaoName").combobox({
                 onChange: function () {
-                    $("#DanJinInt").val(0);
-                    $("#BaoXiaoMoney").val("");
+                    $("#BaoXiaoMoeny").val("");
+                    $("#DanJiuInt").val(0);
+                    var bxlr = $("#BaoXiaoName").val();
+                    $.post("/BillPrint/GetJieKuanMoney", { "id": bxlr }, function (data) {
+                        if(data.ret == "ok"){
+                            $("#BaoXiaoMoeny").linkbutton("setValue",data.jkmoney);
+                        } else if(data.ret == "no"){
+                            $.messager.alert("提示", "未找到金额！");
+                            $("#BaoXiaoMoeny").linkbutton("setValue","");
+                        }
+                    });
                 }
             })
+
+            $("#BuMenid").combobox({
+                onChange: function () {
+                    $("#Jkperson").combobox("setValue", "");
+                    $("#Jkdanwei").combobox("setValue", "");
+                    var BMID = $("#BuMenid").combobox("getValue");
+                    $("#Jkperson").combobox("reload", "/BillPrint/GetJKPerson?BMID=" + BMID);
+                    $("#Jkdanwei").combobox("reload", "/BillPrint/GetBuMenAllSKDW?BMID=" + BMID);
+                }
+            })
+            
+            $("#Jkdanwei").combobox({
+                onChange: function () {
+                    $("#FaHuoBak").combobox("setValue", "");
+                    var skdw = $("#Jkdanwei").combobox("getValue");
+                    $("#FaHuoBak").combobox("reload", "/BillPrint/GetAllFaHuoBak?SKDW=" + skdw);
+                }
+            });
+            
+            $("#FaHuoBak").combobox({
+                onChange: function () {
+                    $("#CardNumberID").combobox("setValue", "");
+                    var fhb = $("#FaHuoBak").combobox("getValue");
+                    $("#CardNumberID").combobox("reload", "/BillPrint/GetAllFaHuoBakCardNumber?FHB=" + fhb);
+                }
+            });
+
             //打印月预览总汇
             $("#PrintMonth").click(function () {
                 $("#PrintDIV").jqprint();
@@ -71,18 +107,66 @@
                         text: '确定',
                         iconCls: 'icon-ok',
                         handler: function () {
-                            if ($("#Jkperson").val().length <= 0)
-                            {
-                                $.messager.alert("提示","借款人不可为空！")
+                            var date = $("#BillTimeID").datebox("getValue");
+                            var bm = $("#BuMenid").combobox("getValue");
+                            var jkp = $("#Jkperson").combobox("getText");
+                            var jkdw = $("#Jkdanwei").combobox("getText");
+                            var jkmid = $("#JieKuanMoneyID").val();
+                            var fhb = $("#FaHuoBak").combobox("getText");
+                            var cnid = $("#CardNumberID").combobox("getText");
+                            if(date == null || date == ""){
+                                $.messager.alert("提示", "请选择借款时间！");
+                                return;
                             }
-                            if ($("#Jkdanwei").val().length <= 0) {
-                                $.messager.alert("提示", "借款单位不可为空！")
+                            if (bm == null || bm == "") {
+                                $.messager.alert("提示", "请选择借款人部门！");
+                                return;
                             }
+                            if (jkp == null || jkp == "") {
+                                $.messager.alert("提示", "请选择借款人或手动输入！");
+                                return;
+                            }else if (!isNaN(parseInt(jkp))) {
+                                $("#Jkperson1").val(jkp);
+                            } else {
+                                $.post("/BillPrint/ReturnUserID", { "personName": jkp, "BuMenID": bm }, function (data) {
+                                    if (data.ret == "ok") {
+                                        $("#Jkperson1").val(data.uid);
+                                    } else if (data.ret == "no") {
+                                        $.messager.alert("提示", data.uid);
+                                        return;
+                                    }
+                                });
+                            }
+                            if (jkdw == null || jkdw == "") {
+                                $.messager.alert("提示", "请选择收款单位或手动输入！");
+                                return;
+                            }
+                            if (jkmid == null || jkmid == "") {
+                                $.messager.alert("提示", "请输入借款金额！");
+                                return;
+                            }
+                            if (fhb == null || fhb == "") {
+                                $.messager.alert("提示", "请选择开户行或手动输入！");
+                                return;
+                            }
+                            if (cnid == null || cnid == "") {
+                                $.messager.alert("提示", "请选择卡号或手动输入！");
+                                return;
+                            }
+                            $("#Jkdanwei1").val(jkdw);
+                            $("#FaHuoBak1").val(fhb);
+                            $("#CardNumberID1").val(cnid);
                             $("#JKBillFrom").submit();//提交表单                            
                         }
                     }, {
                         text: '取消',
                         handler: function () {
+                            $(".JKtable input").val("");
+                            $("#Jkdanwei").combobox("setValue", "");
+                            $("#FaHuoBak").combobox("setValue", "");
+                            $("#CardNumberID").combobox("setValue", "");
+                            $("#Jkperson").combobox("setValue", "");
+                            $("#BuMenid").combobox("setValue", "");
                             $('#AddJieKuanBill').dialog('close');
                         }
                     }]
@@ -512,7 +596,7 @@
         }
         function addbxlist() {
             
-            if ($('#BaoXiaoName').combobox("getValue") == "")
+            if ($('#BaoXiaoName').combobox("getText") == "")
             {
                 $.messager.alert("", "报销内容不可为空");
                 return;
@@ -525,7 +609,7 @@
                 $.messager.alert("", "报销金额不可为空");
                 return;
             }
-            $("#BaoXiaoHidden").val($("#BaoXiaoName").combobox("getValue"));
+            $("#BaoXiaoHidden").val($("#BaoXiaoName").combobox("getText"));
             $('#BXLaFrom').submit();
         }
         //借款单作废
@@ -572,16 +656,13 @@
         function addDJI() {
             var a = parseInt($("#DanJiuInt").val());
             a += 1;
-            alert(a);
             $("#DanJiuInt").val(a);
         }
         function plusDJI() {
             var a = parseInt($("#DanJiuInt").val());
             if(a != 0){
                 a -= 1;
-                alert(a);
             } else {
-                alert(a);
             }
             $("#DanJiuInt").val(a);
         }
@@ -635,28 +716,59 @@
             {
                 <input type="hidden" id="JieKuanID" name="ID" />
                 <table class="JKtable">
-                    <thead>
-                        <tr><td>借款时间</td><td><input type="text" class="easyui-datebox" name="BillTime" id="FaHuoTime" /></td></tr>
-                        <tr>
-                            <td>所属部门</td>
-                            <td>
-                                <input class="easyui-combobox " id="BuMenid"
-                                       name="BuMenid"
-                                       url="/BillPrint/GetBumen"
-                                       valueField="ID"
-                                       textField="MyTexts"
-                                       panelHeight="auto" style="width:100px" />
-                             </td></tr>
-                        <tr><td>借款人</td><td><input type="text" name="JieKuanPerson" id="Jkperson" /></td></tr>
-                        <tr><td>收款单位</td><td><input type="text" name="SkdwName" id="Jkdanwei" /></td></tr>
-                        <tr><td>借款金额</td><td><input type="text" name="JieKuanMoney" id="FaHuoBak" onkeyup="num(this)" /></td></tr>
-                        <tr><td>开户行</td><td><input type="text" name="OpenHang" id="FaHuoBak" /></td></tr>
-                        <tr><td>账号（卡号）</td><td><input type="text" name="CardNumber" id="FaHuoBak" onkeyup="num(this)"  /></td></tr>
-                        <tr><td>借款原因</td><td><input type="text" name="JieKuanYuanYin" id="FaHuoBak" /></td></tr>
-                        <tr><td>备注</td><td><input type="text" name="Bak" id="FaHuoBak" /></td></tr>
-                    </thead>
-
-
+                <thead>
+                    <tr><td>借款时间</td><td><input type="text" class="easyui-datebox" name="BillTime" id="BillTimeID" /></td></tr>
+                    <tr>
+                        <td>所属部门</td>
+                        <td>
+                            <input class="easyui-combobox " id="BuMenid"
+                                   name="BuMenid"
+                                   url="/BillPrint/GetBumen"
+                                   valueField="ID"
+                                   textField="MyTexts"
+                                   panelHeight="auto" style="width:100px" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>借款人</td>
+                        <td>
+                            <input class="easyui-combobox " id="Jkperson"
+                                   name="JieKuanPerson1"
+                                   valueField="ID"
+                                   textField="Name"
+                                   panelHeight="auto" style="width:100px" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>收款单位</td>
+                        <td>
+                            <input class="easyui-combobox " id="Jkdanwei"
+                                   name="SkdwName1"
+                                   valueField="Text"
+                                   textField="Text"
+                                   style="width:100px" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="hidden" name="OpenHang" id="FaHuoBak1" /><input type="hidden" name="SkdwName" id="Jkdanwei1" /></td>
+                        <td><input type="hidden" name="JieKuanPerson" id="Jkperson1" /><input type="hidden" name="CardNumber" id="CardNumberID1" /></td>
+                    </tr>
+                    <tr><td>借款金额</td><td><input type="text" name="JieKuanMoney" id="JieKuanMoneyID" onkeyup="num(this)" /></td></tr>
+                    <tr><td>开户行</td><td><input class="easyui-combobox " id="FaHuoBak"
+                                                  name="OpenHang1"
+                                                  valueField="Text"
+                                                  textField="Text"
+                                                  panelHeight="auto"
+                                                  style="width:100px" /></td></tr>
+                    <tr><td>账号（卡号）</td><td><input class="easyui-combobox " id="CardNumberID"
+                                                        name="CardNumber1"
+                                                        valueField="Text"
+                                                        textField="Text"
+                                                        panelHeight="auto"
+                                                        style="width:100px" /></td></tr>
+                    <tr><td>借款原因</td><td><input type="text" name="JieKuanYuanYin" id="JieKuanYuanYin" /></td></tr>
+                    <tr><td>备注</td><td><input type="text" name="Bak" id="BakID" /></td></tr>
+                </thead>
                 </table>
             }
         </div>  

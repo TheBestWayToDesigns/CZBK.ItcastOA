@@ -15,6 +15,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IT_BaoxiaoItemsService T_BaoxiaoItemsService { get; set; }
         IBLL.IT_JieKuanBillService T_JieKuanBillService { get; set; }
         IBLL.IBumenInfoSetService BumenInfoSetService { get; set; }
+        IBLL.IUserInfoService UserInfoService { get; set; } 
 
         public ActionResult Index()
         {
@@ -257,8 +258,23 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 var tempBXI = T_BaoxiaoItemsService.LoadEntities(x => x.BaoXiaoID == a.ID).DefaultIfEmpty().ToList();
                 bilist.AddRange(tempBXI);
             }
+            var bmid = UserInfoService.LoadEntities(x => x.ID == uid).FirstOrDefault();
+            var tempJKB = T_JieKuanBillService.LoadEntities(x => x.BuMenid == bmid.BuMenID).DefaultIfEmpty().ToList();
+            List<BaoXiaoLR> JKBLR = new List<BaoXiaoLR>();
+            foreach (var d in tempJKB)
+            {
+                if (d == null || d.SkdwName == null)
+                {
+                    continue;
+                }
+                BaoXiaoLR jklr = new BaoXiaoLR();
+                jklr.ID = d.ID;
+                jklr.Text = d.SkdwName;
+                JKBLR.Add(jklr);
+            }
             //users.Where((x, i) => users.FindIndex(z => z.name == x.name) == i).ToList();拉姆达表达式去重
             var sb = bilist.Where((x, i) => bilist.FindIndex(z => z.BaoXiaoName == x.BaoXiaoName) == i).ToList();
+            Random rd = new Random();
             List<BaoXiaoLR> list = new List<BaoXiaoLR>();
             foreach (var c in sb)
             {
@@ -267,11 +283,150 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     continue;
                 }
                 BaoXiaoLR bxlr = new BaoXiaoLR();
-                bxlr.ID = c.ID;
+                bxlr.ID = c.ID + rd.Next(100,10000);
                 bxlr.Text = c.BaoXiaoName;
                 list.Add(bxlr);
             }
+            list.AddRange(JKBLR);
             return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        //获取借款内容的借款金额
+        public ActionResult GetJieKuanMoney()
+        {
+            long jkid = Convert.ToInt64(Request["id"]);
+            var temp = T_JieKuanBillService.LoadEntities(x => x.ID == jkid).FirstOrDefault();
+            if (temp == null || temp.JieKuanMoney == null)
+            {
+                return Json(new { ret = "no"},JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { ret = "yes",jkmoney = temp.JieKuanMoney},JsonRequestBehavior.AllowGet);
+        }
+
+        //获取借款部门下属所有成员
+        public ActionResult GetJKPerson()
+        {
+            int bmid = Convert.ToInt32(Request["BMID"]);
+            var temp = UserInfoService.LoadEntities(x => x.BuMenID == bmid).DefaultIfEmpty().ToList();
+            List<JieKuanPerson> list = new List<JieKuanPerson>();
+            foreach(var a in temp)
+            {
+                if (a == null || a.PerSonName == null)
+                {
+                    continue;
+                }
+                JieKuanPerson jkr = new JieKuanPerson();
+                jkr.ID = a.ID;
+                jkr.Name = a.PerSonName;
+                list.Add(jkr);
+            }
+            return Json(list,JsonRequestBehavior.AllowGet);
+        }
+        //获取借款部门下所有收款单位
+        public ActionResult GetBuMenAllSKDW()
+        {
+            int bmid = Convert.ToInt32(Request["BMID"]);
+            var temp = T_JieKuanBillService.LoadEntities(x => x.BuMenid == bmid).DefaultIfEmpty().ToList();
+            List<T_JieKuanBill> sb = new List<T_JieKuanBill>();
+            if (temp.Count <= 1)
+            {
+                sb.AddRange(temp);
+            }
+            else
+            {
+                var a = temp.Where((x, i) => temp.FindIndex(z => z.SkdwName == x.SkdwName) == i).ToList();
+                sb.AddRange(a);
+            }
+            
+            List<BaoXiaoLR> list = new List<BaoXiaoLR>();
+            foreach(var a in sb)
+            {
+                if (a == null || a.SkdwName == null)
+                {
+                    continue;
+                }
+                BaoXiaoLR bxlr = new BaoXiaoLR();
+                bxlr.ID = a.ID;
+                bxlr.Text = a.SkdwName;
+                list.Add(bxlr);
+            }
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        //获取当前收款单位所有开户行
+        public ActionResult GetAllFaHuoBak()
+        {
+            string skdw = Request["SKDW"];
+            var temp = T_JieKuanBillService.LoadEntities(x => x.SkdwName == skdw).DefaultIfEmpty().ToList();
+            List<T_JieKuanBill> sb = new List<T_JieKuanBill>();
+            if (temp.Count <= 1)
+            {
+                sb.AddRange(temp);
+            }
+            else
+            {
+                var a = temp.Where((x, i) => temp.FindIndex(z => z.OpenHang == x.OpenHang) == i).ToList();
+                sb.AddRange(a);
+            }
+            List<BaoXiaoLR> list = new List<BaoXiaoLR>();
+            foreach (var a in sb)
+            {
+                if (a == null || a.OpenHang == null)
+                {
+                    continue;
+                }
+                BaoXiaoLR bxlr = new BaoXiaoLR();
+                bxlr.ID = a.ID;
+                bxlr.Text = a.OpenHang;
+                list.Add(bxlr);
+            }
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        //获取当前开户银行的所有卡号
+        public ActionResult GetAllFaHuoBakCardNumber()
+        {
+            string fhb = Request["FHB"];
+            var cardNum = T_JieKuanBillService.LoadEntities(x => x.OpenHang == fhb).DefaultIfEmpty().ToList();
+            List<T_JieKuanBill> sb = new List<T_JieKuanBill>();
+            if (cardNum.Count <= 1)
+            {
+                sb.AddRange(cardNum);
+            }
+            else
+            {
+                var a = cardNum.Where((x, i) => cardNum.FindIndex(z => z.CardNumber == x.CardNumber) == i).ToList();
+                sb.AddRange(a);
+            }
+            List<BaoXiaoLR> list = new List<BaoXiaoLR>();
+            foreach (var a in sb)
+            {
+                if (a == null || a.CardNumber == null)
+                {
+                    continue;
+                }
+                BaoXiaoLR bxlr = new BaoXiaoLR();
+                bxlr.ID = a.ID;
+                bxlr.Text = a.CardNumber;
+                list.Add(bxlr);
+            }
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        //返回借款人id
+        public ActionResult ReturnUserID()
+        {
+            int bm = Convert.ToInt32(Request["BuMenID"]);
+            string jkp = Request["personName"];
+            var temp = UserInfoService.LoadEntities(x => x.BuMenID == bm && x.PerSonName == jkp).FirstOrDefault();
+            if (temp != null)
+            {
+                return Json(new {ret = "ok",uid = temp.ID },JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { ret = "no", uid = "在该部门下查无此人！" }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         //报销内容类
@@ -280,5 +435,13 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             public long ID { get; set; }
             public string Text { get; set; }
         }
+
+        //借款人类
+        public class JieKuanPerson
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+        }
+
     }
 }
