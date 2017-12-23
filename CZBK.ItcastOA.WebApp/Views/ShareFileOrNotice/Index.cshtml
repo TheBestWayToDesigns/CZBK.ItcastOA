@@ -40,7 +40,7 @@
                 $('#tt').resizeDataGrid(0, 0, 200, 500);
             });
 
-            $("#AddShareFileDIV").css("display", "none"); 
+            $("#AddShareFileDIV").css("display", "none");
             $("#AddNoticeDIV").css("display", "none");
             $("#CheckAllDIV").css("display", "none");
 
@@ -49,13 +49,9 @@
             $("#divBtn a").click(function () {
                 var ClickA = $(this).attr("id");
                 if (ClickA == "MenuShareFile") {
-                    cleanDatagrid();
-                    $("#AddNoticeBtnDIV").css("display", "none");
                     loadFileData();
                 }
                 else if (ClickA == "MenuNotice") {
-                    cleanDatagrid();
-                    $("#AddShareFileBtnDIV").css("display", "none");
                     loadNoticeData();
                 }
             })
@@ -89,7 +85,7 @@
 
             $("#AddShareFileBtn").click(function () {
                 AddSchareFile();
-            }); 
+            });
 
             $("#AddNoticeBtn").click(function () {
                 AddANotice();
@@ -118,6 +114,7 @@
 
         //加载共享文件页面
         function loadFileData(pars) {
+            $("#AddNoticeBtnDIV").css("display", "none");
             $('#tt').datagrid({
                 url: '/ShareFileOrNotice/GetShareFile',
                 title: '文件共享',
@@ -167,6 +164,7 @@
 
         //加载通知页面
         function loadNoticeData(pars) {
+            $("#AddShareFileBtnDIV").css("display", "none");
             $('#tt').datagrid({
                 url: '/ShareFileOrNotice/GetNotice',
                 title: '公告通知',
@@ -415,7 +413,7 @@
                     }
                 })
             }
-            
+
         }
 
         //把允许查看共享的模板用户id存到隐藏空间里（共享用）
@@ -564,7 +562,7 @@
             return;
         }
 
-   </script>
+    </script>
 
 </head>
 <body class="easyui-layout">
@@ -602,80 +600,81 @@
     <div id="AddShareFileDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddShareFile", "ShareFileOrNotice", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddShareFile" }, new { id = "addsharefilefrom" }))
         {<div id="AddShareFileTab">
-                 <div>
-                     <b>文件类型
-                         <input id="FileTypeInput" class="easyui-combobox" name="FileTypeID"
-                                url="/ShareFileOrNotice/GetAllFileType"
-                                valueField="ID"
-                                textField="Name"
-                                panelHeight="auto"
-                                style="width:100px" />
-                     </b>
-                 </div>
-                 <b>&nbsp;</b>
-                 <div>
-                     <b>
-                         文件备注
-                         <input type="text" name="BeiZhu" id="BeiZhuId" />
-                     </b>
-                     <label style="color:silver">*推荐填写项(对文件加以说明)</label>
-                 </div>
-                 <b>&nbsp;</b>
-                 <div>
-                     <b>
-                         文件
-                         <input type="file" id="uploadShareFileID" name="uploadShareFileName" /><a href='javascript:uploadFileClick()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>上传</a>
-                         <input type="hidden" id="fileUrlID" name="fileUrlName" />
-                     </b>
-                 </div>
-                 <b>&nbsp;</b>
-                 <h1>分享给：</h1>
-                 <b><b><label>是否启用模板？</label></b></b>
-                 <b>&nbsp;</b>
-                 <b class="t2"><b><input type="radio" name="Model" id="yes" value="yes"/><label>是</label></b><b><input type="radio" name="Model" id="no" value="no"/><label>否</label></b></b>
-                 <div><b>&nbsp;</b></div>
-                 <div class="t3">
-                     <b style="width:20px">模板</b>
-                     <b>
-                         <input id="ModelFInput" class="easyui-combobox" name="ModelFName"
-                                url="/ShareFileOrNotice/GetAllModel"
-                                valueField="StrID"
-                                textField="StrName"
-                                panelHeight="auto"
-                                style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-                         <a href='javascript:addModelstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
-                     </b>
-                     <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一个模板，需添加一次！</span></label></p>
-                 </div>
-                 <div class="t1">
-                     <b>部门</b>
-                     <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-                     <b>
-                         <input id="BMSTUInput" class="easyui-combobox" name="BuMenName"
-                                url="/ShareFileOrNotice/GetAllBuMen"
-                                valueField="ID"
-                                textField="Name"
-                                panelHeight="auto"
-                                style="width:100px" />
-                     </b>
-                     <b></b>
-                 </div>
-                 <b>&nbsp;</b>
-                 <div class="t1">
-                     <b>部门用户</b>
-                     <b>
-                         <input id="STUInput" class="easyui-combobox" name="ShareToUserName"
-                                valueField="ID"
-                                textField="Name"
-                                panelHeight="auto"
-                                style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-                         <a href='javascript:addSTUsstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
-                     </b>
-                     <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一人，需添加一次！</span></label></p>
-                 </div>
-                 <b>
-                     <b><input type="hidden" name="STUstrName" id="STUstrID" /></b>
-                 </b>
+            <div>
+                <b>
+                    文件类型
+                    <input id="FileTypeInput" class="easyui-combobox" name="FileTypeID"
+                           url="/ShareFileOrNotice/GetAllFileType"
+                           valueField="ID"
+                           textField="Name"
+                           panelHeight="auto"
+                           style="width:100px" />
+                </b>
+            </div>
+            <b>&nbsp;</b>
+            <div>
+                <b>
+                    文件备注
+                    <input type="text" name="BeiZhu" id="BeiZhuId" />
+                </b>
+                <label style="color:silver">*推荐填写项(对文件加以说明)</label>
+            </div>
+            <b>&nbsp;</b>
+            <div>
+                <b>
+                    文件
+                    <input type="file" id="uploadShareFileID" name="uploadShareFileName" /><a href='javascript:uploadFileClick()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>上传</a>
+                    <input type="hidden" id="fileUrlID" name="fileUrlName" />
+                </b>
+            </div>
+            <b>&nbsp;</b>
+            <h1>分享给：</h1>
+            <b><b><label>是否启用模板？</label></b></b>
+            <b>&nbsp;</b>
+            <b class="t2"><b><input type="radio" name="Model" id="yes" value="yes" /><label>是</label></b><b><input type="radio" name="Model" id="no" value="no" /><label>否</label></b></b>
+            <div><b>&nbsp;</b></div>
+            <div class="t3">
+                <b style="width:20px">模板</b>
+                <b>
+                    <input id="ModelFInput" class="easyui-combobox" name="ModelFName"
+                           url="/ShareFileOrNotice/GetAllModel"
+                           valueField="StrID"
+                           textField="StrName"
+                           panelHeight="auto"
+                           style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                    <a href='javascript:addModelstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
+                </b>
+                <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一个模板，需添加一次！</span></label></p>
+            </div>
+            <div class="t1">
+                <b>部门</b>
+                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                <b>
+                    <input id="BMSTUInput" class="easyui-combobox" name="BuMenName"
+                           url="/ShareFileOrNotice/GetAllBuMen"
+                           valueField="ID"
+                           textField="Name"
+                           panelHeight="auto"
+                           style="width:100px" />
+                </b>
+                <b></b>
+            </div>
+            <b>&nbsp;</b>
+            <div class="t1">
+                <b>部门用户</b>
+                <b>
+                    <input id="STUInput" class="easyui-combobox" name="ShareToUserName"
+                           valueField="ID"
+                           textField="Name"
+                           panelHeight="auto"
+                           style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                    <a href='javascript:addSTUsstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
+                </b>
+                <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一人，需添加一次！</span></label></p>
+            </div>
+            <b>
+                <b><input type="hidden" name="STUstrName" id="STUstrID" /></b>
+            </b>
         </div>
         <table>
             <tbody id="Selebody"></tbody>
@@ -686,40 +685,44 @@
     <!---------------添加公告通知--------------------->
     <div id="AddNoticeDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddNotice", "ShareFileOrNotice", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddNotice" }, new { id = "addnoticefrom" }))
-        {<table id="AddShareFileTab">
-            <tr>
-                <td>通知内容</td>
-                <td><textarea id="BeiZhuArea" name="BeiZhuArea" style="width:302px"></textarea></td>
-                <td><input type="hidden" name="NoticeText" id="NoticeTextID" /></td>
-            </tr>
-            <tr><td colspan="3"><h3>分享给：</h3></td></tr>
-            <tr>
-                <td>部门</td>
-                <td>
+        {<div id="AddShareFileTab">
+            <div>
+                <p><b>通知内容</b></p>
+                &nbsp;&nbsp;&nbsp;&nbsp;<b><textarea id="BeiZhuArea" name="BeiZhuArea" style="width:302px;height:100px"></textarea></b>
+                <b><input type="hidden" name="NoticeText" id="NoticeTextID" /></b>
+            </div>
+             <b>&nbsp;</b>
+            <div><h1>分享给：</h1></div>
+             <b>&nbsp;</b>
+            <div>
+                <b>部门</b>
+                <b>&nbsp;&nbsp;</b>
+                <b>
                     <input id="BMNUInput" class="easyui-combobox" name="BuMenNoticeName"
                            url="/ShareFileOrNotice/GetAllBuMen"
                            valueField="ID"
                            textField="Name"
                            panelHeight="auto"
                            style="width:100px" />
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>部门用户</td>
-                <td>
+                </b>
+            </div>
+             <b>&nbsp;</b>
+            <div>
+                <b>部门用户</b>
+                <b>
                     <input id="STUNInput" class="easyui-combobox" name="ShareToUserNoticeName"
                            valueField="ID"
                            textField="Name"
                            panelHeight="auto"
-                           style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                           style="width:100px" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <a href='javascript:addSTUNsstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
-                </td>
-            </tr>
-            <tr>
-                <td><input type="hidden" name="NoticestrName" id="NoticestrID" /></td>
-            </tr>
-        </table>
+                </b>
+            </div>
+             <b>&nbsp;</b>
+            <div>
+                <b><input type="hidden" name="NoticestrName" id="NoticestrID" /></b>
+            </div>
+        </div>
         <table>
             <tbody id="Selebody"></tbody>
         </table>
@@ -727,7 +730,3 @@
     </div>
 </body>
 </html>
-
-
-
-

@@ -54,7 +54,7 @@
             $("#AddFileTypeBtnDIV").css("display", "none");
             $("#AddFileTypeDIV").css("display", "none");
             
-            loadData();
+            loadSchedule();
 
             $("#divBtn a").click(function () {
                 var ClickA = $(this).attr("id");
@@ -882,44 +882,40 @@
                 <a href="#" class="easyui-linkbutton" id="AddScheduleTypeBtn"  iconCls="icon-add" plain="true">添加日程状态</a>               
             </div>
         </div>
-        <div id="ChooseSerchTypeDIV">
-            <div><label>请选择查找类型：</label></div>
-            <div>
-                <label><input type="radio" name="SerchType" id="ByDBMid"/>根据下级部门查询</label>
-                <label><input type="radio" name="SerchType" id="ByDUid"/>根据下级员工</label>
-            </div>
-        </div>
-        <!---------------下级部门下拉框-------------------->
-        <div id="DownBuMenCombox" style="padding:5px;height:auto">
-            <div>
-                    <label>下级部门：</label>
-                    <input id="DBMInput" class="easyui-combobox" name="DownBuMenName"
-                           url="/EverDayWork/GetDownBuMenall"
-                           valueField="BMID"
-                           textField="Name"
-                           panelHeight="auto"
-                           style="width:100px" />
-                    <label>下级部门所有成员</label>
-                    <input id="DBMUserInput" class="easyui-combobox" name="DownBuMenUserName"
+        <div id="ChooseSerchTypeDIV" style="width:auto;height:30px;float:left">
+                <div style="padding:5px;height:25px;float:left;line-height:25px">
+                    <b>请选择查找类型：</b>
+                    <label><input type="radio" name="SerchType" id="ByDBMid" />根据下级部门查询</label>
+                    <label><input type="radio" name="SerchType" id="ByDUid" />根据下级员工</label>
+                </div>
+                <!---------------下级部门下拉框-------------------->
+                <div id="DownBuMenCombox" style="padding:4px;height:25px;float:left;line-height:25px">
+                        <b>下级部门：</b>
+                        <input id="DBMInput" class="easyui-combobox" name="DownBuMenName"
+                               url="/EverDayWork/GetDownBuMenall"
+                               valueField="BMID"
+                               textField="Name"
+                               panelHeight="auto"
+                               style="width:100px" />
+                        <b>下级部门所有成员</b>
+                        <input id="DBMUserInput" class="easyui-combobox" name="DownBuMenUserName"
+                               valueField="ID"
+                               textField="name"
+                               panelHeight="auto"
+                               style="width:100px" />
+                </div>
+                <!---------------下级用户下拉框-------------------->
+                <div id="DownUserCombox" style="padding:4px;height:25px;float:left;line-height:25px">
+                    <b>下级部门成员：</b>
+                    <input id="DUInput" name="DownUserName"
+                           class="easyui-combobox"
+                           url="/EverDayWork/GetDownUserall"
                            valueField="ID"
                            textField="name"
                            panelHeight="auto"
                            style="width:100px" />
-            </div>
-        </div>
-        <!---------------下级用户下拉框-------------------->
-        <div id="DownUserCombox" style="padding:5px;height:auto">
-            <div><label>下级部门成员：</label></div>
-            <div>
-                <input id="DUInput" name="DownUserName"
-                       class="easyui-combobox"
-                       url="/EverDayWork/GetDownUserall"
-                       valueField="ID"
-                       textField="name"
-                       panelHeight="auto"
-                       style="width:100px" />
-            </div>
-        </div>
+                </div>
+         </div>
         <!--------添加文件类型按钮-------->
         <div id="AddFileTypeBtnDIV" style="padding:5px;height:auto">
             <div style="margin-bottom:5px">
@@ -983,7 +979,7 @@
                            url="/EverDayWork/GetScheduleTypeall"
                            valueField="ID"
                            textField="ItemText"
-                           panelHeight="auto" style="width:100px" />
+                           style="width:100px" />
                 </td>
             </tr>
             <tr>

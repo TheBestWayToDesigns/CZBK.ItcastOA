@@ -158,6 +158,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemText" Type="nvarchar" MaxLength="50" />
+          <Property Name="BuMenId" Type="int" />
           <Property Name="Del" Type="smallint" />
         </EntityType>
         <EntityType Name="ScheduleUser">
@@ -728,6 +729,18 @@
             </Principal>
             <Dependent Role="Schedule">
               <PropertyRef Name="TextReadUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ScheduleType_Bumeninfo">
+          <End Role="BumenInfoSet" Type="Self.BumenInfoSet" Multiplicity="0..1" />
+          <End Role="ScheduleType" Type="Self.ScheduleType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BumenInfoSet">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ScheduleType">
+              <PropertyRef Name="BuMenId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1356,6 +1369,10 @@
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="Schedule" EntitySet="Schedule" />
           </AssociationSet>
+          <AssociationSet Name="FK_ScheduleType_Bumeninfo" Association="Self.FK_ScheduleType_Bumeninfo">
+            <End Role="BumenInfoSet" EntitySet="BumenInfoSet" />
+            <End Role="ScheduleType" EntitySet="ScheduleType" />
+          </AssociationSet>
           <AssociationSet Name="FK_ScheduleUser_UserInfo" Association="Self.FK_ScheduleUser_UserInfo">
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="ScheduleUser" EntitySet="ScheduleUser" />
@@ -1799,6 +1816,10 @@
             <End Role="UserInfo" EntitySet="UserInfoes" />
             <End Role="ShareFileOrNotice" EntitySet="ShareFileOrNotices" />
           </AssociationSet>
+          <AssociationSet Name="FK_ScheduleType_Bumeninfo" Association="OAModel.FK_ScheduleType_Bumeninfo">
+            <End Role="BumenInfoSet" EntitySet="BumenInfoSet" />
+            <End Role="ScheduleType" EntitySet="ScheduleTypes" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ActionInfo">
           <Key>
@@ -1894,6 +1915,7 @@
           <Property Name="DelFlag" Type="Int16" Nullable="false" />
           <NavigationProperty Name="UserInfoes" Relationship="OAModel.FK_Bumen" FromRole="BumenInfoSet" ToRole="UserInfo" />
           <NavigationProperty Name="T_JieKuanBill" Relationship="OAModel.FK_T_JieKuanBill_Bummen" FromRole="BumenInfoSet" ToRole="T_JieKuanBill" />
+          <NavigationProperty Name="ScheduleTypes" Relationship="OAModel.FK_ScheduleType_Bumeninfo" FromRole="BumenInfoSet" ToRole="ScheduleType" />
         </EntityType>
         <EntityType Name="YXB_Kh_list">
           <Key>
@@ -2505,6 +2527,8 @@
           <Property Name="ItemText" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Del" Type="Int16" />
           <NavigationProperty Name="Schedules" Relationship="OAModel.FK_Schedule_ScheduleType" FromRole="ScheduleType" ToRole="Schedule" />
+          <Property Name="BuMenId" Type="Int32" />
+          <NavigationProperty Name="BumenInfoSet" Relationship="OAModel.FK_ScheduleType_Bumeninfo" FromRole="ScheduleType" ToRole="BumenInfoSet" />
         </EntityType>
         <EntityType Name="ScheduleUser">
           <Key>
@@ -3003,6 +3027,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ScheduleType_Bumeninfo">
+          <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
+          <End Type="OAModel.ScheduleType" Role="ScheduleType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BumenInfoSet">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ScheduleType">
+              <PropertyRef Name="BuMenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3359,6 +3395,7 @@
           <EntitySetMapping Name="ScheduleTypes">
             <EntityTypeMapping TypeName="OAModel.ScheduleType">
               <MappingFragment StoreEntitySet="ScheduleType">
+                <ScalarProperty Name="BuMenId" ColumnName="BuMenId" />
                 <ScalarProperty Name="Del" ColumnName="Del" />
                 <ScalarProperty Name="ItemText" ColumnName="ItemText" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

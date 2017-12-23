@@ -46,16 +46,21 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                              Array ay = (a.ShareToUser).Split(',');
                              foreach (var b in ay)
                              {
-                                 int c = Convert.ToInt32(b);
-                                 if (c == userID)
-                                 {
-                                     sfon.Add(a);
-                                     break;
-                                 }
-                                 else
-                                 {
-                                     continue;
-                                 }
+                                if(b.Equals("")){
+                                    continue;
+                                }else
+                                {
+                                    int c = Convert.ToInt32(b);
+                                    if (c == userID)
+                                    {
+                                        sfon.Add(a);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
                              }
                          }
                     }
@@ -100,15 +105,22 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             Array ay = (a.ShareToUser).Split(',');
                             foreach (var b in ay)
                             {
-                                int c = Convert.ToInt32(b);
-                                if (c == userID)
+                                if (b.Equals(""))
                                 {
-                                    sfon.Add(a);
-                                    break;
+                                    continue;
                                 }
                                 else
                                 {
-                                    continue;
+                                    int c = Convert.ToInt32(b);
+                                    if (c == userID)
+                                    {
+                                        sfon.Add(a);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
                                 }
                             }
                         }
