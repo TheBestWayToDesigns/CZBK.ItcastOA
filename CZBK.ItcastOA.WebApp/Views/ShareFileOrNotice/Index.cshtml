@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    Layout = null;
 }
 @using CZBK.ItcastOA.Model
 <html>
@@ -40,30 +40,59 @@
                 $('#tt').resizeDataGrid(0, 0, 200, 500);
             });
 
-            $("#AddShareFileDIV").css("display", "none");
+            $("#AddShareFileDIV").css("display", "none"); 
+            $("#AddNoticeDIV").css("display", "none");
+            $("#CheckAllDIV").css("display", "none");
 
             loadFileData();
 
             $("#divBtn a").click(function () {
                 var ClickA = $(this).attr("id");
                 if (ClickA == "MenuShareFile") {
+                    cleanDatagrid();
+                    $("#AddNoticeBtnDIV").css("display", "none");
                     loadFileData();
                 }
                 else if (ClickA == "MenuNotice") {
+                    cleanDatagrid();
+                    $("#AddShareFileBtnDIV").css("display", "none");
                     loadNoticeData();
                 }
-            });
+            })
 
             $("#BMSTUInput").combobox({
                 onChange: function () {
                     var BMID = $("#BMSTUInput").combobox("getValue");
+                    $("#STUInput").combobox("loadData", {});
                     $("#STUInput").combobox("setValue", "");
                     $("#STUInput").combobox("reload", "/ShareFileOrNotice/GetShareToUser?BMID=" + BMID);
                 }
             })
 
+            $("#BMNUInput").combobox({
+                onChange: function () {
+                    var BMID = $("#BMNUInput").combobox("getValue");
+                    $("#STUNInput").combobox("loadData", {});
+                    $("#STUNInput").combobox("setValue", "");
+                    $("#STUNInput").combobox("reload", "/ShareFileOrNotice/GetShareToUser?BMID=" + BMID);
+                }
+            })
+
+            $("#yes").click(function () {
+                $(".t3").css("display", "block");
+                $(".t1").css("display", "none");
+            });
+            $("#no").click(function () {
+                $(".t1").css("display", "block");
+                $(".t3").css("display", "none");
+            });
+
             $("#AddShareFileBtn").click(function () {
                 AddSchareFile();
+            }); 
+
+            $("#AddNoticeBtn").click(function () {
+                AddANotice();
             });
         });
         //清空datagrid数据
@@ -86,6 +115,7 @@
             var seconds = date.getSeconds()<10?"0"+date.getSeconds():date.getSeconds();
             return date.getFullYear() + "-" + month + "-" + currentDate + " " + hour + ":" + minutes + ":" + seconds;
         }
+
         //加载共享文件页面
         function loadFileData(pars) {
             $('#tt').datagrid({
@@ -108,28 +138,138 @@
                 columns: [[
                     { field: 'ck', checkbox: true, title: '', width: 30 },
                     { field: 'ID', title: '编号', align: 'center' },
-                    { field: 'TypeID', title: '日程状态种类', align: 'center' },
+                    { field: 'TypeID', title: '共享类型', align: 'center' },
                     { field: 'FileTypeID', title: '文件类型', align: 'center' },
-                    { field: 'BeiZhu', title: '日程状态种类', align: 'center' },
-                    { field: 'FileURL', title: '文件下载', align: 'center' },
-                    { field: 'UploadFileTime', title: '文件上传时间', align: 'center' },
+                    { field: 'BeiZhu', title: '文件备注', align: 'center' },
+                    {
+                        field: 'FileURL', title: '文件下载', align: 'center',
+                        formatter: function (value, row, index) {
+                            return "<a href='javascript:downloadFile()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>下载</a>";
+                        }
+                    },
+                    { field: 'UploadFileTime', title: '文件上传时间', align: 'center',formatter: function (value, row, col) {
+                        var sd = value == null ? '' : ChangeDateFormat(value);
+                        return sd;
+                    }},
                     { field: 'ShareUser', title: '上传用户', align: 'center' },
-                    { field: 'ShareToUser', title: '能查阅的用户', align: 'center' },
                     {
                         field: 'Del', title: '编辑栏', align: 'center',
                         formatter: function (value, row, index) {
-                            return "<a href='#' class='l-btn' style='margin:0px 5px;padding:2px 8px ' onclick='deldata()' >删除</a>";
+                            return "<a href='javascript:del()' class='l-btn' style='margin:0px 5px;padding:2px 8px ' >删除</a>";
                         }
                     },
                 ]],
-                toolbar:"#AddShareFileBtnDIV",
+                toolbar: "#AddShareFileBtnDIV",
                 onLoadSuccess: function () {
                 }
             });
         }
 
+        //加载通知页面
+        function loadNoticeData(pars) {
+            $('#tt').datagrid({
+                url: '/ShareFileOrNotice/GetNotice',
+                title: '公告通知',
+                height: $("#dgdiv").height() - 20,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                //onClickCell: onClickCell,
+                //onAfterEdit: onAfterEdit,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                checkOnSelect: true,
+                queryParams: pars,//往后台传递参数
+                columns: [[
+                    { field: 'ck', checkbox: true, title: '', width: 30 },
+                    { field: 'ID', title: '编号', align: 'center' },
+                    { field: 'TypeID', title: '共享类型', align: 'center' },
+                    {
+                        field: 'NoticeText', title: '通知内容', align: 'center', formatter: function (value, row, index) {
+                            if(value.length > 50){
+                                value = value.substring(0,50)+" ......";
+                            }else{
+                                value = value;
+                            }
+                            return value;
+                        }
+                    },
+                    {
+                        field: 'GetAllText', title: '查看通知详细内容', align: 'center',
+                        formatter: function (value, row, index) {
+                            return "<a href='javascript:getAllText()' class='l-btn' style='margin:0px 5px;padding:2px 8px ' >查看通知</a>";
+                        }
+                    },
+                    {
+                        field: 'UpNoticeTime', title: '通知下达时间', align: 'center', formatter: function (value, row, col) {
+                            var sd = value == null ? '' : ChangeDateFormat(value);
+                            return sd;
+                        }
+                    },
+                    { field: 'NoticeUser', title: '下发用户', align: 'center' },
+                    {
+                        field: 'Del', title: '编辑栏', align: 'center',
+                        formatter: function (value, row, index) {
+                            return "<a href='javascript:del()' class='l-btn' style='margin:0px 5px;padding:2px 8px ' >删除</a>";
+                        }
+                    },
+                ]],
+                toolbar: "#AddNoticeBtnDIV",
+                onLoadSuccess: function () {
+                }
+            });
+        }
+
+        //获取通知详细内容
+        function getAllText() {
+            var row = $('#tt').datagrid('getSelected');
+            $.post("/ShareFileOrNotice/GetNoticeAllText", { "id": row.ID }, function (noticeText) {
+                $("#AllNoticeText").val(noticeText);
+            });
+            $("#CheckAllDIV").css("display", "block");
+            $('#CheckAllDIV').dialog({
+                title: "查看通知",
+                width: 505,
+                height: 510,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '确定',
+                    handler: function () {
+                        $('#CheckAllDIV').dialog('close');
+                        $("#AllNoticeText").val("");
+                    }
+                }],
+                onClose: function () {
+                    $("#AllNoticeText").val("");
+                }
+            });
+        }
+
+        //下载共享文件
+        function downloadFile() {
+            var row = $('#tt').datagrid('getSelected');
+            $.post("/ShareFileOrNotice/GetFileUrl", { "id": row.ID }, function (data) {
+                if(data.ret == "null"||data.ret == null){
+                    $.messager.alert("提示", "无文件，可能未上传文件！");
+                }
+                else{
+                    var url = data.ret;
+                    window.open(url);
+                }
+            })
+        }
+
         //添加共享文件
         function AddSchareFile() {
+            $(".t3").css("display", "none");
+            $(".t1").css("display", "none");
             $("#AddShareFileDIV").css("display", "block");
             $('#AddShareFileDIV').dialog({
                 title: "添加共享文件",
@@ -142,41 +282,241 @@
                     text: '确定',
                     iconCls: 'icon-ok',
                     handler: function () {
-                        if ($("#ItemText").val().trim().length <= 0) {
-                            $.messager.alert("提示", "值不可以为空！");
+                        if ($('input:radio[name="Model"]:checked').val == null) {
+                            $.messager.alert("提示", "请选择是否使用模板！");
                             return;
+                        }else if ($('input:radio[name="Model"]:checked').val() == "yes") {
+                            if ($("#ModelFInput").combobox("getValue").trim().length <= 0) {
+                                $.messager.alert("提示", "请选择模板！");
+                                return;
+                            } else if ($("#BeiZhuId").val().trim().length <= 0) {
+                                if (confirm("确定不填写文件备注？")) {
+
+                                } else {
+                                    return;
+                                }
+                            } else if ($("#STUstrID").val().trim().length <= 0) {
+                                $.messager.alert("提示", "请点击模板后的添加按钮完成添加！");
+                                return;
+                            }
+                        } else if ($('input:radio[name="Model"]:checked').val() == "no") {
+                            if ($("#FileTypeInput").combobox("getValue").trim().length <= 0) {
+                                $.messager.alert("提示", "请选择文件类型！");
+                                return;
+                            } else if ($("#BeiZhuId").val().trim().length <= 0) {
+                                if (confirm("确定不填写文件备注？")) {
+
+                                } else {
+                                    return;
+                                }
+                            } else if ($("#BMSTUInput").combobox("getValue").trim().length <= 0) {
+                                $.messager.alert("提示", "请选择分享部门！");
+                                return;
+                            } else if ($("#STUInput").combobox("getValue").trim().length <= 0) {
+                                $.messager.alert("提示", "请选择分享人！");
+                                return;
+                            } else if ($("#STUstrID").val().trim().length <= 0) {
+                                $.messager.alert("提示", "请点击添加按钮完成添加！");
+                                return;
+                            }
                         }
-                        $("#addsharefrom").submit();//提交表单
+                        var fileup = document.getElementById("uploadShareFileID").value;
+                        var fileupurl = document.getElementById("fileUrlID").value;
+                        if (fileup.trim().length > 0 && fileupurl.trim().length <= 0) {
+                            $.messager.alert("提示", "选择的文件还未上传，请先点击上传再点击确认！");
+                        } else if (fileup.trim().length <= 0) {
+                            $.messager.alert("提示","请选择共享文件并上传!");
+                        } else {
+                            $("#addsharefilefrom").submit();//提交表单
+                        }
                     }
                 }, {
                     text: '取消',
                     handler: function () {
-                        $('#AddSchareFileDIV').dialog('close');
+                        $('#AddShareFileDIV').dialog('close');
                     }
                 }]
             });
         }
 
-        //把允许查看共享的用户id存到隐藏空间里
+        //添加公告通知
+        function AddANotice() {
+            $("#AddNoticeDIV").css("display", "block");
+            $('#AddNoticeDIV').dialog({
+                title: "添加公告通知",
+                width: 450,
+                height: 400,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '确定',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+                        if ($("#BeiZhuArea").val().trim().length <= 0) {
+                            $.messager.alert("提示", "请填写通知内容！");
+                            return;
+                        } else if ($("#BMNUInput").combobox("getValue").trim().length <= 0) {
+                            $.messager.alert("提示", "请选择分享部门！");
+                            return;
+                        } else if ($("#STUNInput").combobox("getValue").trim().length <= 0) {
+                            $.messager.alert("提示", "请选择分享人！");
+                            return;
+                        }
+                        document.getElementById("NoticeTextID").value = document.getElementById("BeiZhuArea").value;
+                        $("#addnoticefrom").submit();//提交表单
+                    }
+                }, {
+                    text: '取消',
+                    handler: function () {
+                        $('#AddNoticeDIV').dialog('close');
+                    }
+                }]
+            });
+        }
+
+        //把允许查看共享的用户id存到隐藏空间里（共享用）
         function addSTUsstr() {
-            var str = ",";
+            var str = "";
+            var BMID = $("#BMSTUInput").combobox("getValue");
             var SUId = $("#STUInput").combobox("getValue");
             if (!isNaN(parseInt(SUId))) {
+                var a = $("#STUstrID").val();
+                var ay = a.split(",");
+                for(var i = 0;i < ay.length;i++){
+                    while(ay[i] == SUId){
+                        $.messager.alert("提示", "用户已添加！");
+                        return;
+                    }
+                }
                 str = str + SUId + ",";
-                var a = $("#STUstrName").val;
-                $("#STUstrName").val(a+str);
+                $("#STUstrID").val(a + str);
+                $.messager.alert("提示", "添加人员成功！");
             } else {
-
+                $.post("/ShareFileOrNotice/ReturnUserID", { "personName": SUId,"BuMenID":BMID}, function (data) {
+                    if (data.ret == "ok") {
+                        var suid = data.val;
+                        var a = $("#STUstrID").val();
+                        var ay = a.split(",");
+                        for (var i = 0; i < ay.length; i++) {
+                            while (ay[i] == suid) {
+                                $.messager.alert("提示", "用户已添加！");
+                                return;
+                            }
+                        }
+                        str = str + data.val + ",";
+                        var s = $("#STUstrID").val();
+                        $("#STUstrID").val(s + str);
+                        $.messager.alert("提示","添加人员成功！");
+                    }else if(data.ret == "no"){
+                        $.messager.alert("提示", "在该部门之下查无此人，请确认名字是否输入正确！");
+                    }else {
+                        $.messager.alert("提示", "添加失败！");
+                    }
+                })
             }
             
         }
 
+        //把允许查看共享的模板用户id存到隐藏空间里（共享用）
+        function addModelstr() {
+            var str = "";
+            var MFID = $("#ModelFInput").combobox("getValue");
+            var reg = /^[\d+,]{1,}$/
+            if (reg.test(MFID)) {
+                var a = $("#STUstrID").val();
+                var ay = a.split(",");
+                var my = MFID.split(",");
+                for (var j = 0; j < my.length; j++){
+                    for (var i = 0; i < ay.length; i++) {
+                        while (ay[i] == my[j]) {
+                            delete my[j];
+                            continue;
+                        }
+                    }
+                }
+                for (var f = 0; f < my.length; f++){
+                    while(my[f] == undefined) {
+                        continue;
+                    }
+                    str = str + my[f] + ",";
+
+                    $("#STUstrID").val(s + str);
+                }
+            } else {
+                $.messager.alert("提示","请选择模板！");
+            }
+        }
+
+
+        //把允许查看共享的用户id存到隐藏空间里（公告用）
+        function addSTUNsstr() {
+            var str = "";
+            var BMID = $("#BMNUInput").combobox("getValue");
+            var SUId = $("#STUNInput").combobox("getValue");
+            if (!isNaN(parseInt(SUId))) {
+                var a = $("#NoticestrID").val();
+                var ay = a.split(",");
+                for (var i = 0; i < ay.length; i++) {
+                    while (ay[i] == SUId) {
+                        $.messager.alert("提示", "用户已添加！");
+                        return;
+                    }
+                }
+                str = str + SUId + ",";
+                $("#NoticestrID").val(a + str);
+                $.messager.alert("提示", "添加人员成功！");
+            } else {
+                $.post("/ShareFileOrNotice/ReturnUserID", { "personName": SUId, "BuMenID": BMID }, function (data) {
+                    if (data.ret == "ok") {
+                        var suid = data.val;
+                        var a = $("#NoticestrID").val();
+                        var ay = a.split(",");
+                        for (var i = 0; i < ay.length; i++) {
+                            while (ay[i] == suid) {
+                                $.messager.alert("提示", "用户已添加！");
+                                return;
+                            }
+                        }
+                        str = str + data.val + ",";
+                        var s = $("#NoticestrID").val();
+                        $("#NoticestrID").val(s + str);
+                        $.messager.alert("提示", "添加人员成功！");
+                    } else if (data.ret == "no") {
+                        $.messager.alert("提示", "在该部门之下查无此人，请确认名字是否输入正确！");
+                    } else {
+                        $.messager.alert("提示", "添加失败！");
+                    }
+                })
+            }
+
+        }
+
+        //上传文件返回url
+        function uploadFileClick() {
+            $("#addsharefilefrom").ajaxSubmit({
+                success: function (data) {
+                    var serverData = data.split(":");
+                    if (serverData[0] == "yes") {
+                        $("#fileUrlID").val(serverData[1]);//将上传成功的文件地址放在隐藏input中
+                        alert($("#fileUrlID").val());
+                        $.messager.alert("提示", "上传文件成功！");
+                    }
+                    else {
+                        $.messager.alert("提示", serverData[1], "error");
+                    }
+                },
+                url: "/ShareFileOrNotice/FileUpload",
+                type: "post"
+            });
+        }
+
         //添加共享文件以后调用
-        function afterAddShareFileDIV(data) {
+        function afterAddShareFile(data) {
             if (data.ret == "ok") {
                 try {
                     $('#tt').datagrid('reload');
-                    $('#AddSchareFileDIV').dialog('close');
+                    $('#AddShareFileDIV').dialog('close');
                 }
                 catch (e) {
 
@@ -189,13 +529,48 @@
             }
         }
 
+        //添加通知公告以后调用
+        function afterAddNotice(data) {
+            if (data.ret == "ok") {
+                try {
+                    $('#tt').datagrid('reload');
+                    $('#AddNoticeDIV').dialog('close');
+                }
+                catch (e) {
+
+                }
+
+            } else if (data.ret == "no") {
+                $.messager.alert("提示", data.msg, "error");
+            } else {
+                $.messager.alert("提醒", "修改数据错误!!", "error");
+            }
+        }
+
+        //删除共享文件
+        function del() {
+            //弹窗提示
+            if (confirm('确定要执行删除操作吗?')) {
+                var row = $('#tt').datagrid('getSelected');
+                $.post("/ShareFileOrNotice/DelShareFile", { "id": row.ID }, function (data) {
+                    if (data.ret == "ok") {
+                        $('#tt').datagrid("reload");
+                    }
+                    else {
+                        $.messager.alert("提示", data.msg);
+                    }
+                })
+            }
+            return;
+        }
+
    </script>
 
 </head>
 <body class="easyui-layout">
     <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink " style="width:150px; padding:8px;">
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuShareFile" style="width:98%;margin:10px auto">文件共享</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuNotice" style="width:98%;margin:10px auto">下发通知</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuNotice" style="width:98%;margin:10px auto">下发公告</a>
     </div>
     <div data-options="region:'center',title:'数据报表'" id="dgdiv">
         <div id="TTdiv">
@@ -209,30 +584,119 @@
                 <a href="#" class="easyui-linkbutton" id="AddShareFileBtn" iconCls="icon-add" plain="true">添加共享文件</a>
             </div>
         </div>
+        <!---------------添加公告通知按钮-------------------->
+        <div id="AddNoticeBtnDIV" style="padding:5px;height:auto">
+            <div style="margin-bottom:5px">
+                <a href="#" class="easyui-linkbutton" id="AddNoticeBtn" iconCls="icon-add" plain="true">添加公告通知</a>
+            </div>
+        </div>
+    </div>
+    <div id="CheckAllDIV">
+        <table>
+            <tr><td><h1>通知全部内容</h1></td></tr>
+            <tr><td><textarea id="AllNoticeText" style="width:475px;height:320px;font-size:15px"></textarea></td></tr>
+        </table>
     </div>
 
     <!---------------添加共享文件--------------------->
     <div id="AddShareFileDIV" style="height:100%; width:100%;">
-        @using (Ajax.BeginForm("AddShareFileDIV", "ShareFileOrNotice", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddShareFileDIV" }, new { id = "addsharefilefrom" }))
-        {<table>
-             <tr>
-                <td>文件类型</td>
-                <td><input id="FileTypeInput" class="easyui-combobox" name="FileTypeName"
-                    url="/ShareFileOrNotice/GetAllFileType"
-                    valueField="ID"
-                    textField="Name"
-                    panelHeight="auto"
-                    style="width:100px" />
-                </td>
-             </tr>
-             <tr>
-                <td>文件备注</td>
-                <td><input type="text" name="BeiZhuName" id="BeiZhuId" /></td>
-             </tr>
-             <tr><td colspan="3"><h3>分享给：</h3></td></tr>
-             <tr>
+        @using (Ajax.BeginForm("AddShareFile", "ShareFileOrNotice", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddShareFile" }, new { id = "addsharefilefrom" }))
+        {<div id="AddShareFileTab">
+                 <div>
+                     <b>文件类型
+                         <input id="FileTypeInput" class="easyui-combobox" name="FileTypeID"
+                                url="/ShareFileOrNotice/GetAllFileType"
+                                valueField="ID"
+                                textField="Name"
+                                panelHeight="auto"
+                                style="width:100px" />
+                     </b>
+                 </div>
+                 <b>&nbsp;</b>
+                 <div>
+                     <b>
+                         文件备注
+                         <input type="text" name="BeiZhu" id="BeiZhuId" />
+                     </b>
+                     <label style="color:silver">*推荐填写项(对文件加以说明)</label>
+                 </div>
+                 <b>&nbsp;</b>
+                 <div>
+                     <b>
+                         文件
+                         <input type="file" id="uploadShareFileID" name="uploadShareFileName" /><a href='javascript:uploadFileClick()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>上传</a>
+                         <input type="hidden" id="fileUrlID" name="fileUrlName" />
+                     </b>
+                 </div>
+                 <b>&nbsp;</b>
+                 <h1>分享给：</h1>
+                 <b><b><label>是否启用模板？</label></b></b>
+                 <b>&nbsp;</b>
+                 <b class="t2"><b><input type="radio" name="Model" id="yes" value="yes"/><label>是</label></b><b><input type="radio" name="Model" id="no" value="no"/><label>否</label></b></b>
+                 <div><b>&nbsp;</b></div>
+                 <div class="t3">
+                     <b style="width:20px">模板</b>
+                     <b>
+                         <input id="ModelFInput" class="easyui-combobox" name="ModelFName"
+                                url="/ShareFileOrNotice/GetAllModel"
+                                valueField="StrID"
+                                textField="StrName"
+                                panelHeight="auto"
+                                style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                         <a href='javascript:addModelstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
+                     </b>
+                     <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一个模板，需添加一次！</span></label></p>
+                 </div>
+                 <div class="t1">
+                     <b>部门</b>
+                     <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                     <b>
+                         <input id="BMSTUInput" class="easyui-combobox" name="BuMenName"
+                                url="/ShareFileOrNotice/GetAllBuMen"
+                                valueField="ID"
+                                textField="Name"
+                                panelHeight="auto"
+                                style="width:100px" />
+                     </b>
+                     <b></b>
+                 </div>
+                 <b>&nbsp;</b>
+                 <div class="t1">
+                     <b>部门用户</b>
+                     <b>
+                         <input id="STUInput" class="easyui-combobox" name="ShareToUserName"
+                                valueField="ID"
+                                textField="Name"
+                                panelHeight="auto"
+                                style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                         <a href='javascript:addSTUsstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
+                     </b>
+                     <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一人，需添加一次！</span></label></p>
+                 </div>
+                 <b>
+                     <b><input type="hidden" name="STUstrName" id="STUstrID" /></b>
+                 </b>
+        </div>
+        <table>
+            <tbody id="Selebody"></tbody>
+        </table>
+        }
+    </div>
+
+    <!---------------添加公告通知--------------------->
+    <div id="AddNoticeDIV" style="height:100%; width:100%;">
+        @using (Ajax.BeginForm("AddNotice", "ShareFileOrNotice", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddNotice" }, new { id = "addnoticefrom" }))
+        {<table id="AddShareFileTab">
+            <tr>
+                <td>通知内容</td>
+                <td><textarea id="BeiZhuArea" name="BeiZhuArea" style="width:302px"></textarea></td>
+                <td><input type="hidden" name="NoticeText" id="NoticeTextID" /></td>
+            </tr>
+            <tr><td colspan="3"><h3>分享给：</h3></td></tr>
+            <tr>
                 <td>部门</td>
-                <td><input id="BMSTUInput" class="easyui-combobox" name="BuMenName"
+                <td>
+                    <input id="BMNUInput" class="easyui-combobox" name="BuMenNoticeName"
                            url="/ShareFileOrNotice/GetAllBuMen"
                            valueField="ID"
                            textField="Name"
@@ -240,21 +704,21 @@
                            style="width:100px" />
                 </td>
                 <td></td>
-             </tr>
-             <tr>
+            </tr>
+            <tr>
                 <td>部门用户</td>
-                <td><input id="STUInput" class="easyui-combobox" name="ShareToUserName"
+                <td>
+                    <input id="STUNInput" class="easyui-combobox" name="ShareToUserNoticeName"
                            valueField="ID"
                            textField="Name"
                            panelHeight="auto"
-                           style="width:100px" />
-                 </td>
-                 <td><a href='javascript:addSTUsstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a></td>
-             </tr>
-             <tr>
-                 <td><input type="hidden" name="FileUrlName" id="FileUrlID" /></td>
-                 <td><input type="hidden" name="STUstrName" id="STUstrID" /></td>
-             </tr>
+                           style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                    <a href='javascript:addSTUNsstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="hidden" name="NoticestrName" id="NoticestrID" /></td>
+            </tr>
         </table>
         <table>
             <tbody id="Selebody"></tbody>

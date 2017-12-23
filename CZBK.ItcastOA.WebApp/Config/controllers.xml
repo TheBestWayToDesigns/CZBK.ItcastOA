@@ -91,6 +91,7 @@
     <property name="T_BaoxiaoItemsService" ref="T_BaoxiaoItemsService" />
     <property name="T_JieKuanBillService" ref="T_JieKuanBillService" />
     <property name="BumenInfoSetService" ref="BumenInfoSetService" />
+    <property name="UserInfoService" ref="UserInfoService" />
   </object>
   <object type="CZBK.ItcastOA.WebApp.Controllers.ShareFileOrNoticeController, CZBK.ItcastOA.WebApp" singleton="false" >
     <property name="ShareFileOrNoticeService" ref="ShareFileOrNoticeService" />
@@ -98,6 +99,8 @@
     <property name="UserInfoService" ref="UserInfoService" />
     <property name="BumenInfoSetService" ref="BumenInfoSetService" />
     <property name="FileTypeService" ref="FileTypeService" />
+    <property name="ShareFileOrNoticeService" ref="ShareFileOrNoticeService" />
+    <property name="ShareTypeService" ref="ShareTypeService" />
   </object>
 
 
