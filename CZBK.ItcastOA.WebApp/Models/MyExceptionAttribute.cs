@@ -15,7 +15,6 @@ namespace CZBK.ItcastOA.WebApp.Models
             ExceptionQueue.Enqueue(filterContext.Exception);//将异常信息添加到队列中。
             filterContext.HttpContext.Response.Redirect("/Error.html");
         }
-
     }
    
 }

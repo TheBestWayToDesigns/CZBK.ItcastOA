@@ -130,7 +130,7 @@
             $("#XiangXiDIV").css("display", "none");
             $("#divZhList").css("display", "none");
             $("#divMxList").css("display", "none");
-            $("#City_Div").hide();
+            $("#City_Div").dialog("close");
             $('#CityDint').dialog('close')
             $('#oldbaojia').dialog('close')
             $('#dlg').dialog('close');
@@ -187,7 +187,7 @@
                 };
                 DuoXuanEascsh(pars);
             })
-            $("#Sousuo_win").click(function () {
+            $("#SousuoA").click(function () {
                 var UpTime = $('#StTime').combobox('getValue');
                 if (UpTime.length <= 0) {
                     $.messager.alert("提示", "开始时间不可为空！")
@@ -225,12 +225,12 @@
                 if ($(this).attr("id") == "CityEdit") {
                     $("#TTdiv").hide();
                     $("#mothdiv").hide();
-                    $("#City_Div").show();
+                    showdilag();
 
                 } else if ($(this).attr("id") == undefined) {
                     $("#TTdiv").hide();
                     $("#mothdiv").hide();
-                    $("#City_Div").hide();
+                    $("#City_Div").dialog("close")
                 }
                 else {
                     $("#tt").datagrid("clearSelections");
@@ -306,12 +306,12 @@
                             } else {
                                 Dymct = item["LostCount"];
                             }
-                            var sp = i == 0 ? "上月创建信息" : i == 1 ? "当月创建信息" : "累计创建信息";
+                            var sp = i == 0 ? "历史创建信息" : i == 1 ? "当月创建信息" : "累计创建信息";
                             var $tdName = $("<tr><td >" + sp + "</td><td >" + Contstr(item["WinCount"], true) + "</td><td >" + Contstr(item["DaiDingCount"], true) + "</td><td >" + Contstr(item["LostCount"], true) + "</td><td >" + Contstr(item["SumCount"], true) + "</td> </tr>");
                             $("#GetMonThData").append($tdName);
                         })
                         $.each(data.temp, function (i, item) {
-                            var sp = i == 0 ? "上月创建信息" : i == 1 ? "当月创建信息" : "累计创建信息";
+                            var sp = i == 0 ? "历史创建信息" : i == 1 ? "当月创建信息" : "累计创建信息";
 
                             var $tdName = $("<tr><td >" + sp + "</td><td >" + Contstr(item["WinDML"]) + "</td><td >" + Contstr(item["DdDml"]) + "</td><td >" + Contstr(item["lostDML"]) + "</td><td >" + Contstr(item["SumDMLCount"]) + "</td> </tr>");
                             $("#GetmoneyThData").append($tdName);
@@ -319,7 +319,7 @@
                         var pi = 0;
                         $.each(data.LostItem, function (ui, item) {
 
-                            var divtext = (ui == 0 ? "上月" : "当月") + "失败原因";
+                            var divtext = (ui == 0 ? "历史" : "当月") + "失败原因";
                             var tr_td = "<tr><td>" + divtext + "</td>";
                             var trhread = "<tr><td>分类</td>";
 
@@ -461,8 +461,7 @@
             $('#tt').datagrid({
                 url: '/MasterBaoJia/GetMoneyInfo',
                 title: '未报价信息',
-                width: $("#dgdiv").width() - 20,
-                height: $("#dgdiv").height() - 20,
+                height: $("#dgdiv").height() -15,
                 fitColumns: true, //列自适应
                 nowrap: true,
                 rownumbers: true,
@@ -583,7 +582,6 @@
             $("#Citytt").datagrid({
                 url: '/MasterBaojia/GetCity',
                 title: '城市信息',
-                height: $("#dgdiv").height()-2,
                 fitColumns: true, //列自适应
                 nowrap: true,
                 rownumbers: true,
@@ -1036,8 +1034,7 @@
             $('#tt').datagrid({
                 url: '/MasterBaoJia/DuoXuanSearch',
                 title: '多选查询',
-                width: $("#dgdiv").width() - 10,
-                height: $("#dgdiv").height() - 10,
+                height: $("#dgdiv").height() - 15,
                 fitColumns: true, //列自适应
                 nowrap: true,
                 rownumbers: true,
@@ -1145,8 +1142,7 @@
             $('#tt').datagrid({
                 url: '/MasterBaoJia/OverHeTongt',
                 title: '完成合同',
-                width: $("#dgdiv").width() - 20,
-                height: $("#dgdiv").height() - 20,
+                height: $("#dgdiv").height() - 15,
                 fitColumns: true, //列自适应
                 nowrap: true,
                 rownumbers: true,
@@ -1204,7 +1200,6 @@
             $('#tt').datagrid({
                 url: '/MasterBaoJia/GetWinHeTongWinData',
                 title: '多选查询',
-                width: $("#dgdiv").width() - 15,
                 height: $("#dgdiv").height() - 15,
                 fitColumns: true, //列自适应
                 nowrap: true,
@@ -1389,8 +1384,7 @@
             $('#tt').datagrid({
                 url: '/MasterBaoJia/GetSHbaojia',
                 title: '审核报价',
-                width: $("#dgdiv").width() - 20,
-                height: $("#dgdiv").height() - 20,
+                height: $("#dgdiv").height() - 15,
                 fitColumns: true, //列自适应
                 nowrap: true,
                 rownumbers: true,
@@ -1500,6 +1494,76 @@
                 
             })
            
+        }
+        //产品除税列表
+        function Cpcsbtn() {
+            var UpTime = $('#StTime').combobox('getValue');
+            if (UpTime.length <= 0) {
+                $.messager.alert("提示", "开始时间不可为空！")
+                return;
+            }
+            var DwTime = $('#DwTime').combobox('getValue');
+            if (DwTime.length <= 0) {
+                $.messager.alert("提示", "结束时间不可为空！")
+                return;
+            }
+            showdilag();
+            var pars = {
+                UpTime: UpTime, DwTime: DwTime
+            };
+            $('#Citytt').datagrid({
+                url: '/MasterBaoJia/GetChuShuiTable',
+                title:UpTime+"至"+DwTime+ '除税表',
+                height: $("#City_Div").height()-40,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                     { field: 'Cpname', title: '产品名称', align: "center" },
+                     { field: 'CpXinghao', title: '产品型号', align: "center" },
+                     {
+                         field: 'maxMoney', title: '除税后高价格', align: "center", formatter: function (valuer, r, index) {
+                             return valuer.toFixed(2);
+                         }
+                     },
+                     { field: 'maxPerson', title: '营销员', align: "center" },
+                     { field: 'maxKhname', title: '客户公司' },
+                     {
+                         field: 'minMoney', title: '除税后低价格', align: "center", formatter: function (valuer, r, index) {
+                             return valuer.toFixed(2);
+                         }
+                     },
+                     { field: 'minPerson', title: '营销员', align: "center" },
+                     { field: 'minKhname', title: '客户公司' }                   
+                ]],
+                onLoadSuccess: function () {                  
+                }
+            });
+            
+        }
+        function showdilag() {
+            $('#City_Div').dialog({
+                title: "产品税后信息表",
+                width: $("#dgdiv").width() / 2,
+                height: $("#dgdiv").height() / 1.5,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '取消',
+                    handler: function () {
+                        $('#City_Div').dialog('close');
+                    }
+                }]
+            });
         }
     </script>
     <style>
@@ -1714,7 +1778,7 @@
     </div>
     <div data-options="region:'center',title:'数据报表'" id="dgdiv">
         <div id="TTdiv">
-            <table id="tt" class="easyui-datagrid" style="width: 700px; " title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit"
+            <table id="tt" class="easyui-datagrid"  title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit"
                    data-options="toolbar:'#tb'">
                 <thead data-options="frozen:true">
                     <tr>
@@ -1775,8 +1839,8 @@
 
             </div>
         </div>
-        <div id="City_Div">
-            <table id="Citytt" class="easyui-datagrid" style="width: 700px; " title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit" />
+        <div id="City_Div" class="easyui-dialog">         
+            <table id="Citytt" class="easyui-datagrid"  title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit" />
         </div>
     </div>
     <div id="tb" style="padding:5px;height:auto">
@@ -1878,10 +1942,22 @@
                 <option>不含税</option>
             </select>*@
             <a href="#" class="easyui-linkbutton" id="qingkou" iconCls="icon-reload">清空</a>
+
+
             <a href="#" class="easyui-linkbutton" id="Sousuo" iconCls="icon-search">搜索1</a>
 
-            <a href="#" class="easyui-linkbutton" id="Sousuo_win" iconCls="icon-search">搜索2</a>
 
+            <a href="javascript:void(0)" style="margin-left:10px;" id="Sousuo_win" class="easyui-menubutton"
+               data-options="menu:'#mm',iconCls:'icon-edit'">搜索项</a>
+            <div id="mm" style="width:150px;">
+                <div data-options="iconCls:'icon-undo'" id="SousuoA">搜索</div>
+                <div class="menu-sep"></div>
+                <div onclick="Cpcsbtn()">产品除税表</div>
+                <div class="menu-sep"></div>
+                <div data-options="iconCls:'icon-redo'">除税高价</div>
+                <div data-options="iconCls:'icon-redo'">除税低价</div>
+                
+            </div>
         </div>
         <div id="toolbarIm" style="padding:5px;height:auto">
             <div style="">

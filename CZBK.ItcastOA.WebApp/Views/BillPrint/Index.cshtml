@@ -194,6 +194,16 @@
                         text: '确定',
                         iconCls: 'icon-ok',
                         handler: function () {
+                            if ($("#BxTime").datebox("getValue").length<=0)
+                            {
+                                $.messager.alert("提示", "报销时间不可为空！")
+                                return;
+                            }
+                            
+                            if ($("#BxDw").val().trim().length <= 0) {
+                                $.messager.alert("提示", "报销单位不可为空！")
+                                return;
+                            }
                             $("#BXBillFrom").submit();//提交表单     
                             $('#AddBxBill').dialog('close');
                         }
