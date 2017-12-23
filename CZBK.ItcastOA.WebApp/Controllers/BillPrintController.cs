@@ -195,6 +195,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     return Json(new { ret = "no", msg = "单据条数上线不可添加！" }, JsonRequestBehavior.AllowGet);
                 }
                 jkb.AddTime = MvcApplication.GetT_time();
+                int index = jkb.BaoXiaoName.IndexOf("(");
+                jkb.BaoXiaoName = jkb.BaoXiaoName.Remove(index);
                 jkb.Del = 0;
                 T_BaoxiaoItemsService.AddEntity(jkb);
                 return Json(new { ret = "ok", msg = "添加成功！" }, JsonRequestBehavior.AllowGet);
@@ -250,44 +252,70 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //获取所有报销内容
         public ActionResult GetBaoXiaoall()
         {
+            //获取所有本用户创建过的报销内容
             int uid = LoginUser.ID;
             var tempBXB = T_BaoXiaoBillService.LoadEntities(x => x.AddUserID == uid).DefaultIfEmpty().ToList();
             List<T_BaoxiaoItems> bilist = new List<T_BaoxiaoItems>();
             foreach (var a in tempBXB)
             {
                 var tempBXI = T_BaoxiaoItemsService.LoadEntities(x => x.BaoXiaoID == a.ID).DefaultIfEmpty().ToList();
-                bilist.AddRange(tempBXI);
-            }
-            var bmid = UserInfoService.LoadEntities(x => x.ID == uid).FirstOrDefault();
-            var tempJKB = T_JieKuanBillService.LoadEntities(x => x.BuMenid == bmid.BuMenID).DefaultIfEmpty().ToList();
-            List<BaoXiaoLR> JKBLR = new List<BaoXiaoLR>();
-            foreach (var d in tempJKB)
-            {
-                if (d == null || d.SkdwName == null)
+                foreach (var d in tempBXI)
                 {
-                    continue;
+                    if (d == null || d.BaoXiaoName == null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        bilist.Add(d);
+                    }
                 }
-                BaoXiaoLR jklr = new BaoXiaoLR();
-                jklr.ID = d.ID;
-                jklr.Text = d.SkdwName;
-                JKBLR.Add(jklr);
             }
-            //users.Where((x, i) => users.FindIndex(z => z.name == x.name) == i).ToList();拉姆达表达式去重
-            var sb = bilist.Where((x, i) => bilist.FindIndex(z => z.BaoXiaoName == x.BaoXiaoName) == i).ToList();
+            List<T_BaoxiaoItems> sb1 = new List<T_BaoxiaoItems>();
+            if (bilist.Count <= 1)
+            {
+                sb1.AddRange(bilist);
+            }
+            else {
+                sb1 = bilist.Where((x, i) => bilist.FindIndex(z => z.BaoXiaoName == x.BaoXiaoName) == i).ToList();
+            }
             Random rd = new Random();
             List<BaoXiaoLR> list = new List<BaoXiaoLR>();
-            foreach (var c in sb)
+            foreach (var c in sb1)
             {
-                if(c == null || c.BaoXiaoName == null)
-                {
-                    continue;
-                }
                 BaoXiaoLR bxlr = new BaoXiaoLR();
                 bxlr.ID = c.ID + rd.Next(100,10000);
                 bxlr.Text = c.BaoXiaoName;
                 list.Add(bxlr);
             }
+            //获取所有本部门创建过得借款单内容
+            var tempJKB = T_JieKuanBillService.LoadEntities(x => x.UserAdd == uid).DefaultIfEmpty().ToList();
+            List<T_JieKuanBill> sb2 = new List<T_JieKuanBill>();
+            if (tempJKB.Count <= 1)
+            {
+                sb2.AddRange(tempJKB);
+            }
+            else
+            {
+                sb2 = tempJKB.Where((x, i) => tempJKB.FindIndex(z => z.SkdwName == x.SkdwName) == i).ToList();
+            }
+            List<BaoXiaoLR> JKBLR = new List<BaoXiaoLR>();
+            foreach (var d in sb2)
+            {
+                if (d == null || d.SkdwName == null)
+                {
+                    continue;
+                }
+                else
+                {
+                    BaoXiaoLR jklr = new BaoXiaoLR();
+                    jklr.ID = d.ID;
+                    jklr.Text = d.SkdwName+"($)";
+                    JKBLR.Add(jklr);
+                }
+            }
             list.AddRange(JKBLR);
+            //users.Where((x, i) => users.FindIndex(z => z.name == x.name) == i).ToList();拉姆达表达式去重
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
@@ -300,7 +328,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             {
                 return Json(new { ret = "no"},JsonRequestBehavior.AllowGet);
             }
-            return Json(new { ret = "yes",jkmoney = temp.JieKuanMoney},JsonRequestBehavior.AllowGet);
+            return Json(new { ret = "ok",jkmoney = temp.JieKuanMoney},JsonRequestBehavior.AllowGet);
         }
 
         //获取借款部门下属所有成员

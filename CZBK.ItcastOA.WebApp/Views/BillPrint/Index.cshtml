@@ -44,25 +44,31 @@
             $("#PrintDIV").css("display", "none");
             $("#AddBxBillData").css("display", "none");
             $("#BxBillShow").css("display", "none");             
-            $("#addta").css("display", "none"); addta
+            $("#addta").css("display", "none");
             $("#BtnJkd").click(function () {
                 loadData();
             })
             $("#BaoXiaoName").combobox({
-                onChange: function () {
+                onSelect: function () {
                     $("#BaoXiaoMoeny").val("");
                     $("#DanJiuInt").val(0);
-                    var bxlr = $("#BaoXiaoName").val();
-                    $.post("/BillPrint/GetJieKuanMoney", { "id": bxlr }, function (data) {
-                        if(data.ret == "ok"){
-                            $("#BaoXiaoMoeny").linkbutton("setValue",data.jkmoney);
+                    var bxlr = $("#BaoXiaoName").combobox("getText");
+                    var num = Number(bxlr);
+                    if (!isNaN(num)) {
+                        $("#BaoXiaoMoeny").val("");
+                    } else {
+                        var jkid = $("#BaoXiaoName").combobox("getValue");
+                        $.post("/BillPrint/GetJieKuanMoney", { "id": jkid }, function (data) {
+                        if (data.ret == "ok") {
+                            $("#BaoXiaoMoeny").val(data.jkmoney);
                         } else if(data.ret == "no"){
-                            $.messager.alert("提示", "未找到金额！");
-                            $("#BaoXiaoMoeny").linkbutton("setValue","");
+                            $("#BaoXiaoMoeny").val("");
                         }
                     });
+                    }
                 }
             })
+            
 
             $("#BuMenid").combobox({
                 onChange: function () {
@@ -416,9 +422,17 @@
                 buttons: [{
                     text: '关闭',
                     handler: function () {
+                        $("#DanJiuInt").val("");
+                        $("#BaoXiaoMoney").val("");
+                        $("#BaoXiaoName").combobox("setValue","");
                         $('#BxBillShow').dialog('close');
                     }
-                }]
+                }],
+                onClose: function () {
+                    $("#DanJiuInt").val("");
+                    $("#BaoXiaoMoney").val("");
+                    $("#BaoXiaoName").combobox("setValue", "");
+                }
             });           
             var rows = $('#tt').datagrid('getSelections');
             if (rows.length != 1) {
@@ -898,7 +912,7 @@
                        url="/BillPrint/GetBaoXiaoall"
                        valueField="ID"
                        textField="Text"
-                       panelHeight="auto" style="width:400px" />
+                       style="width:400px" />
             <input type="hidden" name="BaoXiaoName" id="BaoXiaoHidden"/>
         </div>
         <div style="font-size:16px;">
