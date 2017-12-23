@@ -22,7 +22,9 @@ namespace CZBK.ItcastOA.Model
         public int ID { get; set; }
         public string ItemText { get; set; }
         public Nullable<short> Del { get; set; }
+        public Nullable<int> BuMenId { get; set; }
     
         public virtual ICollection<Schedule> Schedules { get; set; }
+        public virtual BumenInfoSet BumenInfoSet { get; set; }
     }
 }

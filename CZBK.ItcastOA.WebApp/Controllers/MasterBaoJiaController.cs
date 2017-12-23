@@ -25,6 +25,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IT_ChanPinNameService T_ChanPinNameService { get; set; }
         IBLL.IT_WinBakFaHuoService T_WinBakFaHuoService { get; set; }
         IBLL.IYXB_BaoJiaEidtMoneyService YXB_BaoJiaEidtMoneyService { get; set; }
+        IBLL.IYXB_WinCanPinService YXB_WinCanPinService { get; set; }
 
 
 
@@ -556,10 +557,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 its.PName = f.PerSonName;
                 its.Wmoney = DMyyItem.Where(x => x.PerName == its.PName).Sum(x => x.WinMoney) == null ? 0 : DMyyItem.Where(x => x.PerName == its.PName).Sum(x => x.WinMoney);
                 its.Lmoney = DMyyItem.Where(x => x.PerName == its.PName).Sum(x => x.LostMoney) == null ? 0 : DMyyItem.Where(x => x.PerName == its.PName).Sum(x => x.LostMoney);
-                var itm = DaiDingData.Where(x => x.YXB_Kh_list.UserInfo.PerSonName == f.PerSonName).DefaultIfEmpty().Sum(x => x.YXB_Baojia.Sum(y => (y.BaoJiaMoney + y.BaoJiaYunFei) * y.CPShuLiang));
+                var itm = DaiDingData.Where(x => x.YXB_Kh_list.UserInfo.ID == f.ID).DefaultIfEmpty().Sum(x => x.YXB_Baojia.Sum(y => (y.BaoJiaMoney + y.BaoJiaYunFei) * y.CPShuLiang));
                 its.Dmoney = itm == null ? 0 : itm;
-                its.WPercent = Rounds((its.Wmoney / DMyyItem.Sum(x => x.WinMoney) * 100) == null ? 0 : its.Wmoney / DMyyItem.Sum(x => x.WinMoney) * 100);
-                its.LPercent = Rounds((its.Lmoney / DMyyItem.Sum(x => x.LostMoney) * 100) == null ? 0 :its.Lmoney / DMyyItem.Sum(x => x.LostMoney) * 100);
+                its.WPercent = Rounds(DMyyItem.Sum(x => x.WinMoney) == 0 ? 0 : its.Wmoney / DMyyItem.Sum(x => x.WinMoney) * 100);
+                its.LPercent = Rounds(DMyyItem.Sum(x => x.LostMoney) == 0 ? 0 :its.Lmoney / DMyyItem.Sum(x => x.LostMoney) * 100);
                 var Summoneydd=DaiDingData.Sum(x => x.YXB_Baojia.Sum(y => (y.BaoJiaMoney + y.BaoJiaYunFei) * y.CPShuLiang));
                 its.DPercent = Rounds( Summoneydd == null ? 0 : its.Dmoney / Summoneydd*100);
                 WinLostMoney.Add(its);
@@ -866,5 +867,112 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                        };
             return Json(new { msg= temp ,ret="ok"}, JsonRequestBehavior.AllowGet);
         }
+        //获取产品除税表明细
+        public ActionResult GetChuShuiTable() {
+            int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
+            UserInfoParam uim = new UserInfoParam();
+            uim.Uptime = Convert.ToDateTime(Request["UpTime"]);
+            uim.Dwtime = Convert.ToDateTime(Request["DwTime"]);
+            uim.zt = Request["Zt"] == null ? 0 : int.Parse(Request["Zt"]);
+            uim.addess = Request["addess"];
+            uim.Person = Request["Person"] == null ? 0 : Request["Person"].Length <= 0 ? 0 : int.Parse(Request["Person"]);
+            uim.KHname = Request["KHname"] == null ? 0 : Request["KHname"].Length <= 0 ? 0 : int.Parse(Request["KHname"]);
+            uim.CPname = Request["CPname"] == null ? 0 : Request["CPname"].Length <= 0 ? 0 : int.Parse(Request["CPname"]);
+            uim.CPxh = Request["CPxh"] == null ? 0 : Request["CPxh"].Length <= 0 ? 0 : int.Parse(Request["CPxh"]);
+            uim.PageIndex = pageIndex;
+            uim.PageSize = pageSize;
+            uim.TotalCount = 0;
+
+            var win= T_WinBakService.LoadEntities(x => x.AddTime >= uim.Uptime && x.AddTime < uim.Dwtime).DefaultIfEmpty();
+            var chanpin= YXB_WinCanPinService.LoadEntities(x=>x.ID>0&&x.Del==null).DefaultIfEmpty();
+            List<cls> Lcls = new List<cls>();
+            foreach (var wins in win) {
+
+                var s = from a in wins.T_BaoJiaToP.YXB_Baojia
+                        select new cls
+                        {
+                            Cpname = a.T_ChanPinName1 != null ? a.T_ChanPinName1.MyTexts : "",
+                            CpnameId = a.CPname,
+                            CpXinghao = a.T_ChanPinName2 != null ? a.T_ChanPinName2.MyTexts : "",
+                            CpXinghaoId = a.CPXingHao,
+                            Hanshui = a.T_BaoJiaToP != null ? a.T_BaoJiaToP.T_BoolItem != null ? a.T_BaoJiaToP.T_BoolItem.str : "" : "",
+                            Piaoju = a.T_BaoJiaToP != null ? a.T_BaoJiaToP.T_YSItems != null ? a.T_BaoJiaToP.T_YSItems.MyText : "" : "",
+                            Money = a.WinMoney,
+                            Yunfei = a.WinYunFei,
+                            Khname = a.T_BaoJiaToP != null ? a.T_BaoJiaToP.YXB_Kh_list != null ? a.T_BaoJiaToP.YXB_Kh_list.KHname : "" : "",
+                            Person = a.T_BaoJiaToP != null ? a.T_BaoJiaToP.YXB_Kh_list.UserInfo != null ? a.T_BaoJiaToP.YXB_Kh_list.UserInfo.PerSonName : "":""
+                        };
+                foreach (var l in s)
+                {
+                    Lcls.Add(l);
+                }
+            }
+            List<cls> tempCls = new List<cls>();
+            foreach (var cls in Lcls) {
+
+                if (cls.Hanshui == "含税") {
+                    cls.Money = cls.Money /(decimal)1.17;
+                }
+                var Thishave = tempCls.Where(x => x.CpnameId == cls.CpnameId && x.CpXinghaoId == cls.CpXinghaoId).FirstOrDefault();
+                cls cc = new cls();
+                if (Thishave==null)
+                {
+                    cc.Cpname = cls.Cpname;
+                    cc.CpnameId = cls.CpnameId;
+                    cc.CpXinghao = cls.CpXinghao;
+                    cc.CpXinghaoId = cls.CpXinghaoId;
+                    cc.maxKhname = cls.Khname;
+                    cc.minKhname = cls.Khname;
+                    cc.maxMoney = cls.Money;
+                    cc.minMoney = cls.Money;
+                    cc.maxPerson = cls.Person;
+                    cc.minPerson = cls.Person;
+                    tempCls.Add(cc);
+                }
+                else
+                {   decimal tm= decimal.Round(Convert.ToDecimal(cls.Money), 2); 
+                    if (cls.Money>Thishave.maxMoney )
+                    {
+                        tempCls.Where(x => x.CpnameId == cls.CpnameId && x.CpXinghaoId == cls.CpXinghaoId).FirstOrDefault().maxMoney = tm;
+                        tempCls.Where(x => x.CpnameId == cls.CpnameId && x.CpXinghaoId == cls.CpXinghaoId).FirstOrDefault().maxKhname = cls.Khname;
+                        tempCls.Where(x => x.CpnameId == cls.CpnameId && x.CpXinghaoId == cls.CpXinghaoId).FirstOrDefault().maxPerson = cls.Person;
+                    }
+                    if (cls.Money < Thishave.minMoney)
+                    {
+                        tempCls.Where(x => x.CpnameId == cls.CpnameId && x.CpXinghaoId == cls.CpXinghaoId).FirstOrDefault().minMoney = tm;
+                        tempCls.Where(x => x.CpnameId == cls.CpnameId && x.CpXinghaoId == cls.CpXinghaoId).FirstOrDefault().maxKhname = cls.Khname;
+                        tempCls.Where(x => x.CpnameId == cls.CpnameId && x.CpXinghaoId == cls.CpXinghaoId).FirstOrDefault().maxPerson = cls.Person;
+                    }
+                }
+
+            }
+           
+           
+            return Json(new { rows = tempCls, total = uim.TotalCount }, JsonRequestBehavior.AllowGet);
+        }
     }
+   
+}
+public class cls {
+    public long ID { get; set; }
+    public string Cpname { get; set; }
+    public long CpnameId { get; set; }
+    public string CpXinghao { get; set; }
+    public long CpXinghaoId { get; set; }
+    public string Piaoju { get; set; }
+    public string Hanshui { get; set; }
+    public decimal? Money { get; set; }
+    public decimal? Yunfei { get; set; }
+
+    public string Khname { get; set; }
+
+    public string Person { get; set; }
+    public decimal? maxMoney { get; set; }
+    public string maxKhname { get; set; }
+    public string maxPerson { get; set; }
+
+    public decimal? minMoney { get; set; }
+    public string minKhname { get; set; }
+    public string minPerson { get; set; }
 }

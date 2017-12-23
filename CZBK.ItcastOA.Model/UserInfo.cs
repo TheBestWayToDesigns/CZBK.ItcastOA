@@ -64,7 +64,7 @@ namespace CZBK.ItcastOA.Model
         public string PerSonName { get; set; }
         public Nullable<int> QuXian { get; set; }
         public Nullable<int> BuMenID { get; set; }
-    
+
         [JsonIgnore]
         public virtual BumenInfoSet BumenInfoSet { get; set; }
         [JsonIgnore]

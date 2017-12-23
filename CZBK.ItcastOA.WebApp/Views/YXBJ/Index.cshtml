@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    Layout = null;
 }
 @using CZBK.ItcastOA.Model
 <!DOCTYPE html>
@@ -49,9 +49,7 @@
             })
             $("#CPBJ_div2").css("display", "none");
             $("#vvv").css("display", "none");
-            $('#myModal').on('shown.bs.modal', function () {
-                $('#myInput').focus()
-            })
+           
             $("tr").click(function () {
                 var id_ = $(this).attr("id");
                 $("#wellinput").val(id_);

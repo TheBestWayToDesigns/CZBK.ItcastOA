@@ -282,7 +282,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //获取日程类型
         public ActionResult GetScheduleTypeall()
         {
-            var temp = ScheduleTypeService.LoadEntities(x => x.ID > 0);
+            var temp = ScheduleTypeService.LoadEntities(x => x.BuMenId==null||x.BuMenId==LoginUser.BuMenID);
             var Rtmp = from a in temp
                        select new
                        {
@@ -477,6 +477,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public ActionResult AddScheduleType(ScheduleType sdt)
         {
             sdt.Del = 0;
+            sdt.BuMenId = LoginUser.BuMenID;
             ScheduleTypeService.AddEntity(sdt);
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
         }

@@ -88,6 +88,13 @@
         <AssociationConnector Association="OAModel.FK_T_WinBakFaHuo_BaoJia" />
         <AssociationConnector Association="OAModel.FK_YXBBaojia_Userinf" />
         <AssociationConnector Association="OAModel.FK_YXB_BaoJiaEidtMoney_YXB_Baojia" />
+        <EntityTypeShape EntityType="OAModel.FileType" Width="1.5" PointX="8.500001000000001" PointY="31.886741943359382" />
+        <EntityTypeShape EntityType="OAModel.ShareFileOrNotice" Width="1.5" PointX="10.750001000000001" PointY="0.75" />
+        <EntityTypeShape EntityType="OAModel.ShareType" Width="1.5" PointX="8.500001000000001" PointY="23.548748779296879" />
+        <AssociationConnector Association="OAModel.FK_ShareFileOrNotice_FileType" />
+        <AssociationConnector Association="OAModel.FK_ShareFileOrNotice_ShareType" />
+        <AssociationConnector Association="OAModel.FK_ShareFileOrNotice_UserInfo" />
+        <AssociationConnector Association="OAModel.FK_ScheduleType_Bumeninfo" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    Layout = null;
 }
 @using CZBK.ItcastOA.Model
 <html>
@@ -53,8 +53,8 @@
             $("#AddUploadFileDIV").css("display", "none");
             $("#AddFileTypeBtnDIV").css("display", "none");
             $("#AddFileTypeDIV").css("display", "none");
+            loadSchedule();
             
-            loadData();
 
             $("#divBtn a").click(function () {
                 var ClickA = $(this).attr("id");
@@ -317,7 +317,7 @@
             $('#tt').datagrid({
                 url: '/EverDayWork/GetDownUser',
                 title: '下级用户日程',
-                height: $("#dgdiv").height() - 20,
+                height: $("#dgdiv").height() - 200,
                 fitColumns: true, //列自适应
                 nowrap: true,
                 rownumbers: true,
@@ -723,12 +723,20 @@
                         document.getElementById("BeiZhu").value = document.getElementById("BeiZhuArea").value;
                         var fileup = document.getElementById("fileupid").value;
                         var fileupurl = document.getElementById("Url").value;
-                        alert(fileup);
-                        if ((fileup != null || fileup != "") && (fileupurl == null || fileupurl == "")) {
-                            $.messager.alert("提示", "选择的文件还未上传，请先点击上传再点击确认！");
-                        } else {
-                            $("#addschedulefrom").submit();//提交表单
-                        }
+
+                        $.messager.confirm('提示', '检查文件上传信息，确认后点击确认键提交！', function (r) {
+                            if (r) {
+
+                                $("#addschedulefrom").submit();//提交表单
+                            }
+                        });
+
+                        //if ((fileup != null || fileup != "") && (fileupurl == null || fileupurl == "")) {
+                        //    $.messager.alert("提示", "选择的文件还未上传，请先点击上传再点击确认！");
+                        //} else {
+                            
+                        //}
+                        // $.messager.show("提示");
                     }
                 }, {
                     text: '取消',
@@ -883,15 +891,16 @@
             </div>
         </div>
         <div id="ChooseSerchTypeDIV">
-            <div><label>请选择查找类型：</label></div>
-            <div>
-                <label><input type="radio" name="SerchType" id="ByDBMid"/>根据下级部门查询</label>
-                <label><input type="radio" name="SerchType" id="ByDUid"/>根据下级员工</label>
+            <div style="float:left">
+                <div><label>请选择查找类型：</label> </div>
+                <div>
+                    <label><input type="radio" name="SerchType" id="ByDBMid" />根据下级部门查询</label>
+                    <label><input type="radio" name="SerchType" id="ByDUid" />根据下级员工</label>
+                </div>
             </div>
-        </div>
-        <!---------------下级部门下拉框-------------------->
-        <div id="DownBuMenCombox" style="padding:5px;height:auto">
-            <div>
+            <!---------------下级部门下拉框-------------------->
+            <div id="DownBuMenCombox" style="padding:5px;height:auto;float:left">
+                <div>
                     <label>下级部门：</label>
                     <input id="DBMInput" class="easyui-combobox" name="DownBuMenName"
                            url="/EverDayWork/GetDownBuMenall"
@@ -905,21 +914,21 @@
                            textField="name"
                            panelHeight="auto"
                            style="width:100px" />
+                </div>
+            </div>
+            <!---------------下级用户下拉框-------------------->
+            <div id="DownUserCombox" style="padding:5px;height:auto;float:left">
+               <label>下级部门成员：</label>
+                    <input id="DUInput" name="DownUserName"
+                           class="easyui-combobox"
+                           url="/EverDayWork/GetDownUserall"
+                           valueField="ID"
+                           textField="name"
+                           panelHeight="auto"
+                           style="width:100px" />
             </div>
         </div>
-        <!---------------下级用户下拉框-------------------->
-        <div id="DownUserCombox" style="padding:5px;height:auto">
-            <div><label>下级部门成员：</label></div>
-            <div>
-                <input id="DUInput" name="DownUserName"
-                       class="easyui-combobox"
-                       url="/EverDayWork/GetDownUserall"
-                       valueField="ID"
-                       textField="name"
-                       panelHeight="auto"
-                       style="width:100px" />
-            </div>
-        </div>
+       
         <!--------添加文件类型按钮-------->
         <div id="AddFileTypeBtnDIV" style="padding:5px;height:auto">
             <div style="margin-bottom:5px">

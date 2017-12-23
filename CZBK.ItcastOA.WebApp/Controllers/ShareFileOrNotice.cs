@@ -17,8 +17,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IBumenInfoSetService BumenInfoSetService;
         IBLL.IUserInfoService UserInfoService;
         IBLL.IFileTypeService FileTypeService;
-
-        //
+        
         // GET: /ShareFileOrNotice/
 
         public ActionResult Index()
