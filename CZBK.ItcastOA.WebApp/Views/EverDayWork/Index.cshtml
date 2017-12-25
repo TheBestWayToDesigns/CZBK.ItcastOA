@@ -729,12 +729,16 @@
                         document.getElementById("BeiZhu").value = document.getElementById("BeiZhuArea").value;
                         var fileup = document.getElementById("fileupid").value;
                         var fileupurl = document.getElementById("Url").value;
-                        alert(fileup);
-                        if ((fileup != null || fileup != "") && (fileupurl == null || fileupurl == "")) {
-                            $.messager.alert("提示", "选择的文件还未上传，请先点击上传再点击确认！");
-                        } else {
-                            $("#addschedulefrom").submit();//提交表单
+                       
+                        if (fileup.trim().length > 0)
+                        {
+                            if (fileupurl.trim().length <= 0) {                              
+                                $.messager.alert("提示", "选择的文件还未上传，请先点击上传再点击确认！");
+                                return;
+                            }
                         }
+                        $("#addschedulefrom").submit();//提交表单
+                        
                     }
                 }, {
                     text: '取消',
