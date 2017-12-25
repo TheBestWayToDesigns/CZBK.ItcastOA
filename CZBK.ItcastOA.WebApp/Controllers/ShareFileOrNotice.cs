@@ -385,7 +385,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 }
                 else
                 {
-                    return Json(new { msg = "操作错误，你没有权限删除此共享文件！" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { msg = "操作错误，你没有权限删除此信息！" }, JsonRequestBehavior.AllowGet);
                 }
             }
         }
