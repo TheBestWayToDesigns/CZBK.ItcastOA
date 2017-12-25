@@ -254,7 +254,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             //获取所有本用户创建过的报销内容
             int uid = LoginUser.ID;
-            var tempBXB = T_BaoXiaoBillService.LoadEntities(x => x.AddUserID == uid).DefaultIfEmpty().ToList();
+            var tempBXB = T_BaoXiaoBillService.LoadEntities(x => x.AddUserID == uid&&x.Del==0).DefaultIfEmpty().ToList();
             List<T_BaoxiaoItems> bilist = new List<T_BaoxiaoItems>();
             foreach (var a in tempBXB)
             {
@@ -289,7 +289,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 list.Add(bxlr);
             }
             //获取所有本部门创建过得借款单内容
-            var tempJKB = T_JieKuanBillService.LoadEntities(x => x.UserAdd == uid).DefaultIfEmpty().ToList();
+            var tempJKB = T_JieKuanBillService.LoadEntities(x => x.UserAdd == uid&&x.Del==0).DefaultIfEmpty().ToList();
             List<T_JieKuanBill> sb2 = new List<T_JieKuanBill>();
             if (tempJKB.Count <= 1)
             {
@@ -456,6 +456,53 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 return Json(new { ret = "no", uid = "在该部门下查无此人！" }, JsonRequestBehavior.AllowGet);
             }
         }
+        //借款与报销详细表
+        public ActionResult JieKuanBaoXiaoTable() {
+            int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 15;
+            string jkdw = Request["jkdw"] != null ? Request["jkdw"] : string.Empty;
+
+            int totalCount = 0;
+            var Bumen= BumenInfoSetService.LoadEntities(x => x.ID == LoginUser.BuMenID).FirstOrDefault();
+            IQueryable<T_JieKuanBill> jktemp;
+            IQueryable<T_BaoxiaoItems> Bxtable;
+            if (Bumen.Name== "财务部" || Bumen.Name == "系统管理员")
+            {
+                jktemp = T_JieKuanBillService.LoadEntities( x => x.Del == 0);
+               // jktemp = T_JieKuanBillService.LoadPageEntities(pageIndex, pageSize, out totalCount, x => x.Del == 0 , x => x.AddTime, false);
+                Bxtable = T_BaoxiaoItemsService.LoadEntities(x => x.Del == 0).DefaultIfEmpty();
+            }
+            else
+            {
+                jktemp = T_JieKuanBillService.LoadEntities(x => x.Del == 0 && x.UserAdd == LoginUser.ID);
+                //jktemp = T_JieKuanBillService.LoadPageEntities(pageIndex, pageSize, out totalCount, x => x.Del == 0 && x.UserAdd == LoginUser.ID, x => x.AddTime, false);
+                Bxtable = T_BaoxiaoItemsService.LoadEntities(x => x.Del == 0&&x.T_BaoXiaoBill.AddUserID==LoginUser.ID).DefaultIfEmpty();
+            }
+            var temp=from a in jktemp
+                     from b in Bxtable
+                     where a.SkdwName==b.BaoXiaoName
+                     select new jkbxdan
+                     {
+                         jkID=a.ID,
+                         kename=a.SkdwName,
+                         jkmoney=a.JieKuanMoney,
+                         jkperson=a.JieKuanPerson,
+                         jktime=a.BillTime,
+                         bxID=b.ID,
+                         bxmoney=b.BaoXiaoMoeny,
+                         bxperson=b.T_BaoXiaoBill.UserInfo.PerSonName,
+                         bxtime=b.AddTime
+                    };
+
+            totalCount = temp.Count();
+            temp = temp.OrderByDescending<jkbxdan,DateTime?>(x=>x.bxtime).Skip<jkbxdan>((pageIndex - 1) * pageSize).Take<jkbxdan>(pageSize);            
+          
+            return Json(new
+            {
+                rows = temp,
+                total = totalCount
+            }, JsonRequestBehavior.AllowGet);
+        }
 
         //报销内容类
         public class BaoXiaoLR
@@ -469,6 +516,19 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             public int ID { get; set; }
             public string Name { get; set; }
+        }
+
+        //借款报销单类
+        public class jkbxdan {
+            public long jkID { get; set; }
+            public long bxID { get; set; }
+            public string kename { get; set; }
+            public string jkperson { get; set; }
+            public string bxperson { get; set; }
+            public DateTime? jktime { get; set; }
+            public DateTime? bxtime { get; set; }
+            public decimal? jkmoney { get; set; }
+            public decimal? bxmoney { get; set; }
         }
 
     }

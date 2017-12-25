@@ -35,6 +35,23 @@
             $("#NewBill").hide();
             $("#NewBaoXiaoBill").hide();
             loadData();
+           
+            //初始化欠款dialg显示信息
+            $("#Qiankuandiv").dialog({
+                title: "欠款报销明细表",
+                width: $(document).width() / 1.5,
+                height: $(document).height() / 1.2,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '取消',
+                    handler: function () {
+                        $('#Qiankuandiv').dialog('close');
+                    }
+                }]
+            });
+            $("#Qiankuandiv").dialog("close");
             // 当窗口大小发生变化时，调整DataGrid的大小
             $(window).resize(function () {
                 $('#tt').resizeDataGrid(0, 0, 200, 500);
@@ -421,6 +438,7 @@
            
         }
         function DigBaoXiaoshow() {
+            $(".combo-text").css("width", 400);
             $("#BxBillShow").css("display", "block");
             $('#BxBillShow').dialog({
                 title: "显示列表数据",
@@ -443,7 +461,8 @@
                     $("#BaoXiaoMoney").val("");
                     $("#BaoXiaoName").combobox("setValue", "");
                 }
-            });           
+            });
+        
             var rows = $('#tt').datagrid('getSelections');
             if (rows.length != 1) {
                 //alert("请选择要修改的商品！");
@@ -690,6 +709,68 @@
             }
             $("#DanJiuInt").val(a);
         }
+        //欠款报销明细表
+        function qkbxtable() {
+            var pars = {};
+            $("#Qiankuandiv").dialog("open");
+            $("#QKtt").datagrid({
+                url: '/BillPrint/JieKuanBaoXiaoTable',
+                title: '欠款报销明细表',
+                height: $("#Qiankuandiv").height() - 40,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数                
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime 
+                    { field: 'kename', title: '客户名称' },
+                    { field: 'jkID', title: '借款单ID' },
+                     { field: 'bxID', title: '报销单ID' },
+                    {
+                        field: 'jktime', title: '借款时间', formatter: function (val, row, index) {
+                            return val == null ? "" : ChangeDateFormat(val);
+                        }
+                    },
+                     {
+                         field: 'bxtime', title: '报销时间', formatter: function (val, row, index) {
+                             return val == null ? "" : ChangeDateFormat(val);
+                         }
+                     },
+                    { field: 'jkperson', title: '借款人员' },                    
+                    { field: 'bxperson', title: '报销人员' },
+                     { field: 'jkmoney', title: '借款金额', align:"center", formatter: function (val, row, index) {
+                         return val.toFixed(2);
+                     }
+                     },
+                    {
+                        field: 'bxmoney', title: '报销金额', align: "center", formatter: function (val, row, index) {
+                            return val.toFixed(2);
+                        }
+                    },
+                    {
+                        field: 'xxm', title: '剩余欠款', align: "center", formatter: function (val, row, index) {
+                            var str = row.jkmoney - row.bxmoney;
+                           
+                            if (str < 0)
+                            { str = "<font style='color:red;'>" + str.toFixed(2) + "</font>"; }
+                           else
+                            {
+                                str= formatCurrency(str);
+                            }
+                            return str;
+                        }
+                    },
+                 ]],
+                onLoadSuccess: function () {
+                }
+            });
+        }
     </script>
     <style>
         html, body {
@@ -878,6 +959,9 @@
                     </table>
                 </div>   
         </div>  
+        <div id="Qiankuandiv" class="easyui-dialog">
+            <table id="QKtt" class="easyui-datagrid"></table>
+        </div>
     </div> 
     <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink" style="width:150px;height:100%">
         <div class="easyui-accordion">
@@ -887,6 +971,7 @@
                 <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="Winlb">公路费报销凭证</a>
             </div>
             <div title="其他选项" data-options="iconCls:'icon-ok'" style="padding:10px;">
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" onclick="qkbxtable()">欠款报销明细表</a>
                 <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="CityEdit">其他</a>
             </div>
         </div>
@@ -913,16 +998,18 @@
             <a href="#" class="easyui-linkbutton" id="NewBaoXiaoBill" iconCls="icon-add">新建报销单据</a>
          </div>
     </div>
-    <div id="addta" style="padding:5px;height:auto;">        
+    <div id="addta" class="addta" style="padding:5px;height:auto;">        
 @using (Ajax.BeginForm("AddOrEditBxlistBill", "BillPrint", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "BXLaFrom" }))
 {              <input type="hidden" id="BaoXianID" name="BaoXiaoID"  />
         <div style="font-size:16px;">
             报销内容：<input class="easyui-combobox" id="BaoXiaoName"
-                       name="BaoXiaoName1"
-                       url="/BillPrint/GetBaoXiaoall"
-                       valueField="ID"
-                       textField="Text"
-                       style="width:400px" />
+                       name="BaoXiaoName1" 
+                      data-options="url: '/BillPrint/GetBaoXiaoall',
+				      method: 'get',
+				      valueField: 'ID',
+				      textField: 'Text',
+			 	      panelWidth: 400,
+			        	" />
             <input type="hidden" name="BaoXiaoName" id="BaoXiaoHidden"/>
         </div>
         <div style="font-size:16px;">
@@ -936,6 +1023,6 @@
         </div>
 }
     </div>
-
+    
 </body>
 </html>
