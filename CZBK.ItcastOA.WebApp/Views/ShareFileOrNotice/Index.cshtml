@@ -129,6 +129,7 @@
                 $("#NoticestrID").val("");
             });
         });
+
         //清空datagrid数据
         function cleanDatagrid() {
             var item = $('#tt').datagrid('getRows');
@@ -139,6 +140,7 @@
                 }
             }
         }
+
         //将序列化成json格式后日期(毫秒数)转成日期格式
         function ChangeDateFormat(cellval) {
             var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
