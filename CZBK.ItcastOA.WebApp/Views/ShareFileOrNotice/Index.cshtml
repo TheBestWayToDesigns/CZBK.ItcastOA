@@ -88,7 +88,45 @@
             });
 
             $("#AddNoticeBtn").click(function () {
+                $("#BMDIV").css("display", "none");
+                $("#ADDBUMENDIV").css("display", "none");
+                $("#BMUSERDIV").css("display", "none");
+                $("#BMNUInput").combobox("setValue", "");
+                $("#STUNInput").combobox("setValue", "");
+                $("#NoticestrID").val("");
+                $("#BeiZhuArea").val("");
+                $("#AddShareFileTab input[type='radio']").removeAttr('checked');
                 AddANotice();
+            });
+
+            $("#ByAllBuMen").click(function () {
+                $("#BMDIV").css("display", "none");
+                $("#ADDBUMENDIV").css("display", "none");
+                $("#BMUSERDIV").css("display", "none");
+                $("#BMNUInput").combobox("setValue", "");
+                $("#STUNInput").combobox("setValue", "");
+                $("#NoticestrID").val("");
+                $.post("/ShareFileOrNotice/GetAllUserID", {}, function (listID) {
+                    $("#NoticestrID").val(listID);
+                });
+            });
+
+            $("#ByOneBuMen").click(function () {
+                $("#BMDIV").css("display", "block");
+                $("#ADDBUMENDIV").css("display", "block");
+                $("#BMUSERDIV").css("display", "none");
+                $("#BMNUInput").combobox("setValue", "");
+                $("#STUNInput").combobox("setValue", "");
+                $("#NoticestrID").val("");
+            });
+
+            $("#ByOneByOne").click(function () {
+                $("#BMDIV").css("display", "block");
+                $("#ADDBUMENDIV").css("display", "none");
+                $("#BMUSERDIV").css("display", "block");
+                $("#BMNUInput").combobox("setValue", "");
+                $("#STUNInput").combobox("setValue", "");
+                $("#NoticestrID").val("");
             });
         });
         //清空datagrid数据
@@ -189,8 +227,8 @@
                     { field: 'TypeID', title: '共享类型', align: 'center' },
                     {
                         field: 'NoticeText', title: '通知内容', align: 'center', formatter: function (value, row, index) {
-                            if(value.length > 50){
-                                value = value.substring(0,50)+" ......";
+                            if(value.length > 30){
+                                value = value.substring(0,30)+" ......";
                             }else{
                                 value = value;
                             }
@@ -343,7 +381,7 @@
             $('#AddNoticeDIV').dialog({
                 title: "添加公告通知",
                 width: 450,
-                height: 400,
+                height: 450,
                 collapsible: true,
                 resizable: true,
                 modal: true,
@@ -351,14 +389,30 @@
                     text: '确定',
                     iconCls: 'icon-ok',
                     handler: function () {
+                        
                         if ($("#BeiZhuArea").val().trim().length <= 0) {
                             $.messager.alert("提示", "请填写通知内容！");
                             return;
-                        } else if ($("#BMNUInput").combobox("getValue").trim().length <= 0) {
-                            $.messager.alert("提示", "请选择分享部门！");
+                        }
+                        var radioVal = $('#AddShareFileTab input[type="radio"]:checked').val();
+                        if (radioVal == undefined) {
+                            $.messager.alert("提示", "请选择下发方式！");
                             return;
-                        } else if ($("#STUNInput").combobox("getValue").trim().length <= 0) {
-                            $.messager.alert("提示", "请选择分享人！");
+                        }else if(radioVal == "ByOneByOne"){
+                            if ($("#BMNUInput").combobox("getValue").trim().length <= 0) {
+                                $.messager.alert("提示", "请选择下发部门！");
+                                return;
+                            }else if ($("#STUNInput").combobox("getValue").trim().length <= 0) {
+                                $.messager.alert("提示", "请选择下发人！");
+                                return;
+                            }
+                        } else if (radioVal == "ByOneBuMen") {
+                            if ($("#BMNUInput").combobox("getValue").trim().length <= 0) {
+                                $.messager.alert("提示", "请选择下发部门！");
+                                return;
+                            }
+                        } else if ($("#NoticestrID").val().trim().length <= 0) {
+                            $.messager.alert("提示", "请点击添加按钮完成添加！");
                             return;
                         }
                         document.getElementById("NoticeTextID").value = document.getElementById("BeiZhuArea").value;
@@ -373,7 +427,8 @@
             });
         }
 
-        //把允许查看共享的用户id存到隐藏空间里（共享用）
+
+        //把允许查看共享的用户id存到隐藏控件里（共享用）
         function addSTUsstr() {
             var str = "";
             var BMID = $("#BMSTUInput").combobox("getValue");
@@ -420,6 +475,7 @@
         function addModelstr() {
             var str = "";
             var MFID = $("#ModelFInput").combobox("getValue");
+            alert(MFID);
             var reg = /^[\d+,]{1,}$/
             if (reg.test(MFID)) {
                 var a = $("#STUstrID").val();
@@ -433,14 +489,9 @@
                         }
                     }
                 }
-                for (var f = 0; f < my.length; f++){
-                    while(my[f] == undefined) {
-                        continue;
-                    }
-                    str = str + my[f] + ",";
-
-                    $("#STUstrID").val(s + str);
-                }
+                str = str + a + MFID;
+                $.messager.alert("提示", "添加人员成功！");
+                $("#STUstrID").val(str);
             } else {
                 $.messager.alert("提示","请选择模板！");
             }
@@ -487,7 +538,23 @@
                     }
                 })
             }
+        }
 
+        //添加部门用户到隐藏控件
+        function addSTBMstr() {
+            var BMID = $("#BMNUInput").combobox("getValue");
+            $.post("/ShareFileOrNotice/ReturnAllUserID", { "BuMenID": BMID }, function (userinfo) {
+                if (userinfo.ret == "no") {
+                    $.messager.alert("提示", "该部门下无任何员工！");
+                } else if (userinfo.ret == "ok") {
+                    var a = $("#NoticestrID").val();
+                    var str = a + userinfo.data;
+                    $("#NoticestrID").val(str);
+                    $.messager.alert("提示", "添加人员成功！");
+                } else {
+                    $.messager.alert("提示", 1343434);
+                }
+            });
         }
 
         //上传文件返回url
@@ -641,14 +708,14 @@
                            valueField="StrID"
                            textField="StrName"
                            panelHeight="auto"
-                           style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                           style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
                     <a href='javascript:addModelstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
                 </b>
-                <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一个模板，需添加一次！</span></label></p>
+                <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一个模板，需添加一次！</span></label></p>
             </div>
             <div class="t1">
                 <b>部门</b>
-                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                <b>&nbsp;&nbsp;</b>
                 <b>
                     <input id="BMSTUInput" class="easyui-combobox" name="BuMenName"
                            url="/ShareFileOrNotice/GetAllBuMen"
@@ -667,10 +734,10 @@
                            valueField="ID"
                            textField="Name"
                            panelHeight="auto"
-                           style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                           style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
                     <a href='javascript:addSTUsstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
                 </b>
-                <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一人，需添加一次！</span></label></p>
+                <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一人，需添加一次！</span></label></p>
             </div>
             <b>
                 <b><input type="hidden" name="STUstrName" id="STUstrID" /></b>
@@ -691,34 +758,50 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;<b><textarea id="BeiZhuArea" name="BeiZhuArea" style="width:302px;height:100px"></textarea></b>
                 <b><input type="hidden" name="NoticeText" id="NoticeTextID" /></b>
             </div>
-             <b>&nbsp;</b>
             <div><h1>分享给：</h1></div>
-             <b>&nbsp;</b>
-            <div>
-                <b>部门</b>
-                <b>&nbsp;&nbsp;</b>
-                <b>
-                    <input id="BMNUInput" class="easyui-combobox" name="BuMenNoticeName"
-                           url="/ShareFileOrNotice/GetAllBuMen"
-                           valueField="ID"
-                           textField="Name"
-                           panelHeight="auto"
-                           style="width:100px" />
-                </b>
+             <div><b><label>请选择添加分享人方式？</label></b></div>
+             <br />
+             <div><b><input type="radio" name="IssuedType" id="ByAllBuMen" value="ByAllBuMen" /><label>全公司下发</label></b><b><input type="radio" name="IssuedType" id="ByOneBuMen" value="ByOneBuMen" /><label>每个部门依次添加</label></b>
+                <b><input type="radio" name="IssuedType" id="ByOneByOne" value="ByOneByOne" /><label>每个人依次添加</label></b></div>
+             <div><b>&nbsp;</b></div>
+             <div id="BMDIV">
+                 <div>
+                     <b>部门</b>
+                     <b>&nbsp;&nbsp;</b>
+                     <b>
+                         <input id="BMNUInput" class="easyui-combobox" name="BuMenNoticeName"
+                                url="/ShareFileOrNotice/GetAllBuMen"
+                                valueField="ID"
+                                textField="Name"
+                                panelHeight="auto"
+                                style="width:100px" />
+                     </b>
+                 </div>
+             </div>
+             <div id="BMUSERDIV">
+                 <div>
+                     <b>&nbsp;&nbsp;</b>
+                 </div>
+                 <div>
+                     <b>部门用户</b>
+                     <b>
+                         <input id="STUNInput" class="easyui-combobox" name="ShareToUserNoticeName"
+                                valueField="ID"
+                                textField="Name"
+                                panelHeight="auto"
+                                style="width:100px" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                         <a href='javascript:addSTUNsstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
+                     </b>
+                     <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一人，需添加一次！</span></label></p>
+                 </div>
+                 <div>
+                     <b>&nbsp;</b>
+                 </div>
+             </div>
+            <div id="ADDBUMENDIV">
+                <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一部门，需添加一次！</span></label></p>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><a href='javascript:addSTBMstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a></b>
             </div>
-             <b>&nbsp;</b>
-            <div>
-                <b>部门用户</b>
-                <b>
-                    <input id="STUNInput" class="easyui-combobox" name="ShareToUserNoticeName"
-                           valueField="ID"
-                           textField="Name"
-                           panelHeight="auto"
-                           style="width:100px" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href='javascript:addSTUNsstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
-                </b>
-            </div>
-             <b>&nbsp;</b>
             <div>
                 <b><input type="hidden" name="NoticestrName" id="NoticestrID" /></b>
             </div>

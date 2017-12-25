@@ -576,7 +576,13 @@
                         if ($("#FileTypeEName").val().trim().length <= 0) {
                             $.messager.alert("提示", "文件扩展名不可以为空！");
                             return;
-                        } if ($("#FileTypeCName").val().trim().length <= 0) {
+                        }
+                        var reg = /^[.]\w{1,}$/;
+                        if (!reg.test($("#FileTypeEName").val())) {
+                            $.messager.alert("提示", "文件扩展名不合法！");
+                            return;
+                        }
+                        if ($("#FileTypeCName").val().trim().length <= 0) {
                             if (!confirm("文件类型说明最好备注一下，方便理解！如备注，请点击取消！如不备注，请点击确定！")) {
                                 return;
                             }
@@ -988,7 +994,7 @@
             </tr>
             <tr>
                 <td>文件备注</td>
-                <td><textarea id="BeiZhuArea" name="BeiZhuArea" style="width:302px"></textarea></td>
+                <td><textarea id="BeiZhuArea" name="BeiZhuArea" style="width:302px;height:50px"></textarea></td>
             </tr>
             <tr>
                 <td><input type="hidden" id="Url" name="Url" /></td>
@@ -1019,7 +1025,7 @@
     <!-------------查看文件--------------->
     <div id="CheckFileDIV" style="height:100%; width:100%;">
         <table id="CheckFileTab">
-            
+            <!--用于遍历写出每一条文件url和备注信息-->
         </table>
         <table>
             <tbody id="Selebody"></tbody>
