@@ -269,20 +269,21 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 10;
             int totalCount;
-            var temp = ScheduleTypeService.LoadPageEntities(pageIndex, pageSize, out totalCount, x => x.Del == 0, x => x.ID, false);
+            var ur = UserInfoService.LoadEntities(x => x.ID == LoginUser.ID).FirstOrDefault();
+            var temp = ScheduleTypeService.LoadPageEntities(pageIndex, pageSize, out totalCount, x => x.BuMenId == ur.BuMenID || x.BuMenId == null, x => x.ID, false);
             var Rtmp = from a in temp
                        select new
                        {
                            ID = a.ID,
                            ItemText = a.ItemText
                        };
-
             return Json(new { rows = Rtmp, total = totalCount }, JsonRequestBehavior.AllowGet);
         }
         //获取日程类型
         public ActionResult GetScheduleTypeall()
         {
-            var temp = ScheduleTypeService.LoadEntities(x => x.BuMenId==null||x.BuMenId==LoginUser.BuMenID);
+            var ur = UserInfoService.LoadEntities(x => x.ID == LoginUser.ID).FirstOrDefault();
+            var temp = ScheduleTypeService.LoadEntities(x => x.BuMenId == ur.BuMenID || x.BuMenId == null);
             var Rtmp = from a in temp
                        select new
                        {
@@ -477,7 +478,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public ActionResult AddScheduleType(ScheduleType sdt)
         {
             sdt.Del = 0;
-            sdt.BuMenId = LoginUser.BuMenID;
+            sdt.BuMenId = UserInfoService.LoadEntities(x => x.ID == LoginUser.ID).FirstOrDefault().BuMenID;
             ScheduleTypeService.AddEntity(sdt);
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
         }

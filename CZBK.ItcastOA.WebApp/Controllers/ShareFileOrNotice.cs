@@ -45,16 +45,21 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                              Array ay = (a.ShareToUser).Split(',');
                              foreach (var b in ay)
                              {
-                                 int c = Convert.ToInt32(b);
-                                 if (c == userID)
-                                 {
-                                     sfon.Add(a);
-                                     break;
-                                 }
-                                 else
-                                 {
-                                     continue;
-                                 }
+                                if(b.Equals("")){
+                                    continue;
+                                }else
+                                {
+                                    int c = Convert.ToInt32(b);
+                                    if (c == userID)
+                                    {
+                                        sfon.Add(a);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
                              }
                          }
                     }
@@ -99,15 +104,22 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             Array ay = (a.ShareToUser).Split(',');
                             foreach (var b in ay)
                             {
-                                int c = Convert.ToInt32(b);
-                                if (c == userID)
+                                if (b.Equals(""))
                                 {
-                                    sfon.Add(a);
-                                    break;
+                                    continue;
                                 }
                                 else
                                 {
-                                    continue;
+                                    int c = Convert.ToInt32(b);
+                                    if (c == userID)
+                                    {
+                                        sfon.Add(a);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
                                 }
                             }
                         }
@@ -150,8 +162,16 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 {
                     foreach (var a in temp)
                     {
+                        if (a == null)
+                        {
+                            continue;
+                        }
                         foreach (var b in list)
                         {
+                            if (b == null)
+                            {
+                                continue;
+                            }
                             if (a.ModelList == b.StrID)
                             {
                                 break;
@@ -182,6 +202,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 {
                     foreach (var a in temp)
                     {
+                        if (a == null)
+                        {
+                            continue;
+                        }
                         ModelSF msf = new ModelSF();
                         msf.StrID = a.ModelList;
                         var str = (a.ModelList).Split(',');
@@ -269,6 +293,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             List<STUBuMen> list = new List<STUBuMen>();
             foreach(var a in temp)
             {
+                if (a == null)
+                {
+                    continue;
+                }
                 STUBuMen stubm = new STUBuMen();
                 stubm.ID = a.ID;
                 stubm.Name = a.Name;
@@ -281,15 +309,25 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             var bmid = Convert.ToInt32(Request["BMID"]);
             var temp = UserInfoService.LoadEntities(x => x.BuMenID == bmid).DefaultIfEmpty().ToList();
-            List<BMUser> list = new List<BMUser>();
-            foreach (var a in temp)
+            if (temp[0] != null)
             {
-                BMUser bmu = new BMUser();
-                bmu.ID = a.ID;
-                bmu.Name = a.PerSonName;
-                list.Add(bmu);
+                List<BMUser> list = new List<BMUser>();
+                foreach (var a in temp)
+                {
+                    if (a == null)
+                    {
+                        continue;
+                    }
+                    BMUser bmu = new BMUser();
+                    bmu.ID = a.ID;
+                    bmu.Name = a.PerSonName;
+                    list.Add(bmu);
+                }
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }else
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
             }
-            return Json(list, JsonRequestBehavior.AllowGet);
         }
         //获取允许查看的用户ID
         public ActionResult ReturnUserID()
@@ -313,6 +351,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             List<FileTP> list = new List<FileTP>();
             foreach (var a in temp)
             {
+                if (a == null)
+                {
+                    continue;
+                }
                 FileTP ftp = new FileTP();
                 ftp.ID = a.ID;
                 ftp.Name = a.FileTypeCHNName;
@@ -343,7 +385,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 }
                 else
                 {
-                    return Json(new { msg = "操作错误，你没有权限删除此共享文件！" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { msg = "操作错误，你没有权限删除此信息！" }, JsonRequestBehavior.AllowGet);
                 }
             }
         }
@@ -355,6 +397,43 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var temp = ShareFileOrNoticeService.LoadEntities(x => x.ID == id).FirstOrDefault();
             var url = temp.FileURL;
             return Json(new { ret = url},JsonRequestBehavior.AllowGet);
+        }
+
+        //获取全部用户id
+        public ActionResult GetAllUserID()
+        {
+            var temp = UserInfoService.LoadEntities(x => x.ID > 0).DefaultIfEmpty().ToList();
+            string str = null;
+            foreach(var a in temp)
+            {
+                if (a == null)
+                {
+                    continue;
+                }
+                str = str +a.ID+",";
+            }
+            return Json(str,JsonRequestBehavior.AllowGet);
+        }
+
+        //获取部门下全部用户id
+        public ActionResult ReturnAllUserID()
+        {
+            int bmid = Convert.ToInt32(Request["BuMenID"]);
+            var temp = UserInfoService.LoadEntities(x => x.BuMenID == bmid).DefaultIfEmpty().ToList();
+            if (temp[0] != null)
+            {
+                string str = null;
+                foreach (var a in temp)
+                {
+                    if (a == null)
+                    {
+                        continue;
+                    }
+                    str = str + a.ID + ",";
+                }
+                return Json(new { ret = "ok",data = str }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { ret = "no" }, JsonRequestBehavior.AllowGet);
         }
 
         public class STUBuMen
