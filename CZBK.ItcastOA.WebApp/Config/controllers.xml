@@ -25,7 +25,8 @@
   </object>
 
   <object type="CZBK.ItcastOA.WebApp.Controllers.DepartmentController, CZBK.ItcastOA.WebApp" singleton="false" >    
-    <property name="DepartmentService" ref="DepartmentService" />
+    <property name="BumenInfoSetService" ref="BumenInfoSetService" />
+    <property name="ScheduleUserService" ref="ScheduleUserService" />
   </object>
 
   <object type="CZBK.ItcastOA.WebApp.Controllers.HomeController, CZBK.ItcastOA.WebApp" singleton="false" >

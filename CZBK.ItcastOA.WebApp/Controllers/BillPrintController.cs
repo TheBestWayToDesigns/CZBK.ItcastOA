@@ -195,8 +195,11 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     return Json(new { ret = "no", msg = "单据条数上线不可添加！" }, JsonRequestBehavior.AllowGet);
                 }
                 jkb.AddTime = MvcApplication.GetT_time();
-                int index = jkb.BaoXiaoName.IndexOf("(");
-                jkb.BaoXiaoName = jkb.BaoXiaoName.Remove(index);
+                int index = jkb.BaoXiaoName.IndexOf("$");
+                if(index != -1)
+                {
+                    jkb.BaoXiaoName = jkb.BaoXiaoName.Remove(index-1,index+1);
+                }
                 jkb.Del = 0;
                 T_BaoxiaoItemsService.AddEntity(jkb);
                 return Json(new { ret = "ok", msg = "添加成功！" }, JsonRequestBehavior.AllowGet);

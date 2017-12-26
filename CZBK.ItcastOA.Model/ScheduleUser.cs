@@ -20,5 +20,6 @@ namespace CZBK.ItcastOA.Model
         public Nullable<short> Del { get; set; }
     
         public virtual UserInfo UserInfo { get; set; }
+        public virtual UserInfo UserInfo1 { get; set; }
     }
 }

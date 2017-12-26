@@ -457,20 +457,9 @@
         }
         //修改日程完成以后调用的方法
         function afterScheduleEdit(data) {
-            if (data.ret == "ok") {
-                try {
-                    $('#tt').datagrid('reload');
-                    $('#UpdateScheduleDIV').dialog('close');
-                }
-                catch (e) {
-
-                }
-
-            } else if (data.ret == "no") {
-                $.messager.alert("提示", data.msg, "error");
-            } else {
-                $.messager.alert("提醒", "修改数据错误!!", "error");
-            }
+            $.messager.alert("提示","修改数据成功！");
+            $('#tt').datagrid('reload');
+            $('#UpdateScheduleDIV').dialog('close');
         }
         //添加日程以后调用
         function afterAddSchedule(data) {

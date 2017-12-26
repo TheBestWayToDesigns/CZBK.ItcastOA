@@ -12,7 +12,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
     {
         //
         // GET: /Department/
-        IBLL.IDepartmentService DepartmentService { get; set; }
+        IBLL.IBumenInfoSetService BumenInfoSetService { get; set; }
+        IBLL.IScheduleUserService ScheduleUserService { get; set; }
+
 
         public ActionResult Index()
         {
@@ -23,37 +25,83 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 5;
-            //构建搜索条件
-            //int totalCount = 0;
-            //UserInfoParam userInfoParam = new UserInfoParam()
-            //{
-
-            //    PageIndex = pageIndex,
-            //    PageSize = pageSize,
-            //    TotalCount = totalCount,
-            //    UserName = name,
-            //    Remark = remark
-            //};
-            short delFlag = (short)DelFlagEnum.Normarl;
             int totalCount;
-
-
-            var Departmet = DepartmentService.LoadPageEntities(pageIndex, pageSize, out totalCount,m=>m.DelFlag==delFlag, a => a.ID, true);
-
-            var temp = from u in Departmet
-                       select new { ID = u.ID, DepName = u.DepName, IsLeaf = u.IsLeaf, Level = u.Level, ParentId = u.ParentId };
-
-            return Json(new { rows = temp, total = totalCount }, JsonRequestBehavior.AllowGet);
+            var temp = BumenInfoSetService.LoadPageEntities(pageIndex, pageSize, out totalCount,x => x.ID > 0, a => a.ID, true);
+            var rtmp = from u in temp
+                       select new
+                       {
+                           ID = u.ID,
+                           DepName = u.Name,
+                           AddTime = u.SubTime
+                       };
+            return Json(new { rows = rtmp, total = totalCount }, JsonRequestBehavior.AllowGet);
         }
-        #region 角色部门
-        public ActionResult AddDepartment(Department department)
+
+
+        //获取上下级信息
+        public ActionResult GetScheduleUser()
         {
-            department.DelFlag = 0;
-            DepartmentService.AddEntity(department);
-            return Content("ok");
-
+            int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 5;
+            int totalCount;
+            var temp = ScheduleUserService.LoadPageEntities(pageIndex,pageSize,out totalCount,x => x.ID > 0,a => a.ID,true);
+            var rtmp = from a in temp
+                       select new
+                       {
+                           ID = a.ID,
+                           UserID = a.UserInfo.PerSonName,
+                           UpID = a.UserInfo1.PerSonName
+                       };
+            return Json(new { rows = rtmp, total = totalCount }, JsonRequestBehavior.AllowGet);
         }
-        #endregion
+
+        //添加部门
+        public ActionResult AddBuMen(BumenInfoSet bis)
+        {
+            bis.SubTime = DateTime.Now;
+            bis.Renark = "0";
+            bis.DelFlag = 0;
+            bis.Gushu = 0;
+            BumenInfoSetService.AddEntity(bis);
+            return Json(new { ret = "ok"}, JsonRequestBehavior.AllowGet);
+        }
+
+        //修改部门名称
+        public ActionResult EditBuMenName()
+        {
+            int bmid = Convert.ToInt32(Request["bmid"]);
+            string newName = Request["New"];
+            var temp = BumenInfoSetService.LoadEntities(x => x.ID == bmid).FirstOrDefault();
+            temp.Name = newName;
+            BumenInfoSetService.EditEntity(temp);
+            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+        }
+
+        //获取所有部门
+        public ActionResult GetAllBuMen()
+        {
+            var temp = BumenInfoSetService.LoadEntities(x => x.ID > 0).DefaultIfEmpty().ToList();
+            List<BMinfo> list = new List<BMinfo>();
+            foreach(var a in temp)
+            {
+                if (a == null)
+                {
+                    continue;
+                }
+                BMinfo bmif = new BMinfo();
+                bmif.ID = a.ID;
+                bmif.Name = a.Name;
+                list.Add(bmif);
+            }
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public class BMinfo
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+        }
 
     }
 }
