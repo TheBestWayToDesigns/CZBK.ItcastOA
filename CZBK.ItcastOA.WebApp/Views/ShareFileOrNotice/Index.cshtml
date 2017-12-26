@@ -74,9 +74,22 @@
             })
 
             $("#yes").click(function () {
-                $(".t3").css("display", "block");
-                $(".t1").css("display", "none");
-            });
+                $.post("/ShareFileOrNotice/GetModels", {}, function (data) {
+                    if(data.ret == "no"){
+                        $.messager.alert("提示", "没有可以使用的模板！");
+                        $(".t2 input[type='radio']").removeAttr('checked');
+                        $(".t3").css("display", "none");
+                        $(".t1").css("display", "none");
+                    } else if (data.ret == "ok") {
+                        $(".t3").css("display", "block");
+                        $(".t1").css("display", "none");
+                    } else {
+                        $.messager.alert("提示", "查找失败！");
+                        $(".t2 input[type='radio']").removeAttr('checked');
+                    }
+                });
+            })
+
             $("#no").click(function () {
                 $(".t1").css("display", "block");
                 $(".t3").css("display", "none");
@@ -128,6 +141,7 @@
                 $("#NoticestrID").val("");
             });
         });
+
         //清空datagrid数据
         function cleanDatagrid() {
             var item = $('#tt').datagrid('getRows');
@@ -138,6 +152,7 @@
                 }
             }
         }
+
         //将序列化成json格式后日期(毫秒数)转成日期格式
         function ChangeDateFormat(cellval) {
             var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
@@ -474,7 +489,6 @@
         function addModelstr() {
             var str = "";
             var MFID = $("#ModelFInput").combobox("getValue");
-            alert(MFID);
             var reg = /^[\d+,]{1,}$/
             if (reg.test(MFID)) {
                 var a = $("#STUstrID").val();

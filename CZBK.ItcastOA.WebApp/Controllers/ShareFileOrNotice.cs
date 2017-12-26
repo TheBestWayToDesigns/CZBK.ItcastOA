@@ -158,11 +158,11 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             List<ModelSF> list = new List<ModelSF>();
             if (temp.Count != 0 && temp[0] != null)
             {
-                if (list.Count != 0)
+                foreach (var a in temp)
                 {
-                    foreach (var a in temp)
+                    if (list.Count != 0)
                     {
-                        if (a == null)
+                        if (a == null || a.ModelList == "")
                         {
                             continue;
                         }
@@ -197,12 +197,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             }
                         }
                     }
-                }
-                else
-                {
-                    foreach (var a in temp)
+                    else
                     {
-                        if (a == null)
+                        if (a == null || a.ModelList == "")
                         {
                             continue;
                         }
@@ -229,6 +226,20 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             else
             {
                 return Json(null, JsonRequestBehavior.AllowGet);
+            }
+        }
+        //获取用户模板
+        public ActionResult GetModels()
+        {
+            var uid = LoginUser.ID;
+            var temp = ShareFileOrNoticeService.LoadEntities(x => x.ShareUser == uid && (x.ModelList != null||x.ModelList != "")).DefaultIfEmpty().ToList();
+            if (temp[0] == null)
+            {
+                return Json(new { ret = "no" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
             }
         }
         //添加共享文件
