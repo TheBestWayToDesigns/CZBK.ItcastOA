@@ -499,7 +499,11 @@
                          }
                      },
                     { field: 'CPname', title: '产品名称' ,align:'center'},
-                    { field: 'CPXingHao', title: '产品型号', align: 'center' },
+                    {
+                        field: 'CPXingHao', title: '产品型号', align: 'center', formatter: function (val, row, index) {
+                            return "<b title='123321'>"+val+"</b>";
+                        }
+                    },
                     { field: 'CPShuLiang', title: '产品数量', align: 'center' },
                      { field: 'WinStr', title: '是否成功', hidden: win == 1 ? false : true, align: 'center' },
                      { field: 'bak', title: '备注信息', hidden: win == 1 ? false : true },

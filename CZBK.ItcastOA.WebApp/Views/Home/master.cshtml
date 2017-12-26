@@ -296,14 +296,16 @@
 
     var tip;
     var edittus = -1;
-
-
-    $.post("/Home/GetBaojidan", { "edittus": edittus }, function (serverData) {
-        if (serverData.ret == "ok") {
-            $.ligerDialog.tip({ title: '提示信息1', content: '您有{' + serverData.count + "}条信息没报价！ <br/> 提醒时间: " + getNowFormatDate(), width: 200, height: 300, size: 21, index: -1 });
-            edittus = serverData.tus_c
+    var qx = "@ViewBag.qx";
+        if (qx == 999) {
+            $.post("/Home/GetBaojidan", { "edittus": edittus }, function (serverData) {
+                if (serverData.ret == "ok") {
+                    $.ligerDialog.tip({ title: '提示信息1', content: '您有{' + serverData.count + "}条信息没报价！ <br/> 提醒时间: " + getNowFormatDate(), width: 200, height: 300, size: 21, index: -1 });
+                    edittus = serverData.tus_c
+                }
+            });
         }
-    });
+  
 
 
     function getNowFormatDate() {
@@ -338,7 +340,10 @@
                 }
             });
         }
-        window.setInterval(tus, 6000);
+        
+        if (qx == 999) {
+            window.setInterval(tus, 6000);
+        }      
         $(document).click(function () {
             if (manager != undefined)
             { manager.close(); }

@@ -127,6 +127,7 @@
                 $("#AddFileTypeTab input").val("");
                 AddFileType();
             })
+            //点击下级成员触发方法
             $("#DBMUserInput").combobox({
                 onChange: function () {
                     var DBMidval = $("#DBMInput").combobox("getValue");
@@ -135,6 +136,7 @@
                     loadDownUser(pars);
                 }
             })
+            //点击下级部门触发方法
             $("#DBMInput").combobox({
                 onChange: function () {
                     var DBMidval = $("#DBMInput").combobox("getValue");
@@ -144,7 +146,9 @@
                     } else {
                         $("#DBMUserInput").combobox("reload", "/EverDayWork/GetDownBuMenalluser?DBMid=" + DBMidval);
                     }
-                }
+                    pars = { BumenID: DBMidval };
+                    loadDownUser(pars);
+                }               
             })
             $("#DUInput").combobox({
                 onChange: function () {
@@ -379,7 +383,7 @@
         //查阅下级日程
         function reviewSchedule() {
             var row = $('#tt').datagrid('getSelected');
-            if (row.TextReadBak == "未审核") {
+            if (row.TextReadBak == "未查阅") {
             $("#ReviewScheduleID").val(row.ID);
             $("#ReviewScheduleDIV").css("display", "block");
             $('#ReviewScheduleDIV').dialog({
