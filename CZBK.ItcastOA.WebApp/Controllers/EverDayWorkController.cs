@@ -123,22 +123,47 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                 FileItemID = b.FileItemID,
                                 ReadUser = b.TextReadUser
                             };
+
+                TotalCount = tRtmp.Count();
+                tRtmp = tRtmp.OrderByDescending(x => x.ScheduleAddTime).Skip((PageIndex - 1) * PageSize).Take(PageSize);
                 return Json(new { rows = tRtmp, total = TotalCount }, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                List<Uidorname> Luin = GetAllDownUser();
+
                 List<int> list = new List<int>();
-                foreach (var a in Luin)
+                if (Request["BumenID"] != null)
                 {
-                    if (a.ID > 0)
-                    {
-                        list.Add(a.ID);
-                    }
-                    else {
-                        continue;
-                    }
+                    var bumenid = Request["BumenID"] != null ? Convert.ToInt32(Request["BumenID"]) : 0;
+                    var bmif = BumenInfoSetService.LoadEntities(x => x.ID == bumenid).DefaultIfEmpty();
+                    var userinfo = UserInfoService.LoadEntities(x => x.DelFlag == 0).DefaultIfEmpty();
+                    var listid = from a in bmif
+                                 from b in userinfo
+                                 where a.ID == b.BuMenID
+                                 select new 
+                                 {
+                                     b.ID                                     
+                                 };
+                    foreach (var b in listid) {
+                        list.Add(b.ID);
+                    }                  
                 }
+                else
+                {
+                    List<Uidorname> Luin = GetAllDownUser();
+
+                    foreach (var a in Luin)
+                    {
+                        if (a.ID > 0)
+                        {
+                            list.Add(a.ID);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                }               
                 var sc = ScheduleService.LoadEntities(x => list.Contains(x.UserID));
                 var tRtmp = from a in sc
                             select new
@@ -155,10 +180,14 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                 TextReadTime = a.TextReadTime,
                                 FileItemID = a.FileItemID
                             };
+
+                TotalCount = tRtmp.Count();
+                tRtmp = tRtmp.OrderByDescending(x => x.ScheduleAddTime).Skip((PageIndex - 1) * PageSize).Take(PageSize);
                 return Json(new { rows = tRtmp, total = TotalCount }, JsonRequestBehavior.AllowGet);
             }
-            
+
         }
+              
 
         //获取下级部门的所属员工
         public ActionResult GetDBMUser()

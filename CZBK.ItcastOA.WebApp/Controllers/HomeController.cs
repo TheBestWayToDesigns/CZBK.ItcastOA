@@ -29,6 +29,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             {
                 ViewData["userName"] = LoginUser.PerSonName;
                 ViewBag.id = LoginUser.ID;
+                ViewBag.qx = LoginUser.QuXian;
             }
             return View();
         }

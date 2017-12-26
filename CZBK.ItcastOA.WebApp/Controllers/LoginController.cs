@@ -74,12 +74,19 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     //记住我
                     if (!string.IsNullOrEmpty(Request["checkMe"]))
                     {
-                        HttpCookie cookie1 = new HttpCookie("cp1", userInfo.UName);
-                        HttpCookie cookie2 = new HttpCookie("cp2", Common.WebCommon.GetMd5String(Common.WebCommon.GetMd5String(userInfo.UPwd)));
-                        cookie1.Expires = DateTime.Now.AddDays(3);
-                        cookie2.Expires = DateTime.Now.AddDays(3);
-                        Response.Cookies.Add(cookie1);
-                        Response.Cookies.Add(cookie2);
+                        HttpCookie cook1 = Response.Cookies["Lname"];
+                        cook1.Values.Add("cp1", userInfo.UName);
+                        cook1.Values.Add("cp2", userInfo.UPwd);
+                        cook1.Expires = DateTime.Now.AddDays(3);
+                        cook1.HttpOnly = true;
+                        //HttpCookie cookie1 = new HttpCookie("cp1", userInfo.UName);
+                        //HttpCookie cookie2 = new HttpCookie("cp2", userInfo.UPwd);
+                        //cookie1.Expires = DateTime.Now.AddDays(3);
+                        //cookie1.HttpOnly = true;
+                        //cookie2.Expires = DateTime.Now.AddDays(3);
+                        //cookie2.HttpOnly = true;
+                        //Response.Cookies.Add(cookie1);
+                        //Response.Cookies.Add(cookie2);
                     }
                     if (Convert.ToBoolean(userInfo.ThisMastr))
                     {
@@ -114,46 +121,49 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         #region 判断Cookie信息
           private void CheckCookieInfo()
           {
-              if (Request.Cookies["cp1"] != null && Request.Cookies["cp2"] != null)
-              {
-                  string userName = Request.Cookies["cp1"].Value;
-                  string userPwd = Request.Cookies["cp2"].Value;
-                  //判断Cookie中存储的用户密码和用户名是否正确.
-                 var userInfo=UserInfoService.LoadEntities(u=>u.UName==userName).FirstOrDefault();
-                  
-                 if (userInfo != null)
-                 {
-                     //注意：将用户的密码保存到数据库时一定要加密。
-                     //由于数据库中存储的密码是明文，所以这里需要将数据库中存储的密码两次MD5运算以后在进行比较。
-                     if (Common.WebCommon.GetMd5String(Common.WebCommon.GetMd5String(userInfo.UPwd)) == userPwd)
-                     {
-                         string sessionId = Guid.NewGuid().ToString();//作为Memcache的key
-                         //使用Memcache代替Session解决数据在不同Web服务器之间共享的问题。
-                         Common.MemcacheHelper.Set(sessionId, Common.SerializerHelper.SerializeToString(userInfo), DateTime.Now.AddMinutes(20));
-                        // 将Memcache的key以cookie的形式返回到浏览器端的内存中，当用户再次请求其它的页面请求报文中会以Cookie将该值再次发送服务端。
-                         Response.Cookies["sessionId"].Value = sessionId;
+            if (Request.Cookies["Lname"] != null) {
+                if (Request.Cookies["Lname"]["cp1"] != null && Request.Cookies["Lname"]["cp2"] != null)
+                {
+                    string userName = Request.Cookies["Lname"]["cp1"];
+                    string userPwd = Request.Cookies["Lname"]["cp2"];
+                    //判断Cookie中存储的用户密码和用户名是否正确.
+                    var userInfo = UserInfoService.LoadEntities(u => u.UName == userName).FirstOrDefault();
 
-                        var  myBrowserCaps = Request.Browser;
-                        //var isMobile= myBrowserCaps.IsMobileDevice ? 1 : 0;
-                       
-                        if (Convert.ToBoolean(userInfo.ThisMastr))
+                    if (userInfo != null)
+                    {
+                        //注意：将用户的密码保存到数据库时一定要加密。
+                        //由于数据库中存储的密码是明文，所以这里需要将数据库中存储的密码两次MD5运算以后在进行比较。
+                        if (userInfo.UPwd == userPwd)
                         {
-                            Response.Redirect("/Home/master");
-                            
-                        }
-                        else
-                        {
-                            if (myBrowserCaps.IsMobileDevice)
-                            { Response.Redirect("/Home/Index"); }
+                            string sessionId = Guid.NewGuid().ToString();//作为Memcache的key
+                                                                         //使用Memcache代替Session解决数据在不同Web服务器之间共享的问题。
+                            Common.MemcacheHelper.Set(sessionId, Common.SerializerHelper.SerializeToString(userInfo), DateTime.Now.AddMinutes(120));
+                            // 将Memcache的key以cookie的形式返回到浏览器端的内存中，当用户再次请求其它的页面请求报文中会以Cookie将该值再次发送服务端。
+                            Response.Cookies["sessionId"].Value = sessionId;
+
+                            var myBrowserCaps = Request.Browser;
+                            //var isMobile= myBrowserCaps.IsMobileDevice ? 1 : 0;
+
+                            if (Convert.ToBoolean(userInfo.ThisMastr))
+                            {
+                                Response.Redirect("/Home/master");
+
+                            }
                             else
-                            { Response.Redirect("/Home/master"); }
-                           
+                            {
+                                if (myBrowserCaps.IsMobileDevice)
+                                { Response.Redirect("/Home/Index"); }
+                                else
+                                { Response.Redirect("/Home/master"); }
+
+                            }
                         }
-                     }
-                 }
-                 Response.Cookies["cp1"].Expires = DateTime.Now.AddDays(-1);
-                 Response.Cookies["cp2"].Expires = DateTime.Now.AddDays(-1);
-              }
+                    }
+                    Response.Cookies.Add(Request.Cookies["Lname"]);
+                    Response.Cookies["Lname"].Expires = DateTime.Now.AddDays(-1);
+                }
+            }
+              
           }
 
         #endregion
@@ -164,9 +174,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
               {
                   string key = Request.Cookies["sessionId"].Value;
                   Common.MemcacheHelper.Delete(key);
-                  Response.Cookies["cp1"].Expires = DateTime.Now.AddDays(-1);
-                  Response.Cookies["cp2"].Expires = DateTime.Now.AddDays(-1);
-              }
+                 Response.Cookies.Add(Request.Cookies["Lname"]);
+                 Response.Cookies["Lname"].Expires = DateTime.Now.AddDays(-1);
+            }
               return Redirect("/Login/Index");
           }
         #endregion

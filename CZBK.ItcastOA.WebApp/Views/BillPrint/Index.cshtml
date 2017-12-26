@@ -118,6 +118,13 @@
                 $("#PrintDIV").jqprint();
             })    
             $("#NewBill").click(function () {
+                // $("#BillTimeID").datebox("setValue",'');
+                //$("#BuMenid").combobox("setValue", '');
+                //$("#Jkperson").combobox("setValue", '');
+                //$("#Jkdanwei").combobox("setValue", '');
+                //$("#JieKuanMoneyID").val("");
+                //$("#FaHuoBak").combobox("setValue", '');
+                //$("#CardNumberID").combobox("setValue", '');
                 $("#AddJieKuanBill").css("display", "block");
                 $('#AddJieKuanBill').dialog({
                     title: "添加用户信息",
@@ -145,21 +152,22 @@
                                 $.messager.alert("提示", "请选择借款人部门！");
                                 return;
                             }
-                            if (jkp == null || jkp == "") {
-                                $.messager.alert("提示", "请选择借款人或手动输入！");
-                                return;
-                            }else if (!isNaN(parseInt(jkp))) {
-                                $("#Jkperson1").val(jkp);
-                            } else {
-                                $.post("/BillPrint/ReturnUserID", { "personName": jkp, "BuMenID": bm }, function (data) {
-                                    if (data.ret == "ok") {
-                                        $("#Jkperson1").val(data.uid);
-                                    } else if (data.ret == "no") {
-                                        $.messager.alert("提示", data.uid);
-                                        return;
-                                    }
-                                });
-                            }
+                            //if (jkp == null || jkp == "") {
+                            //    $.messager.alert("提示", "请选择借款人或手动输入！");
+                            //    return;
+                            //} else if (!isNaN(parseInt(jkp))) {
+                               
+                            //    $("#Jkperson1").val(jkp);
+                            //} else {
+                            //    $.post("/BillPrint/ReturnUserID", { "personName": jkp, "BuMenID": bm }, function (data) {
+                            //        if (data.ret == "ok") {
+                            //            $("#Jkperson1").val(data.uid);
+                            //        } else if (data.ret == "no") {
+                            //            $.messager.alert("提示", data.uid);
+                            //            return;
+                            //        }
+                            //    });
+                            //}
                             if (jkdw == null || jkdw == "") {
                                 $.messager.alert("提示", "请选择收款单位或手动输入！");
                                 return;
@@ -838,7 +846,7 @@
                         <td>借款人</td>
                         <td>
                             <input class="easyui-combobox " id="Jkperson"
-                                   name="JieKuanPerson1"
+                                   name="JieKuanPerson"
                                    valueField="ID"
                                    textField="Name"
                                    panelHeight="auto" style="width:100px" />
@@ -856,7 +864,7 @@
                     </tr>
                     <tr>
                         <td><input type="hidden" name="OpenHang" id="FaHuoBak1" /><input type="hidden" name="SkdwName" id="Jkdanwei1" /></td>
-                        <td><input type="hidden" name="JieKuanPerson" id="Jkperson1" /><input type="hidden" name="CardNumber" id="CardNumberID1" /></td>
+                        <td><input type="hidden" name="JieKuanPerson3333" id="Jkperson1" /><input type="hidden" name="CardNumber" id="CardNumberID1" /></td>
                     </tr>
                     <tr><td>借款金额</td><td><input type="text" name="JieKuanMoney" id="JieKuanMoneyID" onkeyup="num(this)" /></td></tr>
                     <tr><td>开户行</td><td><input class="easyui-combobox " id="FaHuoBak"
