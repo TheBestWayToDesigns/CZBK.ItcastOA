@@ -34,8 +34,6 @@
         $(function () {
             $("#NewBill").hide();
             $("#NewBaoXiaoBill").hide();
-            loadData();
-           
             //初始化欠款dialg显示信息
             $("#Qiankuandiv").dialog({
                 title: "欠款报销明细表",
@@ -85,8 +83,6 @@
                     }
                 }
             })
-            
-
             $("#BuMenid").combobox({
                 onChange: function () {
                     $("#Jkperson").combobox("setValue", "");
@@ -96,7 +92,6 @@
                     $("#Jkdanwei").combobox("reload", "/BillPrint/GetBuMenAllSKDW?BMID=" + BMID);
                 }
             })
-            
             $("#Jkdanwei").combobox({
                 onChange: function () {
                     $("#FaHuoBak").combobox("setValue", "");
@@ -104,7 +99,6 @@
                     $("#FaHuoBak").combobox("reload", "/BillPrint/GetAllFaHuoBak?SKDW=" + skdw);
                 }
             });
-            
             $("#FaHuoBak").combobox({
                 onChange: function () {
                     $("#CardNumberID").combobox("setValue", "");
@@ -112,7 +106,6 @@
                     $("#CardNumberID").combobox("reload", "/BillPrint/GetAllFaHuoBakCardNumber?FHB=" + fhb);
                 }
             });
-
             //打印月预览总汇
             $("#PrintMonth").click(function () {
                 $("#PrintDIV").jqprint();
@@ -240,7 +233,7 @@
                     }]
                 });
             })
-            
+            loadData();
             
         });
         function loadData(pars) {

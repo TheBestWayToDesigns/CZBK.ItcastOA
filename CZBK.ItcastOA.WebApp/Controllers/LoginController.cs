@@ -159,8 +159,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             }
                         }
                     }
-                    Response.Cookies.Add(Request.Cookies["Lname"]);
-                    Response.Cookies["Lname"].Expires = DateTime.Now.AddDays(-1);
+                    else
+                    {
+                        Response.Cookies["Lname"].Expires = DateTime.Now.AddDays(-1);
+                    }
+                   // Response.Cookies.Add(Request.Cookies["Lname"]);
+                    
                 }
             }
               
