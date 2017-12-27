@@ -1,0 +1,337 @@
+
+----------------------header--------------------------
+2017-12-27 08:14:20,784 [10] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:14:20,800 [10] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-27 08:14:22,173 [10] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:14:24,731 [9] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:14:26,465 [7] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:14:29,052 [9] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:14:33,308 [9] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:14:42,964 [10] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:14:54,812 [10] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:15:12,787 [9] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:15:42,786 [11] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:16:36,787 [11] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:18:22,794 [29] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:21:49,313 [29] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:28:43,808 [13] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+2017-12-27 08:41:31,114 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:41:31,131 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-27 08:41:32,239 [7] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:41:34,907 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:41:36,428 [28] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:41:38,834 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:41:41,724 [27] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:41:46,293 [13] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:41:56,832 [28] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:42:14,832 [27] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:42:44,831 [13] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+2017-12-27 08:43:50,474 [7] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:43:50,492 [7] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-27 08:43:52,635 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:43:54,163 [13] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:43:55,877 [13] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:44:17,404 [7] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:44:21,847 [7] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:44:26,065 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:44:37,460 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:44:45,376 [27] ERROR errorMsg - System.FormatException: 输入字符串的格式不正确。
+   在 System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   在 System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   在 System.Convert.ToInt32(String value)
+   在 CZBK.ItcastOA.WebApp.Controllers.DepartmentController.GetAllBMUser() 位置 F:\Dit\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\DepartmentController.cs:行号 102
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<BeginInvokeActionMethodWithFilters>b__36(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   在 System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2017-12-27 08:44:45,376 [27] ERROR errorMsg - System.FormatException: 输入字符串的格式不正确。
+   在 System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   在 System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   在 System.Convert.ToInt32(String value)
+   在 CZBK.ItcastOA.WebApp.Controllers.DepartmentController.GetAllBMUser() 位置 F:\Dit\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\DepartmentController.cs:行号 102
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<BeginInvokeActionMethodWithFilters>b__36(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   在 System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2017-12-27 08:45:27,318 [7] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+2017-12-27 08:50:24,332 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:50:24,351 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to create connection to: 127.0.0.0:11211 -- only 0 created
+2017-12-27 08:50:27,038 [7] ERROR errorMsg - System.Web.HttpException (0x80004005): 服务器无法在发送 HTTP 标头之后修改 cookie。
+   在 System.Web.HttpResponse.BeforeCookieCollectionChange()
+   在 System.Web.HttpCookieCollection.Add(HttpCookie cookie)
+   在 CZBK.ItcastOA.WebApp.Controllers.LoginController.CheckCookieInfo() 位置 F:\Dit\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\LoginController.cs:行号 162
+   在 CZBK.ItcastOA.WebApp.Controllers.LoginController.Index() 位置 F:\Dit\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\LoginController.cs:行号 20
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<BeginInvokeActionMethodWithFilters>b__36(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+2017-12-27 08:50:27,833 [13] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:50:33,835 [35] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:50:39,831 [6] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:50:45,835 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:50:51,836 [8] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:50:57,861 [35] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:51:09,872 [23] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:51:28,848 [6] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:51:58,852 [23] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:52:52,849 [6] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)
+2017-12-27 08:54:40,851 [13] ERROR Memcached.ClientLibrary.SockIOPool - Failed to get SockIO obj for: 127.0.0.0:11211 -- new socket is not connected
+System.IO.IOException: Could not connect for 1000 milliseconds
+   在 Memcached.ClientLibrary.SockIO.GetSocket(String host, Int32 port, Int32 timeout)
+   在 Memcached.ClientLibrary.SockIO..ctor(SockIOPool pool, String host, Int32 timeout, Int32 connectTimeout, Boolean noDelay)
+   在 Memcached.ClientLibrary.SockIOPool.CreateSocket(String host)

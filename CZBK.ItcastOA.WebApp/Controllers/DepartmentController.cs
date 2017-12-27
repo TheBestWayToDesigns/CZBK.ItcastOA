@@ -14,6 +14,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         // GET: /Department/
         IBLL.IBumenInfoSetService BumenInfoSetService { get; set; }
         IBLL.IScheduleUserService ScheduleUserService { get; set; }
+        IBLL.IUserInfoService UserInfoService { get; set; }
 
 
         public ActionResult Index()
@@ -95,7 +96,25 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             return Json(list, JsonRequestBehavior.AllowGet);
         }
-
+        //获取部门下所有员工
+        public ActionResult GetAllBMUser()
+        {
+            var bmid = Convert.ToInt32(Request["BMid"]);
+            var temp = UserInfoService.LoadEntities(x => x.BuMenID == bmid).DefaultIfEmpty().ToList();
+            List<BMinfo> list = new List<BMinfo>();
+            foreach (var a in temp)
+            {
+                if (a == null)
+                {
+                    continue;
+                }
+                BMinfo bmif = new BMinfo();
+                bmif.ID = a.ID;
+                bmif.Name = a.PerSonName;
+                list.Add(bmif);
+            }
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
 
         public class BMinfo
         {

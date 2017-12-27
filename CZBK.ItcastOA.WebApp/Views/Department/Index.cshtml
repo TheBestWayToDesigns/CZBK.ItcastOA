@@ -75,6 +75,32 @@
                 $("#AddUpOrDownDiv").window('open');
             })
 
+            //点击上级用户部门触发方法
+            $("#UpUserBM").combobox({
+                onChange: function () {
+                    var BMidval = $("#UpUserBM").combobox("getValue");
+                    $("#UpUser").combobox("setValue", "");
+                    if (BMidval == -1) {
+                        cleanDatagrid();
+                    } else {
+                        $("#UpUser").combobox("reload", "/Department/GetAllBMUser?BMid=" + BMidval);
+                    }
+                }
+            })
+
+            //点击下级用户部门触发方法
+            $("#DownUserBM").combobox({
+                onChange: function () {
+                    var BMidval = $("#DownUserBM").combobox("getValue");
+                    $("#DownUser").combobox("setValue", "");
+                    if (BMidval == -1) {
+                        cleanDatagrid();
+                    } else {
+                        $("#DownUser").combobox("reload", "/Department/GetAllBMUser?BMid=" + BMidval);
+                    }
+                }
+            })
+
 
         });
 
@@ -177,8 +203,6 @@
             alert(row.ID);
         }
 
-
-       
 
 
         //添加信息
@@ -303,7 +327,7 @@
         </div>
 
         <!---------------添加部门信息--------------------->
-        <div id="AddBMDiv" class="easyui-window" title="添加部门" closed="true" style="width:300px;height:180px;">
+        <div id="AddBMDiv" class="easyui-window" title="添加部门" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:300px;height:180px;">
             @using (Ajax.BeginForm("AddBuMen", "Department", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAdd" }, new { id = "addbumenform" }))
             {
                 <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
@@ -316,7 +340,7 @@
             }
         </div>
         <!---------------修改部门信息--------------------->
-        <div id="EditBMNameDiv" class="easyui-window" title="修改部门名称" closed="true" style="width:300px;height:180px;">
+        <div id="EditBMNameDiv" class="easyui-window" title="修改部门名称" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:300px;height:180px;">
             @using (Ajax.BeginForm("EditBuMenName", "Department", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "editbmnameform" }))
             {
                <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
@@ -331,7 +355,7 @@
             }
         </div>
         <!---------------添加上下级关系--------------------->
-        <div id="AddUpOrDownDiv" class="easyui-window" title="添加上下级关系" closed="true" style="width:400px;height:250px;">
+        <div id="AddUpOrDownDiv" class="easyui-window" title="添加上下级关系" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:400px;height:250px;">
             @using (Ajax.BeginForm("AddUpOrDown", "Department", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddUpOrDown" }, new { id = "addupordownform" }))
             {
                 <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
