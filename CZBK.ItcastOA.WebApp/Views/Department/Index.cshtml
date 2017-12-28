@@ -174,7 +174,7 @@
                     { field: 'UpID', title: '上级用户', align: 'center' },
                     {
                         field: 'EDITu', title: '编辑框', align: 'center', formatter: function (value, row, index) {
-                            return "<a href='javascript:editUser()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>修改</a><a href='javascript:delUser()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>删除</a>";
+                            return "<a href='javascript:delUser()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>删除</a>";
                         }
                     }
                 ]], toolbar: "#AddUpOrDownBtnDIV",
@@ -191,16 +191,23 @@
         }
 
 
-        //修改上下级信息
-        function editUser() {
-            var row = $("#tt").datagrid("getSelected");
-            alert(row.ID);
-        }
 
         //删除上下级信息
         function delUser() {
             var row = $("#tt").datagrid("getSelected");
-            alert(row.ID);
+            if(confirm("确定要删除此条数据？")){
+                 $.post("/Department/DelUpOrDown", { "id": row.ID }, function (data) {
+                     if(data.ret == "ok"){
+                         $.messager.alert("提示","删除成功！");
+                 }else if(data.ret = "no"){
+                         $.messager.alert("提示", data.msg);
+                 } else {
+                         $.messager.alert("提示", "操作失败！");
+                 }
+                 })
+            }else{
+                return;
+            }
         }
 
 
@@ -234,7 +241,19 @@
             $("#AddBMDiv").window('close');
             $(".SmallWindow input").val("");
             $('#tt').datagrid('reload');
-            $.messager.alert("提醒", "修改成功!!");
+            $.messager.alert("提醒", "添加成功!!");
+        }
+
+        //添加上下级关系后调用方法
+        function afterAddUpOrDown(data) {
+            if (data.ret == "ok") {
+                $("#AddUpOrDownDiv").window('close');
+                $(".SmallWindow input").val("");
+                $('#tt').datagrid('reload');
+                $.messager.alert("提示","添加关系成功！");
+            }else if(data.ret == "no"){
+                $.messager.alert("提示", data.msg);
+            }
         }
 
         //修改完成以后调用该方法
@@ -263,12 +282,20 @@
         }
         //添加上下级关系的确定按钮
         function OkToAddUpOrDown() {
-            if ($("#UpUser").val().trim().length <= 0) {
-                $.messager.alert("提示", "请输入上级领导！");
+            if ($("#UpUserBM").combobox("getValue").trim().length <= 0) {
+                $.messager.alert("提示", "请选择上级员工部门！");
                 return;
             }
-            if ($("#DownUser").val().trim().length <= 0) {
-                $.messager.alert("提示", "请输入下级员工！");
+            if ($("#UpUser").combobox("getValue").trim().length <= 0) {
+                $.messager.alert("提示", "请选择上级员工！");
+                return;
+            }
+            if ($("#DownUserBM").combobox("getValue").trim().length <= 0) {
+                $.messager.alert("提示", "请选择下级员工部门！");
+                return;
+            }
+            if ($("#DownUser").combobox("getValue").trim().length <= 0) {
+                $.messager.alert("提示", "请选择下级员工！");
                 return;
             }
             $("#addupordownform").submit();

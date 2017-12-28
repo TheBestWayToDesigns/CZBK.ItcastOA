@@ -116,6 +116,81 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
+
+        //添加上下级关系
+        public ActionResult AddUpOrDown(ScheduleUser su)
+        {
+            var temp = ScheduleUserService.LoadEntities(x => x.UserID == su.UserID).DefaultIfEmpty().ToList();
+            if (temp.Count > 0)
+            {
+                if (temp[0] == null)
+                {
+                    var rtmp = ScheduleUserService.LoadEntities(x => x.UserID == su.UpID).DefaultIfEmpty().ToList();
+                    if (rtmp.Count > 0) {
+                        if (rtmp[0] == null)
+                        {
+                            ScheduleUserService.AddEntity(su);
+                            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+                        }else
+                        {
+                            foreach (var a in rtmp)
+                            {
+                                if(a.UpID == su.UserID)
+                                {
+                                    return Json(new { ret = "no", msg = "您所添加的下级是您所添加上级的上级，请仔细核对数据库！" }, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            ScheduleUserService.AddEntity(su);
+                            return Json(new { ret = "ok"}, JsonRequestBehavior.AllowGet);
+                        }
+                    }else
+                    {
+                        ScheduleUserService.AddEntity(su);
+                        return Json(new { ret = "ok"}, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    var rtmp = ScheduleUserService.LoadEntities(x => x.UserID == su.UpID).DefaultIfEmpty().ToList();
+                    foreach (var a in temp)
+                    {
+                        if (a.UpID == su.UpID)
+                        {
+                            return Json(new { ret = "no", msg = "您所添加的上下级关系已经存在！" }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    foreach (var b in rtmp) {
+                        if (b.UpID == su.UserID)
+                        {
+                            return Json(new { ret = "no", msg = "您所添加的下级是您所添加上级的上级，请仔细核对数据库！" }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    ScheduleUserService.AddEntity(su);
+                    return Json(new { ret = "ok"}, JsonRequestBehavior.AllowGet);
+                }
+            }else
+            {
+                ScheduleUserService.AddEntity(su);
+                return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        //删除上下级关系
+        public ActionResult DelUpOrDown()
+        {
+            int id = Convert.ToInt32(Request["id"]);
+            var temp = ScheduleUserService.LoadEntities(x => x.ID == id).FirstOrDefault();
+            if (ScheduleUserService.DeleteEntity(temp))
+            {
+                return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { ret = "no",msg = "删除失败！" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public class BMinfo
         {
             public int ID { get; set; }

@@ -166,13 +166,13 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                         {
                             continue;
                         }
-                        foreach (var b in list)
+                        for(int i=0;i<list.Count;i++)
                         {
-                            if (b == null)
+                            if (list[i] == null)
                             {
                                 continue;
                             }
-                            if (a.ModelList == b.StrID)
+                            if (a.ModelList == list[i].StrID)
                             {
                                 break;
                             }

@@ -176,6 +176,67 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return Json(new { ret= "ok" }, JsonRequestBehavior.AllowGet);
         }
 
+        //搜索框功能
+        public ActionResult Find()
+        {
+            var value = Request["value"];
+            var name = Request["name"];
+            var temp = ActionInfoService.LoadEntities(a =>a.ID > 0).DefaultIfEmpty();
+            if (name == "RequestUrl"){
+                List<ActionInfo> list = new List<ActionInfo>();
+                foreach (var a in temp)
+                {
+                    if (a.Url.IndexOf(value)!=-1)
+                    {
+                        list.Add(a);
+                    }else
+                    {
+                        continue;
+                    }
+                }
+                var rtmp = from a in list
+                           select new
+                           {
+                               ID = a.ID,
+                               ActionInfoName = a.ActionInfoName,
+                               Sort = a.Sort,
+                               Remark = a.Remark,
+                               Url = a.Url,
+                               HttpMethod = a.HttpMethod,
+                               ActionTypeEnum = a.ActionTypeEnum,
+                               SubTime = a.SubTime
+                           };
+                return Json(rtmp , JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                List<ActionInfo> list = new List<ActionInfo>();
+                foreach (var a in temp)
+                {
+                    if (a.ActionInfoName.IndexOf(value) != -1)
+                    {
+                        list.Add(a);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                var rtmp = from a in list
+                           select new
+                           {
+                               ID = a.ID,
+                               ActionInfoName = a.ActionInfoName,
+                               Sort = a.Sort,
+                               Remark = a.Remark,
+                               Url = a.Url,
+                               HttpMethod = a.HttpMethod,
+                               ActionTypeEnum = a.ActionTypeEnum,
+                               SubTime = a.SubTime
+                           };
+                return Json(rtmp, JsonRequestBehavior.AllowGet);
+            }
+        }
 
     }
 }

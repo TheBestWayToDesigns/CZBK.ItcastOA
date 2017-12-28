@@ -74,6 +74,7 @@
             })
 
             $("#yes").click(function () {
+                $("#ShowAddUsers").hide();
                 $.post("/ShareFileOrNotice/GetModels", {}, function (data) {
                     if(data.ret == "no"){
                         $.messager.alert("提示", "没有可以使用的模板！");
@@ -91,6 +92,8 @@
             })
 
             $("#no").click(function () {
+                $("#ShowAddUsers").show();
+                $("#ShowAddUsers").val("");
                 $(".t1").css("display", "block");
                 $(".t3").css("display", "none");
             });
@@ -320,11 +323,12 @@
         function AddSchareFile() {
             $(".t3").css("display", "none");
             $(".t1").css("display", "none");
+            $("#ShowAddUsers").hide();
             $("#AddShareFileDIV").css("display", "block");
             $('#AddShareFileDIV').dialog({
                 title: "添加共享文件",
                 width: 450,
-                height: 400,
+                height: 430,
                 collapsible: true,
                 resizable: true,
                 modal: true,
@@ -332,34 +336,35 @@
                     text: '确定',
                     iconCls: 'icon-ok',
                     handler: function () {
-                        if ($('input:radio[name="Model"]:checked').val == null) {
-                            $.messager.alert("提示", "请选择是否使用模板！");
+                        if ($("#FileTypeInput").combobox("getValue").trim().length <= 0) {
+                            $.messager.alert("提示", "请选择文件类型！");
                             return;
-                        }else if ($('input:radio[name="Model"]:checked').val() == "yes") {
+                        } else if ($("#BeiZhuId").val().trim().length <= 0) {
+                            if (confirm("确定不填写文件备注？")) {
+
+                            } else {
+                                return;
+                            }
+                        }
+                        var fileup = document.getElementById("uploadShareFileID").value;
+                        var fileupurl = document.getElementById("fileUrlID").value;
+                        if (fileup.trim().length > 0 && fileupurl.trim().length <= 0) {
+                            $.messager.alert("提示", "选择的文件还未上传，请先点击上传再点击确认！");
+                            return;
+                        } else if (fileup.trim().length <= 0) {
+                            $.messager.alert("提示", "请选择共享文件并上传!");
+                            return;
+                        }
+                        if ($('input:radio[name="Model"]:checked').val() == "yes") {
                             if ($("#ModelFInput").combobox("getValue").trim().length <= 0) {
                                 $.messager.alert("提示", "请选择模板！");
                                 return;
-                            } else if ($("#BeiZhuId").val().trim().length <= 0) {
-                                if (confirm("确定不填写文件备注？")) {
-
-                                } else {
-                                    return;
-                                }
                             } else if ($("#STUstrID").val().trim().length <= 0) {
                                 $.messager.alert("提示", "请点击模板后的添加按钮完成添加！");
                                 return;
                             }
                         } else if ($('input:radio[name="Model"]:checked').val() == "no") {
-                            if ($("#FileTypeInput").combobox("getValue").trim().length <= 0) {
-                                $.messager.alert("提示", "请选择文件类型！");
-                                return;
-                            } else if ($("#BeiZhuId").val().trim().length <= 0) {
-                                if (confirm("确定不填写文件备注？")) {
-
-                                } else {
-                                    return;
-                                }
-                            } else if ($("#BMSTUInput").combobox("getValue").trim().length <= 0) {
+                            if ($("#BMSTUInput").combobox("getValue").trim().length <= 0) {
                                 $.messager.alert("提示", "请选择分享部门！");
                                 return;
                             } else if ($("#STUInput").combobox("getValue").trim().length <= 0) {
@@ -369,16 +374,11 @@
                                 $.messager.alert("提示", "请点击添加按钮完成添加！");
                                 return;
                             }
-                        }
-                        var fileup = document.getElementById("uploadShareFileID").value;
-                        var fileupurl = document.getElementById("fileUrlID").value;
-                        if (fileup.trim().length > 0 && fileupurl.trim().length <= 0) {
-                            $.messager.alert("提示", "选择的文件还未上传，请先点击上传再点击确认！");
-                        } else if (fileup.trim().length <= 0) {
-                            $.messager.alert("提示","请选择共享文件并上传!");
                         } else {
-                            $("#addsharefilefrom").submit();//提交表单
+                            $.messager.alert("提示", "请选择是否使用模板！");
+                            return;
                         }
+                        $("#addsharefilefrom").submit();//提交表单
                     }
                 }, {
                     text: '取消',
@@ -447,6 +447,16 @@
             var str = "";
             var BMID = $("#BMSTUInput").combobox("getValue");
             var SUId = $("#STUInput").combobox("getValue");
+            var BMName = $("#BMSTUInput").combobox("getText");
+            var SUName = $("#STUInput").combobox("getText");
+            if (BMName == "" || BMName == null) {
+                $.messager.alert("提示", "请选择部门！");
+                return;
+            }
+            if (SUName == "" || SUName == null) {
+                $.messager.alert("提示", "请选择部门用户！");
+                return;
+            }
             if (!isNaN(parseInt(SUId))) {
                 var a = $("#STUstrID").val();
                 var ay = a.split(",");
@@ -456,6 +466,7 @@
                         return;
                     }
                 }
+                $("#ShowAddUsers").val($("#ShowAddUsers").val() + SUName + "-");
                 str = str + SUId + ",";
                 $("#STUstrID").val(a + str);
                 $.messager.alert("提示", "添加人员成功！");
@@ -471,6 +482,7 @@
                                 return;
                             }
                         }
+                        $("#ShowAddUsers").val($("#ShowAddUsers").val() + SUName + "-");
                         str = str + data.val + ",";
                         var s = $("#STUstrID").val();
                         $("#STUstrID").val(s + str);
@@ -478,7 +490,7 @@
                     }else if(data.ret == "no"){
                         $.messager.alert("提示", "在该部门之下查无此人，请确认名字是否输入正确！");
                     }else {
-                        $.messager.alert("提示", "添加失败！");
+                        $.messager.alert("提示", "在该部门之下查无此人，请确认名字是否输入正确！");
                     }
                 })
             }
@@ -593,6 +605,7 @@
         function afterAddShareFile(data) {
             if (data.ret == "ok") {
                 try {
+                    $.messager.alert("提醒", "共享成功！");
                     $('#tt').datagrid('reload');
                     $('#AddShareFileDIV').dialog('close');
                 }
@@ -603,7 +616,7 @@
             } else if (data.ret == "no") {
                 $.messager.alert("提示", data.msg, "error");
             } else {
-                $.messager.alert("提醒", "修改数据错误!!", "error");
+                $.messager.alert("提醒", "共享成功！");
             }
         }
 
@@ -752,7 +765,9 @@
                 </b>
                 <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一人，需添加一次！</span></label></p>
             </div>
+            <br />
             <b>
+                <b><textarea id="ShowAddUsers" style="width:300px;height:30px;display:none"></textarea></b>
                 <b><input type="hidden" name="STUstrName" id="STUstrID" /></b>
             </b>
         </div>
