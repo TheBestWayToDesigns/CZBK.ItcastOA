@@ -320,7 +320,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 {
                     BaoXiaoLR jklr = new BaoXiaoLR();
                     jklr.ID = d.ID;
-                    jklr.Text = d.SkdwName+"($)";
+                    jklr.Text = d.SkdwName;
                     JKBLR.Add(jklr);
                 }
             }

@@ -756,6 +756,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ScheduleUser_UserInfo1">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="0..1" />
+          <End Role="ScheduleUser" Type="Self.ScheduleUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ScheduleUser">
+              <PropertyRef Name="UpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SczzDanjuID">
           <End Role="T_SczzDanju" Type="Self.T_SczzDanju" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -1377,6 +1389,10 @@
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="ScheduleUser" EntitySet="ScheduleUser" />
           </AssociationSet>
+          <AssociationSet Name="FK_ScheduleUser_UserInfo1" Association="Self.FK_ScheduleUser_UserInfo1">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="ScheduleUser" EntitySet="ScheduleUser" />
+          </AssociationSet>
           <AssociationSet Name="FK_SczzDanjuID" Association="Self.FK_SczzDanjuID">
             <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
             <End Role="T_CanPan" EntitySet="T_CanPan" />
@@ -1820,6 +1836,10 @@
             <End Role="BumenInfoSet" EntitySet="BumenInfoSet" />
             <End Role="ScheduleType" EntitySet="ScheduleTypes" />
           </AssociationSet>
+          <AssociationSet Name="FK_ScheduleUser_UserInfo1" Association="OAModel.FK_ScheduleUser_UserInfo1">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="ScheduleUser" EntitySet="ScheduleUsers" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ActionInfo">
           <Key>
@@ -2159,6 +2179,7 @@
           <NavigationProperty Name="YXB_BaoJiaEidtMoney" Relationship="OAModel.FK_YXB_BaoJiaEidtMoney_UserInfo" FromRole="UserInfo" ToRole="YXB_BaoJiaEidtMoney" />
           <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_YXBBaojia_Userinf" FromRole="UserInfo" ToRole="YXB_Baojia" />
           <NavigationProperty Name="ShareFileOrNotices" Relationship="OAModel.FK_ShareFileOrNotice_UserInfo" FromRole="UserInfo" ToRole="ShareFileOrNotice" />
+          <NavigationProperty Name="ScheduleUsers1" Relationship="OAModel.FK_ScheduleUser_UserInfo1" FromRole="UserInfo" ToRole="ScheduleUser" />
         </EntityType>
         <Association Name="FK_Bumen">
           <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
@@ -2539,6 +2560,7 @@
           <Property Name="UpID" Type="Int32" />
           <Property Name="Del" Type="Int16" />
           <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_ScheduleUser_UserInfo" FromRole="ScheduleUser" ToRole="UserInfo" />
+          <NavigationProperty Name="UserInfo1" Relationship="OAModel.FK_ScheduleUser_UserInfo1" FromRole="ScheduleUser" ToRole="UserInfo" />
         </EntityType>
         <Association Name="FK_Schedule_UserInfo">
           <End Type="OAModel.FileItem" Role="FileItem" Multiplicity="0..1" />
@@ -3036,6 +3058,18 @@
             </Principal>
             <Dependent Role="ScheduleType">
               <PropertyRef Name="BuMenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ScheduleUser_UserInfo1">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
+          <End Type="OAModel.ScheduleUser" Role="ScheduleUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ScheduleUser">
+              <PropertyRef Name="UpID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
