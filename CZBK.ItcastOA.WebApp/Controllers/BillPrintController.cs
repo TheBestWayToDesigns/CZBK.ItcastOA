@@ -256,10 +256,18 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             //获取所有本用户创建过的报销内容
             int uid = LoginUser.ID;
-            var tempBXB = T_BaoXiaoBillService.LoadEntities(x => x.AddUserID == uid&&x.Del==0).DefaultIfEmpty().ToList();
+            var tempBXB = T_BaoXiaoBillService.LoadEntities(x => x.AddUserID == uid&&x.Del==0).DefaultIfEmpty();
+            List<BaoXiaoLR> list = new List<BaoXiaoLR>();
+            if (tempBXB.First() == null) {
+                BaoXiaoLR bxlr = new BaoXiaoLR();
+                bxlr.ID = 0;
+                bxlr.Text ="";
+                list.Add(bxlr);
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
             List<T_BaoxiaoItems> bilist = new List<T_BaoxiaoItems>();
             foreach (var a in tempBXB)
-            {
+            {                
                 var tempBXI = T_BaoxiaoItemsService.LoadEntities(x => x.BaoXiaoID == a.ID).DefaultIfEmpty().ToList();
                 foreach (var d in tempBXI)
                 {
@@ -282,7 +290,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 sb1 = bilist.Where((x, i) => bilist.FindIndex(z => z.BaoXiaoName == x.BaoXiaoName) == i).ToList();
             }
             Random rd = new Random();
-            List<BaoXiaoLR> list = new List<BaoXiaoLR>();
+          
             foreach (var c in sb1)
             {
                 BaoXiaoLR bxlr = new BaoXiaoLR();
