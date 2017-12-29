@@ -394,7 +394,7 @@
                 return;
             }
             $.post("/ActionInfo/Find", { "value": value, "name": name }, function (serverData) {
-                $("#tt").datagrid("loadData",{ "rows":serverData });
+                $("#tt").datagrid("loadData",{ rows:serverData.rows,total:serverData.total });
             })
         }
 

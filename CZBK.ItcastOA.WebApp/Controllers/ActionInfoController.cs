@@ -179,6 +179,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //搜索框功能
         public ActionResult Find()
         {
+            int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 20;
+            int totalCount;
             var value = Request["value"];
             var name = Request["name"];
             var temp = ActionInfoService.LoadEntities(a =>a.ID > 0).DefaultIfEmpty();
@@ -206,7 +209,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                ActionTypeEnum = a.ActionTypeEnum,
                                SubTime = a.SubTime
                            };
-                return Json(rtmp , JsonRequestBehavior.AllowGet);
+                totalCount = rtmp.Count();
+                return Json(new { total = totalCount,rows = rtmp} , JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -234,7 +238,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                ActionTypeEnum = a.ActionTypeEnum,
                                SubTime = a.SubTime
                            };
-                return Json(rtmp, JsonRequestBehavior.AllowGet);
+                totalCount = rtmp.Count();
+                return Json(new { total = totalCount, rows = rtmp }, JsonRequestBehavior.AllowGet);
             }
         }
 
