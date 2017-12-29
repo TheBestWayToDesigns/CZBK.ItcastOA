@@ -118,6 +118,8 @@
             });
 
             $("#ByAllBuMen").click(function () {
+                $("#ShowAddBMOrUser").val("");
+                $("#ShowAddBMOrUser").hide();
                 $("#BMDIV").css("display", "none");
                 $("#ADDBUMENDIV").css("display", "none");
                 $("#BMUSERDIV").css("display", "none");
@@ -131,6 +133,8 @@
             });
 
             $("#ByOneBuMen").click(function () {
+                $("#ShowAddBMOrUser").val("");
+                $("#ShowAddBMOrUser").show();
                 $("#BMDIV").css("display", "block");
                 $("#ADDBUMENDIV").css("display", "block");
                 $("#BMUSERDIV").css("display", "none");
@@ -140,6 +144,8 @@
             });
 
             $("#ByOneByOne").click(function () {
+                $("#ShowAddBMOrUser").val("");
+                $("#ShowAddBMOrUser").show();
                 $("#BMDIV").css("display", "block");
                 $("#ADDBUMENDIV").css("display", "none");
                 $("#BMUSERDIV").css("display", "block");
@@ -422,7 +428,7 @@
             $('#AddNoticeDIV').dialog({
                 title: "添加公告通知",
                 width: 450,
-                height: 450,
+                height: 500,
                 collapsible: true,
                 resizable: true,
                 modal: true,
@@ -588,6 +594,8 @@
             var str = "";
             var BMID = $("#BMNUInput").combobox("getValue");
             var SUId = $("#STUNInput").combobox("getValue");
+            var SUName = $("#STUNInput").combobox("getText");
+            var UserNamestr = $("#ShowAddBMOrUser").val();
             if (!isNaN(parseInt(SUId))) {
                 var a = $("#NoticestrID").val();
                 var ay = a.split(",");
@@ -599,6 +607,7 @@
                 }
                 str = str + SUId + ",";
                 $("#NoticestrID").val(a + str);
+                $("#ShowAddBMOrUser").val(UserNamestr + SUName+",");
                 $.messager.alert("提示", "添加人员成功！");
             } else {
                 $.post("/ShareFileOrNotice/ReturnUserID", { "personName": SUId, "BuMenID": BMID }, function (data) {
@@ -615,6 +624,7 @@
                         str = str + data.val + ",";
                         var s = $("#NoticestrID").val();
                         $("#NoticestrID").val(s + str);
+                        $("#ShowAddBMOrUser").val(UserNamestr + SUName + ",");
                         $.messager.alert("提示", "添加人员成功！");
                     } else if (data.ret == "no") {
                         $.messager.alert("提示", "在该部门之下查无此人，请确认名字是否输入正确！");
@@ -627,18 +637,30 @@
 
         //添加部门用户到隐藏控件
         function addSTBMstr() {
-            var BMID = $("#BMNUInput").combobox("getValue");
+            var BMID = $("#BMNUInput").combobox("getValue"); 
+            var BMName = $("#BMNUInput").combobox("getText");
+            var BMNamestr =  $("#ShowAddBMOrUser").val();
+            var ay = BMNamestr.split(",");
+            for(var i=0;i<ay.length;i++){
+                if(ay[i] == BMName){
+                    $.messager.alert("提示","该部门已添加过！");
+                    return;
+                }else{
+                    continue;
+                }
+            }
             $.post("/ShareFileOrNotice/ReturnAllUserID", { "BuMenID": BMID }, function (userinfo) {
                 if (userinfo.ret == "no") {
                     $.messager.alert("提示", "该部门下无任何员工！");
-                } else if (userinfo.ret == "ok") {
-                    var a = $("#NoticestrID").val();
-                    var str = a + userinfo.data;
-                    $("#NoticestrID").val(str);
-                    $.messager.alert("提示", "添加人员成功！");
-                } else {
-                    $.messager.alert("提示", 1343434);
-                }
+                 } else if (userinfo.ret == "ok") {
+                         var a = $("#NoticestrID").val();
+                         var str = a + userinfo.data;
+                         $("#ShowAddBMOrUser").val(BMNamestr+BMName+",");
+                         $("#NoticestrID").val(str);
+                         $.messager.alert("提示", "添加人员成功！");
+                 } else {
+                         $.messager.alert("提示", 1343434);
+                 }
             });
         }
 
@@ -895,6 +917,7 @@
             </div>
             <div>
                 <b><input type="hidden" name="NoticestrName" id="NoticestrID" /></b>
+                <b><textarea id="ShowAddBMOrUser" style="width:300px;height:30px;display:none"></textarea></b>
             </div>
         </div>
         <table>
