@@ -54,6 +54,11 @@
             $("#setBool").css("display", "none");
             bindActionTypeEnumChange();
             bindFileUpclick();
+
+
+            $("#tt").datagrid({ toolbar: "#SearchboxDiv" });
+            
+
         });
         //给权限类别绑定Change事件
         function bindActionTypeEnumChange() {
@@ -124,9 +129,7 @@
                         formatter: function (value, row, index) {
                             return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
                         }
-                    },
-                     
-
+                    }                  
                 ]],
                 toolbar: [{
                     id: 'btnDelete',
@@ -368,6 +371,7 @@
                 $.messager.alert("提示", "分配权限异常","errer");
             }
         }
+
         function bool_click()
         {
             $.post("/ActionInfo/btnbool", { "id": "" }, function (serverData) {
@@ -381,6 +385,23 @@
                 }
             });
         }
+
+       
+
+        //搜索功能
+        function doSearch(value, name) {
+            if(value == "" || value == null){
+                return;
+            }
+            $.post("/ActionInfo/Find", { "value": value, "name": name }, function (serverData) {
+                $("#tt").datagrid("loadData",{ rows:serverData.rows,total:serverData.total });
+            })
+        }
+
+
+
+
+        
     </script>
 </head>
 <body>
@@ -465,5 +486,15 @@
                 </tr>
             </table>
     </div>
+
+    <!----------------搜索框--------------------->
+    <div id="SearchboxDiv" style="float:left;margin:0px 30px 0px 0px">
+        <input class="easyui-searchbox" data-options="prompt:'请填写搜索信息...',menu:'#mm',searcher:doSearch" style="width:300px" id="SearchBoxID"/>
+        <div id="mm">
+            <div data-options="name:'QuanXianName',iconCls:'icon-ok'">权限名称</div>
+            <div data-options="name:'RequestUrl',iconCls:'icon-ok'">请求地址</div>
+        </div>
+    </div>
+
 </body>
 </html>
