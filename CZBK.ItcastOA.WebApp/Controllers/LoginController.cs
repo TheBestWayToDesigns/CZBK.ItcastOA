@@ -23,19 +23,26 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         #region 校验用户的登录信息
         public ActionResult CheckLogin()
         {
-            //1:判断验证码是否正确
-            string validateCode = Session["validateCode"] == null ? string.Empty : Session["validateCode"].ToString();
-            if (string.IsNullOrEmpty(validateCode))
+            //是否采用验证码
+            var IsNotVali = Request["IsNotVali"];
+            if (IsNotVali == null)
             {
-               
-                return Content("notyzm");
+                //1:判断验证码是否正确
+                string validateCode = Session["validateCode"] == null ? string.Empty : Session["validateCode"].ToString();
+                if (string.IsNullOrEmpty(validateCode))
+                {
+
+                    return Content("notyzm");
+                }
+                Session["validateCode"] = null;
+                string txtCode = Request["vCode"];
+                if (!validateCode.Equals(txtCode, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return Content("notyzm");
+                }
             }
-            Session["validateCode"] = null;
-            string txtCode = Request["vCode"];
-            if (!validateCode.Equals(txtCode, StringComparison.InvariantCultureIgnoreCase))
-            {
-                return Content("notyzm");
-            }
+            
+
             //2:判断用户输入的用户名与密码
             string userName = Request["LoginCode"];
             string userPwd = Request["LoginPwd"];
@@ -79,14 +86,6 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                         cook1.Values.Add("cp2", userInfo.UPwd);
                         cook1.Expires = DateTime.Now.AddDays(3);
                         cook1.HttpOnly = true;
-                        //HttpCookie cookie1 = new HttpCookie("cp1", userInfo.UName);
-                        //HttpCookie cookie2 = new HttpCookie("cp2", userInfo.UPwd);
-                        //cookie1.Expires = DateTime.Now.AddDays(3);
-                        //cookie1.HttpOnly = true;
-                        //cookie2.Expires = DateTime.Now.AddDays(3);
-                        //cookie2.HttpOnly = true;
-                        //Response.Cookies.Add(cookie1);
-                        //Response.Cookies.Add(cookie2);
                     }
                     if (Convert.ToBoolean(userInfo.ThisMastr))
                     {
