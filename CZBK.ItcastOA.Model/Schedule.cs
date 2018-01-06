@@ -30,8 +30,7 @@ namespace CZBK.ItcastOA.Model
         public Nullable<int> TextReadUser { get; set; }
         public Nullable<System.DateTime> TextReadTime { get; set; }
         public Nullable<int> FileItemID { get; set; }
-        public string ExamineText { get; set; }
-        public string ExamineUser { get; set; }
+        
 
 
         public virtual FileItem FileItem { get; set; }
