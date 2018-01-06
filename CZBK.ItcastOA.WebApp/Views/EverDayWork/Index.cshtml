@@ -443,9 +443,12 @@
                         }
                     },
                     {
-                        field: 'TextReadBak', title: '日程审核状态', align: 'center', styler: function (value, row, col) {
-                            if (value == "未查阅") {
-                                return 'background-color:#c0c0c0;';
+                        field: 'TextReadBak', title: '日程审核状态', align: 'center', formatter: function (value, row, col) {
+                            if (value != "未查阅") {
+                                var a = value;
+                                return "<a href='javascript:SeeTextReadBak("+a+")' class='l-btn' style='margin:0px 5px;padding:2px 8px' >查看查阅意见</a>";
+                            } else {
+                                return value;
                             }
                         }
                     },
@@ -474,6 +477,13 @@
 
                 }
             });
+        }
+
+
+        function SeeTextReadBak(value) {
+            $("#TRBText").val(value);
+            document.getElementById("TRBText").setAttribute('readOnly', true);
+            $("#SeeTextReadBakDiv").window("open");
         }
 
         //加载已审核日程
@@ -967,6 +977,7 @@
         function cancel() {
             $("#AddExamineScheduleDiv").window('close');
             $("#CheckScheduleInfoDiv").window('close');
+            $("#SeeTextReadBakDiv").window("close");
             $(".SmallWindow textarea").val("");
             $(".SmallWindow input").val("");
         }
@@ -1524,6 +1535,18 @@
         起始时间：<input type="text" id="start" name="start" class="easyui-datebox" style="height:18px;width:100px;line-height:18px" />
         结束时间：<input type="text" id="end" name="end" class="easyui-datebox" style="height:18px;width:100px;line-height:18px" />
         <input type="button" onclick="DoSerch()" value="查询" />
+    </div>
+
+    <!-------------------查看日程查阅详细--------------------->
+    <div id="SeeTextReadBakDiv" class="easyui-window" title="日程详细信息" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:402px;height:321px;">
+        <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
+            <table>
+                <tr><td><b>领导查阅意见：</b></td><td><textarea id="TRBText" style="width:173px;height:80px;resize:none;"></textarea></td></tr>
+            </table>
+            <div style="padding:5px;text-align:center;">
+                <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="cancel()">确定</a>
+            </div>
+        </form>
     </div>
 
 </body>
