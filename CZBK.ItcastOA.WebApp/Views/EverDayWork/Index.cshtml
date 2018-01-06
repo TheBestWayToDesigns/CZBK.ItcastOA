@@ -286,7 +286,11 @@
                             return sd;
                         }
                     },
-                    { field: 'ScheduleText', title: '日程内容', align: 'center' },
+                    {
+                        field: 'ScheduleText', title: '日程内容', align: 'center', width: 200, formatter: function (val, row, index) {
+                            return "<a title='"+val+"'> " + val + "</a>";
+                        }
+                    },
                     { field: 'ScheduleTypeID', title: '日程类型', align: 'center' },
                     { field: 'TextReadBak', title: '日程审核状态', align: 'center' },
                     { field: 'TextReadUser', title: '日程审核人', align: 'center' },
@@ -299,7 +303,9 @@
                     { field: 'FileItemID', title: '文件编号', align: 'center' },
                     {
                         field: 'EditFile', title: '文件编辑栏', align: 'center', formatter: function (value, row, index) {
-                            return "<a href='javascript:checkFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看文件</a><a href='javascript:addUploadFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>补充上传文件</a>";
+                            var str= "<a href='javascript:checkFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看文件</a>";
+                            var str1="<a href='javascript:addUploadFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>补充上传文件</a>";
+                            return row.FileItemID == null ? str1 : str + str1;
                         }
                     },
                     {
@@ -370,7 +376,10 @@
                     { field: 'FileItemID', title: '文件编号', align: 'center' },
                     {
                         field: 'Edit', title: '编辑栏', align: 'center', formatter: function (value, row, index) {
-                            return "<a href='javascript:checkFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看文件</a><a href='javascript:reviewSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查阅意见</a>";
+
+                            var str = "<a href='javascript:checkFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看文件</a>";
+                            var str1 = "<a href='javascript:reviewSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查阅意见</a>";
+                            return row.FileItemID == null ? str1 : str + str1;
                         }
                     }
                 ]],
