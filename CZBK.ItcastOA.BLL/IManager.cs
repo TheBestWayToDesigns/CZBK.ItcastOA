@@ -43,6 +43,14 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class ExamineScheduleService :BaseService<ExamineSchedule>,IExamineScheduleService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.ExamineScheduleDal;
+        }
+    }   
+	
 	public partial class FileItemService :BaseService<FileItem>,IFileItemService
     {
         public override void SetCurretnDal()

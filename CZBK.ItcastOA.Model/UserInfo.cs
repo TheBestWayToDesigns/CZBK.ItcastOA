@@ -44,6 +44,7 @@ namespace CZBK.ItcastOA.Model
             this.YXB_Baojia = new HashSet<YXB_Baojia>();
             this.ShareFileOrNotices = new HashSet<ShareFileOrNotice>();
             this.ScheduleUsers1 = new HashSet<ScheduleUser>();
+            this.ExamineSchedules = new HashSet<ExamineSchedule>();
         }
     
         public int ID { get; set; }
@@ -122,5 +123,7 @@ namespace CZBK.ItcastOA.Model
         public virtual ICollection<ShareFileOrNotice> ShareFileOrNotices { get; set; }
         [JsonIgnore]
         public virtual ICollection<ScheduleUser> ScheduleUsers1 { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<ExamineSchedule> ExamineSchedules { get; set; }
     }
 }

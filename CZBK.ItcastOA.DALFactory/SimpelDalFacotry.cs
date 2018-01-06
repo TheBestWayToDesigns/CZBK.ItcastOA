@@ -68,6 +68,19 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IDepartmentDal;
         }
 		
+	    public static IExamineScheduleDal CreateExamineScheduleDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".ExamineScheduleDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IExamineScheduleDal;
+        }
+		
 	    public static IFileItemDal CreateFileItemDal()
         {
 

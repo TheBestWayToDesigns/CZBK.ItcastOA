@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="38639b506e3a4aa591ee5f325d6e102d" Name="关系图1" ZoomLevel="73" ShowGrid="false" SnapToGrid="false">
+      <Diagram DiagramId="38639b506e3a4aa591ee5f325d6e102d" Name="关系图1" ZoomLevel="72" ShowGrid="false" SnapToGrid="false">
         <EntityTypeShape EntityType="OAModel.ActionInfo" Width="1.5" PointX="4.2151268643808839" PointY="0.68115941700352467" />
         <EntityTypeShape EntityType="OAModel.Department" Width="1.5" PointX="6.268568933213146" PointY="0.771739125505287" />
         <EntityTypeShape EntityType="OAModel.R_UserInfo_ActionInfo" Width="2.625" PointX="0.82653989676778039" PointY="3.4424818805662452" />
@@ -96,6 +96,9 @@
         <AssociationConnector Association="OAModel.FK_ShareFileOrNotice_UserInfo" />
         <AssociationConnector Association="OAModel.FK_ScheduleType_Bumeninfo" />
         <AssociationConnector Association="OAModel.FK_ScheduleUser_UserInfo1" />
+        <EntityTypeShape EntityType="OAModel.ExamineSchedule" Width="1.5" PointX="20.63638513736575" PointY="15.594512041568974" />
+        <AssociationConnector Association="OAModel.FK_ExamineSchedule_Schedule" />
+        <AssociationConnector Association="OAModel.FK_ExamineSchedule_UserInfo" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

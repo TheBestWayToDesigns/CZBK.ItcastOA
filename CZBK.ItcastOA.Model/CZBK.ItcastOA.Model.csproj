@@ -66,6 +66,9 @@
     <Compile Include="Enum\FastPropertyComparer.cs" />
     <Compile Include="Enum\AddMD5.cs" />
     <Compile Include="EqualityComparer.cs" />
+    <Compile Include="ExamineSchedule.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="FileItem.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

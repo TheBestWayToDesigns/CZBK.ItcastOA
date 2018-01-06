@@ -21,6 +21,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IUserInfoService UserInfoService { get; set; }
         IBLL.IBumenInfoSetService BumenInfoSetService { get; set; }
         IBLL.IFileTypeService FileTypeService { get; set; }
+        IBLL.IExamineScheduleService ExamineScheduleService { get; set; }
         public ActionResult Index()
         {
             return View();
@@ -73,7 +74,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var tempSUser = ScheduleUserService.LoadEntities(x => x.UpID == localID).DefaultIfEmpty();
             List<Uidorname> Luin = new List<Uidorname>();
             ForUser(tempSUser, Luin);
-            return Luin;
+            var a = Luin.Where((x, i) => Luin.FindIndex(z => z.ID == x.ID) == i).ToList();
+            return a;
         }
         //迭代下级用户的次级用户
         public void ForUser(IQueryable<ScheduleUser> tsu,List<Uidorname> Luin)
@@ -130,7 +132,6 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             else
             {
-
                 List<int> list = new List<int>();
                 if (Request["BumenID"] != null)
                 {
@@ -272,7 +273,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 10;
             int totalCount;
-            var temp = ScheduleService.LoadPageEntities(pageIndex, pageSize, out totalCount, x => x.UserID == LoginUser.ID, x => x.ID, false);
+            var temp = ScheduleService.LoadPageEntities(pageIndex, pageSize,out totalCount, x => x.UserID == LoginUser.ID, x => x.ID, false);
             var Rtmp = from a in temp
                        select new
                        {
@@ -564,7 +565,450 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             ScheduleService.EditEntity(temp);
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
-    }
+
+
+        //获取所有该用户下已审核过的用户记录
+        public ActionResult GetExamineSchedule()
+        {
+            var DownUserID = Request["DownUser"] != null ? Convert.ToInt64(Request["DownUser"]) : 0;
+            int PageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            int PageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 10;
+            List<Uidorname> list = GetAllDownUser();
+            List<Schedule> listsch1 = new List<Schedule>();
+            List<Schedule> listsch2 = new List<Schedule>();
+            if (list != null && list[0] != null)
+            {
+                foreach(var l in list)
+                {
+                    var temp = ScheduleService.LoadEntities(x => x.TextReadBak != "未查阅" && x.UserID == l.ID).DefaultIfEmpty().ToList();
+                    if (temp == null || temp[0] == null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        listsch1.AddRange(temp);
+                    }
+                }
+                foreach(var ls in listsch1)
+                {
+                    foreach(var l in list)
+                    {
+                        if (ls.TextReadUser == LoginUser.ID || ls.TextReadUser == l.ID)
+                        {
+                            listsch2.Add(ls);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                }
+            }else
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
+            if(DownUserID > 0)
+            {
+                List<Schedule> dush1 = new List<Schedule>();
+                if (listsch2.Count > 0)
+                {
+                    foreach (var a in listsch2)
+                    {
+                        if (a.UserID == DownUserID)
+                        {
+                            dush1.Add(a);
+                        }
+                    }
+                    List<Schedule> exsh1 = new List<Schedule>();
+                    List<Schedule> exsh2 = new List<Schedule>();
+                    foreach (var b in dush1)
+                    {
+                        var es = ExamineScheduleService.LoadEntities(x => x.ScheduleID == b.ID).DefaultIfEmpty().ToList();
+                        if (es == null || es[0] == null)
+                        {
+                            exsh1.Add(b);
+                        }
+                        else
+                        {
+                            foreach (var e in es)
+                            {
+                                if (e != null)
+                                {
+                                    b.ExamineText = e.ExamineText;
+                                    b.ExamineUser = e.UserInfo.PerSonName;
+                                    exsh2.Add(b);
+                                }
+                            }
+                        }
+                    }
+                    var Rtmp1 = from a in exsh1
+                                select new
+                                {
+                                    ID = a.ID,
+                                    UserID = a.UserInfo.PerSonName,
+                                    ScheduleTime = a.ScheduleTime,
+                                    TextReadBak = a.TextReadBak,
+                                    TextReadUser = a.UserInfo1.PerSonName,
+                                    TextReadTime = a.TextReadTime,
+                                    ExamineState = "未审核",
+                                    ExamineText = "",
+                                    ExamineUser = ""
+                                };
+                    var Rtmp2 = from a in exsh2
+                                select new
+                                {
+                                    ID = a.ID,
+                                    UserID = a.UserInfo.PerSonName,
+                                    ScheduleTime = a.ScheduleTime,
+                                    TextReadBak = a.TextReadBak,
+                                    TextReadUser = a.UserInfo1.PerSonName,
+                                    TextReadTime = a.TextReadTime,
+                                    ExamineState = "已审核",
+                                    ExamineText = a.ExamineText,
+                                    ExamineUser = a.ExamineUser
+                                };
+                    var Rtmp = Rtmp1.Union(Rtmp2);
+                    return Json(new { rows = Rtmp, total = Rtmp.Count() }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(null, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else{
+                var bumenid = Request["BumenID"] != null ? Convert.ToInt32(Request["BumenID"]) : 0;
+                if (bumenid > 0)
+                {
+                    List<Schedule> bmschlist = new List<Schedule>();
+                    foreach (var a in list)
+                    {
+                        var onep = UserInfoService.LoadEntities(x => x.ID == a.ID && x.BuMenID == bumenid).FirstOrDefault();
+                        if (onep != null)
+                        {
+                            foreach (var b in listsch2)
+                            {
+                                if (b.UserID == onep.ID)
+                                {
+                                    bmschlist.Add(b);
+                                }
+                            }
+                        }
+                    }
+                    List<Schedule> exsh1 = new List<Schedule>();
+                    List<Schedule> exsh2 = new List<Schedule>();
+                    if (listsch2.Count > 0)
+                    {
+                        foreach (var b in bmschlist)
+                        {
+                            var es = ExamineScheduleService.LoadEntities(x => x.ScheduleID == b.ID).DefaultIfEmpty().ToList();
+                            if (es == null || es[0] == null)
+                            {
+                                exsh1.Add(b);
+                            }
+                            else
+                            {
+                                foreach (var e in es)
+                                {
+                                    if (e != null)
+                                    {
+                                        b.ExamineText = e.ExamineText;
+                                        b.ExamineUser = e.UserInfo.PerSonName;
+                                        exsh2.Add(b);
+                                    }
+
+                                }
+                            }
+                        }
+                        var Rtmp1 = from a in exsh1
+                                    select new
+                                    {
+                                        ID = a.ID,
+                                        UserID = a.UserInfo.PerSonName,
+                                        ScheduleTime = a.ScheduleTime,
+                                        TextReadBak = a.TextReadBak,
+                                        TextReadUser = a.UserInfo1.PerSonName,
+                                        TextReadTime = a.TextReadTime,
+                                        ExamineState = "未审核",
+                                        ExamineText = "",
+                                        ExamineUser = ""
+                                    };
+                        var Rtmp2 = from a in exsh2
+                                    select new
+                                    {
+                                        ID = a.ID,
+                                        UserID = a.UserInfo.PerSonName,
+                                        ScheduleTime = a.ScheduleTime,
+                                        TextReadBak = a.TextReadBak,
+                                        TextReadUser = a.UserInfo1.PerSonName,
+                                        TextReadTime = a.TextReadTime,
+                                        ExamineState = "已审核",
+                                        ExamineText = a.ExamineText,
+                                        ExamineUser = a.ExamineUser
+                                    };
+                        var Rtmp = Rtmp1.Union(Rtmp2);
+                        return Json(new { rows = Rtmp, total = Rtmp.Count() }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(null, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    List<Schedule> exsh1 = new List<Schedule>();
+                    List<Schedule> exsh2 = new List<Schedule>();
+                    if (listsch2.Count > 0)
+                    {
+                        foreach (var b in listsch2)
+                        {
+                            var es = ExamineScheduleService.LoadEntities(x => x.ScheduleID == b.ID).DefaultIfEmpty().ToList();
+                            if (es == null || es[0] == null)
+                            {
+                                exsh1.Add(b);
+                            }
+                            else
+                            {
+                                foreach (var e in es)
+                                {
+                                    if (e != null)
+                                    {
+                                        b.ExamineText = e.ExamineText;
+                                        b.ExamineUser = e.UserInfo.PerSonName;
+                                        exsh2.Add(b);
+                                    }
+
+                                }
+                            }
+                        }
+                        var Rtmp1 = from a in exsh1
+                                    select new
+                                    {
+                                        ID = a.ID,
+                                        UserID = a.UserInfo.PerSonName,
+                                        ScheduleTime = a.ScheduleTime,
+                                        TextReadBak = a.TextReadBak,
+                                        TextReadUser = a.UserInfo1.PerSonName,
+                                        TextReadTime = a.TextReadTime,
+                                        ExamineState = "未审核",
+                                        ExamineText = "",
+                                        ExamineUser = ""
+                                    };
+                        var Rtmp2 = from a in exsh2
+                                    select new
+                                    {
+                                        ID = a.ID,
+                                        UserID = a.UserInfo.PerSonName,
+                                        ScheduleTime = a.ScheduleTime,
+                                        TextReadBak = a.TextReadBak,
+                                        TextReadUser = a.UserInfo1.PerSonName,
+                                        TextReadTime = a.TextReadTime,
+                                        ExamineState = "已审核",
+                                        ExamineText = a.ExamineText,
+                                        ExamineUser = a.ExamineUser
+                                    };
+                        var Rtmp = Rtmp1.Union(Rtmp2);
+                        return Json(new { rows = Rtmp, total = Rtmp.Count() }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(null, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+        }
+
+        //获取审核查阅意见
+        public ActionResult ExamineSchedule()
+        {
+            long sid = Convert.ToInt64(Request["id"]);
+            var temp = ExamineScheduleService.LoadEntities(x => x.ScheduleID == sid).DefaultIfEmpty().ToList();
+            string s = "";
+            foreach (var a in temp)
+            {
+                if (a != null)
+                {
+                    if (a.ExamineText == null || a.ExamineText == "")
+                    {
+                        s = s + a.UserInfo.PerSonName + ",无审核意见,";
+                    }else
+                    {
+                        s = s + a.UserInfo.PerSonName + "," + a.ExamineText + ",";
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            return Json(s, JsonRequestBehavior.AllowGet);
+        }
+
+        //添加审核意见
+        public ActionResult AddExamineSchedule(ExamineSchedule es)
+        {
+            es.ExamineUser = LoginUser.ID;
+            es.ExamineTime = DateTime.Now;
+            es.ExamineState = 1;
+            ExamineScheduleService.AddEntity(es);
+            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+        }
+
+        //获取日程详细信息
+        public ActionResult GetScheduleInfo()
+        {
+            long id = Convert.ToInt64(Request["id"]);
+            var temp = ScheduleService.LoadEntities(x => x.ID == id).FirstOrDefault();
+            if (temp != null)
+            {
+                return Json(new { UserID =temp.UserInfo.PerSonName,ScheduleTime = temp.ScheduleTime,ScheduleAddTime = temp.ScheduleAddTime,ScheduleTypeID = temp.ScheduleType.ItemText,ScheduleText = temp.ScheduleText }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(null,JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        //判断是否有权审核
+        public ActionResult GetCanOrCant()
+        {
+            List<Uidorname> list = GetAllDownUser();
+            string readname = Request["id"];
+            string str = Request["state"]; 
+            string name = Request["ExamineUser"];
+            if (readname == LoginUser.PerSonName)
+            {
+                return Json(new { ret = "no", msg = "本人无权审核自己的意见！" }, JsonRequestBehavior.AllowGet);
+            }
+            if(str == "已审核")
+            {
+                if (name != LoginUser.PerSonName)
+                {
+                    foreach (var a in list)
+                    {
+                        if (a.name == name)
+                        {
+                            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    return Json(new { ret = "no", msg = "你无权对此条日程再审核！" }, JsonRequestBehavior.AllowGet);
+                }else
+                {
+                    return Json(new { ret = "no", msg = "你不能对自己已审核的日程再审核！" }, JsonRequestBehavior.AllowGet);
+                }
+            }else 
+            {
+                return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        //获取全部日程相关计数信息
+        public ActionResult GetNumber()
+        {
+            List<Uidorname> list = GetAllDownUser();
+            List<Schedule> schsumlist = new List<Schedule>();
+            foreach (var a in list)
+            {
+                var temp = ScheduleService.LoadEntities(x => x.UserID == a.ID).DefaultIfEmpty().ToList();
+                if (temp != null && temp[0] != null)
+                {
+                    schsumlist.AddRange(temp);
+                }
+            }
+            List<Schedule> nochecklist = new List<Schedule>();
+            List<Schedule> checkedlist = new List<Schedule>();
+            int num = 0;
+            foreach (var b in schsumlist)
+            {
+                if (b != null) {
+                    if (b.TextReadBak == "未查阅")
+                    {
+                        nochecklist.Add(b);
+                    } else
+                    {
+                        checkedlist.Add(b);
+                        foreach (var a in list)
+                        {
+                            if (b.TextReadUser == a.ID) {
+                                var rtmp = ExamineScheduleService.LoadEntities(x => x.ScheduleID == b.ID).DefaultIfEmpty().ToList();
+                                if (rtmp == null || rtmp[0] == null)
+                                {
+                                    num += 1;
+                                }
+                            }
+                        }
+                    }
+                }else
+                {
+                    continue;
+                }
+            }
+            
+            var scheduleSum = schsumlist.Count;//日程总数
+            var nocheckNum = nochecklist.Count;//未查阅数量
+            var checkedNum = checkedlist.Count;//已查阅数量
+            var examinedNum = num;//未审核数量
+            return Json(new { scum = scheduleSum,nnum = nocheckNum,cnum = checkedNum,exnum = examinedNum},JsonRequestBehavior.AllowGet);
+        }
+
+        //获取全部日程相关计数信息
+        public ActionResult GetBMNumber()
+        {
+            int id = Convert.ToInt32(Request["id"]);
+            List<Uidorname> list = GetAllDownUser();
+            List<int> listint = new List<int>();
+            List<Schedule> schsumlist = new List<Schedule>();
+            List<Schedule> nochecklist = new List<Schedule>();
+            List<Schedule> checkedlist = new List<Schedule>();
+            foreach (var a in list)
+            {
+                var ub = ScheduleService.LoadEntities(x => x.UserID == a.ID && x.UserInfo.BuMenID == id).DefaultIfEmpty().ToList();
+                if (ub != null || ub[0] != null)
+                {
+                    schsumlist.AddRange(ub);
+                }
+            }
+            int num = 0;
+            foreach (var b in schsumlist)
+            {
+                if (b != null)
+                {
+                    if (b.TextReadBak == "未查阅")
+                    {
+                        nochecklist.Add(b);
+                    }
+                    else
+                    {
+                        checkedlist.Add(b);
+                        foreach (var a in list)
+                        {
+                            if (b.TextReadUser == a.ID)
+                            {
+                                var rtmp = ExamineScheduleService.LoadEntities(x => x.ScheduleID == b.ID).DefaultIfEmpty().ToList();
+                                if (rtmp == null || rtmp[0] == null)
+                                {
+                                    num += 1;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            var scheduleSum = schsumlist.Count;//部门日程总数
+            var nocheckNum = nochecklist.Count;//部门未查阅数量
+            var checkedNum = checkedlist.Count;//部门已查阅数量
+            var examinedNum = num;//部门未审核数量
+            return Json(new { scum = scheduleSum, nnum = nocheckNum, cnum = checkedNum, exnum = examinedNum }, JsonRequestBehavior.AllowGet);
+        }
+     }
     //下拉菜单下级用户类
     public class Uidorname {
         public int ID { get; set; }

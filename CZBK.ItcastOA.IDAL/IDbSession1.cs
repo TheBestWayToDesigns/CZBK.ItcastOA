@@ -20,6 +20,8 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IDepartmentDal DepartmentDal{get;set;}
 	
+		IExamineScheduleDal ExamineScheduleDal{get;set;}
+	
 		IFileItemDal FileItemDal{get;set;}
 	
 		IFileTypeDal FileTypeDal{get;set;}

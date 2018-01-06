@@ -31,6 +31,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class ExamineScheduleDal :BaseDal<ExamineSchedule>,IExamineScheduleDal
+    {
+
+    }
+		
 	public partial class FileItemDal :BaseDal<FileItem>,IFileItemDal
     {
 

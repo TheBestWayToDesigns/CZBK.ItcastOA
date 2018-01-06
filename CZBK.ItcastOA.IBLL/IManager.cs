@@ -30,6 +30,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IExamineScheduleService : IBaseService<ExamineSchedule>
+    {
+       
+    }   
+	
 	public partial interface IFileItemService : IBaseService<FileItem>
     {
        

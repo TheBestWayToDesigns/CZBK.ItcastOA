@@ -14,6 +14,11 @@ namespace CZBK.ItcastOA.Model
     
     public partial class Schedule
     {
+        public Schedule()
+        {
+            this.ExamineSchedules = new HashSet<ExamineSchedule>();
+        }
+    
         public long ID { get; set; }
         public int UserID { get; set; }
         public System.DateTime ScheduleTime { get; set; }
@@ -25,10 +30,14 @@ namespace CZBK.ItcastOA.Model
         public Nullable<int> TextReadUser { get; set; }
         public Nullable<System.DateTime> TextReadTime { get; set; }
         public Nullable<int> FileItemID { get; set; }
-    
+        public string ExamineText { get; set; }
+        public string ExamineUser { get; set; }
+
+
         public virtual FileItem FileItem { get; set; }
         public virtual ScheduleType ScheduleType { get; set; }
         public virtual UserInfo UserInfo { get; set; }
         public virtual UserInfo UserInfo1 { get; set; }
+        public virtual ICollection<ExamineSchedule> ExamineSchedules { get; set; }
     }
 }

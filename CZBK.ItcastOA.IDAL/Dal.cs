@@ -30,6 +30,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IExamineScheduleDal :IBaseDal<ExamineSchedule>
+    {
+      
+    }
+	
 	public partial interface IFileItemDal :IBaseDal<FileItem>
     {
       
