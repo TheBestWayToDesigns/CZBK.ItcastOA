@@ -241,14 +241,6 @@
                     } else {
                         $("#DBMUserInput2").combobox("reload", "/EverDayWork/GetDownBuMenalluser?DBMid=" + DBMidval);
                     }
-                    //$.post("/EverDayWork/GetBMNumber", {"id":DBMidval}, function (NumberInfo) {
-                    //    $("#BMScheduleSum").html(NumberInfo.scum);
-                    //    $("#BMNoCheckedNum").html(NumberInfo.nnum);
-                    //    $("#BMCheckedNum").html(NumberInfo.cnum);
-                    //    $("#BMNoExaminedNum").html(NumberInfo.exnum);
-                    //})
-                    //$("#BMInfoShowDiv").css("display", "block");
-                    //$("#divBtn").load(location.href + "#divBtn");
                     pars = { BumenID: DBMidval};
                     loadExamineSchedule(pars);
                 }
