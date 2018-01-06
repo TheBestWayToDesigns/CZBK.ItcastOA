@@ -400,7 +400,6 @@
                 ]],
                 toolbar: "#AddScheduleBtnDIV",
                 onLoadSuccess: function () {
-                    alert(1);
                 }
             });
         }
@@ -935,13 +934,13 @@
                 var BMID = $("#DBMInput2").combobox("getValue");
                 var BMUID = $("#DBMUserInput2").combobox("getValue");
                 $.post("/EverDayWork/FindAll2", { "startTime": startTime, "endTime": endTime, "BMID": BMID, "BMUID": BMUID }, function (serverData) {
-                    alert(serverData)
+
                     $("#tt").datagrid("loadData", { rows: serverData.rows, total: serverData.total });
                 })
             }else if(val == "User"){
                 var DUID = $("#DUInput2").combobox("getValue");
                 $.post("/EverDayWork/FindAll3", { "startTime": startTime, "endTime": endTime, "DUID": DUID }, function (serverData) {
-                    alert(serverData)
+
                     $("#tt").datagrid("loadData", { rows: serverData.rows, total: serverData.total });
                 })
             }
