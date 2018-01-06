@@ -77,6 +77,7 @@
                 $("#ShowAddUsers").show();
                 $("#STUstrID").val("");
                 $("#ShowAddUsers").val("");
+                $("#ModelFInput").combobox("reload");
                 $.post("/ShareFileOrNotice/GetModels", {}, function (data) {
                     if(data.ret == "no"){
                         $.messager.alert("提示", "没有可以使用的模板！");
@@ -209,11 +210,12 @@
                             return "<a href='javascript:downloadFile()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>下载</a>";
                         }
                     },
+                    { field: 'alluserinfo', title: '共享用户', align: 'center' },
                     { field: 'UploadFileTime', title: '文件上传时间', align: 'center',formatter: function (value, row, col) {
                         var sd = value == null ? '' : ChangeDateFormat(value);
                         return sd;
                     }},
-                    { field: 'ShareUser', title: '上传用户', align: 'center' },
+                    { field: 'ShareUser', title: '上传用户', align: 'center'},
                     {
                         field: 'Del', title: '编辑栏', align: 'center',
                         formatter: function (value, row, index) {
@@ -374,6 +376,7 @@
                                 return;
                             }
                         } else if ($('input:radio[name="Model"]:checked').val() == "no") {
+
                             if ($("#BMSTUInput").combobox("getValue").trim().length <= 0) {
                                 $.messager.alert("提示", "请选择分享部门！");
                                 return;
@@ -385,43 +388,38 @@
                                 return;
                             }
                         } else {
-                            $.messager.alert("提示", "请选择是否使用模板！");
-                            return;
+                         
                         }
                         $("#addsharefilefrom").submit();//提交表单
                     }
                 }, {
                     text: '取消',
                     handler: function () {
-                        $("#FileTypeInput").combobox("setValue", "");
-                        $("#ModelFInput").combobox("setValue", "");
-                        $("#BMSTUInput").combobox("setValue", "");
-                        $("#STUInput").combobox("setValue", "");
-                        $("#BeiZhuId").val("");
-                        $("#uploadShareFileID").val("");
-                        $("#fileUrlID").val("");
-                        $("#STUstrID").val("");
-                        $("#ShowAddUsers").val("");
-                        $("#BeiZhuId").val("");
-                        $("#AddShareFileDIV input[type='radio']").removeAttr('checked');
+                       remval()                       
                         $('#AddShareFileDIV').dialog('close');
                     }
                 }], onClose: function () {
-                    $("#FileTypeInput").combobox("setValue", "");
-                    $("#ModelFInput").combobox("setValue", "");
-                    $("#BMSTUInput").combobox("setValue", "");
-                    $("#STUInput").combobox("setValue", "");
-                    $("#BeiZhuId").val("");
-                    $("#uploadShareFileID").val("");
-                    $("#fileUrlID").val("");
-                    $("#STUstrID").val("");
-                    $("#showAddUsers").val("");
-                    $("#BeiZhuId").val("");
-                    $("#AddShareFileDIV input[type='radio']").removeAttr('checked');
+                    remval()
                 }
             });
         }
-
+        function remval() {
+            try {
+                $("#FileTypeInput").combobox("setValue", "");
+                $("#ModelFInput").combobox("setValue", "");
+                $("#BMSTUInput").combobox("setValue", "");
+                $("#STUInput").combobox("setValue", "");
+                $("#BeiZhuId").val("");
+                $("#uploadShareFileID").val("");
+                $("#fileUrlID").val("");
+                $("#STUstrID").val("");
+                $("#ShowAddUsers").val("");
+                $("#BeiZhuId").val("");
+                $("#AddShareFileDIV input[type='radio']").removeAttr('checked');
+            }
+            catch (e) {
+            }
+        }
         //添加公告通知
         function AddANotice() {
             $("#AddNoticeDIV").css("display", "block");
@@ -513,7 +511,7 @@
                 $("#ShowAddUsers").val($("#ShowAddUsers").val() + SUName + "-");
                 str = str + SUId + ",";
                 $("#STUstrID").val(a + str);
-                $.messager.alert("提示", "添加人员成功！");
+               
             } else {
                 $.post("/ShareFileOrNotice/ReturnUserID", { "personName": SUId,"BuMenID":BMID}, function (data) {
                     if (data.ret == "ok") {
@@ -726,17 +724,19 @@
         //删除共享文件
         function del() {
             //弹窗提示
-            if (confirm('确定要执行删除操作吗?')) {
-                var row = $('#tt').datagrid('getSelected');
-                $.post("/ShareFileOrNotice/DelShareFile", { "id": row.ID }, function (data) {
-                    if (data.ret == "ok") {
-                        $('#tt').datagrid("reload");
-                    }
-                    else {
-                        $.messager.alert("提示", data.msg);
-                    }
-                })
-            }
+            $.messager.confirm('提示', '确定要执行删除操作吗?', function (r) {
+                if (r) {
+                    var row = $('#tt').datagrid('getSelected');
+                    $.post("/ShareFileOrNotice/DelShareFile", { "id": row.ID }, function (data) {
+                        if (data.ret == "ok") {
+                            $('#tt').datagrid("reload");
+                        }
+                        else {
+                            $.messager.alert("提示", data.msg);
+                        }
+                    })
+                }
+            });
             return;
         }
 
@@ -809,7 +809,11 @@
             <h1>分享给：</h1>
             <b><b><label>是否启用模板？</label></b></b>
             <b>&nbsp;</b>
-            <b class="t2"><b><input type="radio" name="Model" id="yes" value="yes" /><label>是</label></b><b><input type="radio" name="Model" id="no" value="no" /><label>否</label></b></b>
+            <b class="t2">
+                <b><input type="radio" name="Model" id="defu" value="defu" /><label>不分享</label></b>
+                <b><input type="radio" name="Model" id="yes" value="yes" /><label>是</label></b>
+                <b><input type="radio" name="Model" id="no" value="no" /><label>否</label></b>
+           </b>
             <div><b>&nbsp;</b></div>
             <div class="t3">
                 <b style="width:20px">模板</b>
