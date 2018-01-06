@@ -575,7 +575,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //获取所有该用户下已审核过的用户记录
         public ActionResult GetExamineSchedule()
         {
-            var DownUserID = Request["DownUser"] != "" && Request["DownUser"] != null ? Convert.ToInt64(Request["DownUser"]) : 0;
+            var DownUserID = Request["DownUser2"] != "" && Request["DownUser2"] != null ? Convert.ToInt64(Request["DownUser2"]) : 0;
             int PageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int PageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 10;
             List<Uidorname> list = GetAllDownUser();
@@ -675,6 +675,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                     TextReadBak = a.TextReadBak,
                                     TextReadUser = a.UserInfo1.PerSonName,
                                     TextReadTime = a.TextReadTime,
+                                    FileItemID = a.FileItemID,
                                     ExamineState = "未审核",
                                     ExamineText = "",
                                     ExamineUser = ""
@@ -688,6 +689,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                     TextReadBak = a.TextReadBak,
                                     TextReadUser = a.UserInfo1.PerSonName,
                                     TextReadTime = a.TextReadTime,
+                                    FileItemID = a.FileItemID,
                                     ExamineState = "已审核",
                                     ExamineText = a.ExamineText,
                                     ExamineUser = a.ExamineUser
@@ -701,7 +703,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 }
             }
             else {
-                var bumenid = Request["BumenID"] != "" && Request["BumenID"] != null ? Convert.ToInt32(Request["BumenID"]) : 0;
+                var bumenid = Request["BumenID2"] != "" && Request["BumenID2"] != null ? Convert.ToInt32(Request["BumenID2"]) : 0;
                 if (bumenid > 0)
                 {
                     List<ExamineForSchedule> listsch3 = new List<ExamineForSchedule>();
@@ -773,6 +775,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                         TextReadBak = a.TextReadBak,
                                         TextReadUser = a.UserInfo1.PerSonName,
                                         TextReadTime = a.TextReadTime,
+                                        FileItemID = a.FileItemID,
                                         ExamineState = "未审核",
                                         ExamineText = "",
                                         ExamineUser = ""
@@ -786,6 +789,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                         TextReadBak = a.TextReadBak,
                                         TextReadUser = a.UserInfo1.PerSonName,
                                         TextReadTime = a.TextReadTime,
+                                        FileItemID = a.FileItemID,
                                         ExamineState = "已审核",
                                         ExamineText = a.ExamineText,
                                         ExamineUser = a.ExamineUser
@@ -853,6 +857,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                         TextReadBak = a.TextReadBak,
                                         TextReadUser = a.UserInfo1.PerSonName,
                                         TextReadTime = a.TextReadTime,
+                                        FileItemID = a.FileItemID,
                                         ExamineState = "未审核",
                                         ExamineText = "",
                                         ExamineUser = ""
@@ -866,6 +871,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                         TextReadBak = a.TextReadBak,
                                         TextReadUser = a.UserInfo1.PerSonName,
                                         TextReadTime = a.TextReadTime,
+                                        FileItemID = a.FileItemID,
                                         ExamineState = "已审核",
                                         ExamineText = a.ExamineText,
                                         ExamineUser = a.ExamineUser
