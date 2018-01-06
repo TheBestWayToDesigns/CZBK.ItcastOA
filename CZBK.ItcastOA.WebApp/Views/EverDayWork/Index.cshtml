@@ -59,6 +59,7 @@
             $("#AddFileTypeDIV").css("display", "none");
             $("#InfoShowDiv").css("display", "none"); 
             $("#BMInfoShowDiv").css("display", "none");
+            $("#SearchboxDiv").css("display", "none");
             
             loadSchedule();
 
@@ -77,6 +78,7 @@
                     $("#AddFileTypeDIV").css("display", "none");
                     $("#InfoShowDiv").css("display", "none");
                     $("#BMInfoShowDiv").css("display", "none");
+                    $("#SearchboxDiv").css("display", "none");
                     loadData();
                 }
                 else if (ClickA == "MenuSchedule")
@@ -92,6 +94,7 @@
                     $("#AddFileTypeDIV").css("display", "none");
                     $("#InfoShowDiv").css("display", "none");
                     $("#BMInfoShowDiv").css("display", "none");
+                    $("#SearchboxDiv").css("display", "none");
                     loadSchedule();
                 }
                 else if (ClickA == "MenuDownUser") {
@@ -106,6 +109,7 @@
                     $("#AddFileTypeDIV").css("display", "none");
                     $("#InfoShowDiv").css("display", "none");
                     $("#BMInfoShowDiv").css("display", "none");
+                    $("#SearchboxDiv").css("display", "none");
                     loadDownUser();
                 } else if (ClickA == "MenuFileType") {
                     $("#AddScheduleTypeBtnDIV").css("display", "none");
@@ -119,6 +123,7 @@
                     $("#AddFileTypeDIV").css("display", "none");
                     $("#InfoShowDiv").css("display", "none");
                     $("#BMInfoShowDiv").css("display", "none");
+                    $("#SearchboxDiv").css("display", "none");
                     loadFileType();
                 } else if (ClickA == "MenuExamineSchedule") {
                     $("#AddScheduleTypeBtnDIV").css("display", "none");
@@ -390,11 +395,7 @@
                             return sd;
                         }
                     },
-                    {
-                        field: 'ScheduleText', title: '日程内容', align: 'center', width: 200, formatter: function (val, row, index) {
-                            return "<a title='"+val+"'> " + val + "</a>";
-                        }
-                    },
+                    { field: 'ScheduleText', title: '日程内容', align: 'center' },
                     { field: 'ScheduleTypeID', title: '日程类型', align: 'center' },
                     { field: 'TextReadBak', title: '日程审核状态', align: 'center' },
                     { field: 'TextReadUser', title: '日程审核人', align: 'center' },
@@ -407,9 +408,7 @@
                     { field: 'FileItemID', title: '文件编号', align: 'center' },
                     {
                         field: 'EditFile', title: '文件编辑栏', align: 'center', formatter: function (value, row, index) {
-                            var str= "<a href='javascript:checkFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看文件</a>";
-                            var str1="<a href='javascript:addUploadFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>补充上传文件</a>";
-                            return row.FileItemID == null ? str1 : str + str1;
+                            return "<a href='javascript:checkFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看文件</a><a href='javascript:addUploadFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>补充上传文件</a>";
                         }
                     },
                     {
@@ -455,6 +454,28 @@
                             return sd;
                         }
                     },
+                    { field: 'ScheduleText', title: '日程内容', align: 'center'},
+                    { field: 'ScheduleTypeID', title: '日程类型', align: 'center' },
+                    { field: 'FileItemID', title: '文件编号', align: 'center' },
+                    {
+                        field: 'Edit', title: '编辑栏', align: 'center', formatter: function (value, row, index) {
+                            return "<a href='javascript:checkFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看文件</a><a href='javascript:reviewSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查阅意见</a>";
+                        }
+                    },
+                    {
+                        field: 'TextReadBak', title: '日程审核状态', align: 'center', styler: function (value, row, col) {
+                            if (value == "未查阅") {
+                                return 'background-color:#c0c0c0;';
+                            }
+                        }
+                    },
+                    { field: 'TextReadUser', title: '日程审核人', align: 'center' },
+                    {
+                        field: 'TextReadTime', title: '日程审核时间', align: 'center', formatter: function (value, row, col) {
+                            var sd = value == null ? '' : ChangeDateFormat(value);
+                            return sd;
+                        }
+                    },
                     {
                         field: 'ScheduleAddTime', title: '日程创建时间', align: 'center', formatter: function (value, row, col) {
                             var sd = value == null ? '' : ChangeDateFormat(value);
@@ -465,25 +486,6 @@
                         field: 'ScheduleUpdateTime', title: '日程最后修改时间', align: 'center', formatter: function (value, row, col) {
                             var sd = value == null ? '' : ChangeDateFormat(value);
                             return sd;
-                        }
-                    },
-                    { field: 'ScheduleText', title: '日程内容', align: 'center'},
-                    { field: 'ScheduleTypeID', title: '日程类型', align: 'center' },
-                    { field: 'TextReadBak', title: '日程审核状态', align: 'center' },
-                    { field: 'TextReadUser', title: '日程审核人', align: 'center' },
-                    {
-                        field: 'TextReadTime', title: '日程审核时间', align: 'center', formatter: function (value, row, col) {
-                            var sd = value == null ? '' : ChangeDateFormat(value);
-                            return sd;
-                        }
-                    },
-                    { field: 'FileItemID', title: '文件编号', align: 'center' },
-                    {
-                        field: 'Edit', title: '编辑栏', align: 'center', formatter: function (value, row, index) {
-
-                            var str = "<a href='javascript:checkFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看文件</a>";
-                            var str1 = "<a href='javascript:reviewSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查阅意见</a>";
-                            return row.FileItemID == null ? str1 : str + str1;
                         }
                     }
                 ]],
@@ -559,7 +561,7 @@
                         }
                     }
                 ]],
-                toolbar: "#ChooseSerchTypeDIV2",
+                toolbar: "#ChooseSerchTypeDIV2,#SearchboxDiv",
                 onLoadSuccess: function () {
 
                 }
@@ -913,6 +915,43 @@
             })
         }
 
+        //时间查询功能
+        function DoSerch() {
+            var startTime = $("#start").datetimebox("getValue");
+            var endTime = $("#end").datetimebox("getValue");
+            var re = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
+            if(re.test(startTime)){
+                if (!re.test(endTime)) {
+                    $.messager.alert("提示", "输入的截止日期格式不正确！");
+                    return;
+                }
+            } else {
+                $.messager.alert("提示", "输入的起始日期格式不正确！");
+                return;
+            }
+            var val = $('input:radio[name="SerchType2"]:checked').val();
+            if (val == null) {
+                $.post("/EverDayWork/FindAll", { "startTime": startTime, "endTime": endTime }, function (serverData) {
+                    alert(serverData)
+                    $("#tt").datagrid("loadData", { rows: serverData.rows, total: serverData.total });
+                })
+            }
+            else if(val == "BM"){
+                var BMID = $("#DBMInput2").combobox("getValue");
+                var BMUID = $("#DBMUserInput2").combobox("getValue");
+                $.post("/EverDayWork/FindAll2", { "startTime": startTime, "endTime": endTime, "BMID": BMID, "BMUID": BMUID }, function (serverData) {
+                    alert(serverData)
+                    $("#tt").datagrid("loadData", { rows: serverData.rows, total: serverData.total });
+                })
+            }else if(val == "User"){
+                var DUID = $("#DUInput2").combobox("getValue");
+                $.post("/EverDayWork/FindAll3", { "startTime": startTime, "endTime": endTime, "DUID": DUID }, function (serverData) {
+                    alert(serverData)
+                    $("#tt").datagrid("loadData", { rows: serverData.rows, total: serverData.total });
+                })
+            }
+        }
+
         //添加审核意见点击确定
         function OkToAddExamineSchedule() {
             if ($("#ExamineText").val().trim().length <= 0) {
@@ -1047,6 +1086,10 @@
         //修改日程
         function updateSchedule() {
             var row = $('#tt').datagrid('getSelected');
+            if(row.TextReadBak != "未查阅"){
+                $.messager.alert("提示", "已查阅完日程不能修改！");
+                return;
+            }
             $("#UpdateID").val(row.ID);
             document.getElementById("UpdateID").setAttribute('readOnly', true);
             $.post("/EverDayWork/getUpdateUserID", { "id": row.ID }, function (data) {
@@ -1446,11 +1489,11 @@
         }
     </div>
 
-    <div id="ChooseSerchTypeDIV2" style="width:auto;height:30px;float:left">
+    <div id="ChooseSerchTypeDIV2" style="width:auto;height:30px;float:left;display:none">
         <div style="padding:5px;height:25px;float:left;line-height:25px">
             <b>请选择查找类型：</b>
-            <label><input type="radio" name="SerchType" id="ByDBMid2" value="BM"/>根据下级部门查询</label>
-            <label><input type="radio" name="SerchType" id="ByDUid2" value="User"/>根据下级员工</label>
+            <label><input type="radio" name="SerchType2" id="ByDBMid2" value="BM"/>根据下级部门查询</label>
+            <label><input type="radio" name="SerchType2" id="ByDUid2" value="User"/>根据下级员工</label>
         </div>
         <!---------------下级部门下拉框-------------------->
         <div id="DownBuMenCombox2" style="padding:4px;height:25px;float:left;line-height:25px">
@@ -1481,10 +1524,13 @@
         </div>
     </div>
 
-
-
-
-
+    <!----------------搜索框--------------------->
+    <div id="SearchboxDiv" style="width:auto;height:30px;display:none;line-height:30px;">
+        <b>&nbsp;&nbsp;&nbsp;&nbsp;</b>
+        起始时间：<input type="text" id="start" name="start" class="easyui-datetimebox" style="height:18px;width:100px;line-height:18px" />
+        结束时间：<input type="text" id="end" name="end" class="easyui-datetimebox" style="height:18px;width:100px;line-height:18px" />
+        <input type="button" onclick="DoSerch()" value="查询"/>
+    </div>
 
 </body>
 </html>
