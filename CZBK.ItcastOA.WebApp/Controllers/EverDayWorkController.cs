@@ -34,12 +34,13 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //获取部门下级用户名称
         public ActionResult GetDownBuMenalluser()
         {
+            List<Uidorname> uid = new List<Uidorname>();
             int a = Request["DBMid"] != "" && Request["DBMid"] != null ? Convert.ToInt32(Request["DBMid"]) : 0;
             if (a == 0)
             {
-                return Json(null, JsonRequestBehavior.AllowGet);
+                return Json(uid, JsonRequestBehavior.AllowGet);
             }
-            List<Uidorname> uid = new List<Uidorname>();
+            
             var temp = UserInfoService.LoadEntities(x => x.BuMenID == a).DefaultIfEmpty();
             foreach (var s in temp)
             {
@@ -1029,7 +1030,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             foreach (var a in list)
             {
                 var ub = ScheduleService.LoadEntities(x => x.UserID == a.ID && x.UserInfo.BuMenID == id).DefaultIfEmpty().ToList();
-                if (ub != null || ub[0] != null)
+                if (ub != null && ub[0] != null)
                 {
                     schsumlist.AddRange(ub);
                 }

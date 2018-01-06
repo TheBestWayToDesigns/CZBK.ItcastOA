@@ -174,18 +174,11 @@
             $("#ByDBMid2").click(function () {
                 $("#DownBuMenCombox2").css("display", "block");
                 $("#DownUserCombox2").css("display", "none");
-                $("#DBMUserInput2").combobox("setValue", "");
-                $("#DBMInput2").combobox("setValue", "");
-                $("#DUInput2").combobox("setValue", "");
-
                 $("#tt").datagrid({ toolbar: "#ChooseSerchTypeDIV2,#DownBuMenCombox2" });
             })
             $("#ByDUid2").click(function () {
                 $("#DownUserCombox2").css("display", "block");
-                $("#DownBuMenCombox2").css("display", "none");
-                $("#DBMUserInput2").combobox("setValue", "");
-                $("#DBMInput2").combobox("setValue", "");
-                $("#DUInput2").combobox("setValue", "");
+                $("#DownBuMenCombox2").css("display", "none");             
 
                 $("#tt").datagrid({ toolbar: "#ChooseSerchTypeDIV2,#DownUserCombox2" });
             })
@@ -203,17 +196,9 @@
                 }
             })
             $("#DBMUserInput2").combobox({
-                onChange: function () {
-                    var DBMidval = $("#DBMInput2").combobox("getValue");
+                onChange: function () {                 
                     var idval = $("#DBMUserInput2").combobox("getValue");
-                    //$.post("/EverDayWork/GetNumber", {}, function (NumberInfo) {
-                    //    $("#ScheduleSum").html(NumberInfo.scum);
-                    //    $("#NoCheckedNum").html(NumberInfo.nnum);
-                    //    $("#CheckedNum").html(NumberInfo.cnum);
-                    //    $("#NoExaminedNum").html(NumberInfo.exnum);
-                    //})
-                    //$("#InfoShowDiv").css("display", "block");
-                    //$("#divBtn").load(location.href + "#divBtn");
+                  
                     var pars = { DownUser: idval };
                     loadExamineSchedule(pars);
                 }
@@ -234,23 +219,18 @@
             })
             $("#DBMInput2").combobox({
                 onChange: function () {
+                    
                     var DBMidval = $("#DBMInput2").combobox("getValue");
-                    $("#DBMUserInput2").combobox("setValue", "");
-                    if (DBMidval == -1) {
-                        cleanDatagrid();
-                    } else {
-                        $("#DBMUserInput2").combobox("reload", "/EverDayWork/GetDownBuMenalluser?DBMid=" + DBMidval);
+                    if (DBMidval == undefined || DBMidval.length<=0) {
+                        DBMidval = 0;
                     }
-                    //$.post("/EverDayWork/GetBMNumber", {"id":DBMidval}, function (NumberInfo) {
-                    //    $("#BMScheduleSum").html(NumberInfo.scum);
-                    //    $("#BMNoCheckedNum").html(NumberInfo.nnum);
-                    //    $("#BMCheckedNum").html(NumberInfo.cnum);
-                    //    $("#BMNoExaminedNum").html(NumberInfo.exnum);
-                    //})
-                    //$("#BMInfoShowDiv").css("display", "block");
-                    //$("#divBtn").load(location.href + "#divBtn");
-                    pars = { BumenID: DBMidval};
-                    loadExamineSchedule(pars);
+                    $("#DBMUserInput2").combobox("reload", "/EverDayWork/GetDownBuMenalluser?DBMid=" + DBMidval);
+                    $("#DBMUserInput2").combobox("setValue","");
+                    pars = { BumenID: DBMidval };
+                    reload(pars);
+                    $.post("/EverDayWork/GetBMNumber", { "id": DBMidval }, function (data) {
+                        setShowNumber(data);
+                    })
                 }
             })
             $("#DUInput").combobox({
@@ -282,6 +262,7 @@
 
         //加载日程类型页面
         function loadData(pars) {
+            $("#tt").addClass("easyui-datagrid");
             $('#tt').datagrid({
                 url: '/EverDayWork/GetScheduleType',
                 title: '日程类型',
@@ -355,7 +336,7 @@
         }
 
         //加载日程页面
-        function loadSchedule(pars) {
+        function loadSchedule(pars) {         
             $('#tt').datagrid({
                 url: '/EverDayWork/GetSchedule',
                 title: '个人日程',
@@ -419,7 +400,7 @@
                 ]],
                 toolbar: "#AddScheduleBtnDIV",
                 onLoadSuccess: function () {
-                    
+                    alert(1);
                 }
             });
         }
@@ -498,14 +479,12 @@
 
         //加载已审核日程
         function loadExamineSchedule(pars) {
+            LoadWdinfo();
+            reload(pars);
+        }
+        function reload(pars)
+        {
             cleanDatagrid();
-            $.post("/EverDayWork/GetNumber", {}, function (NumberInfo) {
-                $("#ScheduleSum").html(NumberInfo.scum);
-                $("#NoCheckedNum").html(NumberInfo.nnum);
-                $("#CheckedNum").html(NumberInfo.cnum);
-                $("#NoExaminedNum").html(NumberInfo.exnum);
-            })
-            $("#InfoShowDiv").css("display", "block");
             $('#tt').datagrid({
                 url: '/EverDayWork/GetExamineSchedule',
                 title: '已审核日程',
@@ -533,7 +512,11 @@
                             return sd;
                         }
                     },
-                    { field: 'TextReadBak', title: '下级领导查阅意见', align: 'center' },
+                    {
+                        field: 'TextReadBak', title: '下级领导查阅意见', align: 'center', formatter: function (val, row, ix) {
+                            return "<b>" + val + "</b>";
+                        }
+                    },
                     { field: 'TextReadUser', title: '下级查阅人', align: 'center' },
                     {
                         field: 'TextReadTime', title: '下级查阅时间', align: 'center', formatter: function (value, row, col) {
@@ -568,7 +551,19 @@
             });
         }
 
-
+        //获取日记条数
+        function LoadWdinfo() {
+            $.post("/EverDayWork/GetNumber", {}, function (NumberInfo) {
+                setShowNumber(NumberInfo);
+            })
+            $("#InfoShowDiv").css("display", "block");
+        }
+        function setShowNumber(data) {
+            $("#ScheduleSum").html(data.scum);
+            $("#NoCheckedNum").html(data.nnum);
+            $("#CheckedNum").html(data.cnum);
+            $("#NoExaminedNum").html(data.exnum);
+        }
         //查阅下级日程
         function reviewSchedule() {
             var row = $('#tt').datagrid('getSelected');
@@ -919,20 +914,20 @@
         function DoSerch() {
             var startTime = $("#start").datetimebox("getValue");
             var endTime = $("#end").datetimebox("getValue");
-            var re = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
-            if(re.test(startTime)){
-                if (!re.test(endTime)) {
-                    $.messager.alert("提示", "输入的截止日期格式不正确！");
-                    return;
-                }
-            } else {
-                $.messager.alert("提示", "输入的起始日期格式不正确！");
-                return;
-            }
+            //var re = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+            //if(re.test(startTime)){
+            //    if (!re.test(endTime)) {
+            //        $.messager.alert("提示", "输入的截止日期格式不正确！");
+            //        return;
+            //    }
+            //} else {
+            //    $.messager.alert("提示", "输入的起始日期格式不正确！");
+            //    return;
+            //}
             var val = $('input:radio[name="SerchType2"]:checked').val();
             if (val == null) {
                 $.post("/EverDayWork/FindAll", { "startTime": startTime, "endTime": endTime }, function (serverData) {
-                    alert(serverData)
+               
                     $("#tt").datagrid("loadData", { rows: serverData.rows, total: serverData.total });
                 })
             }
@@ -1235,7 +1230,7 @@
     <div data-options="region:'center',title:'数据报表'" id="dgdiv">
         
         <div id="TTdiv">
-            <table id="tt" class="easyui-datagrid" title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit" >
+            <table id="tt"  title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit" >
                 <!--插入表格数据-->
             </table>
         </div>
@@ -1527,8 +1522,8 @@
     <!----------------搜索框--------------------->
     <div id="SearchboxDiv" style="width:auto;height:30px;display:none;line-height:30px;">
         <b>&nbsp;&nbsp;&nbsp;&nbsp;</b>
-        起始时间：<input type="text" id="start" name="start" class="easyui-datetimebox" style="height:18px;width:100px;line-height:18px" />
-        结束时间：<input type="text" id="end" name="end" class="easyui-datetimebox" style="height:18px;width:100px;line-height:18px" />
+        起始时间：<input type="text" id="start" name="start" class="easyui-datebox" style="height:18px;width:100px;line-height:18px" />
+        结束时间：<input type="text" id="end" name="end" class="easyui-datebox" style="height:18px;width:100px;line-height:18px" />
         <input type="button" onclick="DoSerch()" value="查询"/>
     </div>
 
