@@ -1584,7 +1584,6 @@
         thead {
            font-size:18px;
            font-weight:bold;
-
         }
       
     </style>
@@ -1856,7 +1855,7 @@
             &nbsp;&nbsp; &nbsp;&nbsp;
           
             营销员:
-            <select class="easyui-combobox"  panelHeight="auto" id="Person" style="width:100px">
+            <select class="easyui-combobox"  panelHeight="auto" id="Person" >
                 @{foreach (UserInfo Item in ViewBag.user)
                     {
             <option value="@Item.ID">@Item.PerSonName</option>
@@ -1866,7 +1865,7 @@
 
             <span id="SpanYyZt">
                 原因:
-                <select class="easyui-combobox" id="YyZt" panelHeight="auto" style="width:100px">
+                <select class="easyui-combobox" id="YyZt" panelHeight="auto" >
                     <option value="-99">失败</option>
                     @{foreach (T_YSItems Item in ViewBag.items)
                         {
@@ -1916,7 +1915,7 @@
 
             &nbsp;&nbsp; &nbsp;&nbsp;
             供货地点:&nbsp;&nbsp;省份
-            <select class="easyui-combobox Province" id="CitySee"
+            <input class="easyui-combobox Province" id="CitySee"
                     name="Province"
                     url="/YXBJ/GetAddress?parentiD=0&MyColums=Province"
                     valueField="ID"

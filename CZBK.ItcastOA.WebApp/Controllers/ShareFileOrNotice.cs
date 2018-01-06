@@ -12,12 +12,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
 {
     public class ShareFileOrNoticeController : BaseController
     {
-        IBLL.IShareFileOrNoticeService ShareFileOrNoticeService;
-        IBLL.IShareTypeService ShareTypeService;
-        IBLL.IBumenInfoSetService BumenInfoSetService;
-        IBLL.IUserInfoService UserInfoService;
-        IBLL.IFileTypeService FileTypeService;
-        
+        IBLL.IShareFileOrNoticeService ShareFileOrNoticeService { get; set; }
+        IBLL.IShareTypeService ShareTypeService { get; set; }
+        IBLL.IBumenInfoSetService BumenInfoSetService { get; set; }
+        IBLL.IUserInfoService UserInfoService { get; set; }
+        IBLL.IFileTypeService FileTypeService { get; set; }
+
         // GET: /ShareFileOrNotice/
 
         public ActionResult Index()
@@ -29,25 +29,32 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             int userID = LoginUser.ID;
             var temp = ShareFileOrNoticeService.LoadEntities(x => x.ID > 0).DefaultIfEmpty().ToList();
+            int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
+            int TotalCount = 0;
             List<ShareFileOrNotice> sfon = new List<ShareFileOrNotice>();
             if (temp[0] != null)
             {
+                #region MyRegion
                 foreach (var a in temp)
                 {
-                    if (a.TypeID == 1) {
-                         if (a.ShareUser == userID)
-                         {
-                             sfon.Add(a);
-                             continue;
-                         }
-                         else
-                         {
-                             Array ay = (a.ShareToUser).Split(',');
-                             foreach (var b in ay)
-                             {
-                                if(b.Equals("")){
+                    if (a.TypeID == 1)
+                    {
+                        if (a.ShareUser == userID)
+                        {
+                            sfon.Add(a);
+                            continue;
+                        }
+                        else
+                        {
+                            Array ay = (a.ShareToUser).Split(',');
+                            foreach (var b in ay)
+                            {
+                                if (b.Equals(""))
+                                {
                                     continue;
-                                }else
+                                }
+                                else
                                 {
                                     int c = Convert.ToInt32(b);
                                     if (c == userID)
@@ -60,15 +67,47 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                         continue;
                                     }
                                 }
-                             }
-                         }
+                            }
+                        }
                     }
                     else
                     {
                         continue;
                     }
                 }
-                var Rtmp = from d in sfon
+                #endregion
+
+               var iemsfon = sfon.OrderByDescending<ShareFileOrNotice, DateTime?>(u => u.UploadFileTime).Skip<ShareFileOrNotice>((pageIndex - 1) * pageSize).Take<ShareFileOrNotice>(pageSize);
+                sfon = iemsfon.ToList();
+                List<Sfob> rtsfob = new List<Sfob>();
+                foreach (var Sf in sfon)
+                {
+                    Sfob s = new Sfob();
+                    s.ID = Sf.ID;
+                    s.ShareType =Sf.ShareType;
+                    s.FileType = Sf.FileType;
+                    s.BeiZhu = Sf.BeiZhu;
+                    s.FileURL = Sf.FileURL;
+                    s.UploadFileTime = Sf.UploadFileTime;
+                    s.UserInfo = Sf.UserInfo;
+                    s.ShareToUser = Sf.ShareToUser;
+                    
+                    string eyy = Sf.ShareToUser;
+                    var usp= eyy.Split(',');
+                    string lname=string.Empty;
+                    foreach (var u in usp) {
+                        if (u.Length <= 0)
+                        {
+                            continue;
+                        }
+                        int uid = Convert.ToInt32(u);
+                       lname=lname+ UserInfoService.LoadEntities(x => x.ID == uid).FirstOrDefault().PerSonName+",";
+                    }
+                    s.alluserinfo = lname;
+                    rtsfob.Add(s);
+                }
+
+                var Rtmp = from d in rtsfob
                            select new
                            {
                                ID = d.ID,
@@ -78,8 +117,13 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                FileURL = d.FileURL,
                                UploadFileTime = d.UploadFileTime,
                                ShareUser = d.UserInfo.PerSonName,
+                               Sunv=d.ShareToUser,
+                               alluserinfo=d.alluserinfo
+
                            };
-                return Json(Rtmp, JsonRequestBehavior.AllowGet);
+                
+
+                return Json(new { rows = Rtmp, total = TotalCount }, JsonRequestBehavior.AllowGet);
             }
             return Json(null, JsonRequestBehavior.AllowGet);
         }
@@ -320,6 +364,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //获取部门用户名字
         public ActionResult GetShareToUser()
         {
+            if (Request["BMID"].Length <= 0)
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
             var bmid = Convert.ToInt32(Request["BMID"]);
             var temp = UserInfoService.LoadEntities(x => x.BuMenID == bmid).DefaultIfEmpty().ToList();
             if (temp[0] != null)
