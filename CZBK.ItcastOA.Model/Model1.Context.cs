@@ -63,6 +63,7 @@ namespace CZBK.ItcastOA.Model
         public DbSet<FileType> FileTypes { get; set; }
         public DbSet<ShareFileOrNotice> ShareFileOrNotices { get; set; }
         public DbSet<ShareType> ShareTypes { get; set; }
+        public DbSet<ExamineSchedule> ExamineSchedules { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

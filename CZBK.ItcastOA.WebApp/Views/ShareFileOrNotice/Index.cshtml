@@ -74,7 +74,9 @@
             })
 
             $("#yes").click(function () {
-                $("#ShowAddUsers").hide();
+                $("#ShowAddUsers").show();
+                $("#STUstrID").val("");
+                $("#ShowAddUsers").val("");
                 $.post("/ShareFileOrNotice/GetModels", {}, function (data) {
                     if(data.ret == "no"){
                         $.messager.alert("提示", "没有可以使用的模板！");
@@ -94,6 +96,7 @@
             $("#no").click(function () {
                 $("#ShowAddUsers").show();
                 $("#ShowAddUsers").val("");
+                $("#STUstrID").val("");
                 $(".t1").css("display", "block");
                 $(".t3").css("display", "none");
             });
@@ -115,6 +118,8 @@
             });
 
             $("#ByAllBuMen").click(function () {
+                $("#ShowAddBMOrUser").val("");
+                $("#ShowAddBMOrUser").hide();
                 $("#BMDIV").css("display", "none");
                 $("#ADDBUMENDIV").css("display", "none");
                 $("#BMUSERDIV").css("display", "none");
@@ -124,9 +129,12 @@
                 $.post("/ShareFileOrNotice/GetAllUserID", {}, function (listID) {
                     $("#NoticestrID").val(listID);
                 });
+                $.messager.alert("提示","已添加完全部人员!");
             });
 
             $("#ByOneBuMen").click(function () {
+                $("#ShowAddBMOrUser").val("");
+                $("#ShowAddBMOrUser").show();
                 $("#BMDIV").css("display", "block");
                 $("#ADDBUMENDIV").css("display", "block");
                 $("#BMUSERDIV").css("display", "none");
@@ -136,6 +144,8 @@
             });
 
             $("#ByOneByOne").click(function () {
+                $("#ShowAddBMOrUser").val("");
+                $("#ShowAddBMOrUser").show();
                 $("#BMDIV").css("display", "block");
                 $("#ADDBUMENDIV").css("display", "none");
                 $("#BMUSERDIV").css("display", "block");
@@ -383,9 +393,32 @@
                 }, {
                     text: '取消',
                     handler: function () {
+                        $("#FileTypeInput").combobox("setValue", "");
+                        $("#ModelFInput").combobox("setValue", "");
+                        $("#BMSTUInput").combobox("setValue", "");
+                        $("#STUInput").combobox("setValue", "");
+                        $("#BeiZhuId").val("");
+                        $("#uploadShareFileID").val("");
+                        $("#fileUrlID").val("");
+                        $("#STUstrID").val("");
+                        $("#ShowAddUsers").val("");
+                        $("#BeiZhuId").val("");
+                        $("#AddShareFileDIV input[type='radio']").removeAttr('checked');
                         $('#AddShareFileDIV').dialog('close');
                     }
-                }]
+                }], onClose: function () {
+                    $("#FileTypeInput").combobox("setValue", "");
+                    $("#ModelFInput").combobox("setValue", "");
+                    $("#BMSTUInput").combobox("setValue", "");
+                    $("#STUInput").combobox("setValue", "");
+                    $("#BeiZhuId").val("");
+                    $("#uploadShareFileID").val("");
+                    $("#fileUrlID").val("");
+                    $("#STUstrID").val("");
+                    $("#showAddUsers").val("");
+                    $("#BeiZhuId").val("");
+                    $("#AddShareFileDIV input[type='radio']").removeAttr('checked');
+                }
             });
         }
 
@@ -395,7 +428,7 @@
             $('#AddNoticeDIV').dialog({
                 title: "添加公告通知",
                 width: 450,
-                height: 450,
+                height: 500,
                 collapsible: true,
                 resizable: true,
                 modal: true,
@@ -435,9 +468,20 @@
                 }, {
                     text: '取消',
                     handler: function () {
+                        $("#BMNUInput").combobox("setValue", "");
+                        $("#BeiZhuArea").val("");
+                        $("#NoticeTextID").val("");
+                        $("#STUNInput").val("");
+                        $("#NoticestrID").val("");
                         $('#AddNoticeDIV').dialog('close');
                     }
-                }]
+                }], onClose: function () {
+                    $("#BMNUInput").combobox("setValue", "");
+                    $("#BeiZhuArea").val("");
+                    $("#NoticeTextID").val("");
+                    $("#STUNInput").val("");
+                    $("#NoticestrID").val("");
+                }
             });
         }
 
@@ -499,8 +543,10 @@
 
         //把允许查看共享的模板用户id存到隐藏空间里（共享用）
         function addModelstr() {
-            var str = "";
+            var str1 = "";
+            var str2 = "";
             var MFID = $("#ModelFInput").combobox("getValue");
+            var MFName = $("#ModelFInput").combobox("getText");
             var reg = /^[\d+,]{1,}$/
             if (reg.test(MFID)) {
                 var a = $("#STUstrID").val();
@@ -513,10 +559,30 @@
                             continue;
                         }
                     }
+                    if(my[j] != undefined){
+                        str1 = str1 + my[j] + ",";
+                    }
                 }
-                str = str + a + MFID;
+                str1 = a + str1;
+                $("#STUstrID").val(str1);
+
+                var b = $("#ShowAddUsers").val();
+                var by = b.split(",");
+                var mn = MFName.split(",");
+                for (var j = 0; j < mn.length; j++) {
+                    for (var i = 0; i < by.length; i++) {
+                        while (by[i] == mn[j]) {
+                            delete mn[j];
+                            continue;
+                        }
+                    }
+                    if (mn[j] != undefined) {
+                        str2 = str2 + mn[j] + ",";
+                    }
+                }
+                str2 = b + str2;
+                $("#ShowAddUsers").val(str2);
                 $.messager.alert("提示", "添加人员成功！");
-                $("#STUstrID").val(str);
             } else {
                 $.messager.alert("提示","请选择模板！");
             }
@@ -528,6 +594,8 @@
             var str = "";
             var BMID = $("#BMNUInput").combobox("getValue");
             var SUId = $("#STUNInput").combobox("getValue");
+            var SUName = $("#STUNInput").combobox("getText");
+            var UserNamestr = $("#ShowAddBMOrUser").val();
             if (!isNaN(parseInt(SUId))) {
                 var a = $("#NoticestrID").val();
                 var ay = a.split(",");
@@ -539,6 +607,7 @@
                 }
                 str = str + SUId + ",";
                 $("#NoticestrID").val(a + str);
+                $("#ShowAddBMOrUser").val(UserNamestr + SUName+",");
                 $.messager.alert("提示", "添加人员成功！");
             } else {
                 $.post("/ShareFileOrNotice/ReturnUserID", { "personName": SUId, "BuMenID": BMID }, function (data) {
@@ -555,6 +624,7 @@
                         str = str + data.val + ",";
                         var s = $("#NoticestrID").val();
                         $("#NoticestrID").val(s + str);
+                        $("#ShowAddBMOrUser").val(UserNamestr + SUName + ",");
                         $.messager.alert("提示", "添加人员成功！");
                     } else if (data.ret == "no") {
                         $.messager.alert("提示", "在该部门之下查无此人，请确认名字是否输入正确！");
@@ -567,18 +637,30 @@
 
         //添加部门用户到隐藏控件
         function addSTBMstr() {
-            var BMID = $("#BMNUInput").combobox("getValue");
+            var BMID = $("#BMNUInput").combobox("getValue"); 
+            var BMName = $("#BMNUInput").combobox("getText");
+            var BMNamestr =  $("#ShowAddBMOrUser").val();
+            var ay = BMNamestr.split(",");
+            for(var i=0;i<ay.length;i++){
+                if(ay[i] == BMName){
+                    $.messager.alert("提示","该部门已添加过！");
+                    return;
+                }else{
+                    continue;
+                }
+            }
             $.post("/ShareFileOrNotice/ReturnAllUserID", { "BuMenID": BMID }, function (userinfo) {
                 if (userinfo.ret == "no") {
                     $.messager.alert("提示", "该部门下无任何员工！");
-                } else if (userinfo.ret == "ok") {
-                    var a = $("#NoticestrID").val();
-                    var str = a + userinfo.data;
-                    $("#NoticestrID").val(str);
-                    $.messager.alert("提示", "添加人员成功！");
-                } else {
-                    $.messager.alert("提示", 1343434);
-                }
+                 } else if (userinfo.ret == "ok") {
+                         var a = $("#NoticestrID").val();
+                         var str = a + userinfo.data;
+                         $("#ShowAddBMOrUser").val(BMNamestr+BMName+",");
+                         $("#NoticestrID").val(str);
+                         $.messager.alert("提示", "添加人员成功！");
+                 } else {
+                         $.messager.alert("提示", 1343434);
+                 }
             });
         }
 
@@ -589,7 +671,6 @@
                     var serverData = data.split(":");
                     if (serverData[0] == "yes") {
                         $("#fileUrlID").val(serverData[1]);//将上传成功的文件地址放在隐藏input中
-                        alert($("#fileUrlID").val());
                         $.messager.alert("提示", "上传文件成功！");
                     }
                     else {
@@ -603,29 +684,33 @@
 
         //添加共享文件以后调用
         function afterAddShareFile(data) {
-            if (data.ret == "ok") {
-                try {
-                    $.messager.alert("提醒", "共享成功！");
-                    $('#tt').datagrid('reload');
-                    $('#AddShareFileDIV').dialog('close');
-                }
-                catch (e) {
-
-                }
-
-            } else if (data.ret == "no") {
-                $.messager.alert("提示", data.msg, "error");
-            } else {
-                $.messager.alert("提醒", "共享成功！");
-            }
+            $("#FileTypeInput").combobox("setValue", "");
+            $("#ModelFInput").combobox("setValue", "");
+            $("#BMSTUInput").combobox("setValue", "");
+            $("#STUInput").combobox("setValue", "");
+            $("#BeiZhuId").val("");
+            $("#uploadShareFileID").val("");
+            $("#fileUrlID").val("");
+            $("#STUstrID").val("");
+            $("#showAddUsers").val("");
+            $("#BeiZhuId").val("");
+            $("#AddShareFileDIV input[type='radio']").removeAttr('checked');
+            $("#AddShareFileDIV").dialog('close');
+            $('#tt').datagrid('reload');
+            $.messager.alert("提醒", "共享成功！");
         }
 
         //添加通知公告以后调用
         function afterAddNotice(data) {
             if (data.ret == "ok") {
                 try {
-                    $('#tt').datagrid('reload');
+                    $("#BMNUInput").combobox("setValue", "");
+                    $("#BeiZhuArea").val("");
+                    $("#NoticeTextID").val("");
+                    $("#STUNInput").val("");
+                    $("#NoticestrID").val("");
                     $('#AddNoticeDIV').dialog('close');
+                    $('#tt').datagrid('reload');
                 }
                 catch (e) {
 
@@ -832,6 +917,7 @@
             </div>
             <div>
                 <b><input type="hidden" name="NoticestrName" id="NoticestrID" /></b>
+                <b><textarea id="ShowAddBMOrUser" style="width:300px;height:30px;display:none"></textarea></b>
             </div>
         </div>
         <table>

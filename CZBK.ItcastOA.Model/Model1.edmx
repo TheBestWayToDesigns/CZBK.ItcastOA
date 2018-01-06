@@ -64,6 +64,18 @@
           <Property Name="ActionInfo_ID" Type="int" Nullable="false" />
           <Property Name="Department_ID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="ExamineSchedule">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ScheduleID" Type="bigint" Nullable="false" />
+          <Property Name="ExamineUser" Type="int" Nullable="false" />
+          <Property Name="ExamineText" Type="nvarchar(max)" />
+          <Property Name="ExamineTime" Type="datetime" Nullable="false" />
+          <Property Name="ExamineState" Type="int" Nullable="false" />
+          <Property Name="Del" Type="smallint" />
+        </EntityType>
         <EntityType Name="FileItem">
           <Key>
             <PropertyRef Name="ID" />
@@ -581,6 +593,30 @@
             </Principal>
             <Dependent Role="DepartmentActionInfo">
               <PropertyRef Name="Department_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExamineSchedule_Schedule">
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="1" />
+          <End Role="ExamineSchedule" Type="Self.ExamineSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Schedule">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ExamineSchedule">
+              <PropertyRef Name="ScheduleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExamineSchedule_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="ExamineSchedule" Type="Self.ExamineSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ExamineSchedule">
+              <PropertyRef Name="ExamineUser" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1271,6 +1307,7 @@
           <EntitySet Name="CarNumber" EntityType="Self.CarNumber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DepartmentActionInfo" EntityType="Self.DepartmentActionInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExamineSchedule" EntityType="Self.ExamineSchedule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileItem" EntityType="Self.FileItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileType" EntityType="Self.FileType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GongLuBaoXiaoBill" EntityType="Self.GongLuBaoXiaoBill" Schema="dbo" store:Type="Tables" />
@@ -1332,6 +1369,14 @@
           <AssociationSet Name="FK_DepartmentActionInfo_Department" Association="Self.FK_DepartmentActionInfo_Department">
             <End Role="Department" EntitySet="Department" />
             <End Role="DepartmentActionInfo" EntitySet="DepartmentActionInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExamineSchedule_Schedule" Association="Self.FK_ExamineSchedule_Schedule">
+            <End Role="Schedule" EntitySet="Schedule" />
+            <End Role="ExamineSchedule" EntitySet="ExamineSchedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExamineSchedule_UserInfo" Association="Self.FK_ExamineSchedule_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="ExamineSchedule" EntitySet="ExamineSchedule" />
           </AssociationSet>
           <AssociationSet Name="FK_GongLuBaoXiaoBill_CarNumber" Association="Self.FK_GongLuBaoXiaoBill_CarNumber">
             <End Role="CarNumber" EntitySet="CarNumber" />
@@ -1840,6 +1885,15 @@
             <End Role="UserInfo" EntitySet="UserInfoes" />
             <End Role="ScheduleUser" EntitySet="ScheduleUsers" />
           </AssociationSet>
+          <EntitySet Name="ExamineSchedules" EntityType="OAModel.ExamineSchedule" />
+          <AssociationSet Name="FK_ExamineSchedule_Schedule" Association="OAModel.FK_ExamineSchedule_Schedule">
+            <End Role="Schedule" EntitySet="Schedules" />
+            <End Role="ExamineSchedule" EntitySet="ExamineSchedules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExamineSchedule_UserInfo" Association="OAModel.FK_ExamineSchedule_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="ExamineSchedule" EntitySet="ExamineSchedules" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ActionInfo">
           <Key>
@@ -2180,6 +2234,7 @@
           <NavigationProperty Name="YXB_Baojia" Relationship="OAModel.FK_YXBBaojia_Userinf" FromRole="UserInfo" ToRole="YXB_Baojia" />
           <NavigationProperty Name="ShareFileOrNotices" Relationship="OAModel.FK_ShareFileOrNotice_UserInfo" FromRole="UserInfo" ToRole="ShareFileOrNotice" />
           <NavigationProperty Name="ScheduleUsers1" Relationship="OAModel.FK_ScheduleUser_UserInfo1" FromRole="UserInfo" ToRole="ScheduleUser" />
+          <NavigationProperty Name="ExamineSchedules" Relationship="OAModel.FK_ExamineSchedule_UserInfo" FromRole="UserInfo" ToRole="ExamineSchedule" />
         </EntityType>
         <Association Name="FK_Bumen">
           <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
@@ -2539,6 +2594,7 @@
           <NavigationProperty Name="ScheduleType" Relationship="OAModel.FK_Schedule_ScheduleType" FromRole="Schedule" ToRole="ScheduleType" />
           <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_Schedule_UserInfo1" FromRole="Schedule" ToRole="UserInfo" />
           <NavigationProperty Name="UserInfo1" Relationship="OAModel.FK_Schedule_UserInfo2" FromRole="Schedule" ToRole="UserInfo" />
+          <NavigationProperty Name="ExamineSchedules" Relationship="OAModel.FK_ExamineSchedule_Schedule" FromRole="Schedule" ToRole="ExamineSchedule" />
         </EntityType>
         <EntityType Name="ScheduleType">
           <Key>
@@ -3070,6 +3126,44 @@
             </Principal>
             <Dependent Role="ScheduleUser">
               <PropertyRef Name="UpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ExamineSchedule">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ScheduleID" Type="Int64" Nullable="false" />
+          <Property Name="ExamineUser" Type="Int32" Nullable="false" />
+          <Property Name="ExamineText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ExamineTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ExamineState" Type="Int32" Nullable="false" />
+          <Property Name="Del" Type="Int16" />
+          <NavigationProperty Name="Schedule" Relationship="OAModel.FK_ExamineSchedule_Schedule" FromRole="ExamineSchedule" ToRole="Schedule" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_ExamineSchedule_UserInfo" FromRole="ExamineSchedule" ToRole="UserInfo" />
+        </EntityType>
+        <Association Name="FK_ExamineSchedule_Schedule">
+          <End Type="OAModel.Schedule" Role="Schedule" Multiplicity="1" />
+          <End Type="OAModel.ExamineSchedule" Role="ExamineSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Schedule">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ExamineSchedule">
+              <PropertyRef Name="ScheduleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExamineSchedule_UserInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+          <End Type="OAModel.ExamineSchedule" Role="ExamineSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ExamineSchedule">
+              <PropertyRef Name="ExamineUser" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3629,6 +3723,19 @@
             <EntityTypeMapping TypeName="OAModel.ShareType">
               <MappingFragment StoreEntitySet="ShareType">
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExamineSchedules">
+            <EntityTypeMapping TypeName="OAModel.ExamineSchedule">
+              <MappingFragment StoreEntitySet="ExamineSchedule">
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="ExamineState" ColumnName="ExamineState" />
+                <ScalarProperty Name="ExamineTime" ColumnName="ExamineTime" />
+                <ScalarProperty Name="ExamineText" ColumnName="ExamineText" />
+                <ScalarProperty Name="ExamineUser" ColumnName="ExamineUser" />
+                <ScalarProperty Name="ScheduleID" ColumnName="ScheduleID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

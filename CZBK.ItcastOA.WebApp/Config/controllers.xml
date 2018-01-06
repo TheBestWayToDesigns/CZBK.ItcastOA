@@ -87,6 +87,7 @@
     <property name="UserInfoService" ref="UserInfoService" />
     <property name="BumenInfoSetService" ref="BumenInfoSetService" />
     <property name="FileTypeService" ref="FileTypeService" />
+    <property name="ExamineScheduleService" ref="ExamineScheduleService" />
   </object>
   <object type="CZBK.ItcastOA.WebApp.Controllers.BillPrintController, CZBK.ItcastOA.WebApp" singleton="false" >
     <property name="T_BaoXiaoBillService" ref="T_BaoXiaoBillService" />

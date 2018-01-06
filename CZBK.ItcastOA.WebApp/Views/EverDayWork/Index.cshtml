@@ -44,15 +44,21 @@
             $("#AddScheduleDIV").css("display", "none");
             $("#UpdateScheduleDIV").css("display", "none");
             $("#ReviewScheduleDIV").css("display", "none");
-            $("#CheckFileDIV").css("display", "none");
+            $("#CheckFileDIV").css("display", "none"); 
+            $("#CheckExamineDIV").css("display", "none");
             $("#AddScheduleTypeBtnDIV").css("display", "none"); 
             $("#ChooseSerchTypeDIV").css("display", "none");
+            $("#ChooseSerchTypeDIV2").css("display", "none");
             $("#AddScheduleBtnDIV").css("display", "none");
             $("#DownUserCombox").css("display", "none");
             $("#DownBuMenCombox").css("display", "none");
+            $("#DownBuMenCombox2").css("display", "none");
+            $("#DownUserCombox2").css("display", "none");
             $("#AddUploadFileDIV").css("display", "none");
             $("#AddFileTypeBtnDIV").css("display", "none");
             $("#AddFileTypeDIV").css("display", "none");
+            $("#InfoShowDiv").css("display", "none"); 
+            $("#BMInfoShowDiv").css("display", "none");
             
             loadSchedule();
 
@@ -63,9 +69,14 @@
                     $("#AddScheduleBtnDIV").css("display", "none");
                     $("#DownUserCombox").css("display", "none");
                     $("#DownBuMenCombox").css("display", "none");
+                    $("#DownBuMenCombox2").css("display", "none");
+                    $("#DownUserCombox2").css("display", "none");
                     $("#ChooseSerchTypeDIV").css("display", "none");
+                    $("#ChooseSerchTypeDIV2").css("display", "none");
                     $("#AddFileTypeBtnDIV").css("display", "none");
                     $("#AddFileTypeDIV").css("display", "none");
+                    $("#InfoShowDiv").css("display", "none");
+                    $("#BMInfoShowDiv").css("display", "none");
                     loadData();
                 }
                 else if (ClickA == "MenuSchedule")
@@ -73,9 +84,14 @@
                     $("#AddScheduleTypeBtnDIV").css("display", "none");
                     $("#DownUserCombox").css("display", "none");
                     $("#DownBuMenCombox").css("display", "none");
+                    $("#DownBuMenCombox2").css("display", "none");
+                    $("#DownUserCombox2").css("display", "none");
                     $("#ChooseSerchTypeDIV").css("display", "none");
+                    $("#ChooseSerchTypeDIV2").css("display", "none");
                     $("#AddFileTypeBtnDIV").css("display", "none");
                     $("#AddFileTypeDIV").css("display", "none");
+                    $("#InfoShowDiv").css("display", "none");
+                    $("#BMInfoShowDiv").css("display", "none");
                     loadSchedule();
                 }
                 else if (ClickA == "MenuDownUser") {
@@ -83,17 +99,38 @@
                     $("#AddScheduleBtnDIV").css("display", "none");
                     $("#DownUserCombox").css("display", "none");
                     $("#DownBuMenCombox").css("display", "none");
+                    $("#DownBuMenCombox2").css("display", "none");
+                    $("#DownUserCombox2").css("display", "none");
+                    $("#ChooseSerchTypeDIV2").css("display", "none");
                     $("#AddFileTypeBtnDIV").css("display", "none");
                     $("#AddFileTypeDIV").css("display", "none");
+                    $("#InfoShowDiv").css("display", "none");
+                    $("#BMInfoShowDiv").css("display", "none");
                     loadDownUser();
                 } else if (ClickA == "MenuFileType") {
                     $("#AddScheduleTypeBtnDIV").css("display", "none");
                     $("#AddScheduleBtnDIV").css("display", "none");
                     $("#DownUserCombox").css("display", "none");
                     $("#DownBuMenCombox").css("display", "none");
+                    $("#DownBuMenCombox2").css("display", "none");
+                    $("#DownUserCombox2").css("display", "none");
+                    $("#ChooseSerchTypeDIV2").css("display", "none");
                     $("#ChooseSerchTypeDIV").css("display", "none");
                     $("#AddFileTypeDIV").css("display", "none");
+                    $("#InfoShowDiv").css("display", "none");
+                    $("#BMInfoShowDiv").css("display", "none");
                     loadFileType();
+                } else if (ClickA == "MenuExamineSchedule") {
+                    $("#AddScheduleTypeBtnDIV").css("display", "none");
+                    $("#AddScheduleBtnDIV").css("display", "none");
+                    $("#DownUserCombox").css("display", "none");
+                    $("#DownBuMenCombox").css("display", "none");
+                    $("#DownBuMenCombox2").css("display", "none");
+                    $("#DownUserCombox2").css("display", "none");
+                    $("#ChooseSerchTypeDIV").css("display", "none");
+                    $("#AddFileTypeDIV").css("display", "none");
+                    $("#BMInfoShowDiv").css("display", "none");
+                    loadExamineSchedule();
                 }
             })
             $("#AddScheduleBtn").click(function () {
@@ -116,12 +153,36 @@
             $("#ByDBMid").click(function () {
                 $("#DownBuMenCombox").css("display", "block");
                 $("#DownUserCombox").css("display", "none");
+                $("#DBMUserInput").combobox("setValue", "");
+                $("#DBMInput").combobox("setValue", "");
+                $("#DUInput").combobox("setValue", "");
                 $("#tt").datagrid({ toolbar: "#ChooseSerchTypeDIV,#DownBuMenCombox" });
             })
             $("#ByDUid").click(function () {
                 $("#DownUserCombox").css("display", "block");
                 $("#DownBuMenCombox").css("display", "none");
+                $("#DBMUserInput").combobox("setValue", "");
+                $("#DBMInput").combobox("setValue", "");
+                $("#DUInput").combobox("setValue", "");
                 $("#tt").datagrid({ toolbar: "#ChooseSerchTypeDIV,#DownUserCombox" });
+            })
+            $("#ByDBMid2").click(function () {
+                $("#DownBuMenCombox2").css("display", "block");
+                $("#DownUserCombox2").css("display", "none");
+                $("#DBMUserInput2").combobox("setValue", "");
+                $("#DBMInput2").combobox("setValue", "");
+                $("#DUInput2").combobox("setValue", "");
+
+                $("#tt").datagrid({ toolbar: "#ChooseSerchTypeDIV2,#DownBuMenCombox2" });
+            })
+            $("#ByDUid2").click(function () {
+                $("#DownUserCombox2").css("display", "block");
+                $("#DownBuMenCombox2").css("display", "none");
+                $("#DBMUserInput2").combobox("setValue", "");
+                $("#DBMInput2").combobox("setValue", "");
+                $("#DUInput2").combobox("setValue", "");
+
+                $("#tt").datagrid({ toolbar: "#ChooseSerchTypeDIV2,#DownUserCombox2" });
             })
             $("#AddFileTypeBtn").click(function () {
                 $("#AddFileTypeTab input").val("");
@@ -136,19 +197,56 @@
                     loadDownUser(pars);
                 }
             })
+            $("#DBMUserInput2").combobox({
+                onChange: function () {
+                    var DBMidval = $("#DBMInput2").combobox("getValue");
+                    var idval = $("#DBMUserInput2").combobox("getValue");
+                    //$.post("/EverDayWork/GetNumber", {}, function (NumberInfo) {
+                    //    $("#ScheduleSum").html(NumberInfo.scum);
+                    //    $("#NoCheckedNum").html(NumberInfo.nnum);
+                    //    $("#CheckedNum").html(NumberInfo.cnum);
+                    //    $("#NoExaminedNum").html(NumberInfo.exnum);
+                    //})
+                    //$("#InfoShowDiv").css("display", "block");
+                    //$("#divBtn").load(location.href + "#divBtn");
+                    var pars = { DownUser: idval };
+                    loadExamineSchedule(pars);
+                }
+            })
             //点击下级部门触发方法
             $("#DBMInput").combobox({
                 onChange: function () {
-                    var DBMidval = $("#DBMInput").combobox("getValue");
-                    $("#DBMUserInput").combobox("setValue","");
+                    var DBMidval = $("#DBMInput2").combobox("getValue");
+                    $("#DBMUserInput2").combobox("setValue","");
                     if (DBMidval == -1) {
                         cleanDatagrid();
                     } else {
-                        $("#DBMUserInput").combobox("reload", "/EverDayWork/GetDownBuMenalluser?DBMid=" + DBMidval);
+                        $("#DBMUserInput2").combobox("reload", "/EverDayWork/GetDownBuMenalluser?DBMid=" + DBMidval);
                     }
                     pars = { BumenID: DBMidval };
                     loadDownUser(pars);
                 }               
+            })
+            $("#DBMInput2").combobox({
+                onChange: function () {
+                    var DBMidval = $("#DBMInput2").combobox("getValue");
+                    $("#DBMUserInput2").combobox("setValue", "");
+                    if (DBMidval == -1) {
+                        cleanDatagrid();
+                    } else {
+                        $("#DBMUserInput2").combobox("reload", "/EverDayWork/GetDownBuMenalluser?DBMid=" + DBMidval);
+                    }
+                    //$.post("/EverDayWork/GetBMNumber", {"id":DBMidval}, function (NumberInfo) {
+                    //    $("#BMScheduleSum").html(NumberInfo.scum);
+                    //    $("#BMNoCheckedNum").html(NumberInfo.nnum);
+                    //    $("#BMCheckedNum").html(NumberInfo.cnum);
+                    //    $("#BMNoExaminedNum").html(NumberInfo.exnum);
+                    //})
+                    //$("#BMInfoShowDiv").css("display", "block");
+                    //$("#divBtn").load(location.href + "#divBtn");
+                    pars = { BumenID: DBMidval};
+                    loadExamineSchedule(pars);
+                }
             })
             $("#DUInput").combobox({
                 onChange: function () {
@@ -157,7 +255,13 @@
                      loadDownUser(pars);
                 }
             })
-            
+            $("#DUInput2").combobox({
+                onChange: function () {
+                    var idval = $("#DUInput2").combobox("getValue");
+                    var pars = { DownUser: idval};
+                    loadExamineSchedule(pars);
+                }
+            })
         });
 
         //清空datagrid数据
@@ -342,8 +446,8 @@
                 pageList: [15, 25, 35],
                 queryParams: pars,//往后台传递参数
                 columns: [[
-                    { field: 'ck', checkbox: true, title: '', width: 30 },
-                    { field: 'ID', title: '日程编号', align: 'center' },
+                    { field: 'ck', checkbox: true, title: '', width: 30},
+                    { field: 'ID', title: '日程编号', align: 'center'},
                     { field: 'UserID', title: '用户名称', align: 'center' },
                     {
                         field: 'ScheduleTime', title: '日程时间', align: 'center', formatter: function (value, row, col) {
@@ -389,6 +493,80 @@
                 }
             });
         }
+
+        //加载已审核日程
+        function loadExamineSchedule(pars) {
+            cleanDatagrid();
+            $.post("/EverDayWork/GetNumber", {}, function (NumberInfo) {
+                $("#ScheduleSum").html(NumberInfo.scum);
+                $("#NoCheckedNum").html(NumberInfo.nnum);
+                $("#CheckedNum").html(NumberInfo.cnum);
+                $("#NoExaminedNum").html(NumberInfo.exnum);
+            })
+            $("#InfoShowDiv").css("display", "block");
+            $('#tt').datagrid({
+                url: '/EverDayWork/GetExamineSchedule',
+                title: '已审核日程',
+                height: $("#dgdiv").height() - 20,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                //onClickCell: onClickCell,
+                //onAfterEdit: onAfterEdit,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[
+                    { field: 'ck', checkbox: true, title: '', width: 30 },
+                    { field: 'ID', title: '日程编号', align: 'center' },
+                    { field: 'UserID', title: '用户名称', align: 'center' },
+                    {
+                        field: 'ScheduleTime', title: '日程时间', align: 'center', formatter: function (value, row, col) {
+                            var sd = value == null ? '' : ChangeDateFormat(value);
+                            return sd;
+                        }
+                    },
+                    { field: 'TextReadBak', title: '下级领导查阅意见', align: 'center' },
+                    { field: 'TextReadUser', title: '下级查阅人', align: 'center' },
+                    {
+                        field: 'TextReadTime', title: '下级查阅时间', align: 'center', formatter: function (value, row, col) {
+                            var sd = value == null ? '' : ChangeDateFormat(value);
+                            return sd;
+                        }
+                    },
+                    {
+                        field: 'ExamineState', title: '上级领导审核状态', align: 'center', styler: function (value, row, col) {
+                            if (value == "未审核") {
+                                return 'background-color:#c0c0c0;';
+                            }
+                        }
+                    },
+                    { field: 'ExamineText', title: '上级领导审核意见', align: 'center' },
+                    { field: 'ExamineUser', title: '上级审核人', align: 'center' },
+                    {
+                        field: 'Examine', title: '审核栏', align: 'center', formatter: function (value, row, index) {
+                            return "<a href='javascript:ExamineSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>审核查阅意见</a>";
+                        }
+                    },
+                    {
+                        field: 'Look', title: '查看栏', align: 'center', formatter: function (value, row, index) {
+                            return "<a href='javascript:checkSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看日程详细</a><a href='javascript:checkFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看文件</a><a href='javascript:CheckExamineSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看审核意见</a>";
+                        }
+                    }
+                ]],
+                toolbar: "#ChooseSerchTypeDIV2",
+                onLoadSuccess: function () {
+
+                }
+            });
+        }
+
+
         //查阅下级日程
         function reviewSchedule() {
             var row = $('#tt').datagrid('getSelected');
@@ -599,6 +777,33 @@
                 }]
             });
         }
+
+        //查看日程详细
+        function checkSchedule() {
+            var row = $('#tt').datagrid('getSelected');
+            $.post("/EverDayWork/GetScheduleInfo", { "id": row.ID }, function (scheduleInfo) {
+                $("#Uid").val(scheduleInfo.UserID);
+                document.getElementById("Uid").setAttribute('readOnly', true);
+                var a = ChangeDateFormat(scheduleInfo.ScheduleTime); 
+                var b = ChangeDateFormat(scheduleInfo.ScheduleAddTime);
+                $("#SCHTime").val(a);
+                document.getElementById("SCHTime").setAttribute('readOnly', true);
+                $("#SCHAddTime").val(b);
+                document.getElementById("SCHAddTime").setAttribute('readOnly', true);
+                $("#SCHType").val(scheduleInfo.ScheduleTypeID);
+                document.getElementById("SCHType").setAttribute('readOnly', true);
+                if(scheduleInfo.FileItemID != undefined){
+                    $("#yessch").attr("checked", true);
+                    document.getElementById("nosch").setAttribute('disabled', true);
+                } else {
+                    $("#nosch").attr("checked", true);
+                    document.getElementById("yessch").setAttribute('disabled', true);
+                }
+                $("#SCHText").val(scheduleInfo.ScheduleText);
+                document.getElementById("SCHText").setAttribute('readOnly', true);
+                $("#CheckScheduleInfoDiv").window("open");
+            })
+        }
        
         //查看文件
         function checkFiles() {
@@ -646,6 +851,94 @@
             };
         }
 
+        //查看审核查阅意见
+        function CheckExamineSchedule() {
+            var row = $('#tt').datagrid('getSelected');
+            if (row.ExamineState != "无审核") {
+                $.post("/EverDayWork/ExamineSchedule", { "id": row.ID }, function (ExamineInfo) {
+                    var ay = new Array();
+                    ay = ExamineInfo.split(",");
+                    var t = 1;
+                    var u = 1;
+                    for (var i = 0; i < ay.length; i++) {
+                        if (i == 0 || i % 2 == 0) {
+                            if (ay[i + 1] == undefined) {
+                                
+                            } else {
+                                $("#CheckExamineTab").append("<tr class='tr5'><td>审核人：</td><td><label>" + ay[i] + "</label></td></tr><tr><td>审核意见：</td><td>" + ay[i + 1] + "</td></tr><tr class='tr5'><td colspan='2'>&nbsp;&nbsp;&nbsp;</td></tr>");
+                            }
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+                    $("#CheckExamineDIV").css("display", "block");
+                    $('#CheckExamineDIV').dialog({
+                        title: "查看审核意见",
+                        width: 500,
+                        height: 500,
+                        collapsible: true,
+                        resizable: true,
+                        modal: true,
+                        buttons: [{
+                            text: '确定',
+                            handler: function () {
+                                $('#CheckExamineDIV').dialog('close');
+                                $("#CheckExamineTab").html("");
+                            }
+                        }],
+                        onClose: function () {
+                            $("#CheckExamineTab").html("");
+                        }
+                    });
+                });
+            } else {
+                $.messager.alert("提示", "无相关审核意见！！！");
+            };
+        }
+
+        //审核此条意见
+        function ExamineSchedule() {
+            var row = $('#tt').datagrid('getSelected');
+            $.post("/EverDayWork/GetCanOrCant", { "id": row.TextReadUser,"state":row.ExamineState,"ExamineUser":row.ExamineUser }, function (canOrCant) {
+                if (canOrCant.ret == "no") {
+                    $.messager.alert("提示", canOrCant.msg);
+                    return;
+                }else if(canOrCant.ret == "ok"){
+                    $("#schID").val(row.ID);
+                    $("#AddExamineScheduleDiv").window('open');
+                } else {
+                    $.messager.alert("提示","发现未知错误！");
+                }
+            })
+        }
+
+        //添加审核意见点击确定
+        function OkToAddExamineSchedule() {
+            if ($("#ExamineText").val().trim().length <= 0) {
+                $.messager.alert("提示", "请填写审核意见！");
+                return;
+            }
+            $("#addexaminescheduleform").submit();
+        }
+
+        //添加之后调用方法
+        function afterAddExamineSchedule() {
+            $("#AddExamineScheduleDiv").window('close');
+            $(".SmallWindow textarea").val("");
+            $('#tt').datagrid('reload');
+            $.messager.alert("提醒", "审核成功!!");
+        }
+
+        //窗口取消功能
+        function cancel() {
+            $("#AddExamineScheduleDiv").window('close'); 
+            $("#CheckScheduleInfoDiv").window('close');
+            $(".SmallWindow textarea").val("");
+            $(".SmallWindow input").val("");
+        }
+            
+
         //增加上传文件
         function addUploadFiles() {
             var row = $('#tt').datagrid('getSelected');
@@ -678,6 +971,7 @@
                 }]
             });
         }
+
         
         //补充上传文件返回url
         function addUploadFileClick() {
@@ -803,6 +1097,7 @@
             });
         }
 
+
         //删除文件类型
         function delfiletype() {
             //弹窗提示
@@ -872,8 +1167,27 @@
     <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink " style="width:150px; padding:8px;">
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuSchedule" style="width:98%;margin:10px auto">日程信息</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuDownUser" style="width:98%;margin:10px auto">下级日程信息</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuExamineSchedule" style="width:98%;margin:10px auto">下级领导已审核的日程</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuScheduleType" style="width:98%;margin:10px auto">日程状态</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuFileType" style="width:98%;margin:10px auto">管理上传文件类型</a>
+        <div style="width:100%;height:50%"></div>
+        <!----------------显示信息框区域-------------------->
+        <div id="InfoShowDiv" style="display:none">
+            <table style="font-size:10px" id="allSchNumID">
+                <tr><td>下级总日程数：</td><td><b><label id="ScheduleSum"></label></b></td></tr>
+                <tr><td>未查阅日程数：</td><td><b><label id="NoCheckedNum"></label></b></td></tr>
+                <tr><td>已查阅日程数：</td><td><b><label id="CheckedNum"></label></b></td></tr>
+                <tr><td>未审核日程数：</td><td><b><label id="NoExaminedNum"></label></b></td></tr>
+            </table>
+        </div>
+        <div id="BMInfoShowDiv" style="display:none">
+            <table style="font-size:10px" id="BuMenSchNumID">
+                <tr><td>下级部门总日程数：</td><td><b><label id="BuMenScheduleSum"></label></b></td></tr>
+                <tr><td>未查阅日程数：</td><td><b><label id="BuMenNoCheckedNum"></label></b></td></tr>
+                <tr><td>已查阅日程数：</td><td><b><label id="BuMenCheckedNum"></label></b></td></tr>
+                <tr><td>未审核日程数：</td><td><b><label id="BuMenNoExaminedNum"></label></b></td></tr>
+            </table>
+        </div>
     </div>
     <div data-options="region:'center',title:'数据报表'" id="dgdiv">
         
@@ -1037,6 +1351,17 @@
             <tbody id="Selebody"></tbody>
         </table>
     </div>
+
+    <!-------------查看审核意见--------------->
+    <div id="CheckExamineDIV" style="height:100%; width:100%;">
+        <table id="CheckExamineTab">
+            <!--用于遍历写出每一条审核人和审核意见-->
+        </table>
+        <table>
+            <tbody id="Selebody"></tbody>
+        </table>
+    </div>
+
     <!-------------修改日程--------------->
     <div id="UpdateScheduleDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("UpdateSchedule", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterScheduleEdit" }, new { id = "updateschedulefrom" }))
@@ -1085,6 +1410,81 @@
         </table>
         }
     </div>
+
+    <!-------------------查看日程详细--------------------->
+    <div id="CheckScheduleInfoDiv" class="easyui-window" title="日程详细信息" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:402px;height:321px;">
+        <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
+            <table>
+                <tr><td><b>用户名称：</b></td><td colspan="2"><input type="text" id="Uid" /></td></tr>
+                <tr><td><b>日程时间：</b></td><td colspan="2"><input type="text" id="SCHTime" /></td></tr>
+                <tr><td><b>日程内容：</b></td><td colspan="2"><textarea id="SCHText" style="width:173px;height:80px;resize:none;"></textarea></td></tr>
+                <tr><td><b>日程创建时间：</b></td><td colspan="2"><input type="text" id="SCHAddTime" /></td></tr>
+                <tr><td><b>日程类型：</b></td><td colspan="2"><input type="text" id="SCHType"/></td></tr>
+                <tr><td><b>是否有文件？</b></td><td><input type="radio" name="yesorno" id="yessch" />有文件</td><td><input type="radio" name="yesorno" id="nosch" />无文件</td></tr>
+            </table>
+            <div style="padding:5px;text-align:center;">
+                <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="cancel()">确定</a>
+            </div>
+        </form>
+    </div>
+
+    <!-------------------审阅查阅意见--------------------->
+    <div id="AddExamineScheduleDiv" class="easyui-window" title="审核下级查阅意见" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:400px;height:250px;">
+        @using (Ajax.BeginForm("AddExamineSchedule", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddExamineSchedule" }, new { id = "addexaminescheduleform" }))
+            {
+            <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
+                <table>
+                    <tr><td><b>意见</b></td></tr>
+                    <tr><td><textarea id="ExamineText" name="ExamineText" style="width:377px;height:107px"></textarea></td></tr>
+                    <tr><td><input type="hidden" id="schID" name="ScheduleID"/></td></tr>
+                </table>
+                <div style="padding:5px;text-align:center;">
+                    <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="OkToAddExamineSchedule()">确定</a>
+                    <a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="cancel()">取消</a>
+                </div>
+            </form>
+        }
+    </div>
+
+    <div id="ChooseSerchTypeDIV2" style="width:auto;height:30px;float:left">
+        <div style="padding:5px;height:25px;float:left;line-height:25px">
+            <b>请选择查找类型：</b>
+            <label><input type="radio" name="SerchType" id="ByDBMid2" value="BM"/>根据下级部门查询</label>
+            <label><input type="radio" name="SerchType" id="ByDUid2" value="User"/>根据下级员工</label>
+        </div>
+        <!---------------下级部门下拉框-------------------->
+        <div id="DownBuMenCombox2" style="padding:4px;height:25px;float:left;line-height:25px">
+            <b>下级部门：</b>
+            <input id="DBMInput2" class="easyui-combobox" name="DownBuMenName"
+                   url="/EverDayWork/GetDownBuMenall"
+                   valueField="BMID"
+                   textField="Name"
+                   panelHeight="auto"
+                   style="width:100px" />
+            <b>下级部门所有成员</b>
+            <input id="DBMUserInput2" class="easyui-combobox" name="DownBuMenUserName"
+                   valueField="ID"
+                   textField="name"
+                   panelHeight="auto"
+                   style="width:100px" />
+        </div>
+        <!---------------下级用户下拉框-------------------->
+        <div id="DownUserCombox2" style="padding:4px;height:25px;float:left;line-height:25px">
+            <b>下级部门成员：</b>
+            <input id="DUInput2" name="DownUserName"
+                   class="easyui-combobox"
+                   url="/EverDayWork/GetDownUserall"
+                   valueField="ID"
+                   textField="name"
+                   panelHeight="auto"
+                   style="width:100px" />
+        </div>
+    </div>
+
+
+
+
+
 
 </body>
 </html>

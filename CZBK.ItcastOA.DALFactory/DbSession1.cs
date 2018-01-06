@@ -75,6 +75,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _DepartmentDal = value; }
         }
 	
+		private IExamineScheduleDal _ExamineScheduleDal;
+        public IExamineScheduleDal ExamineScheduleDal
+        {
+            get
+            {
+                if(_ExamineScheduleDal == null)
+                {
+                   // _ExamineScheduleDal = new ExamineScheduleDal();
+				    _ExamineScheduleDal =AbstractFactory.CreateExamineScheduleDal();
+                }
+                return _ExamineScheduleDal;
+            }
+            set { _ExamineScheduleDal = value; }
+        }
+	
 		private IFileItemDal _FileItemDal;
         public IFileItemDal FileItemDal
         {

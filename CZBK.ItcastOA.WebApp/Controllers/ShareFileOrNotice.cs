@@ -162,11 +162,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 {
                     if (list.Count != 0)
                     {
+                        int g = 0;
                         if (a == null || a.ModelList == "")
                         {
                             continue;
                         }
-                        for(int i=0;i<list.Count;i++)
+                        for (int i = 0; i < list.Count; i++)
                         {
                             if (list[i] == null)
                             {
@@ -174,28 +175,29 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             }
                             if (a.ModelList == list[i].StrID)
                             {
-                                break;
-                            }
-                            else
-                            {
-                                ModelSF msf = new ModelSF();
-                                msf.StrID = a.ModelList;
-                                var str = (a.ModelList).Split(',');
-                                var strs = "";
-                                foreach (var c in str)
-                                {
-                                    if (c == "")
-                                    {
-                                        continue;
-                                    }
-                                    var b1 = Convert.ToInt32(c);
-                                    var u = UserInfoService.LoadEntities(x => x.ID == b1).FirstOrDefault();
-                                    strs = strs + u.PerSonName + ",";
-                                }
-                                msf.StrName = strs;
-                                list.Add(msf);
+                                g = 1;
                             }
                         }
+                        if (g == 1)
+                        {
+                            continue;
+                        }
+                        ModelSF msf = new ModelSF();
+                        msf.StrID = a.ModelList;
+                        var str = (a.ModelList).Split(',');
+                        var strs = "";
+                        foreach (var c in str)
+                        {
+                            if (c == "")
+                            {
+                                continue;
+                            }
+                            var b1 = Convert.ToInt32(c);
+                            var u = UserInfoService.LoadEntities(x => x.ID == b1).FirstOrDefault();
+                            strs = strs + u.PerSonName + ",";
+                        }
+                        msf.StrName = strs;
+                        list.Add(msf);
                     }
                     else
                     {
