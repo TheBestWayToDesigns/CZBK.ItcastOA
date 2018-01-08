@@ -813,13 +813,6 @@
                 document.getElementById("SCHAddTime").setAttribute('readOnly', true);
                 $("#SCHType").val(scheduleInfo.ScheduleTypeID);
                 document.getElementById("SCHType").setAttribute('readOnly', true);
-                if(scheduleInfo.FileItemID != undefined){
-                    $("#yessch").attr("checked", true);
-                    document.getElementById("nosch").setAttribute('disabled', true);
-                } else {
-                    $("#nosch").attr("checked", true);
-                    document.getElementById("yessch").setAttribute('disabled', true);
-                }
                 $("#SCHText").val(scheduleInfo.ScheduleText);
                 document.getElementById("SCHText").setAttribute('readOnly', true);
                 $("#CheckScheduleInfoDiv").window("open");
@@ -1483,7 +1476,6 @@
                 <tr><td><b>日程内容：</b></td><td colspan="2"><textarea id="SCHText" style="width:173px;height:80px;resize:none;"></textarea></td></tr>
                 <tr><td><b>日程创建时间：</b></td><td colspan="2"><input type="text" id="SCHAddTime" /></td></tr>
                 <tr><td><b>日程类型：</b></td><td colspan="2"><input type="text" id="SCHType" /></td></tr>
-                <tr><td><b>是否有文件？</b></td><td><input type="radio" name="yesorno" id="yessch" />有文件</td><td><input type="radio" name="yesorno" id="nosch" />无文件</td></tr>
             </table>
             <div style="padding:5px;text-align:center;">
                 <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="cancel()">确定</a>
