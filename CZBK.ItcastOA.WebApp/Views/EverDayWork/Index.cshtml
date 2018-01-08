@@ -135,6 +135,7 @@
                     $("#ChooseSerchTypeDIV").css("display", "none");
                     $("#AddFileTypeDIV").css("display", "none");
                     $("#BMInfoShowDiv").css("display", "none");
+                    $("#AddFileTypeBtnDIV").css("display", "none");
                     loadExamineSchedule();
                 }
             })
@@ -189,7 +190,6 @@
             //点击下级成员触发方法
             $("#DBMUserInput").combobox({
                 onChange: function () {
-                    var DBMidval = $("#DBMInput").combobox("getValue");
                     var idval = $("#DBMUserInput").combobox("getValue");
                     var pars = {DownUser:idval};
                     loadDownUser(pars);
@@ -198,35 +198,32 @@
             $("#DBMUserInput2").combobox({
                 onChange: function () {
                     var idval = $("#DBMUserInput2").combobox("getValue");
-
-                    var pars = { DownUser: idval };
+                    var pars = { DownUser2: idval };
                     loadExamineSchedule(pars);
                 }
             })
             //点击下级部门触发方法
             $("#DBMInput").combobox({
                 onChange: function () {
-                    var DBMidval = $("#DBMInput2").combobox("getValue");
-                    $("#DBMUserInput2").combobox("setValue","");
-                    if (DBMidval == -1) {
-                        cleanDatagrid();
-                    } else {
-                        $("#DBMUserInput2").combobox("reload", "/EverDayWork/GetDownBuMenalluser?DBMid=" + DBMidval);
+                    var DBMidval = $("#DBMInput").combobox("getValue");
+                    if (DBMidval == undefined || DBMidval.length <= 0) {
+                        DBMidval = 0;
                     }
+                    $("#DBMUserInput").combobox("reload", "/EverDayWork/GetDownBuMenalluser?DBMid=" + DBMidval);
+                    $("#DBMUserInput").combobox("setValue", "");
                     pars = { BumenID: DBMidval };
                     loadDownUser(pars);
                 }
             })
             $("#DBMInput2").combobox({
                 onChange: function () {
-
                     var DBMidval = $("#DBMInput2").combobox("getValue");
                     if (DBMidval == undefined || DBMidval.length<=0) {
                         DBMidval = 0;
                     }
                     $("#DBMUserInput2").combobox("reload", "/EverDayWork/GetDownBuMenalluser?DBMid=" + DBMidval);
                     $("#DBMUserInput2").combobox("setValue","");
-                    pars = { BumenID: DBMidval };
+                    pars = { BumenID2: DBMidval };
                     reload(pars);
                     $.post("/EverDayWork/GetBMNumber", { "id": DBMidval }, function (data) {
                         setShowNumber(data);
@@ -243,7 +240,7 @@
             $("#DUInput2").combobox({
                 onChange: function () {
                     var idval = $("#DUInput2").combobox("getValue");
-                    var pars = { DownUser: idval};
+                    var pars = { DownUser2: idval};
                     loadExamineSchedule(pars);
                 }
             })
@@ -439,13 +436,19 @@
                     { field: 'FileItemID', title: '文件编号', align: 'center' },
                     {
                         field: 'Edit', title: '编辑栏', align: 'center', formatter: function (value, row, index) {
-                            return "<a href='javascript:checkFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看文件</a><a href='javascript:reviewSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查阅意见</a>";
+                            if (row.FileItemID == null) {
+                                return "<a href='javascript:reviewSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查阅意见</a>";
+                            } else {
+                                return "<a href='javascript:checkFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看文件</a><a href='javascript:reviewSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查阅意见</a>";
+                            }
                         }
                     },
                     {
-                        field: 'TextReadBak', title: '日程审核状态', align: 'center', styler: function (value, row, col) {
-                            if (value == "未查阅") {
-                                return 'background-color:#c0c0c0;';
+                        field: 'TextReadBak', title: '日程审核状态', align: 'center', formatter: function (value, row, col) {
+                            if (value != "未查阅") {
+                                return "<a href='javascript:SeeTextReadBak()' class='l-btn' style='margin:0px 5px;padding:2px 8px' >查看查阅意见</a>";
+                            } else {
+                                return value;
                             }
                         }
                     },
@@ -474,6 +477,14 @@
 
                 }
             });
+        }
+
+
+        function SeeTextReadBak(value) {
+            var row = $("#tt").datagrid("getSelected");
+            $("#TRBText").val(row.TextReadBak);
+            document.getElementById("TRBText").setAttribute('readOnly', true);
+            $("#SeeTextReadBakDiv").window("open");
         }
 
         //加载已审核日程
@@ -517,6 +528,7 @@
                         }
                     },
                     { field: 'TextReadUser', title: '下级查阅人', align: 'center' },
+                    { field: 'FileItemID', title: '文件编号', align: 'center',hidden:'true' },
                     {
                         field: 'TextReadTime', title: '下级查阅时间', align: 'center', formatter: function (value, row, col) {
                             var sd = value == null ? '' : ChangeDateFormat(value);
@@ -524,22 +536,23 @@
                         }
                     },
                     {
-                        field: 'ExamineState', title: '上级领导审核状态', align: 'center', styler: function (value, row, col) {
+                        field: 'ExamineState', title: '上级领导审核状态', align: 'center', formatter: function (value, row, index) {
                             if (value == "未审核") {
-                                return 'background-color:#c0c0c0;';
+                                return "<a href='javascript:ExamineSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>审核查阅意见</a>";
+                            } else {
+                                return value;
                             }
                         }
                     },
                     { field: 'ExamineText', title: '上级领导审核意见', align: 'center' },
                     { field: 'ExamineUser', title: '上级审核人', align: 'center' },
                     {
-                        field: 'Examine', title: '审核栏', align: 'center', formatter: function (value, row, index) {
-                            return "<a href='javascript:ExamineSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>审核查阅意见</a>";
-                        }
-                    },
-                    {
                         field: 'Look', title: '查看栏', align: 'center', formatter: function (value, row, index) {
-                            return "<a href='javascript:checkSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看日程详细</a><a href='javascript:checkFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看文件</a><a href='javascript:CheckExamineSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看审核意见</a>";
+                            if (row.FileItemID == null) {
+                                return "<a href='javascript:checkSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看日程详细</a><a href='javascript:CheckExamineSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看审核意见</a>";
+                            } else {
+                                return "<a href='javascript:checkSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看日程详细</a><a href='javascript:checkFiles()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看文件</a><a href='javascript:CheckExamineSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>查看审核意见</a>";
+                            }
                         }
                     }
                 ]],
@@ -967,6 +980,7 @@
         function cancel() {
             $("#AddExamineScheduleDiv").window('close');
             $("#CheckScheduleInfoDiv").window('close');
+            $("#SeeTextReadBakDiv").window("close");
             $(".SmallWindow textarea").val("");
             $(".SmallWindow input").val("");
         }
@@ -1524,6 +1538,18 @@
         起始时间：<input type="text" id="start" name="start" class="easyui-datebox" style="height:18px;width:100px;line-height:18px" />
         结束时间：<input type="text" id="end" name="end" class="easyui-datebox" style="height:18px;width:100px;line-height:18px" />
         <input type="button" onclick="DoSerch()" value="查询" />
+    </div>
+
+    <!-------------------查看日程查阅详细--------------------->
+    <div id="SeeTextReadBakDiv" class="easyui-window" title="日程详细信息" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:402px;height:321px;">
+        <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
+            <table>
+                <tr><td><b>领导查阅意见：</b></td><td><textarea id="TRBText" style="width:173px;height:80px;resize:none;"></textarea></td></tr>
+            </table>
+            <div style="padding:5px;text-align:center;">
+                <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="cancel()">确定</a>
+            </div>
+        </form>
     </div>
 
 </body>
