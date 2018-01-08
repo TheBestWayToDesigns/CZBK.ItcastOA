@@ -496,12 +496,14 @@
           <Property Name="KHperson" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="KHzhiwu" Type="nvarchar" MaxLength="50" />
           <Property Name="KHphoto" Type="nvarchar" MaxLength="15" Nullable="false" />
-          <Property Name="KHfaren" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="KHfaren" Type="nvarchar" MaxLength="250" />
           <Property Name="DelFlag" Type="smallint" Nullable="false" />
           <Property Name="Remark" Type="nvarchar(max)" />
           <Property Name="NewTime" Type="datetime" Nullable="false" />
           <Property Name="AddUser" Type="int" Nullable="false" />
           <Property Name="All_I" Type="smallint" Nullable="false" />
+          <Property Name="KHSGAdrss" Type="nvarchar(max)" />
+          <Property Name="BeiZhu" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="YXB_WinCanPin">
           <Key>
@@ -2001,7 +2003,7 @@
           <Property Name="KHperson" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="KHzhiwu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="KHphoto" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="KHfaren" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="KHfaren" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="DelFlag" Type="Int16" Nullable="false" />
           <Property Name="Remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="NewTime" Type="DateTime" Nullable="false" Precision="3" />
@@ -2009,6 +2011,8 @@
           <Property Name="All_I" Type="Int16" Nullable="false" />
           <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_YXB_Kh_list_UserInfo" FromRole="YXB_Kh_list" ToRole="UserInfo" />
           <NavigationProperty Name="T_BaoJiaToP" Relationship="OAModel.FK_T_BaoJiaToP_YXB_Kh_list" FromRole="YXB_Kh_list" ToRole="T_BaoJiaToP" />
+          <Property Name="KHSGAdrss" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BeiZhu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Login_list">
           <Key>
@@ -3261,6 +3265,8 @@
     <EntitySetMapping Name="YXB_Kh_list">
             <EntityTypeMapping TypeName="OAModel.YXB_Kh_list">
               <MappingFragment StoreEntitySet="YXB_Kh_list">
+                <ScalarProperty Name="BeiZhu" ColumnName="BeiZhu" />
+                <ScalarProperty Name="KHSGAdrss" ColumnName="KHSGAdrss" />
                 <ScalarProperty Name="All_I" ColumnName="All_I" />
                 <ScalarProperty Name="AddUser" ColumnName="AddUser" />
                 <ScalarProperty Name="NewTime" ColumnName="NewTime" />

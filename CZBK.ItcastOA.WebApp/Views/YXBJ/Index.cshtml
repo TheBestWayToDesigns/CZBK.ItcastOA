@@ -61,15 +61,19 @@
                 var KHzhiwu = $("#KHzhiwu");
                 var KHphoto = $("#KHphoto");
                 var KHfaren = $("#KHfaren");
+                var KHSGAdrss = $("#KHSGAdrss");
+                var BeiZhu = $("#BeiZhu");
                 var ay = new Array();
                 ay[0] = KHname;
                 ay[1] = KHperson;
                 ay[2] = KHzhiwu;
                 ay[3] = KHphoto;
                 ay[4] = KHfaren;
+                ay[5] = KHSGAdrss;
+                ay[6] = BeiZhu;
                 for (var i = 0; i < ay.length; i++) {
-                    if (ay[i].val().trim().length <= 0) {
-                        $("#alertShow").text(ay[i].attr("placeholder") + "不可为空")
+                    if (ay[i].val().trim().length <= 0 && ay[i].attr("placeholder") != "法人" && ay[i].attr("placeholder") != "施工地址" && ay[i].attr("placeholder") != "备注") {
+                        $("#alertShow").text(ay[i].attr("placeholder") + "不可为空");
                         $('#Hiddenalert').click();
                         ay[i].focusin();
                         return;
@@ -78,7 +82,7 @@
                
                 $.ajax({
                     url: "/YXBJ/AddYXB_KH_list",
-                    data: { KHname: ay[0].val(),  KHperson: ay[1].val(), KHzhiwu: ay[2].val(), KHphoto: ay[3].val(), KHfaren: ay[4].val() },
+                    data: { KHname: ay[0].val(), KHperson: ay[1].val(), KHzhiwu: ay[2].val(), KHphoto: ay[3].val(), KHfaren: ay[4].val(), KHSGAdrss: ay[5].val(), BeiZhu:ay[6].val() },
                     type: "POST",
                     dataType: 'json',
                     beforeSend: function () {
@@ -338,10 +342,6 @@
             })
             $("body").delegate('#Tbvlo tr td a', 'click', function () {
                 var nam = $(this).attr("name");
-                if (nam != 0) {
-                    alertshow("该信息已报价，不可删除！");
-                    return
-                }
                 $("#Loading").show();
                 $.post("/YXBJ/deletebaojia", {
                     "editID": editID,
@@ -427,10 +427,10 @@
                             })
                           
                         }
-                        else if (sdata.ret == "no")
-                        {
-                            alertshow("数据已报价不可修改！");
-                        }
+                        //else if (sdata.ret == "no")
+                        //{
+                        //    alertshow("数据已报价不可修改！");
+                        //}
                         else if (sdata.ret == "NoData")
                         {
                             $("#XskhxxClose").click();
@@ -901,6 +901,8 @@
                                 <input placeholder="联系人职务" class="form-control" type="text" name="KHzhiwu" id="KHzhiwu" />
                                 <input placeholder="联系人电话" class="form-control" type="text" name="KHphoto" id="KHphoto" />
                                 <input placeholder="法人" class="form-control" type="text" name="KHfaren" id="KHfaren" />
+                                <input placeholder="施工地址" class="form-control" type="text" name="KHSGAdrss" id="KHSGAdrss" />
+                                <input placeholder="备注" class="form-control" type="text" name="BeiZhu" id="BeiZhu" />
                             </div>
                         </div>
                         <div class="modal-footer">

@@ -37,6 +37,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             khlist.KHzhiwu = Request["KHzhiwu"];
             khlist.KHphoto = Request["KHphoto"];
             khlist.KHfaren = Request["KHfaren"];
+            khlist.KHSGAdrss = Request["KHSGAdrss"];
+            khlist.BeiZhu = Request["BeiZhu"];
             khlist.DelFlag = 0;
             khlist.NewTime = DateTime.Now;
             khlist.AddUser = LoginUser.ID;
@@ -83,7 +85,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            KHComname = a.KHComname,
                            KHperson = a.KHperson,
                            AddTime=a.NewTime,
-                           KHfaren=a.KHfaren                           
+                           KHfaren=a.KHfaren,
+                           KHSGAdrss = a.KHSGAdrss,
+                           BeiZhu = a.BeiZhu                           
                        };
             return Json(new { rows = temp, total = totalCount }, JsonRequestBehavior.AllowGet);
         }
@@ -191,35 +195,36 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public ActionResult EditBaoJiaTop()
         {
             var editid =Convert.ToInt64( Request["khid"]);
-            var ifture= YXB_BaojiaService.LoadEntities(x => x.BaoJiaTop_id == editid).DefaultIfEmpty();            
-            if (ifture.All(x => x.ZhuangTai == 0)|| ifture.First() == null)
-            { 
-                var emp = T_BaoJiaToPService.LoadEntities(x => x.id == editid);
-                var temp = from a in emp
-                           select new
-                           {
-                               BaoJiaID = a.id,
-                               HanShuiID = a.HanShuiID,
-                               GhTime = a.GhTime,
-                               Addess = a.Addess,
-                               Kh_List_id = a.Kh_List_id,
-                               KHComname = a.KHComname,
-                               JieShuanFanShi = a.JieShuanFanShi,
-                               DaiBanYunShu = a.DaiBanYunShu,
-                               JiShuYaoQiu = a.JiShuYaoQiu,
-                               HeTongQianDing = a.HeTongQianDing,
-                               HanshuiStr=a.T_BoolItem.str,
-                               PiaoJuID=a.PiaoJuID,
-                               stoptime=a.StopTime
-                           };
-                 var arraddess= temp.ToList()[0].Addess.Split(',');
-                return Json(new { ret = "ok", temp = temp, Province=arraddess[0], City=arraddess[1], Village=arraddess[2] }, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(new { ret = "no" }, JsonRequestBehavior.AllowGet);
-            }
-          
+            var emp = T_BaoJiaToPService.LoadEntities(x => x.id == editid);
+            var temp = from a in emp
+                       select new
+                       {
+                           BaoJiaID = a.id,
+                           HanShuiID = a.HanShuiID,
+                           GhTime = a.GhTime,
+                           Addess = a.Addess,
+                           Kh_List_id = a.Kh_List_id,
+                           KHComname = a.KHComname,
+                           JieShuanFanShi = a.JieShuanFanShi,
+                           DaiBanYunShu = a.DaiBanYunShu,
+                           JiShuYaoQiu = a.JiShuYaoQiu,
+                           HeTongQianDing = a.HeTongQianDing,
+                           HanshuiStr = a.T_BoolItem.str,
+                           PiaoJuID = a.PiaoJuID,
+                           stoptime = a.StopTime
+                       };
+            var arraddess = temp.ToList()[0].Addess.Split(',');
+            return Json(new { ret = "ok", temp = temp, Province = arraddess[0], City = arraddess[1], Village = arraddess[2] }, JsonRequestBehavior.AllowGet);
+            // var ifture= YXB_BaojiaService.LoadEntities(x => x.BaoJiaTop_id == editid).DefaultIfEmpty();
+            //if (ifture.First() == null)
+            //{ 
+
+            //}
+            //else
+            //{
+            //    return Json(new { ret = "no" }, JsonRequestBehavior.AllowGet);
+            //}
+
         }
 
         //添加产品详细数据
@@ -289,8 +294,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var editid= Convert.ToInt64(Request["editID"]);
             var delid= Convert.ToInt64(Request["delID"]);
 
-            YXB_Baojia ybj = YXB_BaojiaService.LoadEntities(x => x.id == delid).FirstOrDefault();      
-            YXB_BaojiaService.DeleteEntity(ybj);
+            YXB_Baojia ybj = YXB_BaojiaService.LoadEntities(x => x.id == delid).FirstOrDefault();
+            ybj.DelFlag = 1;
+            YXB_BaojiaService.EditEntity(ybj);
             return GetysbBaojia(editid);
         }
         //显示客户信息
@@ -337,6 +343,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var arry = straddess.Split(',');
             foreach (string s in arry)
             {
+                if (s == "")
+                {
+                    continue;
+                }
                 long ThisS = Convert.ToInt64(s);
                 string thisf = SysFieldService.LoadEntities(x => x.ID == ThisS).FirstOrDefault().MyTexts;
                 ArryAddess = ArryAddess.Trim().Length <= 0 ? thisf : ArryAddess + "-" + thisf;
