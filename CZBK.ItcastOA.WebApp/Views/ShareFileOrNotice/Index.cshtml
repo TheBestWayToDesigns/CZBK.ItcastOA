@@ -207,7 +207,7 @@
                     {
                         field: 'FileURL', title: '文件下载', align: 'center',
                         formatter: function (value, row, index) {
-                            return "<a href='javascript:downloadFile()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>下载</a>";
+                            return "<a href='javascript:downloadFile()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>下载</a><a href='javascript:addUploadFile()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>补充上传文件</a>";
                         }
                     },
                     { field: 'alluserinfo', title: '共享用户', align: 'center' },
@@ -329,6 +329,13 @@
                     window.open(url);
                 }
             })
+        }
+
+        //补充上传文件
+        function addUploadFile() {
+            var row = $("#tt").datagrid("getSelected");
+            $("#hiddenSFID").val(row.ID);
+            $("#AddUploadFileDiv").window("open");
         }
 
         //添加共享文件
@@ -740,6 +747,41 @@
             return;
         }
 
+        //上传文件返回
+        function getUrl() {
+            $("#adduploadfileform").ajaxSubmit({
+                success: function (data) {
+                    var serverData = data.split(":");
+                    if (serverData[0] == "yes") {
+                        var url = ("#hiddenSFUrl").val();
+                        var urlstr = url + "," + serverData[1];
+                        $("#hiddenSFUrl").val(urlstr);//将上传成功的文件地址放在隐藏input中
+                        $.messager.alert("提示", "上传文件成功！");
+                    }
+                    else {
+                        $.messager.alert("提示", serverData[1], "error");
+                    }
+                },
+                url: "/ShareFileOrNotice/FileUpload",
+                type: "post"
+            });
+        }
+
+        //添加部门的确定按钮
+        function OkToUpLoad() {
+            if ($("#hiddenSFUrl").val().trim().length <= 0) {
+                $.messager.alert("提示", "当前无补充文件，请上传文件再确定！");
+                return;
+            }
+            $("#adduploadfileform").submit();
+        }
+
+        //窗口取消功能
+        function cancel() {
+            $("#AddUploadFileDiv").window('close');
+            $(".SmallWindow input").val("");
+        }
+
     </script>
 
 </head>
@@ -929,5 +971,23 @@
         </table>
         }
     </div>
+
+    <!---------------补充上传文件--------------------->
+    <div id="AddUploadFileDiv" class="easyui-window" title="补充上传文件" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:309px;height:250px;">
+        @using (Ajax.BeginForm("AddUploadFile", "ShareFileOrNotice", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterUpload" }, new { id = "adduploadfileform" }))
+            {
+            <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
+                    文件：
+                    <input type="file" name="uploadShareFileName" id="AddUploadFileID" /><a href="javascript:getUrl()" class="l-btn" style="margin:0px 5px;padding:2px 8px">上传</a>
+                    <input type="text" id="hiddenSFID" name="sfid" />
+                    <input type="text" id="hiddenSFUrl" name="sfurl" />
+                <div style="padding:5px;text-align:center;">
+                    <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="OkToUpLoad()">确定</a>
+                    <a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="cancel()">取消</a>
+                </div>
+            </form>
+        }
+    </div>
+
 </body>
 </html>

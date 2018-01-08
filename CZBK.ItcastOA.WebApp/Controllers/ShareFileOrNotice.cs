@@ -300,6 +300,19 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var sn = ShareFileOrNoticeService.AddEntity(sfon);
             return Json(new { ret = "ok"}, JsonRequestBehavior.AllowGet);
         }
+        //补充上传共享文件
+        public ActionResult AddUploadFile()
+        {
+            var sfid = Convert.ToInt64(Request["sfid"]);
+            var sfurl = Request["sfurl"];
+            var temp = ShareFileOrNoticeService.LoadEntities(x => x.ID == sfid).FirstOrDefault();
+            if(temp != null)
+            {
+                temp.FileURL += sfurl;
+            }
+            ShareFileOrNoticeService.EditEntity(temp);
+            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+        }
         //添加通知公告
         public ActionResult AddNotice(ShareFileOrNotice sfon)
         {
