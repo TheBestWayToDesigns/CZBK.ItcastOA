@@ -30,11 +30,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
 
 
 
-        short delFlag = (short)DelFlagEnum.Normarl;
+        //short delFlag = (short)DelFlagEnum.Normarl;
         public ActionResult Index()
         {
+
             //用户名列表
-            ViewBag.user = UserInfoService.LoadEntities(x => x.DelFlag !=1&&x.BuMenID==1&&x.Click==null).ToList();
+            ViewBag.user = UserInfoService.LoadEntities(x => x.DelFlag !=1&&x.Click==null&&( x.BuMenID == 1||x.BuMenID==20)).ToList();
             //状态列表
             ViewBag.items= T_YSItemsService.LoadEntities(x => x.Items == 1).ToList();
             //客户名称 与 项目名称列表

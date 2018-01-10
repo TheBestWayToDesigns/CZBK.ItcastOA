@@ -71,14 +71,21 @@
                 ay[4] = KHfaren;
                 ay[5] = KHSGAdrss;
                 ay[6] = BeiZhu;
-                for (var i = 0; i < ay.length; i++) {
-                    if (ay[i].val().trim().length <= 0 && ay[i].attr("placeholder") != "法人" && ay[i].attr("placeholder") != "施工地址" && ay[i].attr("placeholder") != "备注") {
-                        $("#alertShow").text(ay[i].attr("placeholder") + "不可为空");
-                        $('#Hiddenalert').click();
-                        ay[i].focusin();
-                        return;
-                    }
+                if (ay[0].val().trim().length <= 0)
+                {
+                    $("#alertShow").text(ay[0].attr("placeholder") + "不可为空");
+                    $('#Hiddenalert').click();
+                    ay[i].focusin();
+                    return;
                 }
+                //for (var i = 0; i < ay.length; i++) {
+                //    if (ay[i].val().trim().length <= 0 && ay[i].attr("placeholder") != "法人" && ay[i].attr("placeholder") != "施工地址" && ay[i].attr("placeholder") != "备注") {
+                //        $("#alertShow").text(ay[i].attr("placeholder") + "不可为空");
+                //        $('#Hiddenalert').click();
+                //        ay[i].focusin();
+                //        return;
+                //    }
+                //}
                
                 $.ajax({
                     url: "/YXBJ/AddYXB_KH_list",
