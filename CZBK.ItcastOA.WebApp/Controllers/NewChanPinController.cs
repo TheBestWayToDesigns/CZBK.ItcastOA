@@ -61,15 +61,15 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public ActionResult DelChanPin()
         {
             long delID =Convert.ToInt64( Request["delID"]);
-            var deldata = T_ChanPinNameService.LoadEntities(x=>x.ID== delID).FirstOrDefault();
-            if (deldata.CreatePerson != LoginUser.ID)
+            var deldata = YXB_WinCanPinService.LoadEntities(x=>x.ID== delID).FirstOrDefault();
+            if (deldata.T_ChanPinName.CreatePerson != LoginUser.ID)
             {
                 return Json("noperson", JsonRequestBehavior.AllowGet);
             }
             else
             {
                 deldata.Del = 1;
-                if (T_ChanPinNameService.EditEntity(deldata))
+                if (YXB_WinCanPinService.EditEntity(deldata))
                 { return Json("ok", JsonRequestBehavior.AllowGet); }
                 else
                 { return Json("no", JsonRequestBehavior.AllowGet); }

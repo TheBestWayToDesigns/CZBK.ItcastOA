@@ -205,20 +205,34 @@
                     { field: 'FileTypeID', title: '文件类型', align: 'center' },
                     { field: 'BeiZhu', title: '文件备注', align: 'center' },
                     {
-                        field: 'FileURL', title: '文件下载', align: 'center',
-                        formatter: function (value, row, index) {
+                        field: 'FileURL', title: '文件下载', align: 'center',formatter: function (value, row, index) {
                             return "<a href='javascript:downloadFile()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>下载</a>";
                         }
+                    }, {
+                        field: 'AddFile', title: '补充上传文件', align: 'center', formatter: function (value, row, index) {
+                            if (value == row.shareuserid) {
+                                return "<a href='javascript:addUploadFile()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>补充上传文件</a>";
+                            } else {
+                                return "<label style='color: silver'>无权补充文件</label>";
+                            }
+                        }
                     },
-                    { field: 'alluserinfo', title: '共享用户', align: 'center' },
-                    { field: 'UploadFileTime', title: '文件上传时间', align: 'center',formatter: function (value, row, col) {
-                        var sd = value == null ? '' : ChangeDateFormat(value);
-                        return sd;
-                    }},
+                    { field: 'shareuserid', title: '发出共享的用户id', align: 'center', hidden: true },
+                    { field: 'alluserinfo', title: '共享用户', align: 'center', hidden: true },
+                    {
+                        field: 'checkalluserinfo', title: '共享用户', align: 'center', formatter: function (value, row, col) {
+                            return "<a href='javascript:checkAllUserInfo()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>查看共享用户</a>";
+                        }
+                    },
+                    {
+                        field: 'UploadFileTime', title: '文件上传时间', align: 'center', formatter: function (value, row, col) {
+                            var sd = value == null ? '' : ChangeDateFormat(value);
+                            return sd;
+                        }
+                    },
                     { field: 'ShareUser', title: '上传用户', align: 'center'},
                     {
-                        field: 'Del', title: '编辑栏', align: 'center',
-                        formatter: function (value, row, index) {
+                        field: 'Del', title: '编辑栏', align: 'center',formatter: function (value, row, index) {
                             return "<a href='javascript:del()' class='l-btn' style='margin:0px 5px;padding:2px 8px ' >删除</a>";
                         }
                     },
@@ -227,6 +241,14 @@
                 onLoadSuccess: function () {
                 }
             });
+        }
+
+        //查看共享用户
+        function checkAllUserInfo() {
+            var row = $("#tt").datagrid("getSelected");
+            $("#allUserInfoTA").val(row.alluserinfo);
+            document.getElementById("allUserInfoTA").setAttribute("readOnly",true);
+            $("#CheckAllUserInfoDiv").window("open");
         }
 
         //加载通知页面
@@ -325,10 +347,21 @@
                     $.messager.alert("提示", "无文件，可能未上传文件！");
                 }
                 else{
-                    var url = data.ret;
-                    window.open(url);
+                    var urlStr = data.ret;
+                    var ay = urlStr.split(",");
+                    for (var i = 0; i < ay.length; i++){
+                        $("#DownloadFileTab").append("<tr><td>文件" + (i + 1) + "</td><td><a href='" + ay[i] + "' target='_blank' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>下载</a></td></tr>");
+                    }
+                    $("#DownloadFileDiv").window("open");
                 }
             })
+        }
+
+        //补充上传文件
+        function addUploadFile() {
+            var row = $("#tt").datagrid("getSelected");
+            $("#hiddenSFID").val(row.ID);
+            $("#AddUploadFileDiv").window("open");
         }
 
         //添加共享文件
@@ -740,6 +773,52 @@
             return;
         }
 
+        //上传文件返回
+        function getUrl() {
+            $("#adduploadfileform").ajaxSubmit({
+                success: function (data) {
+                    var serverData = data.split(":");
+                    if (serverData[0] == "yes") {
+                        var url = $("#hiddenSFUrl").val();
+                        var urlstr = url + "," + serverData[1];
+                        $("#hiddenSFUrl").val(urlstr);//将上传成功的文件地址放在隐藏input中
+                        $.messager.alert("提示", "上传文件成功！");
+                    }
+                    else {
+                        $.messager.alert("提示", serverData[1], "error");
+                    }
+                },
+                url: "/ShareFileOrNotice/FileUpload",
+                type: "post"
+            });
+        }
+
+        //补充共享文件之后调用方法
+        function afterUpload() {
+            $("#AddUploadFileDiv").window('close');
+            $(".SmallWindow input").val("");
+            $('#tt').datagrid('reload');
+            $.messager.alert("提醒", "补充共享文件成功!!");
+        }
+
+        //添加部门的确定按钮
+        function OkToUpLoad() {
+            if ($("#hiddenSFUrl").val().trim().length <= 0) {
+                $.messager.alert("提示", "当前无补充文件，请上传文件再确定！");
+                return;
+            }
+            $("#adduploadfileform").submit();
+        }
+
+        //窗口取消功能
+        function cancel() {
+            $("#AddUploadFileDiv").window('close');
+            $(".SmallWindow input").val("");
+            $("#CheckAllUserInfoDiv").window("close");
+            $("#DownloadFileDiv").window('close');
+            $("#DownloadFileTab").children().remove();
+        }
+
     </script>
 
 </head>
@@ -778,91 +857,91 @@
     <div id="AddShareFileDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddShareFile", "ShareFileOrNotice", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddShareFile" }, new { id = "addsharefilefrom" }))
         {<div id="AddShareFileTab">
-            <div>
+                <div>
+                    <b>
+                        文件类型
+                        <input id="FileTypeInput" class="easyui-combobox" name="FileTypeID"
+                               url="/ShareFileOrNotice/GetAllFileType"
+                               valueField="ID"
+                               textField="Name"
+                               panelHeight="auto"
+                               style="width:100px" />
+                    </b>
+                </div>
+                <b>&nbsp;</b>
+                <div>
+                    <b>
+                        文件备注
+                        <input type="text" name="BeiZhu" id="BeiZhuId" />
+                    </b>
+                    <label style="color:silver">*推荐填写项(对文件加以说明)</label>
+                </div>
+                <b>&nbsp;</b>
+                <div>
+                    <b>
+                        文件
+                        <input type="file" id="uploadShareFileID" name="uploadShareFileName" /><a href='javascript:uploadFileClick()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>上传</a>
+                        <input type="hidden" id="fileUrlID" name="fileUrlName" />
+                    </b>
+                </div>
+                <b>&nbsp;</b>
+                <h1>分享给：</h1>
+                <b><b><label>是否启用模板？</label></b></b>
+                <b>&nbsp;</b>
+                <b class="t2">
+                    <b><input type="radio" name="Model" id="defu" value="defu" /><label>不分享</label></b>
+                    <b><input type="radio" name="Model" id="yes" value="yes" /><label>是</label></b>
+                    <b><input type="radio" name="Model" id="no" value="no" /><label>否</label></b>
+                </b>
+                <div><b>&nbsp;</b></div>
+                <div class="t3">
+                    <b style="width:20px">模板</b>
+                    <b>
+                        <input id="ModelFInput" class="easyui-combobox" name="ModelFName"
+                               url="/ShareFileOrNotice/GetAllModel"
+                               valueField="StrID"
+                               textField="StrName"
+                               panelHeight="auto"
+                               style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                        <a href='javascript:addModelstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
+                    </b>
+                    <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一个模板，需添加一次！</span></label></p>
+                </div>
+                <div class="t1">
+                    <b>部门</b>
+                    <b>&nbsp;&nbsp;</b>
+                    <b>
+                        <input id="BMSTUInput" class="easyui-combobox" name="BuMenName"
+                               url="/ShareFileOrNotice/GetAllBuMen"
+                               valueField="ID"
+                               textField="Name"
+                               panelHeight="auto"
+                               style="width:100px" />
+                    </b>
+                    <b></b>
+                </div>
+                <b>&nbsp;</b>
+                <div class="t1">
+                    <b>部门用户</b>
+                    <b>
+                        <input id="STUInput" class="easyui-combobox" name="ShareToUserName"
+                               valueField="ID"
+                               textField="Name"
+                               panelHeight="auto"
+                               style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                        <a href='javascript:addSTUsstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
+                    </b>
+                    <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一人，需添加一次！</span></label></p>
+                </div>
+                <br />
                 <b>
-                    文件类型
-                    <input id="FileTypeInput" class="easyui-combobox" name="FileTypeID"
-                           url="/ShareFileOrNotice/GetAllFileType"
-                           valueField="ID"
-                           textField="Name"
-                           panelHeight="auto"
-                           style="width:100px" />
+                    <b><textarea id="ShowAddUsers" style="width:300px;height:30px;display:none"></textarea></b>
+                    <b><input type="hidden" name="STUstrName" id="STUstrID" /></b>
                 </b>
             </div>
-            <b>&nbsp;</b>
-            <div>
-                <b>
-                    文件备注
-                    <input type="text" name="BeiZhu" id="BeiZhuId" />
-                </b>
-                <label style="color:silver">*推荐填写项(对文件加以说明)</label>
-            </div>
-            <b>&nbsp;</b>
-            <div>
-                <b>
-                    文件
-                    <input type="file" id="uploadShareFileID" name="uploadShareFileName" /><a href='javascript:uploadFileClick()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>上传</a>
-                    <input type="hidden" id="fileUrlID" name="fileUrlName" />
-                </b>
-            </div>
-            <b>&nbsp;</b>
-            <h1>分享给：</h1>
-            <b><b><label>是否启用模板？</label></b></b>
-            <b>&nbsp;</b>
-            <b class="t2">
-                <b><input type="radio" name="Model" id="defu" value="defu" /><label>不分享</label></b>
-                <b><input type="radio" name="Model" id="yes" value="yes" /><label>是</label></b>
-                <b><input type="radio" name="Model" id="no" value="no" /><label>否</label></b>
-           </b>
-            <div><b>&nbsp;</b></div>
-            <div class="t3">
-                <b style="width:20px">模板</b>
-                <b>
-                    <input id="ModelFInput" class="easyui-combobox" name="ModelFName"
-                           url="/ShareFileOrNotice/GetAllModel"
-                           valueField="StrID"
-                           textField="StrName"
-                           panelHeight="auto"
-                           style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-                    <a href='javascript:addModelstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
-                </b>
-                <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一个模板，需添加一次！</span></label></p>
-            </div>
-            <div class="t1">
-                <b>部门</b>
-                <b>&nbsp;&nbsp;</b>
-                <b>
-                    <input id="BMSTUInput" class="easyui-combobox" name="BuMenName"
-                           url="/ShareFileOrNotice/GetAllBuMen"
-                           valueField="ID"
-                           textField="Name"
-                           panelHeight="auto"
-                           style="width:100px" />
-                </b>
-                <b></b>
-            </div>
-            <b>&nbsp;</b>
-            <div class="t1">
-                <b>部门用户</b>
-                <b>
-                    <input id="STUInput" class="easyui-combobox" name="ShareToUserName"
-                           valueField="ID"
-                           textField="Name"
-                           panelHeight="auto"
-                           style="width:100px" /><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-                    <a href='javascript:addSTUsstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
-                </b>
-                <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一人，需添加一次！</span></label></p>
-            </div>
-            <br />
-            <b>
-                <b><textarea id="ShowAddUsers" style="width:300px;height:30px;display:none"></textarea></b>
-                <b><input type="hidden" name="STUstrName" id="STUstrID" /></b>
-            </b>
-        </div>
-        <table>
-            <tbody id="Selebody"></tbody>
-        </table>
+            <table>
+                <tbody id="Selebody"></tbody>
+            </table>
         }
     </div>
 
@@ -870,64 +949,112 @@
     <div id="AddNoticeDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddNotice", "ShareFileOrNotice", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddNotice" }, new { id = "addnoticefrom" }))
         {<div id="AddShareFileTab">
-            <div>
-                <p><b>通知内容</b></p>
-                &nbsp;&nbsp;&nbsp;&nbsp;<b><textarea id="BeiZhuArea" name="BeiZhuArea" style="width:302px;height:100px"></textarea></b>
-                <b><input type="hidden" name="NoticeText" id="NoticeTextID" /></b>
+                <div>
+                    <p><b>通知内容</b></p>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<b><textarea id="BeiZhuArea" name="BeiZhuArea" style="width:302px;height:100px"></textarea></b>
+                    <b><input type="hidden" name="NoticeText" id="NoticeTextID" /></b>
+                </div>
+                <div><h1>分享给：</h1></div>
+                <div><b><label>请选择添加分享人方式？</label></b></div>
+                <br />
+                <div>
+                    <b><input type="radio" name="IssuedType" id="ByAllBuMen" value="ByAllBuMen" /><label>全公司下发</label></b><b><input type="radio" name="IssuedType" id="ByOneBuMen" value="ByOneBuMen" /><label>每个部门依次添加</label></b>
+                    <b><input type="radio" name="IssuedType" id="ByOneByOne" value="ByOneByOne" /><label>每个人依次添加</label></b>
+                </div>
+                <div><b>&nbsp;</b></div>
+                <div id="BMDIV">
+                    <div>
+                        <b>部门</b>
+                        <b>&nbsp;&nbsp;</b>
+                        <b>
+                            <input id="BMNUInput" class="easyui-combobox" name="BuMenNoticeName"
+                                   url="/ShareFileOrNotice/GetAllBuMen"
+                                   valueField="ID"
+                                   textField="Name"
+                                   panelHeight="auto"
+                                   style="width:100px" />
+                        </b>
+                    </div>
+                </div>
+                <div id="BMUSERDIV">
+                    <div>
+                        <b>&nbsp;&nbsp;</b>
+                    </div>
+                    <div>
+                        <b>部门用户</b>
+                        <b>
+                            <input id="STUNInput" class="easyui-combobox" name="ShareToUserNoticeName"
+                                   valueField="ID"
+                                   textField="Name"
+                                   panelHeight="auto"
+                                   style="width:100px" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href='javascript:addSTUNsstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
+                        </b>
+                        <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一人，需添加一次！</span></label></p>
+                    </div>
+                    <div>
+                        <b>&nbsp;</b>
+                    </div>
+                </div>
+                <div id="ADDBUMENDIV">
+                    <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一部门，需添加一次！</span></label></p>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><a href='javascript:addSTBMstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a></b>
+                </div>
+                <div>
+                    <b><input type="hidden" name="NoticestrName" id="NoticestrID" /></b>
+                    <b><textarea id="ShowAddBMOrUser" style="width:300px;height:30px;display:none"></textarea></b>
+                </div>
             </div>
-            <div><h1>分享给：</h1></div>
-             <div><b><label>请选择添加分享人方式？</label></b></div>
-             <br />
-             <div><b><input type="radio" name="IssuedType" id="ByAllBuMen" value="ByAllBuMen" /><label>全公司下发</label></b><b><input type="radio" name="IssuedType" id="ByOneBuMen" value="ByOneBuMen" /><label>每个部门依次添加</label></b>
-                <b><input type="radio" name="IssuedType" id="ByOneByOne" value="ByOneByOne" /><label>每个人依次添加</label></b></div>
-             <div><b>&nbsp;</b></div>
-             <div id="BMDIV">
-                 <div>
-                     <b>部门</b>
-                     <b>&nbsp;&nbsp;</b>
-                     <b>
-                         <input id="BMNUInput" class="easyui-combobox" name="BuMenNoticeName"
-                                url="/ShareFileOrNotice/GetAllBuMen"
-                                valueField="ID"
-                                textField="Name"
-                                panelHeight="auto"
-                                style="width:100px" />
-                     </b>
-                 </div>
-             </div>
-             <div id="BMUSERDIV">
-                 <div>
-                     <b>&nbsp;&nbsp;</b>
-                 </div>
-                 <div>
-                     <b>部门用户</b>
-                     <b>
-                         <input id="STUNInput" class="easyui-combobox" name="ShareToUserNoticeName"
-                                valueField="ID"
-                                textField="Name"
-                                panelHeight="auto"
-                                style="width:100px" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                         <a href='javascript:addSTUNsstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a>
-                     </b>
-                     <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一人，需添加一次！</span></label></p>
-                 </div>
-                 <div>
-                     <b>&nbsp;</b>
-                 </div>
-             </div>
-            <div id="ADDBUMENDIV">
-                <p><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">【注】</span><span style="color:silver">每选定一部门，需添加一次！</span></label></p>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><a href='javascript:addSTBMstr()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>添加</a></b>
-            </div>
-            <div>
-                <b><input type="hidden" name="NoticestrName" id="NoticestrID" /></b>
-                <b><textarea id="ShowAddBMOrUser" style="width:300px;height:30px;display:none"></textarea></b>
-            </div>
-        </div>
-        <table>
-            <tbody id="Selebody"></tbody>
-        </table>
+            <table>
+                <tbody id="Selebody"></tbody>
+            </table>
         }
     </div>
+
+    <!---------------补充上传文件--------------------->
+    <div id="AddUploadFileDiv" class="easyui-window" title="补充上传文件" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:348px;height:147px;">
+        @using (Ajax.BeginForm("AddUploadFile", "ShareFileOrNotice", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterUpload" }, new { id = "adduploadfileform" }))
+        {
+            <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
+                <div style="height:5px"><!--填充空白区域--></div>
+                文件：
+                <input type="file" name="uploadShareFileName" id="AddUploadFileID" /><a href="javascript:getUrl()" class="l-btn" style="margin:0px 5px;padding:2px 8px">上传</a>
+                <div style="text-align:center"><label><b style="color:red">【注】</b><span style="color:silver">多个文件需依次进行添加再上传！最后再点确定！</span></label></div>
+                <input type="hidden" id="hiddenSFID" name="sfid" />
+                <input type="hidden" id="hiddenSFUrl" name="sfurl" />
+                <div style="height:20px"><!--填充空白区域--></div>
+                <div style="padding:5px;text-align:center;">
+                    <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="OkToUpLoad()">确定</a>
+                    <a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="cancel()">取消</a>
+                </div>
+            </form>
+        }
+    </div>
+
+    <!--------------显示下载文件的列表---------------->
+    <div id="DownloadFileDiv" class="easyui-window" title="下载文件" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:192px;height:auto;">
+        <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
+            <table id="DownloadFileTab">
+                <!--显示文件-->
+            </table>
+            <div style="padding:5px;text-align:center;">
+                <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="cancel()">确定</a>
+            </div>
+        </form>
+    </div>
+
+    <!--------------查看共享用户---------------->
+    <div id="CheckAllUserInfoDiv" class="easyui-window" title="下载文件" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:304px;height:197px;">
+        <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
+            <div>
+                <b>所有共享到的用户：</b><br />
+                &nbsp;&nbsp;<textarea id="allUserInfoTA" style="width:161px;height:76px;resize:none"></textarea>
+            </div>
+            <div style="padding:5px;text-align:center;">
+                <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="cancel()">确定</a>
+            </div>
+        </form>
+    </div>
+
 </body>
 </html>

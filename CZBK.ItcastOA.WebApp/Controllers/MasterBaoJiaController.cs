@@ -30,18 +30,17 @@ namespace CZBK.ItcastOA.WebApp.Controllers
 
 
 
-        //short delFlag = (short)DelFlagEnum.Normarl;
+        short delFlag = (short)DelFlagEnum.Normarl;
         public ActionResult Index()
         {
-
             //用户名列表
-            ViewBag.user = UserInfoService.LoadEntities(x => x.DelFlag !=1&&x.Click==null&&( x.BuMenID == 1||x.BuMenID==20)).ToList();
+            ViewBag.user = UserInfoService.LoadEntities(x => x.DelFlag != 1 && x.BuMenID == 1 && x.Click == null).ToList();
             //状态列表
-            ViewBag.items= T_YSItemsService.LoadEntities(x => x.Items == 1).ToList();
+            ViewBag.items = T_YSItemsService.LoadEntities(x => x.Items == 1).ToList();
             //客户名称 与 项目名称列表
             ViewBag.KeHuName = YXB_Kh_listService.LoadEntities(x => x.DelFlag == 0).ToList();
 
-            
+
             return View();
         }
         public ActionResult GetMenum()
@@ -82,10 +81,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         }
         public ActionResult GetMoneyInfo()
         {
-            int delflg = Request["delflg"] == null ? 0 :int.Parse( Request["delflg"]);
+            int delflg = Request["delflg"] == null ? 0 : int.Parse(Request["delflg"]);
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 15;
-            int win =  Request["win"]== null ? 0 :int.Parse( Request["win"]);
+            int win = Request["win"] == null ? 0 : int.Parse(Request["win"]);
             delflg = win == 1 ? 1 : delflg;
             int totalCount = 0;
             if (win == 1)
@@ -97,11 +96,11 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 List<SlcClass> templist;
                 LoadBaojia(pageIndex, pageSize, out totalCount, out templist, delflg, win, true);
                 return Json(new { rows = templist, ret = delflg, total = totalCount }, JsonRequestBehavior.AllowGet);
-            }   
-           
+            }
+
         }
         //提交报价前先在BaoJiaEidtMoney表中存个记录
-        public bool createEditMoneyTab(long rid,string eM,string eY)
+        public bool createEditMoneyTab(long rid, string eM, string eY)
         {
             YXB_BaoJiaEidtMoney bjem = new YXB_BaoJiaEidtMoney();
             bjem.YXB_BJ_ID = rid;
@@ -122,36 +121,37 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //提交报价
         public ActionResult editMoney()
         {
-            var rID =Convert.ToInt64( Request["resultId"]);
+            var rID = Convert.ToInt64(Request["resultId"]);
             var eMoney = Request["PMoney"];
             var eYunfei = Request["Yunfei"];
-            bool b = createEditMoneyTab(rID,eMoney,eYunfei);
-            if (b) {
-                 var baojia= YXB_BaojiaService.LoadEntities(x => x.id == rID).FirstOrDefault();            
-                 //检查更改金额之前是否存在值
-                 if (baojia.BaoJiaMoney == null)
-                 {
-                     baojia.BaoJiaMoney = Convert.ToDecimal(eMoney);
-                     baojia.BaoJiaYunFei= Convert.ToDecimal(eYunfei);
-                     baojia.BaoJiaPerson = LoginUser.ID;
-                     baojia.BaoJiaTime = MvcApplication.GetT_time();
-                     baojia.ZhuangTai = 1;
-                     baojia.CheckMoney = 0;//未审核
+            bool b = createEditMoneyTab(rID, eMoney, eYunfei);
+            if (b)
+            {
+                var baojia = YXB_BaojiaService.LoadEntities(x => x.id == rID).FirstOrDefault();
+                //检查更改金额之前是否存在值
+                if (baojia.BaoJiaMoney == null)
+                {
+                    baojia.BaoJiaMoney = Convert.ToDecimal(eMoney);
+                    baojia.BaoJiaYunFei = Convert.ToDecimal(eYunfei);
+                    baojia.BaoJiaPerson = LoginUser.ID;
+                    baojia.BaoJiaTime = MvcApplication.GetT_time();
+                    baojia.ZhuangTai = 1;
+                    baojia.CheckMoney = 0;//未审核
                     YXB_BaojiaService.EditEntity(baojia);
-                 }
-                 else
-                 {
-                     baojia.EditQianMoney=baojia.BaoJiaMoney;
-                     baojia.EditQianYunFei = baojia.BaoJiaYunFei;
-                     baojia.UpdataTime= MvcApplication.GetT_time();
-                     baojia.UpdataUserID = LoginUser.ID;
-                     baojia.BaoJiaMoney = Convert.ToDecimal(eMoney);  
-                     baojia.BaoJiaYunFei = Convert.ToDecimal(eYunfei);
-                     baojia.ZhuangTai = 1;
-                     baojia.CheckMoney = 0;//未审核
+                }
+                else
+                {
+                    baojia.EditQianMoney = baojia.BaoJiaMoney;
+                    baojia.EditQianYunFei = baojia.BaoJiaYunFei;
+                    baojia.UpdataTime = MvcApplication.GetT_time();
+                    baojia.UpdataUserID = LoginUser.ID;
+                    baojia.BaoJiaMoney = Convert.ToDecimal(eMoney);
+                    baojia.BaoJiaYunFei = Convert.ToDecimal(eYunfei);
+                    baojia.ZhuangTai = 1;
+                    baojia.CheckMoney = 0;//未审核
                     YXB_BaojiaService.EditEntity(baojia);
-                 }
-                 return Json(new { ret = true }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { ret = true }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -164,21 +164,21 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var bjid = Convert.ToInt64(Request["bjid"]);
             var ckid = Request["ckid"];
             var temp = YXB_BaojiaService.LoadEntities(x => x.id == bjid).FirstOrDefault();
-            temp.ZhuangTai =Convert.ToInt32(ckid);            
+            temp.ZhuangTai = Convert.ToInt32(ckid);
             YXB_BaojiaService.EditEntity(temp);
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
-        }       
+        }
         //信息完成处理
         public ActionResult WinChuLi(T_WinBak Twbak)
         {
             //  var WinMoney = Request["WinMoney"]==null?0:Request["WinMoney"].ToString().Trim().Length<=0?0:Convert.ToDecimal(Request["WinMoney"]);
-      
-            var Baojia = YXB_BaojiaService.LoadEntities(x => x.BaoJiaTop_id ==Twbak.BaoJiaTOPID).DefaultIfEmpty();
+
+            var Baojia = YXB_BaojiaService.LoadEntities(x => x.BaoJiaTop_id == Twbak.BaoJiaTOPID).DefaultIfEmpty();
             List<YXB_Baojia> ybj = new List<YXB_Baojia>();
             foreach (var it in Baojia)
             {
                 it.WinMoney = Convert.ToDecimal(Request["EidtMoney" + it.id]);
-                it.WinYunFei= Convert.ToDecimal(Request["EidtYunFei" + it.id]);
+                it.WinYunFei = Convert.ToDecimal(Request["EidtYunFei" + it.id]);
                 it.WIN = 1;
                 it.UpdataUserID = LoginUser.ID;
                 //修改完成报价信息
@@ -190,8 +190,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             if (T_WinBakService.UpHeTongWinADD(ybj, Twbak))
             { return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet); }
             else
-            { return Json(new { ret = "no" }, JsonRequestBehavior.AllowGet); }           
-          
+            { return Json(new { ret = "no" }, JsonRequestBehavior.AllowGet); }
+
         }
         public string ArrF(string add)
         {
@@ -230,24 +230,24 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             };
             tempName = tempName.OrderBy(p => p.MyText);
             tempXingH = tempXingH.OrderBy(p => p.MyText);
-            return Json(action==1?tempName:tempXingH, JsonRequestBehavior.AllowGet);
+            return Json(action == 1 ? tempName : tempXingH, JsonRequestBehavior.AllowGet);
         }
         //多选查询
         public ActionResult DuoXuanSearch()
         {
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
-            int win = Request["win"] == null ? 0 : int.Parse(Request["win"]);   
+            int win = Request["win"] == null ? 0 : int.Parse(Request["win"]);
             UserInfoParam uim = new UserInfoParam();
-            
+
             uim.Uptime = Convert.ToDateTime(Request["UpTime"]);
             uim.Dwtime = Convert.ToDateTime(Request["DwTime"]);
-            uim.zt = Request["Zt"] == null ? 0 : int.Parse(Request["Zt"]); 
+            uim.zt = Request["Zt"] == null ? 0 : int.Parse(Request["Zt"]);
             uim.addess = Request["addess"];
-            uim.Person = Request["Person"]==null?0 : Request["Person"].Length <= 0 ? 0 : int.Parse( Request["Person"]);
-            uim.KHname = Request["KHname"] == null ? 0 : Request["KHname"].Length<=0?0: int.Parse(Request["KHname"]);
-            uim.CPname = Request["CPname"] == null ? 0 : Request["CPname"].Length <= 0 ?0: int.Parse(Request["CPname"]);
-            uim.CPxh = Request["CPxh"] == null ?0 : Request["CPxh"].Length <= 0 ?0: int.Parse(Request["CPxh"]);
+            uim.Person = Request["Person"] == null ? 0 : Request["Person"].Length <= 0 ? 0 : int.Parse(Request["Person"]);
+            uim.KHname = Request["KHname"] == null ? 0 : Request["KHname"].Length <= 0 ? 0 : int.Parse(Request["KHname"]);
+            uim.CPname = Request["CPname"] == null ? 0 : Request["CPname"].Length <= 0 ? 0 : int.Parse(Request["CPname"]);
+            uim.CPxh = Request["CPxh"] == null ? 0 : Request["CPxh"].Length <= 0 ? 0 : int.Parse(Request["CPxh"]);
             uim.PageIndex = pageIndex;
             uim.PageSize = pageSize;
             uim.TotalCount = 0;
@@ -281,10 +281,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            NewTime = a.T_BaoJiaToP.YXB_Kh_list.NewTime,
                            UName = a.T_BaoJiaToP.YXB_Kh_list.UserInfo.PerSonName,
                            WinMoney = a.WinMoney,
-                           WinYunFei=a.WinYunFei,
+                           WinYunFei = a.WinYunFei,
                            WinStr = a.T_BaoJiaToP.T_WinBak.FirstOrDefault() == null ? null : a.T_BaoJiaToP.T_WinBak.FirstOrDefault().T_YSItems.MyText,
-                           HanShui=a.T_BaoJiaToP.T_BoolItem.str,
-                           BaoJiaYunFei=a.BaoJiaYunFei
+                           HanShui = a.T_BaoJiaToP.T_BoolItem.str,
+                           BaoJiaYunFei = a.BaoJiaYunFei
 
                        };
             var templist = temp.ToList();
@@ -292,16 +292,17 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             {
                 templist[i].Addess = ArrF(templist[i].Addess);
             }
-            return Json(new { rows = templist,  total = uim.TotalCount }, JsonRequestBehavior.AllowGet);
-              
+            return Json(new { rows = templist, total = uim.TotalCount }, JsonRequestBehavior.AllowGet);
+
         }
-        
+
         //完成合同
-        public ActionResult OverHeTongt() {
+        public ActionResult OverHeTongt()
+        {
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
             int TotalCount = 0;
-            var Tbjtop = T_BaoJiaToPService.LoadEntities(a => a.DelFlag==0&& a.YXB_Baojia.All(x => x.WIN == 0)).DefaultIfEmpty().ToList();
+            var Tbjtop = T_BaoJiaToPService.LoadEntities(a => a.DelFlag == 0 && a.YXB_Baojia.All(x => x.WIN == 0)).DefaultIfEmpty().ToList();
             List<T_BaoJiaToP> tbjp = new List<T_BaoJiaToP>();
             foreach (var t in Tbjtop)
             {
@@ -315,7 +316,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
 
                     tbjp.Add(t);
                 }
-            }          
+            }
             var temp = from a in tbjp
                        select new SlcClass
                        {
@@ -334,7 +335,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            KHphoto = a.YXB_Kh_list.KHphoto,
                            NewTime = a.YXB_Kh_list.NewTime,
                            UName = a.YXB_Kh_list.UserInfo.UName,
-                           Denjiu=a.T_YSItems.MyText
+                           Denjiu = a.T_YSItems.MyText
                        };
             var templist = temp.ToList();
             for (int i = 0; i < templist.Count; i++)
@@ -344,7 +345,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return Json(new { rows = templist, total = TotalCount }, JsonRequestBehavior.AllowGet);
         }
         //获取完成合同的详细数据
-        public ActionResult GetWinHeTongData(){
+        public ActionResult GetWinHeTongData()
+        {
             var id = Request["id"] == null ? 0 : int.Parse(Request["id"]);
             if (id == 0)
             {
@@ -353,7 +355,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var temp = T_BaoJiaToPService.LoadEntities(x => x.id == id).FirstOrDefault();
             string XiangMuName = temp.KHComname;
             string HanShuiStr = temp.HanShuiID == null ? "" : temp.T_BoolItem.str;
-            string bak = temp.T_WinBak.FirstOrDefault()==null?"":temp.T_WinBak.FirstOrDefault().Bak;
+            string bak = temp.T_WinBak.FirstOrDefault() == null ? "" : temp.T_WinBak.FirstOrDefault().Bak;
             var mmp = from a in temp.YXB_Baojia
                       select new
                       {
@@ -361,19 +363,20 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                           CPname = a.T_ChanPinName1.MyTexts,
                           CpXingHao = a.T_ChanPinName2.MyTexts,
                           CpMoney = a.WinMoney,
-                          WinYunFei=a.WinYunFei,
-                          BaoJiaMoney=a.BaoJiaMoney,
+                          WinYunFei = a.WinYunFei,
+                          BaoJiaMoney = a.BaoJiaMoney,
                           CPShuLiang = a.CPShuLiang,
-                          BaoJiaYunFei= a.BaoJiaYunFei,
-                          Remark=a.Remark,
-                          Cpdengji= a.T_ChanPinName.MyTexts
-                         
+                          BaoJiaYunFei = a.BaoJiaYunFei,
+                          Remark = a.Remark,
+                          Cpdengji = a.T_ChanPinName.MyTexts
+
                       };
-            return Json(new {ret="ok",temp=mmp,XiangMuName=XiangMuName,HanShuiStr= HanShuiStr,bak = bak }, JsonRequestBehavior.AllowGet);
+            return Json(new { ret = "ok", temp = mmp, XiangMuName = XiangMuName, HanShuiStr = HanShuiStr, bak = bak }, JsonRequestBehavior.AllowGet);
         }
 
         //获取合同进行完成后操作的数据查询
-        public ActionResult GetWinHeTongWinData() {
+        public ActionResult GetWinHeTongWinData()
+        {
             int TotalCount = 0;
             var rtt = GeteSS(out TotalCount);
             return Json(new { rows = rtt, total = TotalCount }, JsonRequestBehavior.AllowGet);
@@ -393,8 +396,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             uim.addess = Request["addess"];
             uim.Person = Request["Person"] == null ? 0 : Request["Person"].Length <= 0 ? 0 : int.Parse(Request["Person"]);
             uim.KHname = Request["KHname"] == null ? 0 : Request["KHname"].Length <= 0 ? 0 : int.Parse(Request["KHname"]);
-            uim.CPname = Request["CPname"] == null ? 0 : Request["CPname"].Length <= 0 ?0: int.Parse(Request["CPname"]);
-            uim.CPxh = Request["CPxh"] == null ? 0 : Request["CPxh"].Length <= 0 ? 0: int.Parse(Request["CPxh"]);
+            uim.CPname = Request["CPname"] == null ? 0 : Request["CPname"].Length <= 0 ? 0 : int.Parse(Request["CPname"]);
+            uim.CPxh = Request["CPxh"] == null ? 0 : Request["CPxh"].Length <= 0 ? 0 : int.Parse(Request["CPxh"]);
             uim.PageIndex = pageIndex;
             uim.PageSize = pageSize;
             uim.TotalCount = 0;
@@ -446,8 +449,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             var winbakID = int.Parse(Request["ID"]);
             int TotalCount = 0;
-            var temp = GetListWINfAHUO(winbakID,out TotalCount);
-            return Json(new {  rows = temp, total = TotalCount }, JsonRequestBehavior.AllowGet);
+            var temp = GetListWINfAHUO(winbakID, out TotalCount);
+            return Json(new { rows = temp, total = TotalCount }, JsonRequestBehavior.AllowGet);
         }
         //追加发货信息
         public ActionResult AddFahuo(T_WinBakFaHuo wbf)
@@ -460,7 +463,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             else
             {
-                int fhint= T_WinBakFaHuoService.LoadEntities(x => x.BaoJia_ID == wbf.BaoJia_ID)==null?0:Convert.ToInt32( T_WinBakFaHuoService.LoadEntities(x => x.BaoJia_ID == wbf.BaoJia_ID).Sum(x => x.FahuoInt));
+                int fhint = T_WinBakFaHuoService.LoadEntities(x => x.BaoJia_ID == wbf.BaoJia_ID) == null ? 0 : Convert.ToInt32(T_WinBakFaHuoService.LoadEntities(x => x.BaoJia_ID == wbf.BaoJia_ID).Sum(x => x.FahuoInt));
                 if (fhint + wbf.FahuoInt > mmp.CPShuLiang)
                 {
                     return Json(new { ret = "no", msg = "发货总数不可大于发货量！" }, JsonRequestBehavior.AllowGet);
@@ -477,11 +480,11 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
 
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
-            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;           
-            var temp= YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out TotalCount, x => x.BaoJiaTop_id == TopId && x.DelFlag == 0 && x.WIN == 1, x => x.AddTime, true);
-           
+            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
+            var temp = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out TotalCount, x => x.BaoJiaTop_id == TopId && x.DelFlag == 0 && x.WIN == 1, x => x.AddTime, true);
+
             var rtemp = from a in temp
-                        select new 
+                        select new
                         {
                             ID = a.id,
                             CpName = a.CPname,
@@ -490,10 +493,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             WinMoney = a.WinMoney,
                             WinYunFei = a.WinYunFei,
                             AddTime = a.AddTime,
-                            Fahuoyint= a.T_WinBakFaHuo.Sum(x=>x.FahuoInt),
-                            FahuoTime=a.T_WinBakFaHuo.Max(x=>x.FaHuoTime),
-                            
-                        };            
+                            Fahuoyint = a.T_WinBakFaHuo.Sum(x => x.FahuoInt),
+                            FahuoTime = a.T_WinBakFaHuo.Max(x => x.FaHuoTime),
+
+                        };
             return rtemp;
         }
         //删除发货信息
@@ -508,47 +511,48 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var Dtime = Convert.ToDateTime(Request["Dtime"]);
             List<Month> retMonth = new List<Month>();
             var oldtemp = T_BaoJiaToPService.LoadEntities(x => x.AddTime < Utime);
-         
+
             if (T_BaoJiaToPService.LoadEntities(x => x.AddTime < Utime).FirstOrDefault() == null)
             {
-                retMonth.Add(new Month { ID = 0, WinCount = 0, LostCount = 0, DaiDingCount = 0, SumCount = 0 ,WinDML=0,lostDML=0,DdDml=0,SumDMLCount=0});
+                retMonth.Add(new Month { ID = 0, WinCount = 0, LostCount = 0, DaiDingCount = 0, SumCount = 0, WinDML = 0, lostDML = 0, DdDml = 0, SumDMLCount = 0 });
             }
             else
             {
-                retMonth.Add(GetMonthVar(oldtemp, 0,0));
+                retMonth.Add(GetMonthVar(oldtemp, 0, 0));
             }
             //获取成功失败原因列表
-            var yyItem = T_YSItemsService.LoadEntities(x => x.Items==1&&x.ID!=1);
+            var yyItem = T_YSItemsService.LoadEntities(x => x.Items == 1 && x.ID != 1);
             List<Items>[] Rlis = new List<Items>[2];
             Rlis[0] = AddList(yyItem, oldtemp);
-            oldtemp = T_BaoJiaToPService.LoadEntities(x=>x.AddTime>=Utime&&x.AddTime<=Dtime).DefaultIfEmpty();
-            
+            oldtemp = T_BaoJiaToPService.LoadEntities(x => x.AddTime >= Utime && x.AddTime <= Dtime).DefaultIfEmpty();
 
-           
-            Rlis[1]=AddList(yyItem, oldtemp);
 
-            retMonth.Add(GetMonthVar(oldtemp,  retMonth[0].DaiDingCount,retMonth[0].DdDml));
+
+            Rlis[1] = AddList(yyItem, oldtemp);
+
+            retMonth.Add(GetMonthVar(oldtemp, retMonth[0].DaiDingCount, retMonth[0].DdDml));
 
             oldtemp = T_BaoJiaToPService.LoadEntities(x => x.AddTime <= Dtime);
-            retMonth.Add(GetMonthVar(oldtemp, 0,0));
+            retMonth.Add(GetMonthVar(oldtemp, 0, 0));
 
             #region 成功失败待定金额百分比
             var LostYuanyinItem = T_WinBakService.LoadEntities(x => x.AddTime < Utime).DefaultIfEmpty();
             //获取报价人员
-            var Uload = UserInfoService.LoadEntities(x => x.BuMenID == 1).DefaultIfEmpty();   
+            var Uload = UserInfoService.LoadEntities(x => x.BuMenID == 1).DefaultIfEmpty();
             //获取成功或失败的信息       
             var DMYuanyinItem = T_WinBakService.LoadEntities(x => x.AddTime >= Utime && x.AddTime <= Dtime).DefaultIfEmpty();
             //获取待定信息
             var DaiDingData = T_BaoJiaToPService.LoadEntities(x => x.AddTime >= Utime && x.AddTime <= Dtime).Where(x => x.T_WinBak.Count() == 0).DefaultIfEmpty();
 
-           //.Sum(a => a.YXB_Baojia.Sum(m => m.CPShuLiang * (m.BaoJiaMoney + m.BaoJiaYunFei)));
+            //.Sum(a => a.YXB_Baojia.Sum(m => m.CPShuLiang * (m.BaoJiaMoney + m.BaoJiaYunFei)));
             var DMyyItem = from a in DMYuanyinItem
-                           select new {
+                           select new
+                           {
                                PerName = a.T_BaoJiaToP.YXB_Kh_list.UserInfo.PerSonName,
-                               WinMoney = a.YuanYin == 1 ? a.T_BaoJiaToP.YXB_Baojia.Sum(m => m.CPShuLiang * (m.WinMoney + m.WinYunFei)):0,
-                               LostMoney=a.YuanYin!=1 ? a.T_BaoJiaToP.YXB_Baojia.Sum(m => m.CPShuLiang * (m.WinMoney + m.WinYunFei)) : 0,
-                               DaiDingMoney=a.T_BaoJiaToP.YXB_Baojia.Where(m=>m.WIN==0).Sum(m => m.CPShuLiang * (m.BaoJiaMoney + m.BaoJiaYunFei)),
-                                
+                               WinMoney = a.YuanYin == 1 ? a.T_BaoJiaToP.YXB_Baojia.Sum(m => m.CPShuLiang * (m.WinMoney + m.WinYunFei)) : 0,
+                               LostMoney = a.YuanYin != 1 ? a.T_BaoJiaToP.YXB_Baojia.Sum(m => m.CPShuLiang * (m.WinMoney + m.WinYunFei)) : 0,
+                               DaiDingMoney = a.T_BaoJiaToP.YXB_Baojia.Where(m => m.WIN == 0).Sum(m => m.CPShuLiang * (m.BaoJiaMoney + m.BaoJiaYunFei)),
+
                            };
             List<Items> WinLostMoney = new List<Items>();
 
@@ -561,9 +565,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 var itm = DaiDingData.Where(x => x.YXB_Kh_list.UserInfo.ID == f.ID).DefaultIfEmpty().Sum(x => x.YXB_Baojia.Sum(y => (y.BaoJiaMoney + y.BaoJiaYunFei) * y.CPShuLiang));
                 its.Dmoney = itm == null ? 0 : itm;
                 its.WPercent = Rounds(DMyyItem.Sum(x => x.WinMoney) == 0 ? 0 : its.Wmoney / DMyyItem.Sum(x => x.WinMoney) * 100);
-                its.LPercent = Rounds(DMyyItem.Sum(x => x.LostMoney) == 0 ? 0 :its.Lmoney / DMyyItem.Sum(x => x.LostMoney) * 100);
-                var Summoneydd=DaiDingData.Sum(x => x.YXB_Baojia.Sum(y => (y.BaoJiaMoney + y.BaoJiaYunFei) * y.CPShuLiang));
-                its.DPercent = Rounds( Summoneydd == null ? 0 : its.Dmoney / Summoneydd*100);
+                its.LPercent = Rounds(DMyyItem.Sum(x => x.LostMoney) == 0 ? 0 : its.Lmoney / DMyyItem.Sum(x => x.LostMoney) * 100);
+                var Summoneydd = DaiDingData.Sum(x => x.YXB_Baojia.Sum(y => (y.BaoJiaMoney + y.BaoJiaYunFei) * y.CPShuLiang));
+                its.DPercent = Rounds(Summoneydd == null ? 0 : its.Dmoney / Summoneydd * 100);
                 WinLostMoney.Add(its);
             }
             //添加总数
@@ -573,15 +577,15 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             ims.Lmoney = WinLostMoney.Sum(x => x.Lmoney);
             ims.Dmoney = WinLostMoney.Sum(x => x.Dmoney);
             ims.WPercent = Convert.ToInt32(WinLostMoney.Sum(x => x.WPercent));
-            ims.LPercent = Convert.ToInt32(WinLostMoney.Sum(x => x.LPercent)); 
+            ims.LPercent = Convert.ToInt32(WinLostMoney.Sum(x => x.LPercent));
             ims.DPercent = Convert.ToInt32(WinLostMoney.Sum(x => x.DPercent));
             WinLostMoney.Add(ims);
             #endregion
 
 
-            return Json(new { ret = "ok", temp = retMonth ,LostItem=Rlis,XiangXi= WinLostMoney }, JsonRequestBehavior.AllowGet);
+            return Json(new { ret = "ok", temp = retMonth, LostItem = Rlis, XiangXi = WinLostMoney }, JsonRequestBehavior.AllowGet);
         }
-        private Month GetMonthVar(IQueryable<T_BaoJiaToP> iq,int p,decimal? ddmm)
+        private Month GetMonthVar(IQueryable<T_BaoJiaToP> iq, int p, decimal? ddmm)
         {
             var mscc = from a in iq
                        select new
@@ -590,20 +594,20 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            Lcount = a.T_WinBak.Where(x => x.YuanYin != 1),
                        };
 
-            Month mh = new Month() ;
+            Month mh = new Month();
             mh.ID = 1;
             mh.WinCount = mscc.Sum(x => x.Wcount.Count());
             mh.LostCount = mscc.Sum(x => x.Lcount.Count());
             var ttw = iq.Where(x => x.T_WinBak.Count() == 0).FirstOrDefault();
-            mh.DaiDingCount = ttw==null?p: iq.Where(x => x.T_WinBak.Count() == 0).Count() + p;
+            mh.DaiDingCount = ttw == null ? p : iq.Where(x => x.T_WinBak.Count() == 0).Count() + p;
             mh.SumCount = mh.WinCount + mh.LostCount + mh.DaiDingCount;
 
             var t = mscc.Sum(x => x.Wcount.Sum(a => a.T_BaoJiaToP.YXB_Baojia.Sum(m => m.CPShuLiang * (m.WinMoney + m.WinYunFei))));
-            mh.WinDML = Math.Round( Convert.ToDecimal(t==null?0:t),2);
+            mh.WinDML = Math.Round(Convert.ToDecimal(t == null ? 0 : t), 2);
             t = mscc.Sum(x => x.Lcount.Sum(a => a.T_BaoJiaToP.YXB_Baojia.Sum(m => m.CPShuLiang * (m.WinMoney + m.WinYunFei))));
             mh.lostDML = t == null ? 0 : t;
             var gg = iq.Where(x => x.T_WinBak.Count() == 0).Sum(a => a.YXB_Baojia.Sum(m => m.CPShuLiang * (m.BaoJiaMoney + m.BaoJiaYunFei)));
-            mh.DdDml= (gg ==null?0:gg)+ ddmm;
+            mh.DdDml = (gg == null ? 0 : gg) + ddmm;
 
 
             mh.SumDMLCount = CdmlNull(mh.WinDML) + CdmlNull(mh.lostDML) + CdmlNull(mh.DdDml);
@@ -634,7 +638,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return decimal.Round(Convert.ToDecimal(val), 2);
         }
         //删除发货详细信息
-        public ActionResult DelFahuoXiangXI() {
+        public ActionResult DelFahuoXiangXI()
+        {
             var id = Convert.ToInt64(Request["ID"]);
             var temp = T_WinBakFaHuoService.LoadEntities(x => x.ID == id).FirstOrDefault();
             T_WinBakFaHuoService.DeleteEntity(temp);
@@ -647,18 +652,18 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
             int TotalCount = 0;
-            var temp = T_WinBakFaHuoService.LoadPageEntities(pageIndex, pageSize, out TotalCount, x =>x.BaoJia_ID==id, x => x.AddTime, true);
+            var temp = T_WinBakFaHuoService.LoadPageEntities(pageIndex, pageSize, out TotalCount, x => x.BaoJia_ID == id, x => x.AddTime, true);
             var ttemp = from a in temp
                         select new
                         {
                             ID = a.ID,
-                            FaHuoBak= a.FaHuoBak,
-                            FahuoInt= a.FahuoInt,
-                            FaHuoTime=a.FaHuoTime,
-                            AddTime=a.AddTime,
-                            PerSonName= a.UserInfo1.PerSonName
+                            FaHuoBak = a.FaHuoBak,
+                            FahuoInt = a.FahuoInt,
+                            FaHuoTime = a.FaHuoTime,
+                            AddTime = a.AddTime,
+                            PerSonName = a.UserInfo1.PerSonName
                         };
-        
+
             return Json(new { ret = "ok", rows = ttemp, total = TotalCount }, JsonRequestBehavior.AllowGet);
         }
 
@@ -668,7 +673,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return dml == null ? 0 : Convert.ToDecimal(dml);
         }
         public FileResult DownLoadExcel()
-        {           
+        {
             DataTable Tdt = new DataTable();
             Tdt.Columns.Add("id", typeof(int));
             Tdt.Columns.Add("SqBaoJiaPer", typeof(string));
@@ -718,10 +723,11 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 string ms = ex.ToString();
                 return null;
             }
-           
+
         }
         //获取城市列表
-        public ActionResult GetCity() {
+        public ActionResult GetCity()
+        {
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
             int TotalCount = 0;
@@ -729,25 +735,27 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             if (Request["ParentId"] != null)
             {
                 var sp = int.Parse(Request["ParentId"]);
-                CityTemy = SysFieldService.LoadPageEntities(pageIndex, pageSize, out TotalCount, x => x.ParentId == sp&&x.ID!=sp, x => x.MyTexts, false);
+                CityTemy = SysFieldService.LoadPageEntities(pageIndex, pageSize, out TotalCount, x => x.ParentId == sp && x.ID != sp, x => x.MyTexts, false);
             }
-          
-            
+
+
             var temp = from a in CityTemy
-                       select new {
-                          ID= a.ID,
-                          Text=a.MyTexts,
-                          ParentId=a.ParentId,
-                          MyColums= a.MyColums
+                       select new
+                       {
+                           ID = a.ID,
+                           Text = a.MyTexts,
+                           ParentId = a.ParentId,
+                           MyColums = a.MyColums
                        };
             return Json(new { rows = temp, total = TotalCount }, JsonRequestBehavior.AllowGet);
         }
         //追加城市列表信息
-        public ActionResult AddSysfied() {
+        public ActionResult AddSysfied()
+        {
             int? ParentID = Convert.ToInt32(Request["Parent"]);
             var strval = Request["strval"];
             var val = Request["val"];
-            var isdistc= SysFieldService.LoadEntities(x => x.ParentId == ParentID && x.MyColums == strval && x.MyTexts == val).FirstOrDefault();
+            var isdistc = SysFieldService.LoadEntities(x => x.ParentId == ParentID && x.MyColums == strval && x.MyTexts == val).FirstOrDefault();
             if (isdistc != null)
             {
                 return Json(new { ret = "no", msg = "不可添加重复信息！" }, JsonRequestBehavior.AllowGet);
@@ -756,15 +764,15 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             sfd.MyTexts = val;
             sfd.ParentId = ParentID;
             sfd.MyColums = strval;
-            SysFieldService.AddEntity(sfd); 
+            SysFieldService.AddEntity(sfd);
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
         //删除追加的城市列表信息
         public ActionResult DelSysfiedF()
         {
             int? did = Convert.ToInt32(Request["id"]);
-           
-            var isdistc = SysFieldService.LoadEntities(x => x.ID==did).FirstOrDefault();
+
+            var isdistc = SysFieldService.LoadEntities(x => x.ID == did).FirstOrDefault();
             if (isdistc != null)
             {
                 if (SysFieldService.DeleteEntity(isdistc))
@@ -780,7 +788,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             {
                 return Json(new { ret = "no", msg = "未找到要删除的信息ID！" }, JsonRequestBehavior.AllowGet);
 
-            }  
+            }
         }
 
         //报价审核获取方法
@@ -790,25 +798,25 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 15;
             int toalCount = 0;
             List<SlcClass> templist;
-            LoadBaojia(pageIndex, pageSize, out toalCount, out templist,0,0,false);
+            LoadBaojia(pageIndex, pageSize, out toalCount, out templist, 0, 0, false);
             return Json(new { rows = templist, total = toalCount }, JsonRequestBehavior.AllowGet);
         }
 
-        private void LoadBaojia(int pageIndex, int pageSize, out int toalCount, out List<SlcClass> templist,int delflg,int win, bool isbool)
+        private void LoadBaojia(int pageIndex, int pageSize, out int toalCount, out List<SlcClass> templist, int delflg, int win, bool isbool)
         {
-            var Adata = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out toalCount, x => x.DelFlag == 0  && x.WIN == win && x.ZhuangTai == delflg , x => x.AddTime, false);
+            var Adata = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out toalCount, x => x.DelFlag == 0 && x.WIN == win && x.ZhuangTai == delflg, x => x.AddTime, false);
             if (delflg == 1)
             {
                 Adata = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out toalCount, x => x.DelFlag == 0 && x.WIN == win && (x.ZhuangTai == delflg || x.ZhuangTai > 0), x => x.AddTime, false);
             }
-            else if(delflg>1)
+            else if (delflg > 1)
             {
                 delflg = delflg == 4 ? 1 : delflg;
-                Adata = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out toalCount, x => x.DelFlag == 0 && x.WIN == win && x.ZhuangTai == delflg , x => x.AddTime, false);
+                Adata = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out toalCount, x => x.DelFlag == 0 && x.WIN == win && x.ZhuangTai == delflg, x => x.AddTime, false);
             }
             if (!isbool)
-            { Adata = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out toalCount, x => x.ZhuangTai==1&&x.DelFlag==0&&x.WIN==win, x => x.AddTime, false); }
-        
+            { Adata = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out toalCount, x => x.ZhuangTai == 1 && x.DelFlag == 0 && x.WIN == win, x => x.AddTime, false); }
+
             var temp = from a in Adata
                        select new SlcClass
                        {
@@ -842,7 +850,6 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            Remark = a.Remark,
                            CpJB = a.T_ChanPinName.MyTexts,
                            Denjiu = a.T_BaoJiaToP.T_YSItems.MyText
-
                        };
             templist = temp.ToList();
             for (int i = 0; i < templist.Count; i++)
@@ -851,25 +858,28 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
         }
         //获取历史报价数据
-        public ActionResult GetOldBaojia() {
+        public ActionResult GetOldBaojia()
+        {
             var id = Convert.ToInt32(Request["id"]);
-            var tem= YXB_BaoJiaEidtMoneyService.LoadEntities(x => x.YXB_BJ_ID == id).DefaultIfEmpty();
-            if (tem == null) {
+            var tem = YXB_BaoJiaEidtMoneyService.LoadEntities(x => x.YXB_BJ_ID == id).DefaultIfEmpty();
+            if (tem == null)
+            {
                 return Json(new { msg = "", ret = "no" }, JsonRequestBehavior.AllowGet);
             }
             var temp = from a in tem
                        select new
                        {
-                          ID= a.ID,
-                           EditBJMoney=a.EditBJMoney,
-                           EditYFMoney=a.EditYFMoney,
-                           EidtTime=a.EidtTime,
-                           PerSonName=a.UserInfo.PerSonName
+                           ID = a.ID,
+                           EditBJMoney = a.EditBJMoney,
+                           EditYFMoney = a.EditYFMoney,
+                           EidtTime = a.EidtTime,
+                           PerSonName = a.UserInfo.PerSonName
                        };
-            return Json(new { msg= temp ,ret="ok"}, JsonRequestBehavior.AllowGet);
+            return Json(new { msg = temp, ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
         //获取产品除税表明细
-        public ActionResult GetChuShuiTable() {
+        public ActionResult GetChuShuiTable()
+        {
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
             UserInfoParam uim = new UserInfoParam();
@@ -885,10 +895,11 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             uim.PageSize = pageSize;
             uim.TotalCount = 0;
 
-            var win= T_WinBakService.LoadEntities(x => x.AddTime >= uim.Uptime && x.AddTime < uim.Dwtime).DefaultIfEmpty();
-            var chanpin= YXB_WinCanPinService.LoadEntities(x=>x.ID>0&&x.Del==null).DefaultIfEmpty();
+            var win = T_WinBakService.LoadEntities(x => x.AddTime >= uim.Uptime && x.AddTime < uim.Dwtime).DefaultIfEmpty();
+            var chanpin = YXB_WinCanPinService.LoadEntities(x => x.ID > 0 && x.Del == null).DefaultIfEmpty();
             List<cls> Lcls = new List<cls>();
-            foreach (var wins in win) {
+            foreach (var wins in win)
+            {
 
                 var s = from a in wins.T_BaoJiaToP.YXB_Baojia
                         select new cls
@@ -902,7 +913,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             Money = a.WinMoney,
                             Yunfei = a.WinYunFei,
                             Khname = a.T_BaoJiaToP != null ? a.T_BaoJiaToP.YXB_Kh_list != null ? a.T_BaoJiaToP.YXB_Kh_list.KHname : "" : "",
-                            Person = a.T_BaoJiaToP != null ? a.T_BaoJiaToP.YXB_Kh_list.UserInfo != null ? a.T_BaoJiaToP.YXB_Kh_list.UserInfo.PerSonName : "":""
+                            Person = a.T_BaoJiaToP != null ? a.T_BaoJiaToP.YXB_Kh_list.UserInfo != null ? a.T_BaoJiaToP.YXB_Kh_list.UserInfo.PerSonName : "" : ""
                         };
                 foreach (var l in s)
                 {
@@ -910,14 +921,16 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 }
             }
             List<cls> tempCls = new List<cls>();
-            foreach (var cls in Lcls) {
+            foreach (var cls in Lcls)
+            {
 
-                if (cls.Hanshui == "含税") {
-                    cls.Money = cls.Money /(decimal)1.17;
+                if (cls.Hanshui == "含税")
+                {
+                    cls.Money = cls.Money / (decimal)1.17;
                 }
                 var Thishave = tempCls.Where(x => x.CpnameId == cls.CpnameId && x.CpXinghaoId == cls.CpXinghaoId).FirstOrDefault();
                 cls cc = new cls();
-                if (Thishave==null)
+                if (Thishave == null)
                 {
                     cc.Cpname = cls.Cpname;
                     cc.CpnameId = cls.CpnameId;
@@ -932,8 +945,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     tempCls.Add(cc);
                 }
                 else
-                {   decimal tm= decimal.Round(Convert.ToDecimal(cls.Money), 2); 
-                    if (cls.Money>Thishave.maxMoney )
+                {
+                    decimal tm = decimal.Round(Convert.ToDecimal(cls.Money), 2);
+                    if (cls.Money > Thishave.maxMoney)
                     {
                         tempCls.Where(x => x.CpnameId == cls.CpnameId && x.CpXinghaoId == cls.CpXinghaoId).FirstOrDefault().maxMoney = tm;
                         tempCls.Where(x => x.CpnameId == cls.CpnameId && x.CpXinghaoId == cls.CpXinghaoId).FirstOrDefault().maxKhname = cls.Khname;
@@ -948,10 +962,100 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 }
 
             }
-           
-           
+
+
             return Json(new { rows = tempCls, total = uim.TotalCount }, JsonRequestBehavior.AllowGet);
         }
+
+        //获取客户报备信息
+        public ActionResult GetKeHuBaoBei()
+        {
+            int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
+            var UpTime = Convert.ToDateTime(Request["UpTime"]);
+            var DwTime = Convert.ToDateTime(Request["DwTime"]);
+            var yxy = Request["yxy"] != "" ? Convert.ToInt32(Request["yxy"]) : 0;
+            var khn = Request["khn"] != "" ? Convert.ToInt32(Request["khn"]) : 0;
+            var cs = Request["cs"] != "" ? Request["cs"] : "0";
+            var vs = Request["vs"] != "" ? Request["vs"] : "0";
+            var sd = Request["sd"] != "" ? Request["sd"] : "0";
+            var temp = T_BaoJiaToPService.LoadEntities(x => x.AddTime > UpTime && x.AddTime < DwTime).DefaultIfEmpty().ToList();
+            if (temp != null && temp[0] != null)
+            {
+                List<T_BaoJiaToP> list1 = new List<T_BaoJiaToP>();
+                if(yxy != 0)
+                {
+                    list1.AddRange(temp.Where(x => x.YXB_Kh_list.AddUser == yxy));
+                }else
+                {
+                    list1.AddRange(temp);
+                }
+                List<T_BaoJiaToP> list2 = new List<T_BaoJiaToP>();
+                if (khn != 0)
+                {
+                    list2.AddRange(list1.Where(x => x.YXB_Kh_list.id == khn));
+                }
+                else
+                {
+                    list2.AddRange(list1);
+                }
+                List<T_BaoJiaToP> list3 = new List<T_BaoJiaToP>();
+                if (cs != "0")
+                {
+                    if(vs != "0")
+                    {
+                        if(sd != "0")
+                        {
+                            list3.AddRange(list2.Where(x => x.Addess.Contains(cs +","+vs+","+ sd)));
+                        }
+                        else
+                        {
+                            list3.AddRange(list2.Where(x => x.Addess.Contains(cs +","+ vs)));
+                        }
+                    }
+                    else
+                    {
+                        list3.AddRange(list2.Where(x => x.Addess.Contains(cs)));
+                    }
+                }
+                else
+                {
+                    list3.AddRange(list2);
+                }
+                for (int i = 0; i < list3.Count; i++)
+                {
+                    list3[i].Addess = ArrF(list3[i].Addess);
+                }
+                var rtmp = from a in list3
+                           select new
+                           {
+                               ID = a.id,
+                               AddTime = a.AddTime,
+                               GhTime = a.GhTime,
+                               JiShuYaoQiu = a.JiShuYaoQiu,
+                               Addess = a.Addess,
+                               DaiBanYunShu = a.DaiBanYunShu,
+                               JieShuanFanShi = a.JieShuanFanShi,
+                               HeTongQianDing = a.HeTongQianDing,
+                               TOPaddtime = a.AddTime,
+                               KHname = a.YXB_Kh_list.KHname,
+                               KHComname = a.KHComname,
+                               KHperson = a.YXB_Kh_list.KHperson,
+                               KHfaren = a.YXB_Kh_list.KHfaren,
+                               KHzhiwu = a.YXB_Kh_list.KHzhiwu,
+                               KHphoto = a.YXB_Kh_list.KHphoto,
+                               NewTime = a.YXB_Kh_list.NewTime,
+                               UName = a.YXB_Kh_list.UserInfo.PerSonName,
+                               HanShui = a.T_BoolItem.str,
+                               Denjiu = a.T_YSItems.MyText
+                           };
+                return Json(new { rows = rtmp, total = rtmp.Count() }, JsonRequestBehavior.AllowGet);
+            }else
+            {
+                return null;
+            }
+        }
+
     }
    
 }

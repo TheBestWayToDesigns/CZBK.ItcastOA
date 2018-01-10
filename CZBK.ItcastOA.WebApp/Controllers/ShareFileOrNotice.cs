@@ -117,9 +117,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                FileURL = d.FileURL,
                                UploadFileTime = d.UploadFileTime,
                                ShareUser = d.UserInfo.PerSonName,
-                               Sunv=d.ShareToUser,
-                               alluserinfo=d.alluserinfo
-
+                               Sunv = d.ShareToUser,
+                               alluserinfo = d.alluserinfo,
+                               AddFile = d.UserInfo.ID,
+                               shareuserid=LoginUser.ID
                            };
                 
 
@@ -300,6 +301,19 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var sn = ShareFileOrNoticeService.AddEntity(sfon);
             return Json(new { ret = "ok"}, JsonRequestBehavior.AllowGet);
         }
+        //补充上传共享文件
+        public ActionResult AddUploadFile()
+        {
+            var sfid = Convert.ToInt64(Request["sfid"]);
+            var sfurl = Request["sfurl"];
+            var temp = ShareFileOrNoticeService.LoadEntities(x => x.ID == sfid).FirstOrDefault();
+            if(temp != null)
+            {
+                temp.FileURL += sfurl;
+            }
+            ShareFileOrNoticeService.EditEntity(temp);
+            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+        }
         //添加通知公告
         public ActionResult AddNotice(ShareFileOrNotice sfon)
         {
@@ -457,7 +471,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var id = Convert.ToInt32(Request["id"]);
             var temp = ShareFileOrNoticeService.LoadEntities(x => x.ID == id).FirstOrDefault();
             var url = temp.FileURL;
-            return Json(new { ret = url},JsonRequestBehavior.AllowGet);
+            var beizhu = temp.BeiZhu;
+            return Json(new { ret = url,sbeizhu = beizhu},JsonRequestBehavior.AllowGet);
         }
 
         //获取全部用户id
@@ -495,6 +510,28 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 return Json(new { ret = "ok",data = str }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { ret = "no" }, JsonRequestBehavior.AllowGet);
+        }
+
+        //查询是否有权补充文件
+        public ActionResult GetCanOrCant()
+        {
+            var id = Convert.ToInt64(Request["id"]);
+            var temp = ShareFileOrNoticeService.LoadEntities(x => x.ID == id).FirstOrDefault();
+            if(temp != null)
+            {
+                if (temp.ShareUser != LoginUser.ID)
+                {
+                    return Json(new { ret = "no"},JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public class STUBuMen
