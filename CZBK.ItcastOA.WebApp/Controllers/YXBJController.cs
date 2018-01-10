@@ -449,6 +449,51 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return Json(new { tem = tem , tem2=tem2}, JsonRequestBehavior.AllowGet);
         }
 
+
+
+
+        //获取是否含税列表（修改报价用）
+        public ActionResult GetHSYesOrNo()
+        {
+            var temp = T_BoolItemService.LoadEntities(x => x.ItemsID == 0).DefaultIfEmpty();
+            var tem = from a in temp
+                      select new
+                      {
+                          ID = a.ID,
+                          MyText = a.str
+                      };
+            return Json(tem, JsonRequestBehavior.AllowGet);
+        }
+        //获取产品级别列表（修改报价用）
+        public ActionResult GetChanPinJB()
+        {
+            var temp = T_ChanPinNameService.LoadEntities(x => x.MyColums == "CPDengJi").DefaultIfEmpty();
+            var tem = from a in temp
+                      select new
+                      {
+                          ID = a.ID,
+                          MyText = a.MyTexts
+                      };
+            return Json(tem, JsonRequestBehavior.AllowGet);
+        }
+
+        //获取产品单据列表（修改报价用）
+        public ActionResult GetChanPinDJ()
+        {
+            var temp = T_YSItemsService.LoadEntities(x => x.Items == 2).DefaultIfEmpty();
+            var tem = from a in temp
+                      select new
+                      {
+                          ID = a.ID,
+                          MyText = a.MyText
+                      };
+            return Json(tem, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+
+
         //获取组合表中的产品名称
         public ActionResult GetChanPinName() {
 
@@ -479,6 +524,107 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             
             return Json( tem , JsonRequestBehavior.AllowGet);
         }
+
+        //获取所有修改报价需要的信息
+        public ActionResult getAllInfo()
+        {
+            long id = Convert.ToInt64(Request["id"]);
+            var bjinfo = YXB_BaojiaService.LoadEntities(x => x.id == id).FirstOrDefault();
+            return Json(new { CPname=bjinfo.CPname,CPXingHao=bjinfo.CPXingHao,
+                              HanShuiID =bjinfo.T_BaoJiaToP.HanShuiID,CPDengJiID=bjinfo.CPDengJiID,
+                              PiaoJuID =bjinfo.T_BaoJiaToP.PiaoJuID,Addess=bjinfo.T_BaoJiaToP.Addess,GhTime=bjinfo.T_BaoJiaToP.GhTime}, JsonRequestBehavior.AllowGet);
+        }
+
+        //修改报价信息
+        public ActionResult EditBJInfo()
+        {
+            long id = Convert.ToInt64(Request["BaoJiaID"]);
+            long CPname = Convert.ToInt64(Request["CPname"]);
+            long CPxh = Convert.ToInt64(Request["CPxh"]);
+            int CPShuLiang = Convert.ToInt32(Request["CPShuLiang"]);
+            long HanShuiID = Convert.ToInt64(Request["HanShuiID"]);
+            long CPDengJiID = Convert.ToInt64(Request["CPDengJiID"]);
+            long PiaoJuID = Convert.ToInt64(Request["PiaoJuID"]);
+            string BeiZhu = Request["BeiZhu"];
+            DateTime GhTime = Convert.ToDateTime(Request["GhTime"]);
+            string KHname = Request["KHname"];
+            string KHperson = Request["KHperson"];
+            string KHzhiwu = Request["KHzhiwu"];
+            string KHphoto = Request["KHphoto"];
+            string KHfaren = Request["KHfaren"];
+            string JiShuYaoQiu = Request["JiShuYaoQiu"];
+            string ProvinceIDname = Request["ProvinceIDname"];
+            string CityIDname = Request["CityIDname"];
+            string VillageIDname = Request["VillageIDname"];
+            string DaiBanYunShu = Request["DaiBanYunShu"];
+            string JieShuanFanShi = Request["JieShuanFanShi"];
+            string HeTongQianDing = Request["HeTongQianDing"];
+            var bj = YXB_BaojiaService.LoadEntities(x => x.id == id).FirstOrDefault();
+            if(bj != null)
+            {
+                bj.CPname = CPname;
+                bj.CPXingHao = CPxh;
+                bj.CPShuLiang = CPShuLiang;
+                bj.CPDengJiID = CPDengJiID;
+                bj.Remark = BeiZhu;
+                if (YXB_BaojiaService.EditEntity(bj))
+                {
+                    var bjtop = T_BaoJiaToPService.LoadEntities(x => x.id == bj.BaoJiaTop_id).FirstOrDefault();
+                    if (bjtop != null)
+                    {
+                        bjtop.HanShuiID = HanShuiID;
+                        bjtop.PiaoJuID = PiaoJuID;
+                        bjtop.GhTime = GhTime;
+                        bjtop.JiShuYaoQiu = JiShuYaoQiu;
+                        if (ProvinceIDname != null && ProvinceIDname != "")
+                        {
+                            var str = ProvinceIDname;
+                            if (CityIDname != null && CityIDname != "")
+                            {
+                                str = str + "," + CityIDname;
+                                if (VillageIDname != null && VillageIDname != "")
+                                {
+                                    str = str + "," + VillageIDname;
+                                }
+                            }
+                            bjtop.Addess = str;
+                        }
+                        bjtop.DaiBanYunShu = DaiBanYunShu;
+                        bjtop.JieShuanFanShi = JieShuanFanShi;
+                        bjtop.HeTongQianDing = HeTongQianDing;
+                        if (T_BaoJiaToPService.EditEntity(bjtop))
+                        {
+                            var khlist = YXB_Kh_listService.LoadEntities(x => x.id == bjtop.Kh_List_id).FirstOrDefault();
+                            if (khlist != null)
+                            {
+                                khlist.KHname = KHname;
+                                khlist.KHperson = KHperson;
+                                khlist.KHzhiwu = KHzhiwu;
+                                khlist.KHphoto = KHphoto;
+                                khlist.KHfaren = KHfaren;
+                                if (YXB_Kh_listService.EditEntity(khlist))
+                                {
+                                    return Json(new { ret = "yes", msg = "修改成功！" }, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    return Json(new { ret = "no", msg = "修改失败，发生在第三阶段！" }, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                        }else
+                        {
+                            return Json(new { ret = "no", msg = "修改失败，发生在第二阶段！" }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }else
+                {
+                    return Json(new { ret="no",msg="修改失败，发生在第一阶段！"},JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(new { ret = "no", msg = "修改失败！" }, JsonRequestBehavior.AllowGet); ;
+        }
+
+
     }
     public class RetcTEMP {
         public long ID { get; set; }

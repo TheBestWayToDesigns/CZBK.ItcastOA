@@ -195,19 +195,15 @@
         //删除上下级信息
         function delUser() {
             var row = $("#tt").datagrid("getSelected");
-            if(confirm("确定要删除此条数据？")){
-                 $.post("/Department/DelUpOrDown", { "id": row.ID }, function (data) {
-                     if(data.ret == "ok"){
-                         $.messager.alert("提示","删除成功！");
-                 }else if(data.ret = "no"){
-                         $.messager.alert("提示", data.msg);
-                 } else {
-                         $.messager.alert("提示", "操作失败！");
-                 }
-                 })
-            }else{
-                return;
-            }
+            $.post("/Department/DelUpOrDown", { "id": row.ID }, function (data) {
+                if(data.ret == "ok"){
+                    $("#tt").datagrid("reload");
+                }else if(data.ret = "no"){
+                        $.messager.alert("提示", data.msg);
+                } else {
+                        $.messager.alert("提示", "操作失败！");
+                }
+            })
         }
 
 

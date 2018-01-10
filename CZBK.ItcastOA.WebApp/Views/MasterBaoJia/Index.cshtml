@@ -100,6 +100,27 @@
                     });                    
                 }
             })
+            $("#CPname2").combobox({
+                onChange: function (n, o) {
+                    $("#CPxh2").combobox({
+                        url: "/YXBJ/GetCpname_xinghao?cpid=" + n,
+                    });
+                }
+            })
+            $("#ProvinceID").combobox({
+                onChange: function (n, o) {
+                    $("#CityID").combobox({
+                        url: "/YXBJ/GetAddress?parentiD=" + n + "&MyColums=City",
+                    });
+                }
+            })
+            $("#CityID").combobox({
+                onChange: function (n, o) {
+                    $("#VillageID").combobox({
+                        url: "/YXBJ/GetAddress?parentiD=" + n + "&MyColums=Village",
+                    });
+                }
+            })
             $(".CityAdd").combobox({
                 onChange: function (n, o) {
                     ComboboxF($(this))
@@ -209,6 +230,7 @@
                 };
                 WinHeTong(pars);
             })
+            
             //完成合同
             $("#OverHeTong").click(function () {
 
@@ -284,6 +306,7 @@
                     num.substring(num.length - (4 * i + 3));
                 return (((sign) ? '' : '-') + num + '.' + cents);
             }
+        
             //查询月总汇
             $("#MonthBTN").click(function () {
                 $("#ZhList").click();
@@ -432,6 +455,29 @@
                 }
             });
         }
+
+        function SousuoP() {
+            var UpTime = $('#StTime').combobox('getValue');
+            if (UpTime.length <= 0) {
+                $.messager.alert("提示", "开始时间不可为空！")
+                return;
+            }
+            var DwTime = $('#DwTime').combobox('getValue');
+            if (DwTime.length <= 0) {
+                $.messager.alert("提示", "结束时间不可为空！")
+                return;
+            }
+            var addess = RetAddess();
+            var Person = $('#Person').combobox('getValue');
+            var KHname = $('#KHname').combobox('getValue');
+            var CPname = $('#CPname').combobox('getValue');
+            var CPxh = $('#CPxh').combobox('getValue');
+            var pars = {
+                UpTime: UpTime, DwTime: DwTime, addess: addess, Person: Person, KHname: KHname, CPname: CPname, CPxh: CPxh
+            };
+            DuoXuanEascsh(pars);
+        }
+
         //文件上传
         function bindFileUpclick() {
             $("#btnFileUp").click(function () {
@@ -475,12 +521,19 @@
                 queryParams: pars,//往后台传递参数
                 columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
                      {
-                         field: 'baojia', title: '报价',
+                         field: 'baojia', title: '报价栏',
                          formatter: function (value, row, index) {
                              var str = "<a href='javascript:BaoJia(" + row.ID + " )' class='l-btn deletes' style='padding:2px 5px 2px 5px' >报价</a>";
                              return str;
                          }
                      }, {
+                         field: 'edit', title: '修改栏',
+                         formatter: function (value, row, index) {
+                             var str = "<a href='javascript:EditBJInfo(" + row.ID + " )' class='l-btn deletes' style='padding:2px 5px 2px 5px' >修改</a>";
+                             return str;
+                         }
+                     },
+                     {
                          field: 'ZhuangTai', title: '审核状态',
                          formatter: function (value, row, index) {
                              if (value == 0) {
@@ -677,6 +730,42 @@
                     $.messager.alert("提示", "审核失败！");
                 }
             });
+        }
+        //修改
+        function EditBJInfo(obj) {
+            var row = $("#tt").datagrid("getSelected");
+            $.post("/YXBJ/getAllInfo", { "id": row.ID }, function (data) {
+                $("#CPname2").combobox("setValue", data.CPname);//产品名称
+                $("#CPxh2").combobox("setValue", data.CPXingHao);//产品型号
+                $("#HanShuiID2").combobox("setValue", data.HanShuiID);//是否含税
+                $("#CPDengJiID2").combobox("setValue", data.CPDengJiID);//产品登记
+                $("#PiaoJuID2").combobox("setValue", data.PiaoJuID);//产品单据
+                $("#GHTime2").datebox("setValue",ChangeDateFormat(data.GhTime));//供货时间
+                var ay = data.Addess.split(',');
+                if (ay.length == 1) {//供货地点
+                    $("#ProvinceID").combobox("setValue", ay[0]);
+                } else if (ay.length == 2) {
+                    $("#ProvinceID").combobox("setValue", ay[0]);
+                    $("#CityID").combobox("setValue", ay[1]);
+                } else if (ay.length == 3) {
+                    $("#ProvinceID").combobox("setValue", ay[0]);
+                    $("#CityID").combobox("setValue", ay[1]);
+                    $("#VillageID").combobox("setValue", ay[2]);
+                }
+            });
+            $("#CPShuLiang2").val(row.CPShuLiang);//产品数量
+            $("#BeiZhu2").val(row.Remark);//备注
+            $("#KHname2").val(row.KHname);//客户名称
+            $("#KHperson2").val(row.KHperson); //客户联系人
+            $("#KHzhiwu2").val(row.KHzhiwu);  //联系人职务
+            $("#KHphoto2").val(row.KHphoto); //联系人电话
+            $("#KHfaren2").val(row.KHfaren);  //法人
+            $("#JiShuYaoQiu2").val(row.JiShuYaoQiu);  //技术要求
+            $("#DaiBanYunShu2").val(row.DaiBanYunShu); //代办运输
+            $("#JieShuanFanShi2").val(row.JieShuanFanShi); //结算方式
+            $("#HeTongQianDing2").val(row.HeTongQianDing); //合同签订
+            $("#BaoJiaID2").val(row.ID); //合同签订
+            $("#EditBJInfoDiv").window("open");
         }
         //报价
         function BaoJia(obj) {
@@ -1497,8 +1586,93 @@
                 }             
                 
             })
-           
         }
+
+        //报价查询
+        function Khbbbtn() {
+            var UpTime = $('#StTime').combobox('getValue');
+            if (UpTime.trim().length <= 0) {
+                $.messager.alert("提示", "开始时间不可为空！")
+                return;
+            }
+            var DwTime = $('#DwTime').combobox('getValue');
+            if (DwTime.trim().length <= 0) {
+                $.messager.alert("提示", "结束时间不可为空！")
+                return;
+            }
+            var yxy = $('#Person').combobox('getValue');
+            yxy = yxy.trim().length < 0 ? 0 : yxy;
+            var khn = $('#KHname').combobox('getValue');
+            khn = khn.trim().length < 0 ? 0 : khn;
+            var cs = $('#CitySee').combobox('getValue');
+            cs = cs.trim().length < 0 ? 0 : cs;
+            var vs = $('#VillageSee').combobox('getValue');
+            vs = vs.trim().length < 0 ? 0 : vs;
+            var sd = $('#SeeDint').combobox('getValue');
+            sd = sd.trim().length < 0 ? 0 : sd;
+            
+            showdilag2();
+            var pars = {
+                UpTime: UpTime, DwTime: DwTime, yxy: yxy, khn: khn, cs: cs, vs: vs, sd: sd
+            };
+            $('#Citytt').datagrid({
+                url: '/MasterBaoJia/GetKeHuBaoBei',
+                title: UpTime + "至" + DwTime + '客户报备信息',
+                height: $("#City_Div").height() - 40,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                    { field: 'ck', checkbox: true, title: '', width: 30 },
+                    {
+                        field: 'ZhuangTai', title: '审核状态',
+                        formatter: function (value, row, index) {
+                            return "客户报备阶段";
+                        }
+                    },
+                     { field: 'Denjiu', title: '产品单据', align: 'center' },
+                    { field: 'Remark', title: '备注' },
+                     {
+                         field: 'GhTime', title: '供货时间', align: 'center',
+                         formatter: function (value, row, col) {
+                             var sd = value == null ? '' : ChangeDateFormat(value);
+                             return sd;
+                         }
+                     },
+                    {
+                        field: 'AddTime', title: '申请时间', align: 'center',
+                        formatter: function (value, row, col) {
+                            var sd = value == null ? '' : ChangeDateFormat(value, true);
+                            return sd;
+                        }
+                    },
+                     { field: 'KHname', title: '客户名称', align: 'center' },
+                      { field: 'KHperson', title: '客户联系人', align: 'center' },
+                      { field: 'KHzhiwu', title: '联系人职务', align: 'center' },
+                     { field: 'KHphoto', title: '联系人电话', align: 'center' },
+                      { field: 'KHfaren', title: '法人', align: 'center' },
+                    { field: 'JiShuYaoQiu', title: '技术要求' },
+                    { field: 'Addess', title: '供货地点' },
+                    { field: 'DaiBanYunShu', title: '代办运输', align: 'center' },
+                    { field: 'JieShuanFanShi', title: '结算方式', align: 'center' },
+                    { field: 'HeTongQianDing', title: '合同签订', align: 'center' }
+                ]],
+                onLoadSuccess: function () {
+                }
+            });
+
+        }
+
+
+
         //产品除税列表
         function Cpcsbtn() {
             var UpTime = $('#StTime').combobox('getValue');
@@ -1569,6 +1743,61 @@
                 }]
             });
         }
+        function showdilag2() {
+            $('#City_Div').dialog({
+                title: "客户报备信息",
+                width: $("#dgdiv").width() / 2,
+                height: $("#dgdiv").height() / 1.5,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '取消',
+                    handler: function () {
+                        $('#City_Div').dialog('close');
+                    }
+                }]
+            });
+        }
+
+        function cancel() {
+            $("#EditBJInfoDiv").window("close");
+        }
+
+        function OkToEdit() {
+            if($("#ProvinceID").combobox("getValue").trim().length < 0){
+                $.messager.alert("提示", "供货地址不能为空！");
+                return;
+            }if($("#CPxh2").combobox("getValue").trim().length < 0){
+                $.messager.alert("提示", "产品型号不能为空！");
+                return;
+            }
+
+            $("#CPname3").val($("#CPname2").combobox("getValue"));
+            $("#CPxh3").val($("#CPxh2").combobox("getValue"));
+            $("#HanShuiID3").val($("#HanShuiID2").combobox("getValue"));
+            $("#CPDengJiID3").val($("#CPDengJiID2").combobox("getValue"));
+            $("#PiaoJuID3").val($("#PiaoJuID2").combobox("getValue"));
+            $("#ProvinceID3").val($("#ProvinceID").combobox("getValue"));
+            $("#CityID3").val($("#CityID").combobox("getValue"));
+            $("#VillageID3").val($("#VillageID").combobox("getValue"));
+            $("#GHTime3").val($("#GHTime2").datebox("getValue"));
+
+            $("#editbjinfoform").submit();
+        }
+
+        function afterEditBJInfo(data) {
+            if (data.ret = "yes") {
+                $("#EditBJInfoDiv").window("close");
+                $("#tt").datagrid("reload");
+
+            } else if (data.ret = "no") {
+                $.message.alert("提示",data.msg);
+            } else {
+                $.message.alert("提示","未知错误，请联系管理员");
+            }
+        }
+
     </script>
     <style>
         html, body {
@@ -1770,7 +1999,7 @@
                 <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="Ybj">完成报价</a>
                 <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="BaoJiaShenhe">报价审核</a>
                 <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="OverHeTong">合同完成</a>
-                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="Winlb">完成报价查询</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="Winlb">报价查询</a>
                 <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="WinHeTong">签订合同查询</a>
                 <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MonthTable">月信息总汇表</a>
             </div>           
@@ -1947,8 +2176,12 @@
             <a href="#" class="easyui-linkbutton" id="qingkou" iconCls="icon-reload">清空</a>
 
 
-            <a href="#" class="easyui-linkbutton" id="Sousuo" iconCls="icon-search">搜索1</a>
-
+            <a href="javascript:void(0)" class="easyui-menubutton" id="Sousuo" iconCls="icon-search" style="margin-left:10px;" data-options="menu:'#xmm',iconCls:'icon-edit'">搜索项</a>
+            <div id="xmm" style="width:150px;">
+                <div data-options="iconCls:'icon-undo'" onclick="SousuoP()" id="Sousuo">搜索</div>
+                <div class="menu-sep"></div>
+                <div onclick="Khbbbtn()">客户报备查询</div>
+            </div>
 
             <a href="javascript:void(0)" style="margin-left:10px;" id="Sousuo_win" class="easyui-menubutton"
                data-options="menu:'#mm',iconCls:'icon-edit'">搜索项</a>
@@ -1974,6 +2207,122 @@
                 </select>
             </div>
         </div>
+    </div>
+
+    <!-------------------修改报价信息--------------------->
+    <div id="EditBJInfoDiv" class="easyui-window" title="修改报价信息" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:500px;height:470px">
+        @using (Ajax.BeginForm("EditBJInfo", "YXBJ", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEditBJInfo" }, new { id = "editbjinfoform" }))
+        {
+        <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
+            <div style="text-align:center">
+                <div>
+                    <label>&nbsp;<b>产品名称:</b></label>
+                    <label>
+                        <input class="easyui-combobox"
+                               id="CPname2"
+                               name="CPname2"
+                               url="/YXBJ/GetChanPinName"
+                               valueField="ID"
+                               textField="MyText"
+                               panelHeight="auto" style="width:auto" /><input type="hidden" id="CPname3" name="CPname" />
+                    </label>
+                </div>
+                <div>
+                    <label>&nbsp;<b>产品型号:</b></label>
+                    <label>
+                        <input class="easyui-combobox"
+                               id="CPxh2"
+                               name="CPxh2"
+                               url=""
+                               valueField="ID"
+                               textField="MyText"
+                               panelHeight="auto" style="width:100px" /><input type="hidden" id="CPxh3" name="CPxh" />
+                    </label>
+                </div>
+                <div><label>&nbsp;<b>产品数量:</b></label><label><input type="text" id="CPShuLiang2" name="CPShuLiang" /></label></div>
+                <div>
+                    <label>&nbsp;<b>是否含税:</b></label>
+                    <label>
+                        <input class="easyui-combobox"
+                               id="HanShuiID2"
+                               name="HanShuiID2"
+                               url="/YXBJ/GetHSYesOrNo"
+                               valueField="ID"
+                               textField="MyText"
+                               panelHeight="auto" style="width:100px" /><input type="hidden" id="HanShuiID3" name="HanShuiID" />
+                    </label>
+                </div>
+                <div>
+                    <label>&nbsp;<b>产品级别:</b></label>
+                    <label>
+                        <input class="easyui-combobox"
+                               id="CPDengJiID2"
+                               name="CPDengJiID2"
+                               url="/YXBJ/GetChanPinJB"
+                               valueField="ID"
+                               textField="MyText"
+                               panelHeight="auto" style="width:100px" /><input type="hidden" id="CPDengJiID3" name="CPDengJiID" />
+                    </label>
+                </div>
+                <div>
+                    <label>&nbsp;<b>产品单据:</b></label>
+                    <label>
+                        <input class="easyui-combobox"
+                               id="PiaoJuID2"
+                               name="PiaoJuID2"
+                               url="/YXBJ/GetChanPinDJ"
+                               valueField="ID"
+                               textField="MyText"
+                               panelHeight="auto" style="width:100px" /><input type="hidden" id="PiaoJuID3" name="PiaoJuID" />
+                    </label>
+                </div>
+                <div><label>&nbsp;&nbsp;&nbsp;<b>备注:</b></label><label><input type="text" id="BeiZhu2" name="BeiZhu" /></label></div>
+                <div><label>&nbsp;&nbsp;<b>供货时间:</b></label><label><input class="easyui-datebox" id="GHTime2" name="GhTime2" /><input type="hidden" id="GHTime3" name="GhTime" /></label></div>
+                <div><label>&nbsp;<b>客户名称:</b></label><label><input type="text" id="KHname2" name="KHname" /></label></div>
+                <div><label><b>客户联系人:</b></label><label><input type="text" id="KHperson2" name="KHperson" /></label></div>
+                <div><label><b>联系人职务:</b></label><label><input type="text" id="KHzhiwu2" name="KHzhiwu" /></label></div>
+                <div><label><b>联系人电话:</b></label><label><input type="text" id="KHphoto2" name="KHphoto" /></label></div>
+                <div><label>&nbsp;&nbsp;&nbsp;<b>法人:</b></label><label><input type="text" id="KHfaren2" name="KHfaren" /></label></div>
+                <div><label>&nbsp;<b>技术要求:</b></label><label><input type="text" id="JiShuYaoQiu2" name="JiShuYaoQiu" /></label></div>
+                <div><div>&nbsp;<b>供货地点:</b>
+                    <input class="easyui-combobox"
+                           id="ProvinceID"
+                           name="ProvinceIDname2"
+                           url="/YXBJ/GetAddress?MyColums=Province"
+                           valueField="ID"
+                           textField="MyTexts"
+                           panelHeight="auto" style="width:auto" /><input type="hidden" id="ProvinceID3" name="ProvinceIDname" />
+                    </div>
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input class="easyui-combobox"
+                               id="CityID"
+                               name="CityIDname2"
+                               url=""
+                               valueField="ID"
+                               textField="MyTexts"
+                               panelHeight="auto" style="width:auto" /><input type="hidden" id="CityID3" name="CityIDname" />
+                    </div>
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input class="easyui-combobox"
+                               id="VillageID"
+                               name="VillageIDname2"
+                               url=""
+                               valueField="ID"
+                               textField="MyTexts"
+                               panelHeight="auto" style="width:auto" /><input type="hidden" id="VillageID3" name="VillageIDname" />
+                    </div>
+                </div>
+                <div><label>&nbsp;<b>代办运输:</b></label><label><input type="text" id="DaiBanYunShu2" name="DaiBanYunShu" /></label></div>
+                <div><label>&nbsp;<b>结算方式:</b></label><label><input type="text" id="JieShuanFanShi2" name="JieShuanFanShi" /></label></div>
+                <div><label>&nbsp;<b>合同签订:</b></label><label><input type="text" id="HeTongQianDing2" name="HeTongQianDing" /></label></div>
+                <div><label><input type="hidden" id="BaoJiaID2" name="BaoJiaID" /></label></div>
+            </div>
+            <div style="padding:5px;text-align:center;">
+                <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="OkToEdit()">确定</a>
+                <a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="cancel()">取消</a>
+            </div>
+        </form>
+        }
     </div>
   
 </body>
