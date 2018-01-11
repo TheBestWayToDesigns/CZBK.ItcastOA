@@ -534,6 +534,27 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
         }
 
+        //删除上传过程中的废弃文件
+        public void DelLaJiFile()
+        {
+            var urlstr = Request["urlstr"];
+            string[] str = urlstr.Split(',');
+            var list = str.ToList();
+            if (list != null)
+            {
+                foreach(var a in list)
+                {
+                    if(a != "")
+                    {
+                        if (Directory.Exists(Path.GetDirectoryName(Request.MapPath(a))))
+                        {
+                            System.IO.File.Delete(Request.MapPath(a));
+                        }
+                    }
+                }
+            }
+        }
+
         public class STUBuMen
         {
             public int ID { get; set; }

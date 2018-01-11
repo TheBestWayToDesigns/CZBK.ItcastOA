@@ -375,6 +375,7 @@
                 width: 450,
                 height: 430,
                 collapsible: true,
+                closable: false,
                 resizable: true,
                 modal: true,
                 buttons: [{
@@ -428,11 +429,14 @@
                 }, {
                     text: '取消',
                     handler: function () {
-                       remval()                       
+                        var urlstr = $("#BeiFenFileUrlID").val();
+                        $.post("/ShareFileOrNotice/DelLaJiFile", { "urlstr": urlstr }, function (data) { })
+                        remval();
                         $('#AddShareFileDIV').dialog('close');
+                        $("#BeiFenFileUrlID").val("")
                     }
                 }], onClose: function () {
-                    remval()
+                    remval();
                 }
             });
         }
@@ -702,6 +706,7 @@
                     var serverData = data.split(":");
                     if (serverData[0] == "yes") {
                         $("#fileUrlID").val(serverData[1]);//将上传成功的文件地址放在隐藏input中
+                        $("#BeiFenFileUrlID").val($("#BeiFenFileUrlID").val() +","+serverData[1]);
                         $.messager.alert("提示", "上传文件成功！");
                     }
                     else {
@@ -715,24 +720,20 @@
 
         //添加共享文件以后调用
         function afterAddShareFile(data) {
-            try {
-                $("#FileTypeInput").combobox("setValue", "");
-                $("#ModelFInput").combobox("setValue", "");
-                $("#BMSTUInput").combobox("setValue", "");
-                $("#STUInput").combobox("setValue", "");
-                $("#BeiZhuId").val("");
-                $("#uploadShareFileID").val("");
-                $("#fileUrlID").val("");
-                $("#STUstrID").val("");
-                $("#showAddUsers").val("");
-                $("#BeiZhuId").val("");
-                $("#AddShareFileDIV input[type='radio']").removeAttr('checked');
-            }
-            catch(e){}
-           
             $("#AddShareFileDIV").dialog('close');
             $('#tt').datagrid('reload');
             $.messager.alert("提醒", "共享成功！");
+            $("#FileTypeInput").combobox("setValue", "");
+            $("#ModelFInput").combobox("setValue", "");
+            $("#BMSTUInput").combobox("setValue","");
+            $("#STUInput").combobox("setValue", "");
+            $("#BeiZhuId").val("");
+            $("#uploadShareFileID").val("");
+            $("#fileUrlID").val("");
+            $("#STUstrID").val("");
+            $("#showAddUsers").val("");
+            $("#BeiFenFileUrlID").val("");
+            $("#AddShareFileDIV input[type='radio']").removeAttr('checked');
         }
 
         //添加通知公告以后调用
@@ -784,8 +785,11 @@
                     var serverData = data.split(":");
                     if (serverData[0] == "yes") {
                         var url = $("#hiddenSFUrl").val();
+                        var bf = $("#BeiFenAddFileUrlID").val();
                         var urlstr = url + "," + serverData[1];
+                        var bfstr = bf + "," + serverData[1];
                         $("#hiddenSFUrl").val(urlstr);//将上传成功的文件地址放在隐藏input中
+                        $("#BeiFenAddFileUrlID").val(bfstr);
                         $.messager.alert("提示", "上传文件成功！");
                     }
                     else {
@@ -800,6 +804,7 @@
         //补充共享文件之后调用方法
         function afterUpload() {
             $("#AddUploadFileDiv").window('close');
+            $("#BeiFenAddFileUrlID").val("");
             $(".SmallWindow input").val("");
             $('#tt').datagrid('reload');
             $.messager.alert("提醒", "补充共享文件成功!!");
@@ -816,11 +821,14 @@
 
         //窗口取消功能
         function cancel() {
+            var urlstr = $("#BeiFenAddFileUrlID").val();
+            $.post("/ShareFileOrNotice/DelLaJiFile", { "urlstr": urlstr}, function (data) { })
             $("#AddUploadFileDiv").window('close');
             $(".SmallWindow input").val("");
             $("#CheckAllUserInfoDiv").window("close");
             $("#DownloadFileDiv").window('close');
             $("#DownloadFileTab").children().remove();
+            $("#BeiFenAddFileUrlID").val("");
         }
 
     </script>
@@ -885,7 +893,7 @@
                     <b>
                         文件
                         <input type="file" id="uploadShareFileID" name="uploadShareFileName" /><a href='javascript:uploadFileClick()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>上传</a>
-                        <input type="hidden" id="fileUrlID" name="fileUrlName" />
+                        <input type="hidden" id="fileUrlID" name="fileUrlName" /><input type="hidden" id="BeiFenFileUrlID" name="BeiFenFileUrlName" />
                     </b>
                 </div>
                 <b>&nbsp;</b>
@@ -1016,13 +1024,14 @@
     </div>
 
     <!---------------补充上传文件--------------------->
-    <div id="AddUploadFileDiv" class="easyui-window" title="补充上传文件" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:348px;height:147px;">
+    <div id="AddUploadFileDiv" class="easyui-window" title="补充上传文件" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:auto;height:auto;">
         @using (Ajax.BeginForm("AddUploadFile", "ShareFileOrNotice", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterUpload" }, new { id = "adduploadfileform" }))
         {
             <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
                 <div style="height:5px"><!--填充空白区域--></div>
                 文件：
                 <input type="file" name="uploadShareFileName" id="AddUploadFileID" /><a href="javascript:getUrl()" class="l-btn" style="margin:0px 5px;padding:2px 8px">上传</a>
+                <input type="hidden" id="BeiFenAddFileUrlID" name="BeiFenAddFileUrlName" />
                 <div style="text-align:center"><label><b style="color:red">【注】</b><span style="color:silver">多个文件需依次进行添加再上传！最后再点确定！</span></label></div>
                 <input type="hidden" id="hiddenSFID" name="sfid" />
                 <input type="hidden" id="hiddenSFUrl" name="sfurl" />
@@ -1036,7 +1045,7 @@
     </div>
 
     <!--------------显示下载文件的列表---------------->
-    <div id="DownloadFileDiv" class="easyui-window" title="下载文件" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:192px;height:auto;">
+    <div id="DownloadFileDiv" class="easyui-window" title="下载文件" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:185px;height:auto;">
         <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
             <table id="DownloadFileTab">
                 <!--显示文件-->
@@ -1048,7 +1057,7 @@
     </div>
 
     <!--------------查看共享用户---------------->
-    <div id="CheckAllUserInfoDiv" class="easyui-window" title="下载文件" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:304px;height:197px;">
+    <div id="CheckAllUserInfoDiv" class="easyui-window" title="下载文件" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:auto;height:auto;">
         <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
             <div>
                 <b>所有共享到的用户：</b><br />
