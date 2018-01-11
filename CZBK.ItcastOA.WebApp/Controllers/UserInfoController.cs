@@ -231,11 +231,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
 
             userInfo.ModifiedOn = DateTime.Now;
             userInfo.OverTime = new DateTime(2030, 1, 1);
-            userInfo.UPwd= Model.Enum.AddMD5.GaddMD5(userInfo.UPwd);
+            //userInfo.UPwd = UserInfoService.LoadEntities(x => x.ID == userInfo.ID).FirstOrDefault().UPwd;
             //var uct= UserInfo_CityService.LoadEntities(x=>x.UserInfo_ID==userInfo.ID).FirstOrDefault();
             //uct.T_City_ID = (int)userInfo.CityID;
-            //UserInfo_CityService.EditEntity(uct);
-            
+            //UserInfo_CityService.EditEntity(uct);            
             if (UserInfoService.EditEntity(userInfo))
             {
                 return Content("ok");

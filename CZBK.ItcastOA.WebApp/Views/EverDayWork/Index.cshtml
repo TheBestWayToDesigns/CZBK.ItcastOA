@@ -590,8 +590,11 @@
         }
         //查阅下级日程
         function reviewSchedule() {
+
+            var row = $("#tt").datagrid("getSelected");
+           
+            $("#TextReadBak").val(row.TextReadBak);
             var row = $('#tt').datagrid('getSelected');
-            if (row.TextReadBak == "未查阅") {
             $("#ReviewScheduleID").val(row.ID);
             $("#ReviewScheduleDIV").css("display", "block");
             $('#ReviewScheduleDIV').dialog({
@@ -612,11 +615,13 @@
                     handler: function () {
                         $('#ReviewScheduleDIV').dialog('close');
                     }
-                } ]
+                }]
             });
-        }else{
-                $.messager.alert("提示","已审核过，不能重复审核！");
-        }
+        //if (row.TextReadBak == "未查阅") {
+           
+        //}else{
+        //        $.messager.alert("提示","已审核过，不能重复审核！");
+        //}
         }
 
         //将序列化成json格式后日期(毫秒数)转成日期格式
@@ -1467,7 +1472,7 @@
             <tr><td colspan="2"><h1>查阅意见</h1></td></tr>
             <tr><td><input type="hidden" id="ReviewScheduleID" name="ReviewScheduleID" /></td></tr>
             <tr>
-                <td><h2>请输入您的意见：</h2><textarea name="TextReadBak" style="width:302px;height:158px"></textarea></td>
+                <td><h2>请输入您的意见：</h2><textarea name="TextReadBak" id="TextReadBak" style="width:302px;height:158px"></textarea></td>
             </tr>
         </table>
         <table>
