@@ -19,6 +19,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             CheckCookieInfo();
             return View();
+            
         }
         #region 校验用户的登录信息
         public ActionResult CheckLogin()

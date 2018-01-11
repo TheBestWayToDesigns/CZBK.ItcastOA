@@ -30,11 +30,11 @@ namespace CZBK.ItcastOA.WebApp.Controllers
 
 
 
-        short delFlag = (short)DelFlagEnum.Normarl;
+       // short delFlag = (short)DelFlagEnum.Normarl;
         public ActionResult Index()
         {
             //用户名列表
-            ViewBag.user = UserInfoService.LoadEntities(x => x.DelFlag != 1 && x.BuMenID == 1 && x.Click == null).ToList();
+            ViewBag.user = UserInfoService.LoadEntities(x => x.DelFlag != 1  && x.Click == null && (x.BuMenID == 1||x.BuMenID==20)).ToList();
             //状态列表
             ViewBag.items = T_YSItemsService.LoadEntities(x => x.Items == 1).ToList();
             //客户名称 与 项目名称列表
@@ -976,84 +976,40 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var DwTime = Convert.ToDateTime(Request["DwTime"]);
             var yxy = Request["yxy"] != "" ? Convert.ToInt32(Request["yxy"]) : 0;
             var khn = Request["khn"] != "" ? Convert.ToInt32(Request["khn"]) : 0;
-            var cs = Request["cs"] != "" ? Request["cs"] : "0";
-            var vs = Request["vs"] != "" ? Request["vs"] : "0";
-            var sd = Request["sd"] != "" ? Request["sd"] : "0";
-            var temp = T_BaoJiaToPService.LoadEntities(x => x.AddTime > UpTime && x.AddTime < DwTime).DefaultIfEmpty().ToList();
-            if (temp != null && temp[0] != null)
-            {
-                List<T_BaoJiaToP> list1 = new List<T_BaoJiaToP>();
-                if(yxy != 0)
-                {
-                    list1.AddRange(temp.Where(x => x.YXB_Kh_list.AddUser == yxy));
-                }else
-                {
-                    list1.AddRange(temp);
-                }
-                List<T_BaoJiaToP> list2 = new List<T_BaoJiaToP>();
-                if (khn != 0)
-                {
-                    list2.AddRange(list1.Where(x => x.YXB_Kh_list.id == khn));
-                }
-                else
-                {
-                    list2.AddRange(list1);
-                }
-                List<T_BaoJiaToP> list3 = new List<T_BaoJiaToP>();
-                if (cs != "0")
-                {
-                    if(vs != "0")
-                    {
-                        if(sd != "0")
-                        {
-                            list3.AddRange(list2.Where(x => x.Addess.Contains(cs +","+vs+","+ sd)));
-                        }
-                        else
-                        {
-                            list3.AddRange(list2.Where(x => x.Addess.Contains(cs +","+ vs)));
-                        }
-                    }
-                    else
-                    {
-                        list3.AddRange(list2.Where(x => x.Addess.Contains(cs)));
-                    }
-                }
-                else
-                {
-                    list3.AddRange(list2);
-                }
-                for (int i = 0; i < list3.Count; i++)
-                {
-                    list3[i].Addess = ArrF(list3[i].Addess);
-                }
-                var rtmp = from a in list3
-                           select new
-                           {
-                               ID = a.id,
-                               AddTime = a.AddTime,
-                               GhTime = a.GhTime,
-                               JiShuYaoQiu = a.JiShuYaoQiu,
-                               Addess = a.Addess,
-                               DaiBanYunShu = a.DaiBanYunShu,
-                               JieShuanFanShi = a.JieShuanFanShi,
-                               HeTongQianDing = a.HeTongQianDing,
-                               TOPaddtime = a.AddTime,
-                               KHname = a.YXB_Kh_list.KHname,
-                               KHComname = a.KHComname,
-                               KHperson = a.YXB_Kh_list.KHperson,
-                               KHfaren = a.YXB_Kh_list.KHfaren,
-                               KHzhiwu = a.YXB_Kh_list.KHzhiwu,
-                               KHphoto = a.YXB_Kh_list.KHphoto,
-                               NewTime = a.YXB_Kh_list.NewTime,
-                               UName = a.YXB_Kh_list.UserInfo.PerSonName,
-                               HanShui = a.T_BoolItem.str,
-                               Denjiu = a.T_YSItems.MyText
-                           };
-                return Json(new { rows = rtmp, total = rtmp.Count() }, JsonRequestBehavior.AllowGet);
-            }else
-            {
-                return null;
-            }
+            //var cs = Request["cs"] != "" ? Request["cs"] : "0";
+            //var vs = Request["vs"] != "" ? Request["vs"] : "0";
+            //var sd = Request["sd"] != "" ? Request["sd"] : "0";
+            var addess = Request["addess"];
+            UserInfoParam uip = new UserInfoParam();
+            uip.PageIndex = pageIndex;
+            uip.PageSize = pageSize;
+            uip.Uptime = UpTime;
+            uip.Dwtime = DwTime;
+            uip.Person = yxy;
+            uip.KHname = khn;
+            uip.addess = addess;
+            var temp_ = YXB_Kh_listService.loadBaoBeientities(uip);
+
+           // var temp = T_BaoJiaToPService.LoadEntities(x => x.AddTime > UpTime && x.AddTime < DwTime).DefaultIfEmpty().ToList();
+
+
+            var temp = from a in temp_
+                       select new
+                       {
+                           ID = a.id,                          
+                           KHname = a.KHname,                           
+                           KHperson = a.KHperson,
+                           KHfaren = a.KHfaren,
+                           KHzhiwu = a.KHzhiwu,
+                           KHphoto = a.KHphoto,
+                           NewTime = a.NewTime,
+                           UName = a.UserInfo.PerSonName,
+                           khsgaaddess=a.KHSGAdrss,
+                           bak=a.BeiZhu
+                       };
+            return Json(new { rows = temp, total = uip.TotalCount }, JsonRequestBehavior.AllowGet);
+
+           
         }
 
     }

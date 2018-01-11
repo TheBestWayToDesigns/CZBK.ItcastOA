@@ -715,17 +715,21 @@
 
         //添加共享文件以后调用
         function afterAddShareFile(data) {
-            $("#FileTypeInput").combobox("setValue", "");
-            $("#ModelFInput").combobox("setValue", "");
-            $("#BMSTUInput").combobox("setValue", "");
-            $("#STUInput").combobox("setValue", "");
-            $("#BeiZhuId").val("");
-            $("#uploadShareFileID").val("");
-            $("#fileUrlID").val("");
-            $("#STUstrID").val("");
-            $("#showAddUsers").val("");
-            $("#BeiZhuId").val("");
-            $("#AddShareFileDIV input[type='radio']").removeAttr('checked');
+            try {
+                $("#FileTypeInput").combobox("setValue", "");
+                $("#ModelFInput").combobox("setValue", "");
+                $("#BMSTUInput").combobox("setValue", "");
+                $("#STUInput").combobox("setValue", "");
+                $("#BeiZhuId").val("");
+                $("#uploadShareFileID").val("");
+                $("#fileUrlID").val("");
+                $("#STUstrID").val("");
+                $("#showAddUsers").val("");
+                $("#BeiZhuId").val("");
+                $("#AddShareFileDIV input[type='radio']").removeAttr('checked');
+            }
+            catch(e){}
+           
             $("#AddShareFileDIV").dialog('close');
             $('#tt').datagrid('reload');
             $.messager.alert("提醒", "共享成功！");

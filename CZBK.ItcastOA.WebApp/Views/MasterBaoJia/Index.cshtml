@@ -76,6 +76,10 @@
         //提交数据
         $(function () {
             GetItemMeun();
+            
+            var cur_time = new Date();
+            $("#StTime").datebox("setValue", myformatter(cur_time));
+            $("#DwTime").datebox("setValue", myformatter(cur_time));
             win = 0;
             $(".Province").combobox({
                 onChange: function (n, o) {
@@ -427,7 +431,7 @@
                 }
             });
         });
-
+        
         //返回ADDESS地址
         function RetAddess() {
             var addess = "";
@@ -1084,6 +1088,13 @@
             }
             return date.getFullYear() + "-" + month + "-" + currentDate ;
         }
+
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            var d = date.getDate();
+            return y + '-' + (m < 10 ? ('0' + m) : m) + '-' + (d < 10 ? ('0' + d) : d);
+        }
         function bool_click() {
             $.post("/ActionInfo/btnbool", { "id": "" }, function (serverData) {
                 if (serverData == "True") {
@@ -1466,6 +1477,7 @@
                 if (data.rows != null)
                 {
                     var a = "<a href='#' class='easyui-linkbutton l-btn l-btn-small' data-options='toggle:true,group:'g1'' id='" + data.rows[0].url + "' group='g1'><span class='l-btn-left'><span class='l-btn-text'>" + data.rows[0].title + "</span></span></a>";
+                    alert(data.rows[0].url)
                     $("#" + data.rows[0].url).show();
                 }                
                
@@ -1591,29 +1603,22 @@
         //报价查询
         function Khbbbtn() {
             var UpTime = $('#StTime').combobox('getValue');
-            if (UpTime.trim().length <= 0) {
+            if (UpTime == undefined||UpTime.trim().length <= 0) {
                 $.messager.alert("提示", "开始时间不可为空！")
                 return;
             }
             var DwTime = $('#DwTime').combobox('getValue');
-            if (DwTime.trim().length <= 0) {
+            if (DwTime == undefined || DwTime.trim().length <= 0) {
                 $.messager.alert("提示", "结束时间不可为空！")
                 return;
             }
             var yxy = $('#Person').combobox('getValue');
-            yxy = yxy.trim().length < 0 ? 0 : yxy;
+            yxy =yxy==undefined?0: yxy.trim().length < 0 ? 0 : yxy;
             var khn = $('#KHname').combobox('getValue');
-            khn = khn.trim().length < 0 ? 0 : khn;
-            var cs = $('#CitySee').combobox('getValue');
-            cs = cs.trim().length < 0 ? 0 : cs;
-            var vs = $('#VillageSee').combobox('getValue');
-            vs = vs.trim().length < 0 ? 0 : vs;
-            var sd = $('#SeeDint').combobox('getValue');
-            sd = sd.trim().length < 0 ? 0 : sd;
-            
+            khn = yxy == undefined ? 0 : khn.trim().length < 0 ? 0 : khn;
             showdilag2();
             var pars = {
-                UpTime: UpTime, DwTime: DwTime, yxy: yxy, khn: khn, cs: cs, vs: vs, sd: sd
+                UpTime: UpTime, DwTime: DwTime, yxy: yxy, khn: khn,  addess: RetAddess()
             };
             $('#Citytt').datagrid({
                 url: '/MasterBaoJia/GetKeHuBaoBei',
@@ -1633,38 +1638,30 @@
                 columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
                     { field: 'ck', checkbox: true, title: '', width: 30 },
                     {
-                        field: 'ZhuangTai', title: '审核状态',
+                        field: 'ZhuangTai', title: '审核状态',hidden:true,
                         formatter: function (value, row, index) {
                             return "客户报备阶段";
                         }
                     },
-                     { field: 'Denjiu', title: '产品单据', align: 'center' },
-                    { field: 'Remark', title: '备注' },
-                     {
-                         field: 'GhTime', title: '供货时间', align: 'center',
-                         formatter: function (value, row, col) {
-                             var sd = value == null ? '' : ChangeDateFormat(value);
-                             return sd;
-                         }
-                     },
                     {
-                        field: 'AddTime', title: '申请时间', align: 'center',
+                        field: 'NewTime', title: '创建时间', align: 'center',
                         formatter: function (value, row, col) {
                             var sd = value == null ? '' : ChangeDateFormat(value, true);
                             return sd;
                         }
                     },
+                     {
+                         field: 'UName', title: '创建人员', align: 'center'
+                     },
                      { field: 'KHname', title: '客户名称', align: 'center' },
                       { field: 'KHperson', title: '客户联系人', align: 'center' },
                       { field: 'KHzhiwu', title: '联系人职务', align: 'center' },
                      { field: 'KHphoto', title: '联系人电话', align: 'center' },
                       { field: 'KHfaren', title: '法人', align: 'center' },
-                    { field: 'JiShuYaoQiu', title: '技术要求' },
-                    { field: 'Addess', title: '供货地点' },
-                    { field: 'DaiBanYunShu', title: '代办运输', align: 'center' },
-                    { field: 'JieShuanFanShi', title: '结算方式', align: 'center' },
-                    { field: 'HeTongQianDing', title: '合同签订', align: 'center' }
+                      { field: 'KHphoto', title: '施工地址', align: 'center' },
+                      { field: 'KHfaren', title: '备注', align: 'center' }
                 ]],
+                toolbar:"",
                 onLoadSuccess: function () {
                 }
             });
