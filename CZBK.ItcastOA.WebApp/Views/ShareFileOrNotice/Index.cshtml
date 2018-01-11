@@ -375,6 +375,7 @@
                 width: 450,
                 height: 430,
                 collapsible: true,
+                closable: false,
                 resizable: true,
                 modal: true,
                 buttons: [{
@@ -435,10 +436,7 @@
                         $("#BeiFenFileUrlID").val("")
                     }
                 }], onClose: function () {
-                    var urlstr = $("#BeiFenFileUrlID").val();
-                    $.post("/ShareFileOrNotice/DelLaJiFile", { "urlstr": urlstr }, function (data) {})
                     remval();
-                    $("#BeiFenFileUrlID").val("");
                 }
             });
         }
@@ -722,21 +720,20 @@
 
         //添加共享文件以后调用
         function afterAddShareFile(data) {
+            $("#AddShareFileDIV").dialog('close');
+            $('#tt').datagrid('reload');
+            $.messager.alert("提醒", "共享成功！");
             $("#FileTypeInput").combobox("setValue", "");
             $("#ModelFInput").combobox("setValue", "");
-            $("#BMSTUInput").combobox("setValue", "");
+            $("#BMSTUInput").combobox("setValue","");
             $("#STUInput").combobox("setValue", "");
             $("#BeiZhuId").val("");
             $("#uploadShareFileID").val("");
             $("#fileUrlID").val("");
             $("#STUstrID").val("");
             $("#showAddUsers").val("");
-            $("#BeiZhuId").val("");
             $("#BeiFenFileUrlID").val("");
             $("#AddShareFileDIV input[type='radio']").removeAttr('checked');
-            $("#AddShareFileDIV").dialog('close');
-            $('#tt').datagrid('reload');
-            $.messager.alert("提醒", "共享成功！");
         }
 
         //添加通知公告以后调用
@@ -896,7 +893,7 @@
                     <b>
                         文件
                         <input type="file" id="uploadShareFileID" name="uploadShareFileName" /><a href='javascript:uploadFileClick()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>上传</a>
-                        <input type="hidden" id="fileUrlID" name="fileUrlName" /><input type="text" id="BeiFenFileUrlID" name="BeiFenFileUrlName" />
+                        <input type="hidden" id="fileUrlID" name="fileUrlName" /><input type="hidden" id="BeiFenFileUrlID" name="BeiFenFileUrlName" />
                     </b>
                 </div>
                 <b>&nbsp;</b>
