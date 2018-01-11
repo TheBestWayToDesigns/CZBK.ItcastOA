@@ -13,7 +13,14 @@ namespace CZBK.ItcastOA.WebApp.Models
         {
             base.OnException(filterContext);
             ExceptionQueue.Enqueue(filterContext.Exception);//将异常信息添加到队列中。
-            filterContext.HttpContext.Response.Redirect("/Error.html");
+            try
+            {
+                filterContext.HttpContext.Response.Redirect("/Error.html");
+            }
+            catch (Exception e)
+            {
+
+            }
         }
     }
    

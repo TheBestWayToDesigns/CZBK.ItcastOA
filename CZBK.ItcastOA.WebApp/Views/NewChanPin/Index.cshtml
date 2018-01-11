@@ -36,6 +36,7 @@
         var MyColums = "CPname";
         var Del;
         var Tpage = true;
+        var yesorno = null;
         $(function () {
             //读取产品名称
             loadCpxh()
@@ -138,15 +139,19 @@
                 })
             })
             
+
           
             //删除信息
             $("body").delegate('#tb tr td a', 'click', function () {
+                yesorno = $(this).attr("name");
+                alert(yesorno)
                 Del = $(this).attr("id");
                 $("#thishi").click();               
             }) 
-            $("body").delegate('#Yesdel', 'click', function () {                    
+            $("body").delegate('#Yesdel', 'click', function () {
                 $.post("/NewChanPin/DelChanPin", {
-                    "delID":Del
+                    "delID": Del,
+                    "bol":yesorno
                 }, function (serverData) {
                     if (serverData == "ok") {
                         $("#TdText").html(MyColums == "CPname" ? "产品名称" : "产品型号");
@@ -184,6 +189,8 @@
             })           
             
         })
+
+
         function AjaxLN(obj,vl)
         {
             $.ajax({
@@ -227,7 +234,7 @@
             $('#Pageul').children().filter('li').remove(); //动态删除
             $.post("/NewChanPin/GetHref", { "page": artPage, "rows": Rows,"MyColums":MyColums }, function (serverData) {
                 for (var i = 0; i < serverData.rows.length; i++) {
-                    var trHTML = "<tr  ><td>" + serverData.rows[i].MyTexts + "</td><td><a  class='btn  btn-info btn-sm' role='button' href='#'  id='" + serverData.rows[i].ID + "' name=''>删除</a></td></tr>"
+                    var trHTML = "<tr  ><td>" + serverData.rows[i].MyTexts + "</td><td><a  class='btn  btn-info btn-sm' role='button' href='#'  id='" + serverData.rows[i].ID + "' name='true'>删除</a></td></tr>"
                     $("#tb").append(trHTML);
                 }
                 Aconunt = serverData.total;
@@ -262,7 +269,7 @@
             $('#Pageul').children().filter('li').remove(); //动态删除
             $.post("/NewChanPin/GetWinCpXh", { "page": artPage, "rows": Rows}, function (serverData) {
                 for (var i = 0; i < serverData.rows.length; i++) {
-                    var trHTML = "<tr  ><td>产品名称：【" + serverData.rows[i].CPname + "】 —产品型号：【" + serverData.rows[i].Cpxinghao + "】</td><td><a  class='btn  btn-info btn-sm' role='button' href='#'  id='" + serverData.rows[i].ID + "' name=''>删除</a></td></tr>"
+                    var trHTML = "<tr  ><td>产品名称：【" + serverData.rows[i].CPname + "】 —产品型号：【" + serverData.rows[i].Cpxinghao + "】</td><td><a  class='btn  btn-info btn-sm' role='button' href='#'  id='" + serverData.rows[i].ID + "' name='false'>删除</a></td></tr>"
                     $("#tb").append(trHTML);
                 }
                 Aconunt = serverData.total;

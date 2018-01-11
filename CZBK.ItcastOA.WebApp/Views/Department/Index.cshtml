@@ -350,7 +350,7 @@
         </div>
 
         <!---------------添加部门信息--------------------->
-        <div id="AddBMDiv" class="easyui-window" title="添加部门" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:300px;height:180px;">
+        <div id="AddBMDiv" class="easyui-window" title="添加部门" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:auto;height:auto;">
             @using (Ajax.BeginForm("AddBuMen", "Department", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAdd" }, new { id = "addbumenform" }))
             {
                 <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
@@ -363,7 +363,7 @@
             }
         </div>
         <!---------------修改部门信息--------------------->
-        <div id="EditBMNameDiv" class="easyui-window" title="修改部门名称" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:300px;height:180px;">
+        <div id="EditBMNameDiv" class="easyui-window" title="修改部门名称" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:auto;height:auto;">
             @using (Ajax.BeginForm("EditBuMenName", "Department", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "editbmnameform" }))
             {
                <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
@@ -378,7 +378,7 @@
             }
         </div>
         <!---------------添加上下级关系--------------------->
-        <div id="AddUpOrDownDiv" class="easyui-window" title="添加上下级关系" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:400px;height:250px;">
+        <div id="AddUpOrDownDiv" class="easyui-window" title="添加上下级关系" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:auto;height:auto;">
             @using (Ajax.BeginForm("AddUpOrDown", "Department", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddUpOrDown" }, new { id = "addupordownform" }))
             {
                 <form class="SmallWindow" style="padding:10px 20px 10px 40px;">

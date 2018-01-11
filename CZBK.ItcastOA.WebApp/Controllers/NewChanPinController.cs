@@ -60,20 +60,45 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //删除产品 信息
         public ActionResult DelChanPin()
         {
-            long delID =Convert.ToInt64( Request["delID"]);
-            var deldata = YXB_WinCanPinService.LoadEntities(x=>x.ID== delID).FirstOrDefault();
-            if (deldata.T_ChanPinName.CreatePerson != LoginUser.ID)
+            long delID = Convert.ToInt64(Request["delID"]);
+            var NameOrType = Request["bol"];
+            if (NameOrType == "true")
             {
-                return Json("noperson", JsonRequestBehavior.AllowGet);
+                var deldata = T_ChanPinNameService.LoadEntities(x => x.ID == delID).FirstOrDefault();
+                if (deldata.CreatePerson != LoginUser.ID)
+                {
+                    return Json("noperson", JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    deldata.Del = 1;
+                    if (T_ChanPinNameService.EditEntity(deldata))
+                    { return Json("ok", JsonRequestBehavior.AllowGet); }
+                    else
+                    { return Json("no", JsonRequestBehavior.AllowGet); }
+                }
+
+            }
+            else if (NameOrType == "false")
+            {
+                var deldata = YXB_WinCanPinService.LoadEntities(x => x.ID == delID).FirstOrDefault();
+                if (deldata.T_ChanPinName.CreatePerson != LoginUser.ID)
+                {
+                    return Json("noperson", JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    deldata.Del = 1;
+                    if (YXB_WinCanPinService.EditEntity(deldata))
+                    { return Json("ok", JsonRequestBehavior.AllowGet); }
+                    else
+                    { return Json("no", JsonRequestBehavior.AllowGet); }
+                }
             }
             else
             {
-                deldata.Del = 1;
-                if (YXB_WinCanPinService.EditEntity(deldata))
-                { return Json("ok", JsonRequestBehavior.AllowGet); }
-                else
-                { return Json("no", JsonRequestBehavior.AllowGet); }
-            }            
+                return Json("no", JsonRequestBehavior.AllowGet);
+            }       
         }
         //获取产品型号列表
         public ActionResult GetWinCpXh() {
