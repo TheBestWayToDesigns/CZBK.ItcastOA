@@ -170,6 +170,16 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IYJ_ScheduleActionDal :IBaseDal<YJ_ScheduleAction>
+    {
+      
+    }
+	
+	public partial interface IYJ_ScheduleDayDal :IBaseDal<YJ_ScheduleDay>
+    {
+      
+    }
+	
 	public partial interface IYXB_BaojiaDal :IBaseDal<YXB_Baojia>
     {
       

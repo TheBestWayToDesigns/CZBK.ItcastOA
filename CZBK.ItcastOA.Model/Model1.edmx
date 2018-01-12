@@ -447,6 +447,31 @@
           <Property Name="RoleInfo_ID" Type="int" Nullable="false" />
           <Property Name="UserInfo_ID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="YJ_ScheduleAction">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UpSdeDayID" Type="bigint" />
+          <Property Name="TheSdeDayID" Type="bigint" Nullable="false" />
+          <Property Name="Del" Type="bit" />
+        </EntityType>
+        <EntityType Name="YJ_ScheduleDay">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SchenuleTime" Type="datetime" />
+          <Property Name="WriteUserID" Type="int" />
+          <Property Name="TextID" Type="int" />
+          <Property Name="YJText" Type="nvarchar(max)" />
+          <Property Name="YJUserinfoID" Type="int" />
+          <Property Name="AddYJtime" Type="datetime" />
+          <Property Name="ISee" Type="bit" />
+          <Property Name="ISeeAddtime" Type="datetime" />
+          <Property Name="DEL" Type="smallint" />
+          <Property Name="SeeUserInfoList" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="YXB_Baojia">
           <Key>
             <PropertyRef Name="id" />
@@ -1150,6 +1175,54 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_YJ_ScheduleAction_thesdeday">
+          <End Role="YJ_ScheduleDay" Type="Self.YJ_ScheduleDay" Multiplicity="1" />
+          <End Role="YJ_ScheduleAction" Type="Self.YJ_ScheduleAction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="YJ_ScheduleDay">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YJ_ScheduleAction">
+              <PropertyRef Name="TheSdeDayID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YJ_ScheduleAction_UPSdeday">
+          <End Role="YJ_ScheduleDay" Type="Self.YJ_ScheduleDay" Multiplicity="0..1" />
+          <End Role="YJ_ScheduleAction" Type="Self.YJ_ScheduleAction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="YJ_ScheduleDay">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YJ_ScheduleAction">
+              <PropertyRef Name="UpSdeDayID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YJ_ScheduleDay_Writeuserid_Userinfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="0..1" />
+          <End Role="YJ_ScheduleDay" Type="Self.YJ_ScheduleDay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YJ_ScheduleDay">
+              <PropertyRef Name="WriteUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YJ_ScheduleDay_yjuserid_userinfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="0..1" />
+          <End Role="YJ_ScheduleDay" Type="Self.YJ_ScheduleDay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YJ_ScheduleDay">
+              <PropertyRef Name="YJUserinfoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_YXB_Baojia_CanPinDengji">
           <End Role="T_ChanPinName" Type="Self.T_ChanPinName" Multiplicity="0..1" />
           <End Role="YXB_Baojia" Type="Self.YXB_Baojia" Multiplicity="*" />
@@ -1340,6 +1413,8 @@
           <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfoDepartment" EntityType="Self.UserInfoDepartment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfoRoleInfo" EntityType="Self.UserInfoRoleInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="YJ_ScheduleAction" EntityType="Self.YJ_ScheduleAction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="YJ_ScheduleDay" EntityType="Self.YJ_ScheduleDay" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YXB_Baojia" EntityType="Self.YXB_Baojia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YXB_BaoJiaEidtMoney" EntityType="Self.YXB_BaoJiaEidtMoney" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YXB_Kh_list" EntityType="Self.YXB_Kh_list" Schema="dbo" store:Type="Tables" />
@@ -1551,6 +1626,22 @@
           <AssociationSet Name="FK_UserInfoRoleInfo_UserInfo" Association="Self.FK_UserInfoRoleInfo_UserInfo">
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="UserInfoRoleInfo" EntitySet="UserInfoRoleInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YJ_ScheduleAction_thesdeday" Association="Self.FK_YJ_ScheduleAction_thesdeday">
+            <End Role="YJ_ScheduleDay" EntitySet="YJ_ScheduleDay" />
+            <End Role="YJ_ScheduleAction" EntitySet="YJ_ScheduleAction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YJ_ScheduleAction_UPSdeday" Association="Self.FK_YJ_ScheduleAction_UPSdeday">
+            <End Role="YJ_ScheduleDay" EntitySet="YJ_ScheduleDay" />
+            <End Role="YJ_ScheduleAction" EntitySet="YJ_ScheduleAction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YJ_ScheduleDay_Writeuserid_Userinfo" Association="Self.FK_YJ_ScheduleDay_Writeuserid_Userinfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="YJ_ScheduleDay" EntitySet="YJ_ScheduleDay" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YJ_ScheduleDay_yjuserid_userinfo" Association="Self.FK_YJ_ScheduleDay_yjuserid_userinfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="YJ_ScheduleDay" EntitySet="YJ_ScheduleDay" />
           </AssociationSet>
           <AssociationSet Name="FK_YXB_Baojia_CanPinDengji" Association="Self.FK_YXB_Baojia_CanPinDengji">
             <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
@@ -1896,6 +1987,24 @@
             <End Role="UserInfo" EntitySet="UserInfoes" />
             <End Role="ExamineSchedule" EntitySet="ExamineSchedules" />
           </AssociationSet>
+          <EntitySet Name="YJ_ScheduleAction" EntityType="OAModel.YJ_ScheduleAction" />
+          <EntitySet Name="YJ_ScheduleDay" EntityType="OAModel.YJ_ScheduleDay" />
+          <AssociationSet Name="FK_YJ_ScheduleDay_Writeuserid_Userinfo" Association="OAModel.FK_YJ_ScheduleDay_Writeuserid_Userinfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="YJ_ScheduleDay" EntitySet="YJ_ScheduleDay" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YJ_ScheduleDay_yjuserid_userinfo" Association="OAModel.FK_YJ_ScheduleDay_yjuserid_userinfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="YJ_ScheduleDay" EntitySet="YJ_ScheduleDay" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YJ_ScheduleAction_thesdeday" Association="OAModel.FK_YJ_ScheduleAction_thesdeday">
+            <End Role="YJ_ScheduleDay" EntitySet="YJ_ScheduleDay" />
+            <End Role="YJ_ScheduleAction" EntitySet="YJ_ScheduleAction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YJ_ScheduleAction_UPSdeday" Association="OAModel.FK_YJ_ScheduleAction_UPSdeday">
+            <End Role="YJ_ScheduleDay" EntitySet="YJ_ScheduleDay" />
+            <End Role="YJ_ScheduleAction" EntitySet="YJ_ScheduleAction" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ActionInfo">
           <Key>
@@ -2239,6 +2348,8 @@
           <NavigationProperty Name="ShareFileOrNotices" Relationship="OAModel.FK_ShareFileOrNotice_UserInfo" FromRole="UserInfo" ToRole="ShareFileOrNotice" />
           <NavigationProperty Name="ScheduleUsers1" Relationship="OAModel.FK_ScheduleUser_UserInfo1" FromRole="UserInfo" ToRole="ScheduleUser" />
           <NavigationProperty Name="ExamineSchedules" Relationship="OAModel.FK_ExamineSchedule_UserInfo" FromRole="UserInfo" ToRole="ExamineSchedule" />
+          <NavigationProperty Name="YJ_ScheduleDay" Relationship="OAModel.FK_YJ_ScheduleDay_Writeuserid_Userinfo" FromRole="UserInfo" ToRole="YJ_ScheduleDay" />
+          <NavigationProperty Name="YJ_ScheduleDay1" Relationship="OAModel.FK_YJ_ScheduleDay_yjuserid_userinfo" FromRole="UserInfo" ToRole="YJ_ScheduleDay" />
         </EntityType>
         <Association Name="FK_Bumen">
           <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
@@ -3171,6 +3282,85 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="YJ_ScheduleAction">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UpSdeDayID" Type="Int64" />
+          <Property Name="TheSdeDayID" Type="Int64" Nullable="false" />
+          <Property Name="Del" Type="Boolean" />
+          <NavigationProperty Name="YJ_ScheduleDay" Relationship="OAModel.FK_YJ_ScheduleAction_thesdeday" FromRole="YJ_ScheduleAction" ToRole="YJ_ScheduleDay" />
+          <NavigationProperty Name="YJ_ScheduleDay1" Relationship="OAModel.FK_YJ_ScheduleAction_UPSdeday" FromRole="YJ_ScheduleAction" ToRole="YJ_ScheduleDay" />
+        </EntityType>
+        <EntityType Name="YJ_ScheduleDay">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SchenuleTime" Type="DateTime" Precision="3" />
+          <Property Name="WriteUserID" Type="Int32" />
+          <Property Name="TextID" Type="Int32" />
+          <Property Name="YJText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="YJUserinfoID" Type="Int32" />
+          <Property Name="AddYJtime" Type="DateTime" Precision="3" />
+          <Property Name="ISee" Type="Boolean" />
+          <Property Name="ISeeAddtime" Type="DateTime" Precision="3" />
+          <Property Name="DEL" Type="Int16" />
+          <Property Name="SeeUserInfoList" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_YJ_ScheduleDay_Writeuserid_Userinfo" FromRole="YJ_ScheduleDay" ToRole="UserInfo" />
+          <NavigationProperty Name="UserInfo1" Relationship="OAModel.FK_YJ_ScheduleDay_yjuserid_userinfo" FromRole="YJ_ScheduleDay" ToRole="UserInfo" />
+          <NavigationProperty Name="YJ_ScheduleAction" Relationship="OAModel.FK_YJ_ScheduleAction_thesdeday" FromRole="YJ_ScheduleDay" ToRole="YJ_ScheduleAction" />
+          <NavigationProperty Name="YJ_ScheduleAction1" Relationship="OAModel.FK_YJ_ScheduleAction_UPSdeday" FromRole="YJ_ScheduleDay" ToRole="YJ_ScheduleAction" />
+        </EntityType>
+        <Association Name="FK_YJ_ScheduleDay_Writeuserid_Userinfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
+          <End Type="OAModel.YJ_ScheduleDay" Role="YJ_ScheduleDay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YJ_ScheduleDay">
+              <PropertyRef Name="WriteUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YJ_ScheduleDay_yjuserid_userinfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
+          <End Type="OAModel.YJ_ScheduleDay" Role="YJ_ScheduleDay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YJ_ScheduleDay">
+              <PropertyRef Name="YJUserinfoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YJ_ScheduleAction_thesdeday">
+          <End Type="OAModel.YJ_ScheduleDay" Role="YJ_ScheduleDay" Multiplicity="1" />
+          <End Type="OAModel.YJ_ScheduleAction" Role="YJ_ScheduleAction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="YJ_ScheduleDay">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YJ_ScheduleAction">
+              <PropertyRef Name="TheSdeDayID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YJ_ScheduleAction_UPSdeday">
+          <End Type="OAModel.YJ_ScheduleDay" Role="YJ_ScheduleDay" Multiplicity="0..1" />
+          <End Type="OAModel.YJ_ScheduleAction" Role="YJ_ScheduleAction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="YJ_ScheduleDay">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YJ_ScheduleAction">
+              <PropertyRef Name="UpSdeDayID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3742,6 +3932,33 @@
                 <ScalarProperty Name="ExamineText" ColumnName="ExamineText" />
                 <ScalarProperty Name="ExamineUser" ColumnName="ExamineUser" />
                 <ScalarProperty Name="ScheduleID" ColumnName="ScheduleID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="YJ_ScheduleAction">
+            <EntityTypeMapping TypeName="OAModel.YJ_ScheduleAction">
+              <MappingFragment StoreEntitySet="YJ_ScheduleAction">
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="TheSdeDayID" ColumnName="TheSdeDayID" />
+                <ScalarProperty Name="UpSdeDayID" ColumnName="UpSdeDayID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="YJ_ScheduleDay">
+            <EntityTypeMapping TypeName="OAModel.YJ_ScheduleDay">
+              <MappingFragment StoreEntitySet="YJ_ScheduleDay">
+                <ScalarProperty Name="SeeUserInfoList" ColumnName="SeeUserInfoList" />
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
+                <ScalarProperty Name="ISeeAddtime" ColumnName="ISeeAddtime" />
+                <ScalarProperty Name="ISee" ColumnName="ISee" />
+                <ScalarProperty Name="AddYJtime" ColumnName="AddYJtime" />
+                <ScalarProperty Name="YJUserinfoID" ColumnName="YJUserinfoID" />
+                <ScalarProperty Name="YJText" ColumnName="YJText" />
+                <ScalarProperty Name="TextID" ColumnName="TextID" />
+                <ScalarProperty Name="WriteUserID" ColumnName="WriteUserID" />
+                <ScalarProperty Name="SchenuleTime" ColumnName="SchenuleTime" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

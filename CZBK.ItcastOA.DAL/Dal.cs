@@ -171,6 +171,16 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class YJ_ScheduleActionDal :BaseDal<YJ_ScheduleAction>,IYJ_ScheduleActionDal
+    {
+
+    }
+		
+	public partial class YJ_ScheduleDayDal :BaseDal<YJ_ScheduleDay>,IYJ_ScheduleDayDal
+    {
+
+    }
+		
 	public partial class YXB_BaojiaDal :BaseDal<YXB_Baojia>,IYXB_BaojiaDal
     {
 

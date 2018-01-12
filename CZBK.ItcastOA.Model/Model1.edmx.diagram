@@ -4,29 +4,29 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="38639b506e3a4aa591ee5f325d6e102d" Name="关系图1" ZoomLevel="72" ShowGrid="false" SnapToGrid="false">
+      <Diagram DiagramId="38639b506e3a4aa591ee5f325d6e102d" Name="关系图1" ZoomLevel="34" ShowGrid="false" SnapToGrid="false">
         <EntityTypeShape EntityType="OAModel.ActionInfo" Width="1.5" PointX="4.2151268643808839" PointY="0.68115941700352467" />
         <EntityTypeShape EntityType="OAModel.Department" Width="1.5" PointX="6.268568933213146" PointY="0.771739125505287" />
-        <EntityTypeShape EntityType="OAModel.R_UserInfo_ActionInfo" Width="2.625" PointX="0.82653989676778039" PointY="3.4424818805662452" />
+        <EntityTypeShape EntityType="OAModel.R_UserInfo_ActionInfo" Width="2.625" PointX="11.046568520461678" PointY="3.5306372545797045" />
         <EntityTypeShape EntityType="OAModel.RoleInfo" Width="1.5" PointX="0.97373192308314427" PointY="0.5" />
-        <EntityTypeShape EntityType="OAModel.BumenInfoSet" Width="1.5" PointX="6.0724639028554881" PointY="3.7178441558629474" />
+        <EntityTypeShape EntityType="OAModel.BumenInfoSet" Width="1.5" PointX="11.731617588085804" PointY="15.453431249446867" />
         <AssociationConnector Association="OAModel.FK_ActionInfoR_UserInfo_ActionInfo" />
         <AssociationConnector Association="OAModel.DepartmentActionInfo" />
         <AssociationConnector Association="OAModel.RoleInfoActionInfo" />
-        <EntityTypeShape EntityType="OAModel.YXB_Kh_list" Width="1.5" PointX="10.726273144123915" PointY="4.1655092328142977" />
-        <EntityTypeShape EntityType="OAModel.Login_list" Width="1.5" PointX="0.5118371212762618" PointY="9.9071969786766623" />
-        <EntityTypeShape EntityType="OAModel.SysField" Width="1.5" PointX="20.886193852092411" PointY="6.7960198183956235" />
-        <EntityTypeShape EntityType="OAModel.T_YSItems" Width="1.5" PointX="4.7622283785612716" PointY="6.5928441558629478" />
-        <EntityTypeShape EntityType="OAModel.T_CanPan" Width="1.5" PointX="3.9930558687558753" PointY="9.6840278350368667" />
-        <EntityTypeShape EntityType="OAModel.T_SczzItem" Width="1.5" PointX="6.4374998882412946" PointY="9.8715278226192336" />
-        <EntityTypeShape EntityType="OAModel.T_ShengChanZhiZhaoTopName" Width="1.5" PointX="1.454861197344679" PointY="14.475694485146688" />
+        <EntityTypeShape EntityType="OAModel.YXB_Kh_list" Width="1.5" PointX="27.17156845472126" PointY="0.81617650539198472" />
+        <EntityTypeShape EntityType="OAModel.Login_list" Width="1.5" PointX="8.741421481940332" PointY="13.919117604520908" />
+        <EntityTypeShape EntityType="OAModel.SysField" Width="1.5" PointX="42.627450751589727" PointY="16.492646956345819" />
+        <EntityTypeShape EntityType="OAModel.T_YSItems" Width="1.5" PointX="43.598038807064469" PointY="5.1544117801742155" />
+        <EntityTypeShape EntityType="OAModel.T_CanPan" Width="1.5" PointX="9.42279406060758" PointY="9.165441181304443" />
+        <EntityTypeShape EntityType="OAModel.T_SczzItem" Width="1.5" PointX="11.981617588085802" PointY="9.997549018318816" />
+        <EntityTypeShape EntityType="OAModel.T_ShengChanZhiZhaoTopName" Width="1.5" PointX="7.0759803335061" PointY="10.700980432116722" />
         <AssociationConnector Association="OAModel.FK_SczzItemsID" />
-        <EntityTypeShape EntityType="OAModel.T_SczzDanju" Width="1.5" PointX="6.6909721897984" PointY="13.913194398223251" />
+        <EntityTypeShape EntityType="OAModel.T_SczzDanju" Width="1.5" PointX="5.1262255072756959" PointY="5.2352942085235155" />
         <AssociationConnector Association="OAModel.FK_SczzDanjuID" />
         <AssociationConnector Association="OAModel.FK_TopName" />
-        <EntityTypeShape EntityType="OAModel.T_WinBak" Width="1.5" PointX="14.971618223220464" PointY="9.8461653528695834" />
+        <EntityTypeShape EntityType="OAModel.T_WinBak" Width="1.5" PointX="43.278185977066649" PointY="9.17034314466681" />
         <AssociationConnector Association="OAModel.FK_T_WinBak_T_WinBak_Items" />
-        <EntityTypeShape EntityType="OAModel.UserInfo" Width="1.5" PointX="8.5000005" PointY="0.75" />
+        <EntityTypeShape EntityType="OAModel.UserInfo" Width="1.5" PointX="17.844362646809671" PointY="3.7218136942312725" />
         <AssociationConnector Association="OAModel.FK_Bumen" />
         <AssociationConnector Association="OAModel.FK_Login_list_UserInfo" />
         <AssociationConnector Association="OAModel.FK_UserInfoR_UserInfo_ActionInfo" />
@@ -42,43 +42,43 @@
         <AssociationConnector Association="OAModel.FK_YXB_Kh_list_UserInfo" />
         <AssociationConnector Association="OAModel.UserInfoDepartment" />
         <AssociationConnector Association="OAModel.UserInfoRoleInfo" />
-        <EntityTypeShape EntityType="OAModel.T_ChanPinName" Width="1.5" PointX="10.84375" PointY="8.5197855631510411" />
+        <EntityTypeShape EntityType="OAModel.T_ChanPinName" Width="1.5" PointX="33.393382116082321" PointY="6.5085784523192505" />
         <AssociationConnector Association="OAModel.FK_T_ChanPinName_T_ChanPinName" />
-        <EntityTypeShape EntityType="OAModel.T_BaoJiaToP" Width="1.5" PointX="16.283582523328548" PointY="2.1013681193148548" />
-        <EntityTypeShape EntityType="OAModel.T_BoolItem" Width="1.5" PointX="12.307836297659138" PointY="2.1757311688521432" />
+        <EntityTypeShape EntityType="OAModel.T_BaoJiaToP" Width="1.5" PointX="41.096813464139821" PointY="2.3700980366376307" />
+        <EntityTypeShape EntityType="OAModel.T_BoolItem" Width="1.5" PointX="34.829656625241739" PointY="0.77696079849303068" />
         <AssociationConnector Association="OAModel.FK_T_BaoJiaToP_Hanshui" />
         <AssociationConnector Association="OAModel.FK_T_BaoJiaToP_PiaoJue" />
         <AssociationConnector Association="OAModel.FK_T_BaoJiaToP_YXB_Kh_list" />
         <AssociationConnector Association="OAModel.FK_T_WinBak_YXB_Baojia" />
-        <EntityTypeShape EntityType="OAModel.T_WinBakFaHuo" Width="1.5" PointX="21.258049744669165" PointY="1.0284257304467284" />
+        <EntityTypeShape EntityType="OAModel.T_WinBakFaHuo" Width="1.5" PointX="29.552695991099743" PointY="0.74509803663763075" />
         <AssociationConnector Association="OAModel.FK_T_WinBakFaHuo_EditUser" />
         <AssociationConnector Association="OAModel.FK_T_WinBakFaHuo_UserINfo" />
-        <EntityTypeShape EntityType="OAModel.FileItem" Width="1.5" PointX="15.784091431796705" PointY="17.902290524756104" />
-        <EntityTypeShape EntityType="OAModel.Schedule" Width="1.5" PointX="12.54166715961119" PointY="14.975165208639993" />
-        <EntityTypeShape EntityType="OAModel.ScheduleType" Width="1.5" PointX="9.8063451872844531" PointY="18.249698136814825" />
-        <EntityTypeShape EntityType="OAModel.ScheduleUser" Width="1.5" PointX="15.223484872216893" PointY="13.557765220915364" />
+        <EntityTypeShape EntityType="OAModel.FileItem" Width="1.5" PointX="20.927696023969951" PointY="18.487745091594075" />
+        <EntityTypeShape EntityType="OAModel.Schedule" Width="1.5" PointX="23.31495086663546" PointY="18.737745058723871" />
+        <EntityTypeShape EntityType="OAModel.ScheduleType" Width="1.5" PointX="13.671568586202092" PointY="19.138480382811412" />
+        <EntityTypeShape EntityType="OAModel.ScheduleUser" Width="1.5" PointX="16.53676469234756" PointY="15.093137238144601" />
         <AssociationConnector Association="OAModel.FK_Schedule_UserInfo" />
         <AssociationConnector Association="OAModel.FK_Schedule_ScheduleType" />
         <AssociationConnector Association="OAModel.FK_Schedule_UserInfo1" />
         <AssociationConnector Association="OAModel.FK_ScheduleUser_UserInfo" />
         <EntityTypeShape EntityType="OAModel.sysdiagram" Width="1.5" PointX="0.75" PointY="6.75" />
-        <EntityTypeShape EntityType="OAModel.T_BaoXiaoBill" Width="1.5" PointX="10.75" PointY="25.048798421223957" />
-        <EntityTypeShape EntityType="OAModel.T_BaoxiaoItems" Width="1.5" PointX="13" PointY="25.048798421223957" />
-        <EntityTypeShape EntityType="OAModel.T_JieKuanBill" Width="1.5" PointX="14.088068199905854" PointY="0.844696970210095" />
+        <EntityTypeShape EntityType="OAModel.T_BaoXiaoBill" Width="1.5" PointX="10.474264708782664" PointY="20.404411813044426" />
+        <EntityTypeShape EntityType="OAModel.T_BaoxiaoItems" Width="1.5" PointX="8.1899510309864958" PointY="20.435049067624131" />
+        <EntityTypeShape EntityType="OAModel.T_JieKuanBill" Width="1.5" PointX="14.462009800376743" PointY="14.631127306287025" />
         <AssociationConnector Association="OAModel.FK_T_JieKuanBill_Bummen" />
         <AssociationConnector Association="OAModel.FK_Schedule_UserInfo2" />
         <AssociationConnector Association="OAModel.FK_T_BaoXiaoBill_Userinfo" />
         <AssociationConnector Association="OAModel.FK_T_BaoxiaoItems_T_BaoxiaoBill" />
         <AssociationConnector Association="OAModel.FK_T_JieKuanBill_Userinfo" />
-        <EntityTypeShape EntityType="OAModel.CarNumber" Width="1.5" PointX="21.8750005" PointY="11.570393880208332" />
-        <EntityTypeShape EntityType="OAModel.GongLuBaoXiaoBill" Width="1.5" PointX="24.1250005" PointY="4.7108052571614571" />
+        <EntityTypeShape EntityType="OAModel.CarNumber" Width="1.5" PointX="42.463235077560988" PointY="13.738970565999567" />
+        <EntityTypeShape EntityType="OAModel.GongLuBaoXiaoBill" Width="1.5" PointX="36.992646923475618" PointY="13.5122548097953" />
         <AssociationConnector Association="OAModel.FK_GongLuBaoXiaoBill_CarNumber" />
         <AssociationConnector Association="OAModel.FK_GongLuBaoXiaoBill_SysField" />
         <AssociationConnector Association="OAModel.FK_GongLuBaoXiaoBill_UserInfo" />
-        <EntityTypeShape EntityType="OAModel.YXB_BaoJiaEidtMoney" Width="1.5" PointX="23.7500005" PointY="1.2838643391927067" />
+        <EntityTypeShape EntityType="OAModel.YXB_BaoJiaEidtMoney" Width="1.5" PointX="38.394607689098443" PointY="9.7058822639982587" />
         <AssociationConnector Association="OAModel.FK_YXB_BaoJiaEidtMoney_UserInfo" />
-        <EntityTypeShape EntityType="OAModel.YXB_Baojia" Width="1.5" PointX="18.5000005" PointY="2.9058277539061237" />
-        <EntityTypeShape EntityType="OAModel.YXB_WinCanPin" Width="1.5" PointX="13.125" PointY="6.1685739290363326" />
+        <EntityTypeShape EntityType="OAModel.YXB_Baojia" Width="1.5" PointX="37.893382148952526" PointY="1.3737745255945115" />
+        <EntityTypeShape EntityType="OAModel.YXB_WinCanPin" Width="1.5" PointX="30.557597855851487" PointY="6.6151960732752615" />
         <AssociationConnector Association="OAModel.FK_YXB_Baojia_T_BaoJiaToP1" />
         <AssociationConnector Association="OAModel.FK_YXB_Baojia_CanPinDengji" />
         <AssociationConnector Association="OAModel.FK_YXB_Baojia_cpname" />
@@ -88,17 +88,23 @@
         <AssociationConnector Association="OAModel.FK_T_WinBakFaHuo_BaoJia" />
         <AssociationConnector Association="OAModel.FK_YXBBaojia_Userinf" />
         <AssociationConnector Association="OAModel.FK_YXB_BaoJiaEidtMoney_YXB_Baojia" />
-        <EntityTypeShape EntityType="OAModel.FileType" Width="1.5" PointX="8.500001000000001" PointY="31.886741943359382" />
-        <EntityTypeShape EntityType="OAModel.ShareFileOrNotice" Width="1.5" PointX="10.750001000000001" PointY="0.75" />
-        <EntityTypeShape EntityType="OAModel.ShareType" Width="1.5" PointX="8.500001000000001" PointY="23.548748779296879" />
+        <EntityTypeShape EntityType="OAModel.FileType" Width="1.5" PointX="33.101715427502185" PointY="23.633578518059664" />
+        <EntityTypeShape EntityType="OAModel.ShareFileOrNotice" Width="1.5" PointX="32.87009780654617" PointY="11.626225375794867" />
+        <EntityTypeShape EntityType="OAModel.ShareType" Width="1.5" PointX="30.0073527149521" PointY="19.854166705015242" />
         <AssociationConnector Association="OAModel.FK_ShareFileOrNotice_FileType" />
         <AssociationConnector Association="OAModel.FK_ShareFileOrNotice_ShareType" />
         <AssociationConnector Association="OAModel.FK_ShareFileOrNotice_UserInfo" />
         <AssociationConnector Association="OAModel.FK_ScheduleType_Bumeninfo" />
         <AssociationConnector Association="OAModel.FK_ScheduleUser_UserInfo1" />
-        <EntityTypeShape EntityType="OAModel.ExamineSchedule" Width="1.5" PointX="20.63638513736575" PointY="15.594512041568974" />
+        <EntityTypeShape EntityType="OAModel.ExamineSchedule" Width="1.5" PointX="18.878676488956877" PointY="14.920343144666813" />
         <AssociationConnector Association="OAModel.FK_ExamineSchedule_Schedule" />
         <AssociationConnector Association="OAModel.FK_ExamineSchedule_UserInfo" />
+        <EntityTypeShape EntityType="OAModel.YJ_ScheduleAction" Width="1.5" PointX="25.806372414316204" PointY="8.1429969624604386" />
+        <EntityTypeShape EntityType="OAModel.YJ_ScheduleDay" Width="1.5" PointX="23.556372414316204" PointY="7.2834083394135636" />
+        <AssociationConnector Association="OAModel.FK_YJ_ScheduleDay_Writeuserid_Userinfo" />
+        <AssociationConnector Association="OAModel.FK_YJ_ScheduleDay_yjuserid_userinfo" />
+        <AssociationConnector Association="OAModel.FK_YJ_ScheduleAction_thesdeday" />
+        <AssociationConnector Association="OAModel.FK_YJ_ScheduleAction_UPSdeday" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
