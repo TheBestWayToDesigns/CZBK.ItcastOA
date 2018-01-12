@@ -723,10 +723,12 @@
             $("#AddShareFileDIV").dialog('close');
             $('#tt').datagrid('reload');
             $.messager.alert("提醒", "共享成功！");
-            $("#FileTypeInput").combobox("setValue", "");
-            $("#ModelFInput").combobox("setValue", "");
-            $("#BMSTUInput").combobox("setValue","");
-            $("#STUInput").combobox("setValue", "");
+            try{
+                $("#FileTypeInput").combobox("setValue", "");
+                $("#ModelFInput").combobox("setValue", "");
+                $("#BMSTUInput").combobox("setValue","");
+                $("#STUInput").combobox("setValue", "");
+            }catch(e){ }
             $("#BeiZhuId").val("");
             $("#uploadShareFileID").val("");
             $("#fileUrlID").val("");
