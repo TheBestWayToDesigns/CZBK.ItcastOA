@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace CZBK.ItcastOA.BLL
 {
-    public partial  class YJ_ScheduleDayService:BaseService<YJ_ScheduleDayService>,IYJ_ScheduleDayService
+    public partial  class YJ_ScheduleDayService:BaseService<YJ_ScheduleDay>,IYJ_ScheduleDayService
     {
-        public bool NewAddSEDDAY(IYJ_ScheduleDayService ysdday) {
+        public bool NewAddSEDDAY(YJ_ScheduleDay ysdday) {
             return true;
         }
     }
