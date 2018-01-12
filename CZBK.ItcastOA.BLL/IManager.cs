@@ -267,6 +267,22 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class YJ_ScheduleActionService :BaseService<YJ_ScheduleAction>,IYJ_ScheduleActionService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.YJ_ScheduleActionDal;
+        }
+    }   
+	
+	public partial class YJ_ScheduleDayService :BaseService<YJ_ScheduleDay>,IYJ_ScheduleDayService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.YJ_ScheduleDayDal;
+        }
+    }   
+	
 	public partial class YXB_BaojiaService :BaseService<YXB_Baojia>,IYXB_BaojiaService
     {
         public override void SetCurretnDal()

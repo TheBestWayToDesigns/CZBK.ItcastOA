@@ -76,6 +76,10 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IUserInfoDal UserInfoDal{get;set;}
 	
+		IYJ_ScheduleActionDal YJ_ScheduleActionDal{get;set;}
+	
+		IYJ_ScheduleDayDal YJ_ScheduleDayDal{get;set;}
+	
 		IYXB_BaojiaDal YXB_BaojiaDal{get;set;}
 	
 		IYXB_BaoJiaEidtMoneyDal YXB_BaoJiaEidtMoneyDal{get;set;}

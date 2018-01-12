@@ -495,6 +495,36 @@ namespace CZBK.ItcastOA.DALFactory
             set { _UserInfoDal = value; }
         }
 	
+		private IYJ_ScheduleActionDal _YJ_ScheduleActionDal;
+        public IYJ_ScheduleActionDal YJ_ScheduleActionDal
+        {
+            get
+            {
+                if(_YJ_ScheduleActionDal == null)
+                {
+                   // _YJ_ScheduleActionDal = new YJ_ScheduleActionDal();
+				    _YJ_ScheduleActionDal =AbstractFactory.CreateYJ_ScheduleActionDal();
+                }
+                return _YJ_ScheduleActionDal;
+            }
+            set { _YJ_ScheduleActionDal = value; }
+        }
+	
+		private IYJ_ScheduleDayDal _YJ_ScheduleDayDal;
+        public IYJ_ScheduleDayDal YJ_ScheduleDayDal
+        {
+            get
+            {
+                if(_YJ_ScheduleDayDal == null)
+                {
+                   // _YJ_ScheduleDayDal = new YJ_ScheduleDayDal();
+				    _YJ_ScheduleDayDal =AbstractFactory.CreateYJ_ScheduleDayDal();
+                }
+                return _YJ_ScheduleDayDal;
+            }
+            set { _YJ_ScheduleDayDal = value; }
+        }
+	
 		private IYXB_BaojiaDal _YXB_BaojiaDal;
         public IYXB_BaojiaDal YXB_BaojiaDal
         {

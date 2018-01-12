@@ -22,6 +22,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IBumenInfoSetService BumenInfoSetService { get; set; }
         IBLL.IFileTypeService FileTypeService { get; set; }
         IBLL.IExamineScheduleService ExamineScheduleService { get; set; }
+        IBLL.IYJ_ScheduleActionService YJ_ScheduleActionService { get; set; }
+        IBLL.IYJ_ScheduleDayService YJ_ScheduleDayService { get; set; }
         public ActionResult Index()
         {
             return View();
@@ -1478,6 +1480,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 return Json(null, JsonRequestBehavior.AllowGet);
             }
         }
+
+        //——————————————————日程总汇————————————————————————
+
 
     }
 

@@ -119,6 +119,7 @@
     <Compile Include="SearchParam\Sfob.cs" />
     <Compile Include="SearchParam\SlcClass.cs" />
     <Compile Include="SearchParam\UserInfoParam.cs" />
+    <Compile Include="SearchParam\Yj_seddayinfo.cs" />
     <Compile Include="ShareFileOrNotice.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -177,6 +178,12 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="UserInfo.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="YJ_ScheduleAction.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="YJ_ScheduleDay.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="YXB_Baojia.cs">

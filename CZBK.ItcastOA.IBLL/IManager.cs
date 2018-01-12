@@ -170,6 +170,16 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IYJ_ScheduleActionService : IBaseService<YJ_ScheduleAction>
+    {
+       
+    }   
+	
+	public partial interface IYJ_ScheduleDayService : IBaseService<YJ_ScheduleDay>
+    {
+       
+    }   
+	
 	public partial interface IYXB_BaojiaService : IBaseService<YXB_Baojia>
     {
        
