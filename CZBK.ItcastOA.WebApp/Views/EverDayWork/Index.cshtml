@@ -51,12 +51,7 @@
                                 $('#calendarSmallDiv').menu('appendItem', {
                                     id: data[i].ID,
                                     text: data[i].name,
-                                    iconCls: 'icon-blank',
-                                    onclick: function () {
-                                        $("#infoTopText").html("<b style='font-size:20px'>" + $("#RiQiBeiFenText").val() + "工作表总结</b>");
-                                        $("#ZXPerson").html("<b>撰写人：</b>" + $(this).attr("text"));
-                                        $("#AllInfoWindowDiv").window("open");
-                                    }
+                                    iconCls: 'icon-blank'
                                 });
                             }
                         } else {
@@ -65,12 +60,7 @@
                                     parent: $('#calendarSmallDiv').menu('getItem', $('#' + data[i].UpID)[0]).target,
                                     id: data[i].ID,
                                     text: data[i].name,
-                                    iconCls: 'icon-blank',
-                                    onclick: function () {
-                                        $("#infoTopText").html("<b style='font-size:20px'>" + $("#RiQiBeiFenText").val() + "工作表总结</b>");
-                                        $("#ZXPerson").html("<b>撰写人：</b>" + $('#mm').menu('getItem', itemEl));
-                                        $("#AllInfoWindowDiv").window("open");
-                                    },
+                                    iconCls: 'icon-blank'
                                 });
                             }
                         }
@@ -78,6 +68,7 @@
                 }
             })
         })
+
 
         function show_X(event) {
             x = event.clientX;
@@ -319,6 +310,14 @@
             })
         });
 
+        //菜单单击事件
+        function menuHandler(item) {
+            $("#infoTopText").html("<b style='font-size:20px'>" + $("#RiQiBeiFenText").val() + "工作表总结</b>");
+            $("#ZXPerson").html("<b>撰写人：</b>" + item.text);
+            $("#AllInfoWindowDiv").window("open");
+        }
+
+
         //清空datagrid数据
         function cleanDatagrid() {
             var item = $('#tt').datagrid('getRows');
@@ -329,6 +328,8 @@
                 }
             }
         }
+
+
 
         //加载日程类型页面
         function loadData(pars) {
@@ -1335,6 +1336,16 @@
                     }
                 });
             }
+
+            function JiYuYiJianBtn() {
+                $("#JiYuYiJianDiv").window("open");
+            }
+
+            function cancel() {
+                $("#JiYuYiJianDiv").window("close");
+                $("#yijianID").val("");
+            }
+
     </script>
 
 </head>
@@ -1681,37 +1692,63 @@
     </div>
 
     <!-------------------日历菜单区域--------------------------->
-    <div id="calendarSmallDiv" class="easyui-menu" style="width:120px;position:absolute;">
+    <div id="calendarSmallDiv" class="easyui-menu" data-options="onClick:menuHandler"  style="width:120px;position:absolute;">
         
     </div>
 
     <!-------------------信息汇总窗口区域--------------------------->
     <div id="AllInfoWindowDiv" class="easyui-window" title="信息汇总" closed="true" collapsible="false" minimizable="false" maximizable="false" style="width:500px;height:auto;padding:5px;">
-        <div  id="infoTopText" style="text-align:center">
-            <!--表头-->
-        </div>
         <div>
-            <table style="margin-right:auto;margin-left:auto">
-                <tr>
-                    <td>创建时间</td>
-                    <td>内容</td>
-                    <td>类型</td>
-                    <td>查看日程详细</td>
-                    <td>查看审核意见</td>
-                </tr>
-            </table>
+            <div  id="infoTopText" style="text-align:center">
+                <!--表头-->
+            </div>
+            <div>
+                <table style="margin-right:auto;margin-left:auto">
+                    <tr>
+                        <td>创建时间</td>
+                        <td>内容</td>
+                        <td>类型</td>
+                        <td>查看日程详细</td>
+                        <td>查看审核意见</td>
+                    </tr>
+                </table>
+            </div>
+            <div id="ScheduleTypeNumberDiv">
+                <div id="ZXPerson" style="width:30%;float:right"></div>
+                <div style="width:70%"><b>日程类型总数：</b></div>
+            </div>
+            <div style="text-align:right">
+                <a href="javascript:YiYueBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>已阅</a><a href="javascript:JiYuYiJianBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>给予意见</a>
+            </div>
+            <div style="display:none">
+                <input type="text" id="RiQiBeiFenText" />
+            </div> 
         </div>
-        <div id="ScheduleTypeNumberDiv">
-            <div id="ZXPerson" style="width:30%;float:right"></div>
-            <div style="width:70%"><b>日程类型总数：</b></div>
-        </div>
-        <div style="text-align:right">
-            <a href="javascript:YiYueBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>已阅</a><a href="javascript:JiYuYiJianBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>给予意见</a>
-        </div>
-        <div style="display:none">
-            <input type="text" id="RiQiBeiFenText" />
-        </div>   
+        <!------------------复核意见区域----------------------->
+        <div id="FuHeYiJianDiv" class="easyui-layout" style="height:200px">
+            <div id="YiYuePersonsID" data-options="region:'north',collapsible:false" style="height:30px;">
+                <b style="font-size:20px">已阅人员：</b>
+            </div>
+            <div id="InfoShowDiv" data-options="region:'west',collapsible:false" style="width:100px;">
+                <label>人员名称:</label>
+                <label>时间:</label>
+                <label><a href="javascript:YiYueBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>已阅</a></label>
+                <label><a href="javascript:JiYuYiJianBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>反馈</a></label>
+            </div>
+            <div id="FuHeYJDivID" data-options="region:'center'" style="padding:5px;background:#eee;"></div>
+        </div> 
     </div>
+
+
+    <!-------------------信息汇总窗口区域--------------------------->
+    <div id="JiYuYiJianDiv" class="easyui-window" title="给予意见" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:230px">
+        <h3>意见：</h3>&nbsp;<textarea id="yijianID" name="yijianName" style="width:201px;height:100px;resize:none"></textarea>
+        <div style="padding:5px;text-align:center;">
+            <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="OkToAddYiJian()">确定</a>
+            <a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="cancel()">取消</a>
+        </div>
+    </div>
+
 
     
 </body>
