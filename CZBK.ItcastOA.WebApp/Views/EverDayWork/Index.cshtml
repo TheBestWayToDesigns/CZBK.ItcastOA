@@ -36,6 +36,49 @@
             }
         });
 
+        $(document).ready(function () {
+            $.post("/EverDayWork/GetAllDownLeader", {}, function (data) {
+                var a = 0;
+                for (var i = 0; i < data.length; i++) {
+                    if (parseInt(data[i].DJ) > a) {
+                        a = parseInt(data[i].DJ);
+                    }
+                }
+                for (var k = 1; k <= a; k++) {
+                    for (var i = 0; i < data.length; i++) {
+                        if(k==1){
+                            if (data[i].DJ == 1) {
+                                $('#calendarSmallDiv').menu('appendItem', {
+                                    id: data[i].ID,
+                                    text: data[i].name,
+                                    iconCls: 'icon-blank',
+                                    onclick: function () {
+                                        $("#infoTopText").html("<b style='font-size:20px'>" + $("#RiQiBeiFenText").val() + "工作表总结</b>");
+                                        $("#ZXPerson").html("<b>撰写人：</b>" + $(this).attr("text"));
+                                        $("#AllInfoWindowDiv").window("open");
+                                    }
+                                });
+                            }
+                        } else {
+                            if (data[i].DJ == k) {
+                                $('#calendarSmallDiv').menu('appendItem', {
+                                    parent: $('#calendarSmallDiv').menu('getItem', $('#' + data[i].UpID)[0]).target,
+                                    id: data[i].ID,
+                                    text: data[i].name,
+                                    iconCls: 'icon-blank',
+                                    onclick: function () {
+                                        $("#infoTopText").html("<b style='font-size:20px'>" + $("#RiQiBeiFenText").val() + "工作表总结</b>");
+                                        $("#ZXPerson").html("<b>撰写人：</b>" + $('#mm').menu('getItem', itemEl));
+                                        $("#AllInfoWindowDiv").window("open");
+                                    },
+                                });
+                            }
+                        }
+                    }
+                }
+            })
+        })
+
         function show_X(event) {
             x = event.clientX;
             return x;
@@ -540,9 +583,7 @@
                 month: mydate.getMonth()+1,
                 current: new Date(mydate.getYear(), mydate.getMonth(), mydate.getDay()),
                 onSelect: function (date) {
-                    //$.post("/EverDayWork/GetNumber", {}, function (NumberInfo) {
-
-                    //})
+                    $("#RiQiBeiFenText").val(date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate()+"日");
                     var x = show_X(event);
                     var y = show_Y(event);
                     $('#calendarSmallDiv').menu('show', {
@@ -1639,8 +1680,37 @@
         </form>
     </div>
 
-    <div id="calendarSmallDiv" class="easyui-menu" style="width:30px;height:50px;position:absolute;">
-        <label></label>
+    <!-------------------日历菜单区域--------------------------->
+    <div id="calendarSmallDiv" class="easyui-menu" style="width:120px;position:absolute;">
+        
+    </div>
+
+    <!-------------------信息汇总窗口区域--------------------------->
+    <div id="AllInfoWindowDiv" class="easyui-window" title="信息汇总" closed="true" collapsible="false" minimizable="false" maximizable="false" style="width:500px;height:auto;padding:5px;">
+        <div  id="infoTopText" style="text-align:center">
+            <!--表头-->
+        </div>
+        <div>
+            <table style="margin-right:auto;margin-left:auto">
+                <tr>
+                    <td>创建时间</td>
+                    <td>内容</td>
+                    <td>类型</td>
+                    <td>查看日程详细</td>
+                    <td>查看审核意见</td>
+                </tr>
+            </table>
+        </div>
+        <div id="ScheduleTypeNumberDiv">
+            <div id="ZXPerson" style="width:30%;float:right"></div>
+            <div style="width:70%"><b>日程类型总数：</b></div>
+        </div>
+        <div style="text-align:right">
+            <a href="javascript:YiYueBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>已阅</a><a href="javascript:JiYuYiJianBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>给予意见</a>
+        </div>
+        <div style="display:none">
+            <input type="text" id="RiQiBeiFenText" />
+        </div>   
     </div>
 
     
