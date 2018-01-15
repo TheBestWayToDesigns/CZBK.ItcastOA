@@ -1,5 +1,6 @@
 ﻿using CZBK.ItcastOA.IBLL;
 using CZBK.ItcastOA.Model;
+using CZBK.ItcastOA.Model.SearchParam;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +9,39 @@ using System.Threading.Tasks;
 
 namespace CZBK.ItcastOA.BLL
 {
-    public partial  class YJ_ScheduleDayService:BaseService<YJ_ScheduleDay>,IYJ_ScheduleDayService
+    public partial  class YJ_ScheduleDayService : BaseService<YJ_ScheduleDay>,IYJ_ScheduleDayService
     {
-        public bool NewAddSEDDAY(YJ_ScheduleDay ysdday) {
-            return true;
+        #region 写入每日审批意见，已阅、给予人员意见
+        public bool NewAddSEDDAY(YjsdayClass ysdday)
+        {
+            ysdday.Ysdy.DEL = 0;
+            var textid = GetCurrentDbSession.YJ_ScheduleDayDal.LoadEntities(x => x.DEL == 0).Max(m => m.TextID);
+            ysdday.Ysdy.TextID = textid != null ? textid + 1 : 0;
+            
+            var Addta = this.GetCurrentDbSession.YJ_ScheduleDayDal.AddEntity(ysdday.Ysdy);
+            YJ_ScheduleAction ysa = new YJ_ScheduleAction();
+            //true 对日程整体建议
+            ysa.UpSdeDayID = ysdday.IFours?null:Addta.WriteUserID;
+            ysa.TheSdeDayID = Addta.ID;
+            return this.GetCurrentDbSession.SaveChanges();
         }
+        #endregion
+     
+        #region 查询已经阅览人员  dte 时间   UinfoId 撰写人员ID
+
+        public string GetReadPerson(DateTime dte,int UinfoId) {
+            string retStr=string.Empty;
+            var temp = this.GetCurrentDbSession.YJ_ScheduleDayDal.LoadEntities(x => x.DEL == 0 && x.SchenuleTime == dte&&x.ISee==true).DefaultIfEmpty();
+            if (temp.Count() > 0) {
+                var disct = temp.GroupBy(x => x.YJUserinfoID).Where(m => m.Count() > 0).ToList();
+                foreach (var str in disct)
+                {
+                    retStr = retStr + str.Key + ",";
+                }
+            }
+            return retStr;
+        }
+        #endregion
+
     }
 }
