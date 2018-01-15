@@ -3,6 +3,7 @@ using CZBK.ItcastOA.Model;
 using CZBK.ItcastOA.Model.SearchParam;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -25,7 +26,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IYJ_ScheduleActionService YJ_ScheduleActionService { get; set; }
         IBLL.IYJ_ScheduleDayService YJ_ScheduleDayService { get; set; }
 
-        int DJ = 1;
+        int DJ = 2;
         public ActionResult Index()
         {
             return View();
@@ -432,7 +433,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //查看文件
         public ActionResult checkFile()
         {
-            int fileid = Convert.ToInt32(Request["id"]);
+            int fileid =Convert.ToInt32(Request["id"]);
             var fileItem = FileItemService.LoadEntities(x => x.ID == fileid).FirstOrDefault();
             var fileItems = FileItemService.LoadEntities(x => x.FileFirstID == fileid).DefaultIfEmpty().ToList();
             fileItems.Add(fileItem);
@@ -1517,7 +1518,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 }
             }
             DJ += 1;
-            if (listLFJ.Any(x => x.DJ == int.MaxValue))
+            if (listLFJ.Any(x => x.DJ == 10))
             {
                 AgainAndAgain(listLFJ, CiJiLeader);
             }
@@ -1528,6 +1529,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             List<Uidorname> list = GetAllDownUser();
             List<LeaderFJ> leader = new List<LeaderFJ>();
+            List<LeaderFJ> BottomUser = new List<LeaderFJ>();
             if (list != null && list[0] != null)
             {
                 foreach (var a in list)
@@ -1542,38 +1544,52 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                         leader.Add(lfj);
                     }else
                     {
-                        continue;
+                        LeaderFJ lfj = new LeaderFJ();
+                        lfj.ID = a.ID;
+                        lfj.name = a.name;
+                        lfj.DJ = 10;
+                        var one = ScheduleUserService.LoadEntities(x => x.UserID == a.ID).FirstOrDefault();
+                        if(one != null)
+                        {
+                            lfj.UpID = one.UpID;
+                        }
+                        BottomUser.Add(lfj);
                     }
                 }
             }
-            List <LeaderFJ> firstLeader = new List<LeaderFJ>();
-            List<LeaderFJ> SYLeader = new List<LeaderFJ>();
+            
+          
+
             if (list != null && list[0] != null)
             {
-                foreach (var a in leader)
+
+                List<LeaderFJ> SYLeader= new List<LeaderFJ>();
+                SYLeader = GetVoidLeader(leader, BottomUser).ToList();
+                List<LeaderFJ> new1 = new List<LeaderFJ>();
+                foreach (var a in SYLeader)
                 {
-                    if (a != null)
-                    {
-                        var zaipanduan = ScheduleUserService.LoadEntities(x => x.UserID == a.ID && x.UpID == LoginUser.ID).DefaultIfEmpty().ToList();
-                        if (zaipanduan != null && zaipanduan[0] != null)
-                        {
-                            a.DJ = 1;
-                            a.UpID = LoginUser.ID;
-                            DJ += 1;
-                            firstLeader.Add(a);
-                        }else
-                        {
-                            a.DJ = int.MaxValue;
-                            SYLeader.Add(a);
-                        }
-                    }else
-                    {
-                        continue;
-                    }
+                    int? ID= a.ID;
+                    int DJ=a.DJ;
+                    string name = a.name;
+                    int SerchType = a.SerchType;
+                    int? UpID = a.UpID;
+                    LeaderFJ lfj = new LeaderFJ();
+                    lfj.ID = ID;
+                    lfj.DJ = DJ;
+                    lfj.name = name;
+                    lfj.UpID = 1;
+                    lfj.SerchType = 1;
+                    new1.Add(lfj);
                 }
-                AgainAndAgain(SYLeader,firstLeader);
-                SYLeader.AddRange(firstLeader);
-                return Json(SYLeader, JsonRequestBehavior.AllowGet);
+                //foreach(var a in BottomUser)
+                //{
+                //    a.SerchType = 1;
+                //}
+
+                new1.AddRange(SYLeader);
+                //new1.AddRange(BottomUser);
+
+                return Json(new1, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -1581,6 +1597,80 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
         }
 
+        private List<LeaderFJ> GetVoidLeader(List<LeaderFJ> leader, List<LeaderFJ> BottomUser)
+        {
+            List<LeaderFJ> SYLeader = new List<LeaderFJ>();
+            List<LeaderFJ> firstLeader = new List<LeaderFJ>();
+
+            foreach (var a in leader)
+            {
+                if (a != null)
+                {
+                    var zaipanduan = ScheduleUserService.LoadEntities(x => x.UserID == a.ID && x.UpID == LoginUser.ID).DefaultIfEmpty().ToList();
+                    if (zaipanduan != null && zaipanduan[0] != null)
+                    {
+                        a.DJ = 1;
+                        a.UpID = 1;
+                        DJ += 1;
+                        firstLeader.Add(a);
+                    }
+                    else
+                    {
+                        a.DJ = 10;
+                        SYLeader.Add(a);
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            AgainAndAgain(SYLeader, firstLeader);
+
+            List<LeaderFJ> llfj = new List<LeaderFJ>();
+            llfj.AddRange(firstLeader);
+            llfj.AddRange(SYLeader);
+            foreach (var a in llfj)
+            {
+                a.SerchType = 2;
+            }
+            SYLeader.AddRange(firstLeader);
+            SYLeader.AddRange(BottomUser);
+            return llfj;
+        }
+
+
+        //获取日程信息给信息汇总的表
+        public ActionResult GetScheduleInfoForTab()
+        {
+            int id = Convert.ToInt32(Request["id"]);
+            string time = Request["time"];
+            time = time.Replace("年","-");
+            time = time.Replace("月","-");
+            time = time.Replace("日","");
+            DateTime dt = Convert.ToDateTime(time);
+            DateTime end = dt.AddDays(1);
+            //List<Uidorname> downUser = GetAllDownUser();
+            var temp = ScheduleService.LoadEntities(x => x.UserID == id && x.ScheduleTime > dt && x.ScheduleTime < end).DefaultIfEmpty().ToList();
+            if(temp != null && temp[0] != null)
+            {
+                List<SchInfoForTab> Lsift = new List<SchInfoForTab>();
+                foreach(var a in temp)
+                {
+                    SchInfoForTab sift = new SchInfoForTab();
+                    sift.ScheduleTime = a.ScheduleTime;
+                    sift.ScheduleText = a.ScheduleText;
+                    sift.ScheduleTypeName = a.ScheduleType.ItemText;
+                    sift.ScheduleID = a.ID;
+                    sift.FileItemID = a.FileItemID;
+                    Lsift.Add(sift);
+                }
+                return Json(Lsift, JsonRequestBehavior.AllowGet);
+            }else
+            {
+                return null;
+            }
+        }
     }
 
     //下拉菜单下级用户类
@@ -1609,5 +1699,15 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public string name { get; set; }
         public int? UpID { get; set; }
         public int DJ { get; set; }
+        public int SerchType { get; set; }
     }
+    public class SchInfoForTab
+    {
+        public DateTime ScheduleTime { get; set; }
+        public string ScheduleText { get; set;}
+        public string ScheduleTypeName { get; set; }
+        public long ScheduleID { get; set; }
+        public int? FileItemID { get; set; }
+    }
+
 }

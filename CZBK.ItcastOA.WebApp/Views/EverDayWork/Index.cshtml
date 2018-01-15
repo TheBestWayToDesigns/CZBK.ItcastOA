@@ -37,6 +37,16 @@
         });
 
         $(document).ready(function () {
+            $('#calendarSmallDiv').menu('appendItem', {
+                id: "info1",
+                text: '个人日总结',
+                iconCls: 'icon-blank'
+            });
+            $('#calendarSmallDiv').menu('appendItem', {
+                id: "info2",
+                text: '部门日总结',
+                iconCls: 'icon-blank'
+            });
             $.post("/EverDayWork/GetAllDownLeader", {}, function (data) {
                 var a = 0;
                 for (var i = 0; i < data.length; i++) {
@@ -48,20 +58,43 @@
                     for (var i = 0; i < data.length; i++) {
                         if(k==1){
                             if (data[i].DJ == 1) {
-                                $('#calendarSmallDiv').menu('appendItem', {
-                                    id: data[i].ID,
-                                    text: data[i].name,
-                                    iconCls: 'icon-blank'
-                                });
+                                if (data[i].SerchType == 1) {
+                                    alert(data[i].UpID)
+                                    $('#calendarSmallDiv').menu('appendItem', {
+                                        parent: $('#calendarSmallDiv').menu('getItem', $('#info' + data[i].UpID)[0]).target,
+                                        id: data[i].ID,
+                                        text: data[i].name,
+                                        iconCls: 'icon-blank'
+                                    });
+                                } else {
+                                    alert(data[i].UpID)
+                                    $('#calendarSmallDiv').menu('appendItem', {
+                                        parent: $('#calendarSmallDiv').menu('getItem', $('#info' + data[i].UpID)[0]).target,
+                                        id: 'info' + data[i].ID,
+                                        text: data[i].name,
+                                        iconCls: 'icon-blank'
+                                    });
+                                }
                             }
                         } else {
                             if (data[i].DJ == k) {
-                                $('#calendarSmallDiv').menu('appendItem', {
-                                    parent: $('#calendarSmallDiv').menu('getItem', $('#' + data[i].UpID)[0]).target,
-                                    id: data[i].ID,
-                                    text: data[i].name,
-                                    iconCls: 'icon-blank'
-                                });
+                                if (data[i].SerchType == 1) {
+                                    alert(data[i].UpID)
+                                    $('#calendarSmallDiv').menu('appendItem', {
+                                        parent: $('#calendarSmallDiv').menu('getItem', $('#' + data[i].UpID)[0]).target,
+                                        id: data[i].ID,
+                                        text: data[i].name,
+                                        iconCls: 'icon-blank'
+                                    });
+                                } else {
+                                    alert(data[i].UpID)
+                                    $('#calendarSmallDiv').menu('appendItem', {
+                                        parent: $('#calendarSmallDiv').menu('getItem', $('#info'+data[i].UpID)[0]).target,
+                                        id: 'info' + data[i].ID,
+                                        text: data[i].name,
+                                        iconCls: 'icon-blank'
+                                    });
+                                }
                             }
                         }
                     }
@@ -312,9 +345,18 @@
 
         //菜单单击事件
         function menuHandler(item) {
+            $("#FirstTrID").nextAll().remove();
             $("#infoTopText").html("<b style='font-size:20px'>" + $("#RiQiBeiFenText").val() + "工作表总结</b>");
             $("#ZXPerson").html("<b>撰写人：</b>" + item.text);
-            $("#AllInfoWindowDiv").window("open");
+            $.post("/EverDayWork/GetScheduleInfoForTab", { "id": item.id, "time": $("#RiQiBeiFenText").val() }, function (Info) {
+                $.each(Info, function (index, item) {
+                    $("#ScheduleInfoTab").append("<tr style='font-size:7px'><td>" + ChangeDateFormat2(item["ScheduleTime"])
+                        + "</td><td style='width:300px'>" + item["ScheduleText"] + "</td><td>" + item["ScheduleTypeName"]
+                        + "</td><td><a href='#' onclick='CheckSchFile(this)' class='l-btn' style='margin:0px 5px;padding:2px 8px'>查看文件</a><input type='hidden' value='" + item["FileItemID"] + "'/></td>"
+                        + "<td><a href='#' onclick='CheckYiJian(this)' class='l-btn' style='margin:0px 5px;padding:2px 8px'>查看审核意见</a><input type='hidden' value='" + item["ScheduleID"] + "'/></td></tr>");
+                })
+                $("#AllInfoWindowDiv").window("open");
+            })
         }
 
 
@@ -740,6 +782,15 @@
             var seconds = date.getSeconds()<10?"0"+date.getSeconds():date.getSeconds();
             return date.getFullYear() + "-" + month + "-" + currentDate + " " + hour + ":" + minutes + ":" + seconds;
         }
+        function ChangeDateFormat2(cellval) {
+            var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+            var hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+            var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+            var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            return  hour + ":" + minutes + ":" + seconds;
+        }
         //补充上传文件以后调用的方法
         function afterAddUploadFileEdit(data) {
             if (data.ret == "ok") {
@@ -934,7 +985,7 @@
         function checkFiles() {
             var row = $('#tt').datagrid('getSelected');
             if (row.FileItemID != null) {
-                $.post("/EverDayWork/checkFile", { "id": row.FileItemID }, function (fileInfo) {
+                $.post("/EverDayWork/checkFile", { "id": row.FileItemID,"schid":"" }, function (fileInfo) {
                     var ay = new Array();
                     ay = fileInfo.split(",");
                     var t = 1;
@@ -975,6 +1026,60 @@
                 $.messager.alert("提示", "无文件！！！");
             };
         }
+
+        //查看文件(总结报表用)
+        function CheckSchFile(s) {
+            var fileID = $(s).next().val();
+            alert(fileID)
+            if (fileID != "null") {
+                $.post("/EverDayWork/checkFile", { "id": fileID }, function (fileInfo) {
+                    var ay = new Array();
+                    ay = fileInfo.split(",");
+                    var t = 1;
+                    var u = 1;
+                    for (var i = 0; i < ay.length; i++) {
+                        if (i == 0 || i % 2 == 0) {
+                            if (ay[i + 1] == undefined) {
+                                $("#CheckFileTab").append("<tr class='tr5'><td>文件" + (t++) + "备注：</td><td><label>无备注信息</label></td></tr><tr class='tr5'><td>文件" + (u++) + "下载路径：</td><td><label style='color:darkgrey'>无文件相关路径(可能未上传文件)</label></td></tr><tr class='tr5'><td colspan='2'>&nbsp;&nbsp;&nbsp;</td></tr>");
+                            } else {
+                                $("#CheckFileTab").append("<tr class='tr5'><td>文件" + (t++) + "备注：</td><td><label>" + ay[i] + "</label></td></tr><tr><td colspan='2'><img width='200px' height='200'  src='" + ay[i + 1] + "'/></td></tr><tr><td><a href='" + ay[i + 1] + "' target='_blank' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>下载</a></td></tr>");
+                            }
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+                    $("#CheckFileDIV").css("display", "block");
+                    $('#CheckFileDIV').dialog({
+                        title: "查看文件",
+                        width: 500,
+                        height: 500,
+                        collapsible: true,
+                        resizable: true,
+                        modal: true,
+                        buttons: [{
+                            text: '确定',
+                            handler: function () {
+                                $('#CheckFileDIV').dialog('close');
+                                $("#CheckFileTab").html("");
+                            }
+                        }],
+                        onClose: function () {
+                            $("#CheckFileTab").html("");
+                        }
+                    });
+                });
+            } else {
+                $.messager.alert("提示", "无文件！！！");
+            };
+        }
+
+        //查看审核意见(总结报表用)
+        function CheckYiJian(s) {
+            var schid = $(s).next().val();
+            
+        }
+
 
         //查看审核查阅意见
         function CheckExamineSchedule() {
@@ -1336,11 +1441,16 @@
                     }
                 });
             }
-
+            //给予意见
             function JiYuYiJianBtn() {
+                YiYueBtn();//触发已阅
                 $("#JiYuYiJianDiv").window("open");
             }
+            //已阅
+            function YiYueBtn() {
 
+            }
+            //窗口取消
             function cancel() {
                 $("#JiYuYiJianDiv").window("close");
                 $("#yijianID").val("");
@@ -1697,14 +1807,14 @@
     </div>
 
     <!-------------------信息汇总窗口区域--------------------------->
-    <div id="AllInfoWindowDiv" class="easyui-window" title="信息汇总" closed="true" collapsible="false" minimizable="false" maximizable="false" style="width:500px;height:auto;padding:5px;">
+    <div id="AllInfoWindowDiv" class="easyui-window" title="信息汇总" closed="true" collapsible="false" minimizable="false" maximizable="false" style="width:650px;height:auto;padding:5px;">
         <div>
             <div  id="infoTopText" style="text-align:center">
                 <!--表头-->
             </div>
             <div>
-                <table style="margin-right:auto;margin-left:auto">
-                    <tr>
+                <table id="ScheduleInfoTab" border="1" style="margin-right:auto;margin-left:auto;padding:0px,5px;border-collapse:collapse">
+                    <tr id="FirstTrID">
                         <td>创建时间</td>
                         <td>内容</td>
                         <td>类型</td>
