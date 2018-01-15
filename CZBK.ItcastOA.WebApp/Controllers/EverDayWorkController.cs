@@ -24,6 +24,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IExamineScheduleService ExamineScheduleService { get; set; }
         IBLL.IYJ_ScheduleActionService YJ_ScheduleActionService { get; set; }
         IBLL.IYJ_ScheduleDayService YJ_ScheduleDayService { get; set; }
+
+        int DJ = 1;
         public ActionResult Index()
         {
             return View();
@@ -1482,7 +1484,102 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         }
 
         //——————————————————日程总汇————————————————————————
-       
+
+        //循环领导分级
+
+
+        public void AgainAndAgain(List<LeaderFJ> listLFJ, List<LeaderFJ> UpYiJiLeader)
+        {
+            List<LeaderFJ> CiJiLeader = new List<LeaderFJ>();
+            foreach (var a in UpYiJiLeader)
+            {
+                var temp = ScheduleUserService.LoadEntities(x => x.UpID == a.ID).DefaultIfEmpty().ToList();
+                if (temp != null && temp[0] != null)
+                {
+                    foreach (var b in temp)
+                    {
+                        LeaderFJ lfj = new LeaderFJ();
+                        lfj.ID = b.UserID;
+                        lfj.name = b.UserInfo.PerSonName;
+                        lfj.UpID = b.UpID;
+                        lfj.DJ = DJ;
+                        CiJiLeader.Add(lfj);
+                        foreach (var c in listLFJ)
+                        {
+                            if(c.ID == lfj.ID)
+                            {
+                                c.DJ = DJ;
+                                c.UpID = b.UpID;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            DJ += 1;
+            if (listLFJ.Any(x => x.DJ == int.MaxValue))
+            {
+                AgainAndAgain(listLFJ, CiJiLeader);
+            }
+        }
+        
+        //获取所有下级领导
+        public ActionResult GetAllDownLeader()
+        {
+            List<Uidorname> list = GetAllDownUser();
+            List<LeaderFJ> leader = new List<LeaderFJ>();
+            if (list != null && list[0] != null)
+            {
+                foreach (var a in list)
+                {
+                    var rtmp = ScheduleUserService.LoadEntities(x => x.UpID == a.ID).DefaultIfEmpty().ToList();
+                    if(rtmp!=null && rtmp[0] != null)
+                    {
+                        LeaderFJ lfj = new LeaderFJ();
+                        lfj.ID = a.ID;
+                        lfj.name = a.name;
+                        lfj.DJ = 0;
+                        leader.Add(lfj);
+                    }else
+                    {
+                        continue;
+                    }
+                }
+            }
+            List <LeaderFJ> firstLeader = new List<LeaderFJ>();
+            List<LeaderFJ> SYLeader = new List<LeaderFJ>();
+            if (list != null && list[0] != null)
+            {
+                foreach (var a in leader)
+                {
+                    if (a != null)
+                    {
+                        var zaipanduan = ScheduleUserService.LoadEntities(x => x.UserID == a.ID && x.UpID == LoginUser.ID).DefaultIfEmpty().ToList();
+                        if (zaipanduan != null && zaipanduan[0] != null)
+                        {
+                            a.DJ = 1;
+                            a.UpID = LoginUser.ID;
+                            DJ += 1;
+                            firstLeader.Add(a);
+                        }else
+                        {
+                            a.DJ = int.MaxValue;
+                            SYLeader.Add(a);
+                        }
+                    }else
+                    {
+                        continue;
+                    }
+                }
+                AgainAndAgain(SYLeader,firstLeader);
+                SYLeader.AddRange(firstLeader);
+                return Json(SYLeader, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return null;
+            }
+        }
 
     }
 
@@ -1504,5 +1601,13 @@ namespace CZBK.ItcastOA.WebApp.Controllers
     {
         public int BMID { get; set; }
         public string Name { get; set; }
+    }
+
+    public class LeaderFJ
+    {
+        public int? ID { get; set; }
+        public string name { get; set; }
+        public int? UpID { get; set; }
+        public int DJ { get; set; }
     }
 }

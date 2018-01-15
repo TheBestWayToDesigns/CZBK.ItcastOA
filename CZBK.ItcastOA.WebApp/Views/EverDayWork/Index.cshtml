@@ -12,6 +12,7 @@
 
     <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
     <link href="~/Content/themes/icon.css" rel="stylesheet" />
+    <link href="~/Content/demo/demo.css" rel="stylesheet" />
     <script src="~/Scripts/jquery.easyui.min.js"></script>
     <script src="~/Scripts/easyui-lang-zh_CN.js"></script>
     <script src="~/Scripts/datapattern.js"></script>
@@ -35,6 +36,49 @@
             }
         });
 
+        $(document).ready(function () {
+            $.post("/EverDayWork/GetAllDownLeader", {}, function (data) {
+                var a = 0;
+                for (var i = 0; i < data.length; i++) {
+                    if (parseInt(data[i].DJ) > a) {
+                        a = parseInt(data[i].DJ);
+                    }
+                }
+                for (var k = 1; k <= a; k++) {
+                    for (var i = 0; i < data.length; i++) {
+                        if(k==1){
+                            if (data[i].DJ == 1) {
+                                $('#calendarSmallDiv').menu('appendItem', {
+                                    id: data[i].ID,
+                                    text: data[i].name,
+                                    iconCls: 'icon-blank'
+                                });
+                            }
+                        } else {
+                            if (data[i].DJ == k) {
+                                $('#calendarSmallDiv').menu('appendItem', {
+                                    parent: $('#calendarSmallDiv').menu('getItem', $('#' + data[i].UpID)[0]).target,
+                                    id: data[i].ID,
+                                    text: data[i].name,
+                                    iconCls: 'icon-blank'
+                                });
+                            }
+                        }
+                    }
+                }
+            })
+        })
+
+
+        function show_X(event) {
+            x = event.clientX;
+            return x;
+        }
+        function show_Y(event) {
+            y = event.clientY;
+            return y;
+        }
+
         // 当窗口大小发生变化时，调整DataGrid的大小211434
         $(function () {
             $(window).resize(function () {
@@ -54,12 +98,13 @@
             $("#DownBuMenCombox").css("display", "none");
             $("#DownBuMenCombox2").css("display", "none");
             $("#DownUserCombox2").css("display", "none");
-            $("#AddUploadFileDIV").css("display", "none");
+            $("#AddUploadFileDIV").css("display", "none"); 
             $("#AddFileTypeBtnDIV").css("display", "none");
             $("#AddFileTypeDIV").css("display", "none");
             $("#InfoShowDiv").css("display", "none");
             $("#BMInfoShowDiv").css("display", "none");
             $("#SearchboxDiv").css("display", "none");
+            $("#calendarDiv").css("display", "none"); 
 
             loadSchedule();
 
@@ -79,6 +124,7 @@
                     $("#InfoShowDiv").css("display", "none");
                     $("#BMInfoShowDiv").css("display", "none");
                     $("#SearchboxDiv").css("display", "none");
+                    $("#calendarDiv").css("display", "none");
                     loadData();
                 }
                 else if (ClickA == "MenuSchedule")
@@ -95,6 +141,7 @@
                     $("#InfoShowDiv").css("display", "none");
                     $("#BMInfoShowDiv").css("display", "none");
                     $("#SearchboxDiv").css("display", "none");
+                    $("#calendarDiv").css("display", "none");
                     loadSchedule();
                 }
                 else if (ClickA == "MenuDownUser") {
@@ -110,6 +157,7 @@
                     $("#InfoShowDiv").css("display", "none");
                     $("#BMInfoShowDiv").css("display", "none");
                     $("#SearchboxDiv").css("display", "none");
+                    $("#calendarDiv").css("display", "none");
                     loadDownUser();
                 } else if (ClickA == "MenuFileType") {
                     $("#AddScheduleTypeBtnDIV").css("display", "none");
@@ -124,6 +172,7 @@
                     $("#InfoShowDiv").css("display", "none");
                     $("#BMInfoShowDiv").css("display", "none");
                     $("#SearchboxDiv").css("display", "none");
+                    $("#calendarDiv").css("display", "none");
                     loadFileType();
                 } else if (ClickA == "MenuExamineSchedule") {
                     $("#AddScheduleTypeBtnDIV").css("display", "none");
@@ -136,7 +185,22 @@
                     $("#AddFileTypeDIV").css("display", "none");
                     $("#BMInfoShowDiv").css("display", "none");
                     $("#AddFileTypeBtnDIV").css("display", "none");
+                    $("#calendarDiv").css("display", "none");
                     loadExamineSchedule();
+                } else if (ClickA == "MenuAllScheduleInfo") {
+                    $("#AddScheduleTypeBtnDIV").css("display", "none");
+                    $("#AddScheduleBtnDIV").css("display", "none");
+                    $("#DownUserCombox").css("display", "none");
+                    $("#DownBuMenCombox").css("display", "none");
+                    $("#DownBuMenCombox2").css("display", "none");
+                    $("#DownUserCombox2").css("display", "none");
+                    $("#ChooseSerchTypeDIV2").css("display", "none");
+                    $("#ChooseSerchTypeDIV").css("display", "none");
+                    $("#AddFileTypeDIV").css("display", "none");
+                    $("#InfoShowDiv").css("display", "none");
+                    $("#BMInfoShowDiv").css("display", "none");
+                    $("#SearchboxDiv").css("display", "none");
+                    loadCalendar();
                 }
             })
             $("#AddScheduleBtn").click(function () {
@@ -246,6 +310,14 @@
             })
         });
 
+        //菜单单击事件
+        function menuHandler(item) {
+            $("#infoTopText").html("<b style='font-size:20px'>" + $("#RiQiBeiFenText").val() + "工作表总结</b>");
+            $("#ZXPerson").html("<b>撰写人：</b>" + item.text);
+            $("#AllInfoWindowDiv").window("open");
+        }
+
+
         //清空datagrid数据
         function cleanDatagrid() {
             var item = $('#tt').datagrid('getRows');
@@ -257,8 +329,11 @@
             }
         }
 
+
+
         //加载日程类型页面
         function loadData(pars) {
+            $("#TTdiv").css("display", "block");
             $("#tt").addClass("easyui-datagrid");
             $('#tt').datagrid({
                 url: '/EverDayWork/GetScheduleType',
@@ -296,6 +371,7 @@
         //加载文件类型页面
         function loadFileType(pars) {
             cleanDatagrid();
+            $("#TTdiv").css("display", "block");
             $('#tt').datagrid({
                 url: '/EverDayWork/GetFileType',
                 title: '文件类型',
@@ -334,6 +410,7 @@
 
         //加载日程页面
         function loadSchedule(pars) {
+            $("#TTdiv").css("display", "block");
             $('#tt').datagrid({
                 url: '/EverDayWork/GetSchedule',
                 title: '个人日程',
@@ -416,6 +493,7 @@
         //加载下级用户日程页面
         function loadDownUser(pars) {
             cleanDatagrid();
+            $("#TTdiv").css("display", "block");
             $('#tt').datagrid({
                 url: '/EverDayWork/GetDownUser',
                 title: '下级用户日程',
@@ -491,6 +569,33 @@
             });
         }
 
+        //加载大日历表筛选页面
+        function loadCalendar() {
+            $("#TTdiv").css("display", "none");
+            var mydate = new Date();
+            $("#calendarDiv").calendar({
+                fit:true,
+                border: false,
+                firstDay: 0,
+                weeks: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+                months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月',
+                 '九月', '十月', '十一月', '十二月'],
+                year: mydate.getFullYear(),
+                month: mydate.getMonth()+1,
+                current: new Date(mydate.getYear(), mydate.getMonth(), mydate.getDay()),
+                onSelect: function (date) {
+                    $("#RiQiBeiFenText").val(date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate()+"日");
+                    var x = show_X(event);
+                    var y = show_Y(event);
+                    $('#calendarSmallDiv').menu('show', {
+                        left: x,
+                        top: y
+                    });
+                }
+            });
+            $("#calendarDiv").css("display", "block");
+        }
+
 
         function SeeTextReadBak(value) {
             var row = $("#tt").datagrid("getSelected");
@@ -501,6 +606,7 @@
 
         //加载已审核日程
         function loadExamineSchedule(pars) {
+            $("#TTdiv").css("display", "block");
             LoadWdinfo();
             reload(pars);
         }
@@ -535,20 +641,20 @@
                         }
                     },
                     {
-                        field: 'TextReadBak', title: '下级领导查阅意见', align: 'center', formatter: function (val, row, ix) {
+                        field: 'TextReadBak', title: '中层领导查阅意见', align: 'center', formatter: function (val, row, ix) {
                             return "<b>" + val + "</b>";
                         }
                     },
-                    { field: 'TextReadUser', title: '下级查阅人', align: 'center' },
+                    { field: 'TextReadUser', title: '中层查阅人', align: 'center' },
                     { field: 'FileItemID', title: '文件编号', align: 'center',hidden:'true' },
                     {
-                        field: 'TextReadTime', title: '下级查阅时间', align: 'center', formatter: function (value, row, col) {
+                        field: 'TextReadTime', title: '中层查阅时间', align: 'center', formatter: function (value, row, col) {
                             var sd = value == null ? '' : ChangeDateFormat(value);
                             return sd;
                         }
                     },
                     {
-                        field: 'ExamineState', title: '上级领导审核状态', align: 'center', formatter: function (value, row, index) {
+                        field: 'ExamineState', title: '高层领导审核状态', align: 'center', formatter: function (value, row, index) {
                             if (value == "未审核") {
                                 return "<a href='javascript:ExamineSchedule()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>审核查阅意见</a>";
                             } else {
@@ -556,8 +662,8 @@
                             }
                         }
                     },
-                    { field: 'ExamineText', title: '上级领导审核意见', align: 'center' },
-                    { field: 'ExamineUser', title: '上级审核人', align: 'center' },
+                    { field: 'ExamineText', title: '高层领导审核意见', align: 'center' },
+                    { field: 'ExamineUser', title: '高层审核人', align: 'center' },
                     {
                         field: 'Look', title: '查看栏', align: 'center', formatter: function (value, row, index) {
                             if (row.FileItemID == null) {
@@ -1230,6 +1336,16 @@
                     }
                 });
             }
+
+            function JiYuYiJianBtn() {
+                $("#JiYuYiJianDiv").window("open");
+            }
+
+            function cancel() {
+                $("#JiYuYiJianDiv").window("close");
+                $("#yijianID").val("");
+            }
+
     </script>
 
 </head>
@@ -1237,7 +1353,8 @@
     <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink " style="width:150px; padding:8px;">
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuSchedule" style="width:98%;margin:10px auto">日程信息</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuDownUser" style="width:98%;margin:10px auto">下级日程信息</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuExamineSchedule" style="width:98%;margin:10px auto">下级领导已审核的日程</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuExamineSchedule" style="width:98%;margin:10px auto">中层领导已审核的日程</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuAllScheduleInfo" style="width:98%;margin:10px auto">总结报表</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuScheduleType" style="width:98%;margin:10px auto">日程状态</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuFileType" style="width:98%;margin:10px auto">管理上传文件类型</a>
         <div style="width:100%;height:50%"></div>
@@ -1312,6 +1429,10 @@
                        style="width:100px" />
             </div>
         </div>
+
+        <!------------日历显示区窗口-------------->
+        <div class="easyui-calendar" id="calendarDiv"></div>
+
         <!--------添加文件类型按钮-------->
         <div id="AddFileTypeBtnDIV" style="padding:5px;height:auto">
             <div style="margin-bottom:5px">
@@ -1570,6 +1691,66 @@
         </form>
     </div>
 
+    <!-------------------日历菜单区域--------------------------->
+    <div id="calendarSmallDiv" class="easyui-menu" data-options="onClick:menuHandler"  style="width:120px;position:absolute;">
+        
+    </div>
+
+    <!-------------------信息汇总窗口区域--------------------------->
+    <div id="AllInfoWindowDiv" class="easyui-window" title="信息汇总" closed="true" collapsible="false" minimizable="false" maximizable="false" style="width:500px;height:auto;padding:5px;">
+        <div>
+            <div  id="infoTopText" style="text-align:center">
+                <!--表头-->
+            </div>
+            <div>
+                <table style="margin-right:auto;margin-left:auto">
+                    <tr>
+                        <td>创建时间</td>
+                        <td>内容</td>
+                        <td>类型</td>
+                        <td>查看日程详细</td>
+                        <td>查看审核意见</td>
+                    </tr>
+                </table>
+            </div>
+            <div id="ScheduleTypeNumberDiv">
+                <div id="ZXPerson" style="width:30%;float:right"></div>
+                <div style="width:70%"><b>日程类型总数：</b></div>
+            </div>
+            <div style="text-align:right">
+                <a href="javascript:YiYueBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>已阅</a><a href="javascript:JiYuYiJianBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>给予意见</a>
+            </div>
+            <div style="display:none">
+                <input type="text" id="RiQiBeiFenText" />
+            </div> 
+        </div>
+        <!------------------复核意见区域----------------------->
+        <div id="FuHeYiJianDiv" class="easyui-layout" style="height:200px">
+            <div id="YiYuePersonsID" data-options="region:'north',collapsible:false" style="height:30px;">
+                <b style="font-size:20px">已阅人员：</b>
+            </div>
+            <div id="InfoShowDiv" data-options="region:'west',collapsible:false" style="width:100px;">
+                <label>人员名称:</label>
+                <label>时间:</label>
+                <label><a href="javascript:YiYueBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>已阅</a></label>
+                <label><a href="javascript:JiYuYiJianBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>反馈</a></label>
+            </div>
+            <div id="FuHeYJDivID" data-options="region:'center'" style="padding:5px;background:#eee;"></div>
+        </div> 
+    </div>
+
+
+    <!-------------------信息汇总窗口区域--------------------------->
+    <div id="JiYuYiJianDiv" class="easyui-window" title="给予意见" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:230px">
+        <h3>意见：</h3>&nbsp;<textarea id="yijianID" name="yijianName" style="width:201px;height:100px;resize:none"></textarea>
+        <div style="padding:5px;text-align:center;">
+            <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="OkToAddYiJian()">确定</a>
+            <a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="cancel()">取消</a>
+        </div>
+    </div>
+
+
+    
 </body>
 </html>
 
