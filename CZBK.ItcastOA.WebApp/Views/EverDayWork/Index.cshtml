@@ -59,7 +59,6 @@
                         if(k==1){
                             if (data[i].DJ == 1) {
                                 if (data[i].SerchType == 1) {
-                                    alert(data[i].UpID)
                                     $('#calendarSmallDiv').menu('appendItem', {
                                         parent: $('#calendarSmallDiv').menu('getItem', $('#info' + data[i].UpID)[0]).target,
                                         id: data[i].ID,
@@ -67,7 +66,6 @@
                                         iconCls: 'icon-blank'
                                     });
                                 } else {
-                                    alert(data[i].UpID)
                                     $('#calendarSmallDiv').menu('appendItem', {
                                         parent: $('#calendarSmallDiv').menu('getItem', $('#info' + data[i].UpID)[0]).target,
                                         id: 'info' + data[i].ID,
@@ -79,15 +77,13 @@
                         } else {
                             if (data[i].DJ == k) {
                                 if (data[i].SerchType == 1) {
-                                    alert(data[i].UpID)
                                     $('#calendarSmallDiv').menu('appendItem', {
                                         parent: $('#calendarSmallDiv').menu('getItem', $('#' + data[i].UpID)[0]).target,
                                         id: data[i].ID,
                                         text: data[i].name,
                                         iconCls: 'icon-blank'
                                     });
-                                } else {
-                                    alert(data[i].UpID)
+                                } else {    
                                     $('#calendarSmallDiv').menu('appendItem', {
                                         parent: $('#calendarSmallDiv').menu('getItem', $('#info'+data[i].UpID)[0]).target,
                                         id: 'info' + data[i].ID,
@@ -345,18 +341,39 @@
 
         //菜单单击事件
         function menuHandler(item) {
+            if (item.text == "个人日总结" || item.text == "部门日总结") {
+                return;
+            }
             $("#FirstTrID").nextAll().remove();
             $("#infoTopText").html("<b style='font-size:20px'>" + $("#RiQiBeiFenText").val() + "工作表总结</b>");
             $("#ZXPerson").html("<b>撰写人：</b>" + item.text);
-            $.post("/EverDayWork/GetScheduleInfoForTab", { "id": item.id, "time": $("#RiQiBeiFenText").val() }, function (Info) {
-                $.each(Info, function (index, item) {
-                    $("#ScheduleInfoTab").append("<tr style='font-size:7px'><td>" + ChangeDateFormat2(item["ScheduleTime"])
-                        + "</td><td style='width:300px'>" + item["ScheduleText"] + "</td><td>" + item["ScheduleTypeName"]
-                        + "</td><td><a href='#' onclick='CheckSchFile(this)' class='l-btn' style='margin:0px 5px;padding:2px 8px'>查看文件</a><input type='hidden' value='" + item["FileItemID"] + "'/></td>"
-                        + "<td><a href='#' onclick='CheckYiJian(this)' class='l-btn' style='margin:0px 5px;padding:2px 8px'>查看审核意见</a><input type='hidden' value='" + item["ScheduleID"] + "'/></td></tr>");
+            var id = item.ID + "";
+            if (id.indexOf("info")<0) {
+                $.post("/EverDayWork/GetScheduleInfoForTab", { "id": item.id, "time": $("#RiQiBeiFenText").val() }, function (Info) {
+                    $.each(Info.lsift, function (index, item) {
+                        $("#ScheduleInfoTab").append("<tr style='font-size:7px'><td>"+item["Name"]+"</td><td>" + ChangeDateFormat2(item["ScheduleTime"])
+                            + "</td><td style='width:350px'>" + item["ScheduleText"] + "</td><td>" + item["ScheduleTypeName"]
+                            + "</td><td><a href='#' onclick='CheckSchFile(this)' class='l-btn' style='margin:0px 5px;padding:2px 8px'>查看文件</a><input type='hidden' value='" + item["FileItemID"] + "'/></td>"
+                            + "<td><a href='#' onclick='CheckYiJian(this)' class='l-btn' style='margin:0px 5px;padding:2px 8px'>查看审核意见</a><input type='hidden' value='" + item["ScheduleID"] + "'/></td></tr>");
+                    })
+                    $("#SchTypeCount").html("<b>日程类型统计：</b>" + Info.scheduleSumStr);
+                    $("#AllInfoWindowDiv").window("center");
+                    $("#AllInfoWindowDiv").window("open");
                 })
-                $("#AllInfoWindowDiv").window("open");
-            })
+            }
+            if (id.indexOf("info") >= 0) {
+                $.post("/EverDayWork/GetScheduleInfoForTab", { "id": item.id, "time": $("#RiQiBeiFenText").val() }, function (Info) {
+                    $.each(Info.lsift, function (index, item) {
+                        $("#ScheduleInfoTab").append("<tr style='font-size:7px'><td>" + ChangeDateFormat2(item["ScheduleTime"])
+                            + "</td><td style='width:300px'>" + item["ScheduleText"] + "</td><td>" + item["ScheduleTypeName"]
+                            + "</td><td><a href='#' onclick='CheckSchFile(this)' class='l-btn' style='margin:0px 5px;padding:2px 8px'>查看文件</a><input type='hidden' value='" + item["FileItemID"] + "'/></td>"
+                            + "<td><a href='#' onclick='CheckYiJian(this)' class='l-btn' style='margin:0px 5px;padding:2px 8px'>查看审核意见</a><input type='hidden' value='" + item["ScheduleID"] + "'/></td></tr>");
+                    })
+                    $("#SchTypeCount").html("<b>日程类型统计：</b>" + Info.scheduleSumStr);
+                    $("#AllInfoWindowDiv").window("center");
+                    $("#AllInfoWindowDiv").window("open");
+                })
+            }
         }
 
 
@@ -765,11 +782,6 @@
                     }
                 }]
             });
-        //if (row.TextReadBak == "未查阅") {
-           
-        //}else{
-        //        $.messager.alert("提示","已审核过，不能重复审核！");
-        //}
         }
 
         //将序列化成json格式后日期(毫秒数)转成日期格式
@@ -1030,7 +1042,6 @@
         //查看文件(总结报表用)
         function CheckSchFile(s) {
             var fileID = $(s).next().val();
-            alert(fileID)
             if (fileID != "null") {
                 $.post("/EverDayWork/checkFile", { "id": fileID }, function (fileInfo) {
                     var ay = new Array();
@@ -1555,25 +1566,25 @@
     <div id="AddUploadFileDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddUploadFile", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddUploadFileEdit" }, new { id = "adduploadfilefrom" }))
         {<table id="Upfiletab">
-            <tr>
-                <td colspan="2"><b style="font-size:50px;margin:10px auto">补充上传文件</b></td>
-            </tr>
-            <tr>
-                <td>文件</td>
-                <td><input type="file" id="AddupLoadFileID" name="fileupname" /><input type="button" id="AddupLoadFileBtn" value="上传" /></td>
-            </tr>
-            <tr>
-                <td>文件备注</td>
-                <td><textarea id="AddupLoadBeiZhuArea" name="AddupLoadBeiZhuArea" style="width:302px"></textarea></td>
-            </tr>
-            <tr>
-                <td><input type="hidden" id="AddupLoadUrl" name="Url" /><input type="hidden" id="AddUploadScheduleID" name="AddUploadScheduleName" /><input type="hidden" id="FirstFileID" name="FirstFileName" /></td>
-                <td><input type="hidden" id="AddupLoadBeiZhu" name="BeiZhu" /><input type="hidden" id="AddupLoadSchID" name="SchID" /></td>
-            </tr>
-        </table>
-        <table>
-            <tbody id="Selebody"></tbody>
-        </table>
+                <tr>
+                    <td colspan="2"><b style="font-size:50px;margin:10px auto">补充上传文件</b></td>
+                </tr>
+                <tr>
+                    <td>文件</td>
+                    <td><input type="file" id="AddupLoadFileID" name="fileupname" /><input type="button" id="AddupLoadFileBtn" value="上传" /></td>
+                </tr>
+                <tr>
+                    <td>文件备注</td>
+                    <td><textarea id="AddupLoadBeiZhuArea" name="AddupLoadBeiZhuArea" style="width:302px"></textarea></td>
+                </tr>
+                <tr>
+                    <td><input type="hidden" id="AddupLoadUrl" name="Url" /><input type="hidden" id="AddUploadScheduleID" name="AddUploadScheduleName" /><input type="hidden" id="FirstFileID" name="FirstFileName" /></td>
+                    <td><input type="hidden" id="AddupLoadBeiZhu" name="BeiZhu" /><input type="hidden" id="AddupLoadSchID" name="SchID" /></td>
+                </tr>
+            </table>
+            <table>
+                <tbody id="Selebody"></tbody>
+            </table>
 
         }
     </div>
@@ -1582,11 +1593,11 @@
     <div id="AddScheduleTypeDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddScheduleType", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterScheduleTypeEdit" }, new { id = "addscheduletypefrom" }))
         {<table>
-            <tr><td>日程状态</td><td><input type="text" name="ItemText" id="ItemText" /></td></tr>
-        </table>
-        <table>
-            <tbody id="Selebody"></tbody>
-        </table>
+                <tr><td>日程状态</td><td><input type="text" name="ItemText" id="ItemText" /></td></tr>
+            </table>
+            <table>
+                <tbody id="Selebody"></tbody>
+            </table>
 
         }
     </div>
@@ -1595,36 +1606,36 @@
     <div id="AddScheduleDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddSchedule", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddSchedule" }, new { id = "addschedulefrom" }))
         {<table id="AddScheduleTab">
-            <tr><td>日程时间</td><td><input type="text" class="easyui-datetimebox" name="ScheduleTime" id="ScheduleTime" /></td></tr>
-            <tr><td>日程内容</td><td><textarea class="easyui-textarea" name="ScheduleText" id="ScheduleText" style="width:302px;height:158px"></textarea></td></tr>
-            <tr>
-                <td>日程类型</td>
-                <td>
-                    <!--从数据库取值的下拉菜单-->
-                    <input class="easyui-combobox" id="ScheduleType"
-                           name="ScheduleTypeID"
-                           url="/EverDayWork/GetScheduleTypeall"
-                           valueField="ID"
-                           textField="ItemText"
-                           style="width:100px" />
-                </td>
-            </tr>
-            <tr>
-                <td>文件</td>
-                <td><input type="file" id="fileupid" name="fileupname" /><input type="button" id="uploadFileBtn" value="上传" /></td>
-            </tr>
-            <tr>
-                <td>文件备注</td>
-                <td><textarea id="BeiZhuArea" name="BeiZhuArea" style="width:302px;height:50px"></textarea></td>
-            </tr>
-            <tr>
-                <td><input type="hidden" id="Url" name="Url" /></td>
-                <td><input type="hidden" id="BeiZhu" name="BeiZhu" /></td>
-            </tr>
-        </table>
-        <table>
-            <tbody id="Selebody"></tbody>
-        </table>
+                <tr><td>日程时间</td><td><input type="text" class="easyui-datetimebox" name="ScheduleTime" id="ScheduleTime" /></td></tr>
+                <tr><td>日程内容</td><td><textarea class="easyui-textarea" name="ScheduleText" id="ScheduleText" style="width:302px;height:158px"></textarea></td></tr>
+                <tr>
+                    <td>日程类型</td>
+                    <td>
+                        <!--从数据库取值的下拉菜单-->
+                        <input class="easyui-combobox" id="ScheduleType"
+                               name="ScheduleTypeID"
+                               url="/EverDayWork/GetScheduleTypeall"
+                               valueField="ID"
+                               textField="ItemText"
+                               style="width:100px" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>文件</td>
+                    <td><input type="file" id="fileupid" name="fileupname" /><input type="button" id="uploadFileBtn" value="上传" /></td>
+                </tr>
+                <tr>
+                    <td>文件备注</td>
+                    <td><textarea id="BeiZhuArea" name="BeiZhuArea" style="width:302px;height:50px"></textarea></td>
+                </tr>
+                <tr>
+                    <td><input type="hidden" id="Url" name="Url" /></td>
+                    <td><input type="hidden" id="BeiZhu" name="BeiZhu" /></td>
+                </tr>
+            </table>
+            <table>
+                <tbody id="Selebody"></tbody>
+            </table>
 
         }
     </div>
@@ -1633,12 +1644,12 @@
     <div id="AddFileTypeDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddFileType", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddFileType" }, new { id = "addfiletypefrom" }))
         {<table id="AddFileTypeTab">
-            <tr><td>文件扩展名</td><td><input type="text" class="easyui-textbox" name="FileTypeENGName" id="FileTypeEName" /></td></tr>
-            <tr><td>文件类型说明</td><td><input type="text" class="easyui-textbox" name="FileTypeCHNName" id="FileTypeCName" /></td></tr>
-        </table>
-        <table>
-            <tbody id="Selebody"></tbody>
-        </table>
+                <tr><td>文件扩展名</td><td><input type="text" class="easyui-textbox" name="FileTypeENGName" id="FileTypeEName" /></td></tr>
+                <tr><td>文件类型说明</td><td><input type="text" class="easyui-textbox" name="FileTypeCHNName" id="FileTypeCName" /></td></tr>
+            </table>
+            <table>
+                <tbody id="Selebody"></tbody>
+            </table>
 
         }
     </div>
@@ -1667,32 +1678,32 @@
     <div id="UpdateScheduleDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("UpdateSchedule", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterScheduleEdit" }, new { id = "updateschedulefrom" }))
         {<table id="UpdateScheduleTab">
-            <tr><td>日程编号</td><td><input type="text" name="ID" id="UpdateID" /></td></tr>
-            <tr><td>用户编号</td><td><input type="text" name="UserID" id="UpdateUserID" /></td></tr>
-            <tr><td>日程时间</td><td><input type="text" class="easyui-datetimebox" name="ScheduleTime" id="UpdateScheduleTime" /></td></tr>
-            <tr><td>日程创建时间</td><td><input type="text" name="ScheduleAddTime" id="UpdateScheduleAddTime" /></td></tr>
-            <tr><td>日程内容</td><td><textarea class="easyui-textarea" name="ScheduleText" id="UpdateScheduleText" style="width:302px;height:158px"></textarea></td></tr>
-            <tr>
-                <td>日程类型</td>
-                <td>
-                    <!--从数据库取值的下拉菜单-->
-                    <input class="easyui-combobox"
-                           id="UpdateScheduleType"
-                           name="ScheduleTypeID"
-                           url="/EverDayWork/GetScheduleTypeall"
-                           valueField="ID"
-                           textField="ItemText"
-                           panelHeight="auto" style="width:100px" />
-                </td>
-            </tr>
-            <tr><td>日程审核状态</td><td><input type="text" name="TextReadBak" id="UpdateTextReadBak" /></td></tr>
-            <tr><td>日程审核人</td><td><input name="TextReadUser" id="UpdateTextReadUser" /></td></tr>
-            <tr><td>日程审核时间</td><td><input type="text" name="TextReadTime" id="UpdateTextReadTime" /></td></tr>
-            <tr><td>文件编号</td><td><input type="text" name="FileItemID" id="UpdateFileItemID" /></td></tr>
-        </table>
-        <table>
-            <tbody id="Selebody"></tbody>
-        </table>
+                <tr><td>日程编号</td><td><input type="text" name="ID" id="UpdateID" /></td></tr>
+                <tr><td>用户编号</td><td><input type="text" name="UserID" id="UpdateUserID" /></td></tr>
+                <tr><td>日程时间</td><td><input type="text" class="easyui-datetimebox" name="ScheduleTime" id="UpdateScheduleTime" /></td></tr>
+                <tr><td>日程创建时间</td><td><input type="text" name="ScheduleAddTime" id="UpdateScheduleAddTime" /></td></tr>
+                <tr><td>日程内容</td><td><textarea class="easyui-textarea" name="ScheduleText" id="UpdateScheduleText" style="width:302px;height:158px"></textarea></td></tr>
+                <tr>
+                    <td>日程类型</td>
+                    <td>
+                        <!--从数据库取值的下拉菜单-->
+                        <input class="easyui-combobox"
+                               id="UpdateScheduleType"
+                               name="ScheduleTypeID"
+                               url="/EverDayWork/GetScheduleTypeall"
+                               valueField="ID"
+                               textField="ItemText"
+                               panelHeight="auto" style="width:100px" />
+                    </td>
+                </tr>
+                <tr><td>日程审核状态</td><td><input type="text" name="TextReadBak" id="UpdateTextReadBak" /></td></tr>
+                <tr><td>日程审核人</td><td><input name="TextReadUser" id="UpdateTextReadUser" /></td></tr>
+                <tr><td>日程审核时间</td><td><input type="text" name="TextReadTime" id="UpdateTextReadTime" /></td></tr>
+                <tr><td>文件编号</td><td><input type="text" name="FileItemID" id="UpdateFileItemID" /></td></tr>
+            </table>
+            <table>
+                <tbody id="Selebody"></tbody>
+            </table>
         }
     </div>
 
@@ -1700,15 +1711,15 @@
     <div id="ReviewScheduleDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("ReviewSchedule", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterReviewSchedule" }, new { id = "reviewschedulefrom" }))
         {<table id="ReviewScheduleTab">
-            <tr><td colspan="2"><h1>查阅意见</h1></td></tr>
-            <tr><td><input type="hidden" id="ReviewScheduleID" name="ReviewScheduleID" /></td></tr>
-            <tr>
-                <td><h2>请输入您的意见：</h2><textarea name="TextReadBak" id="TextReadBak" style="width:302px;height:158px"></textarea></td>
-            </tr>
-        </table>
-        <table>
-            <tbody id="Selebody"></tbody>
-        </table>
+                <tr><td colspan="2"><h1>查阅意见</h1></td></tr>
+                <tr><td><input type="hidden" id="ReviewScheduleID" name="ReviewScheduleID" /></td></tr>
+                <tr>
+                    <td><h2>请输入您的意见：</h2><textarea name="TextReadBak" id="TextReadBak" style="width:302px;height:158px"></textarea></td>
+                </tr>
+            </table>
+            <table>
+                <tbody id="Selebody"></tbody>
+            </table>
         }
     </div>
 
@@ -1731,7 +1742,7 @@
     <!-------------------审阅查阅意见--------------------->
     <div id="AddExamineScheduleDiv" class="easyui-window" title="审核下级查阅意见" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:400px;height:250px;">
         @using (Ajax.BeginForm("AddExamineSchedule", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddExamineSchedule" }, new { id = "addexaminescheduleform" }))
-            {
+        {
             <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
                 <table>
                     <tr><td><b>意见</b></td></tr>
@@ -1790,7 +1801,7 @@
     </div>
 
     <!-------------------查看日程查阅详细--------------------->
-    <div id="SeeTextReadBakDiv" class="easyui-window" title="日程详细信息" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" >
+    <div id="SeeTextReadBakDiv" class="easyui-window" title="日程详细信息" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false">
         <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
             <table>
                 <tr><td><b>领导查阅意见：</b></td><td><textarea id="TRBText" style="width:173px;height:80px;resize:none;"></textarea></td></tr>
@@ -1802,65 +1813,68 @@
     </div>
 
     <!-------------------日历菜单区域--------------------------->
-    <div id="calendarSmallDiv" class="easyui-menu" data-options="onClick:menuHandler"  style="width:120px;position:absolute;">
-        
+    <div id="calendarSmallDiv" class="easyui-menu" data-options="onClick:menuHandler" style="width:120px;position:absolute;">
+
     </div>
 
     <!-------------------信息汇总窗口区域--------------------------->
-    <div id="AllInfoWindowDiv" class="easyui-window" title="信息汇总" closed="true" collapsible="false" minimizable="false" maximizable="false" style="width:650px;height:auto;padding:5px;">
-        <div>
-            <div  id="infoTopText" style="text-align:center">
-                <!--表头-->
-            </div>
+    <div id="AllInfoWindowDiv" class="easyui-window" title="信息汇总" closed="true" collapsible="false" minimizable="false" maximizable="false" style="width:800px;height:auto;padding:5px;">
+        <div class="easyui-accordion" data-options="multiple:true">
             <div>
-                <table id="ScheduleInfoTab" border="1" style="margin-right:auto;margin-left:auto;padding:0px,5px;border-collapse:collapse">
-                    <tr id="FirstTrID">
-                        <td>创建时间</td>
-                        <td>内容</td>
-                        <td>类型</td>
-                        <td>查看日程详细</td>
-                        <td>查看审核意见</td>
-                    </tr>
-                </table>
+                <div id="infoTopText" style="text-align:center">
+                    <!--表头-->
+                </div>
+                <div>
+                    <table id="ScheduleInfoTab" border="1" style="margin-right:auto;margin-left:auto;padding:0px,5px;border-collapse:collapse">
+                        <tr id="FirstTrID">
+                            <td>创建人</td>
+                            <td>创建时间</td>
+                            <td>内容</td>
+                            <td>类型</td>
+                            <td>查看日程详细</td>
+                            <td>查看审核意见</td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="ScheduleTypeNumberDiv">
+                    <div id="ZXPerson" style="width:15%;float:right"></div>
+                    <div id="SchTypeCount" style="width:85%"></div>
+                </div>
+                <div style="text-align:right">
+                    <a href="javascript:YiYueBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>已阅</a><a href="javascript:JiYuYiJianBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>给予意见</a>
+                </div>
+                <div style="display:none">
+                    <input type="text" id="RiQiBeiFenText" />
+                </div>
             </div>
-            <div id="ScheduleTypeNumberDiv">
-                <div id="ZXPerson" style="width:30%;float:right"></div>
-                <div style="width:70%"><b>日程类型总数：</b></div>
+            <!------------------复核意见区域----------------------->
+            <div title="复核意见区" id="FuHeYiJianDiv" class="easyui-layout" style="height:200px">
+                <div id="YiYuePersonsID" data-options="region:'north',collapsible:false" style="height:30px;">
+                    <b style="font-size:20px">已阅人员：</b>
+                </div>
+                <div id="InfoShowDiv" data-options="region:'west',collapsible:false" style="width:100px;">
+                    <label>人员名称:</label>
+                    <label>时间:</label>
+                    <label><a href="javascript:YiYueBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>已阅</a></label>
+                    <label><a href="javascript:JiYuYiJianBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>反馈</a></label>
+                </div>
+                <div id="FuHeYJDivID" data-options="region:'center'" style="padding:5px;background:#eee;"></div>
             </div>
-            <div style="text-align:right">
-                <a href="javascript:YiYueBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>已阅</a><a href="javascript:JiYuYiJianBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>给予意见</a>
-            </div>
-            <div style="display:none">
-                <input type="text" id="RiQiBeiFenText" />
-            </div> 
-        </div>
-        <!------------------复核意见区域----------------------->
-        <div id="FuHeYiJianDiv" class="easyui-layout" style="height:200px">
-            <div id="YiYuePersonsID" data-options="region:'north',collapsible:false" style="height:30px;">
-                <b style="font-size:20px">已阅人员：</b>
-            </div>
-            <div id="InfoShowDiv" data-options="region:'west',collapsible:false" style="width:100px;">
-                <label>人员名称:</label>
-                <label>时间:</label>
-                <label><a href="javascript:YiYueBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>已阅</a></label>
-                <label><a href="javascript:JiYuYiJianBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>反馈</a></label>
-            </div>
-            <div id="FuHeYJDivID" data-options="region:'center'" style="padding:5px;background:#eee;"></div>
-        </div> 
-    </div>
-
-
-    <!-------------------信息汇总窗口区域--------------------------->
-    <div id="JiYuYiJianDiv" class="easyui-window" title="给予意见" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:230px">
-        <h3>意见：</h3>&nbsp;<textarea id="yijianID" name="yijianName" style="width:201px;height:100px;resize:none"></textarea>
-        <div style="padding:5px;text-align:center;">
-            <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="OkToAddYiJian()">确定</a>
-            <a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="cancel()">取消</a>
         </div>
     </div>
 
 
-    
+        <!-------------------信息汇总窗口区域--------------------------->
+        <div id="JiYuYiJianDiv" class="easyui-window" title="给予意见" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:230px">
+            <h3>意见：</h3>&nbsp;<textarea id="yijianID" name="yijianName" style="width:201px;height:100px;resize:none"></textarea>
+            <div style="padding:5px;text-align:center;">
+                <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="OkToAddYiJian()">确定</a>
+                <a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="cancel()">取消</a>
+            </div>
+        </div>
+
+
+
 </body>
 </html>
 

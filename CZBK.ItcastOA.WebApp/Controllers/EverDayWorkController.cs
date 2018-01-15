@@ -1548,6 +1548,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                         lfj.ID = a.ID;
                         lfj.name = a.name;
                         lfj.DJ = 10;
+                        lfj.SerchType = 1;
                         var one = ScheduleUserService.LoadEntities(x => x.UserID == a.ID).FirstOrDefault();
                         if(one != null)
                         {
@@ -1557,9 +1558,6 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     }
                 }
             }
-            
-          
-
             if (list != null && list[0] != null)
             {
 
@@ -1577,18 +1575,28 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     lfj.ID = ID;
                     lfj.DJ = DJ;
                     lfj.name = name;
-                    lfj.UpID = 1;
+                    var one = ScheduleUserService.LoadEntities(x => x.UserID == lfj.ID).FirstOrDefault();
+                    if(one != null && lfj.DJ != 1)
+                    {
+                        lfj.UpID = one.UpID;
+                    }
+                    else
+                    {
+                        lfj.UpID = 1;
+                    }
                     lfj.SerchType = 1;
                     new1.Add(lfj);
                 }
-                //foreach(var a in BottomUser)
-                //{
-                //    a.SerchType = 1;
-                //}
-
                 new1.AddRange(SYLeader);
-                //new1.AddRange(BottomUser);
-
+                if(new1.Count<1 || new1[0] == null)
+                {
+                    foreach(var a in BottomUser)
+                    {
+                        a.DJ = 1;
+                        a.UpID = 1;
+                    }
+                }
+                new1.AddRange(BottomUser);
                 return Json(new1, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1633,6 +1641,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             foreach (var a in llfj)
             {
                 a.SerchType = 2;
+                if(a.DJ == 1)
+                {
+                    a.UpID = 2;
+                }
             }
             SYLeader.AddRange(firstLeader);
             SYLeader.AddRange(BottomUser);
@@ -1643,19 +1655,74 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //获取日程信息给信息汇总的表
         public ActionResult GetScheduleInfoForTab()
         {
-            int id = Convert.ToInt32(Request["id"]);
             string time = Request["time"];
-            time = time.Replace("年","-");
-            time = time.Replace("月","-");
-            time = time.Replace("日","");
+            time = time.Replace("年", "-");
+            time = time.Replace("月", "-");
+            time = time.Replace("日", "");
             DateTime dt = Convert.ToDateTime(time);
             DateTime end = dt.AddDays(1);
-            //List<Uidorname> downUser = GetAllDownUser();
-            var temp = ScheduleService.LoadEntities(x => x.UserID == id && x.ScheduleTime > dt && x.ScheduleTime < end).DefaultIfEmpty().ToList();
-            if(temp != null && temp[0] != null)
+            string idstr = Request["id"];
+            if (!idstr.Contains("info")) {
+                int id = Convert.ToInt32(Request["id"]);
+                var temp = ScheduleService.LoadEntities(x => x.UserID == id && x.ScheduleTime > dt && x.ScheduleTime < end).DefaultIfEmpty().ToList();
+                var ScheduleSum = temp.Where((x, i) => temp.FindIndex(z => z.ScheduleTypeID == x.ScheduleTypeID) == i).ToList();
+                string ScheduleSumStr = "";
+                foreach (var a in ScheduleSum)
+                {
+                    var rtmp = temp.Where(x => x.ScheduleTypeID == a.ScheduleTypeID).DefaultIfEmpty().ToList();
+                    if (rtmp != null && rtmp[0] != null)
+                    {
+                        ScheduleSumStr = ScheduleSumStr + a.ScheduleType.ItemText + ":<b>" + rtmp.Count + "</b> ";
+                    }
+                }
+                if (temp != null && temp[0] != null)
+                {
+                    List<SchInfoForTab> Lsift = new List<SchInfoForTab>();
+                    foreach (var a in temp)
+                    {
+                        SchInfoForTab sift = new SchInfoForTab();
+                        sift.ScheduleTime = a.ScheduleTime;
+                        sift.ScheduleText = a.ScheduleText;
+                        sift.ScheduleTypeName = a.ScheduleType.ItemText;
+                        sift.ScheduleID = a.ID;
+                        sift.FileItemID = a.FileItemID;
+                        sift.Name = a.UserInfo.PerSonName;
+                        Lsift.Add(sift);
+                    }
+                    return Json(new { lsift = Lsift, scheduleSumStr = ScheduleSumStr }, JsonRequestBehavior.AllowGet);
+                } else
+                {
+                    return null;
+                }
+            }
+            else
             {
+                int id = Convert.ToInt32(Request["id"].Replace("info",""));
+                var tempSUser = ScheduleUserService.LoadEntities(x => x.UpID == id).DefaultIfEmpty();
+                List<Uidorname> Luin = new List<Uidorname>();
+                ForUser(tempSUser, Luin);
+                List<Uidorname> list = Luin.Where((x, i) => Luin.FindIndex(z => z.ID == x.ID) == i).ToList();
+                List<Schedule> schlist = new List<Schedule>();
+                foreach(var a in list)
+                {
+                    var temp = ScheduleService.LoadEntities(x => x.UserID == a.ID && x.ScheduleTime > dt && x.ScheduleTime < end).DefaultIfEmpty().ToList();
+                    if (temp != null && temp[0] != null)
+                    {
+                        schlist.AddRange(temp);
+                    }
+                }
+                var ScheduleSum = schlist.Where((x, i) => schlist.FindIndex(z => z.ScheduleTypeID == x.ScheduleTypeID) == i).ToList();
+                string ScheduleSumStr = "";
+                foreach (var a in ScheduleSum)
+                {
+                    var rtmp = schlist.Where(x => x.ScheduleTypeID == a.ScheduleTypeID).DefaultIfEmpty().ToList();
+                    if (rtmp != null && rtmp[0] != null)
+                    {
+                        ScheduleSumStr = ScheduleSumStr + a.ScheduleType.ItemText + ":<b>" + rtmp.Count + "</b> ";
+                    }
+                }
                 List<SchInfoForTab> Lsift = new List<SchInfoForTab>();
-                foreach(var a in temp)
+                foreach (var a in schlist)
                 {
                     SchInfoForTab sift = new SchInfoForTab();
                     sift.ScheduleTime = a.ScheduleTime;
@@ -1663,12 +1730,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     sift.ScheduleTypeName = a.ScheduleType.ItemText;
                     sift.ScheduleID = a.ID;
                     sift.FileItemID = a.FileItemID;
+                    sift.Name = a.UserInfo.PerSonName;
                     Lsift.Add(sift);
                 }
-                return Json(Lsift, JsonRequestBehavior.AllowGet);
-            }else
-            {
-                return null;
+                return Json(new { lsift = Lsift ,scheduleSumStr = ScheduleSumStr}, JsonRequestBehavior.AllowGet);
             }
         }
     }
@@ -1708,6 +1773,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public string ScheduleTypeName { get; set; }
         public long ScheduleID { get; set; }
         public int? FileItemID { get; set; }
+        public string Name { get; set; } 
+        public string SchTypeNum { get; set; }
     }
 
 }
