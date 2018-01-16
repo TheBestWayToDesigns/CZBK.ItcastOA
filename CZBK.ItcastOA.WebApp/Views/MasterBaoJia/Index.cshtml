@@ -851,7 +851,7 @@
                     });
                 }
                 else {
-                    alert(serverData.ret)
+                     alert(serverData.ret)
                 }
             });
         }
@@ -1406,7 +1406,7 @@
                         queryParams.outexe = true;
 
                         $('#tt').datagrid('options').queryParams = queryParams;
-                        alert($('#tt').datagrid('options').url)
+                       // alert($('#tt').datagrid('options').url)
                         $("#tt").datagrid('reload');
                     }
                 }]
@@ -1477,7 +1477,7 @@
                 if (data.rows != null)
                 {
                     var a = "<a href='#' class='easyui-linkbutton l-btn l-btn-small' data-options='toggle:true,group:'g1'' id='" + data.rows[0].url + "' group='g1'><span class='l-btn-left'><span class='l-btn-text'>" + data.rows[0].title + "</span></span></a>";
-                    alert(data.rows[0].url)
+                   // alert(data.rows[0].url)
                     $("#" + data.rows[0].url).show();
                 }                
                
@@ -2076,8 +2076,8 @@
 
         <div  class="tbb0" style="margin-bottom:5px">
             &nbsp;&nbsp; &nbsp;&nbsp;
-            开始时间: <input class="easyui-datebox" id="StTime" value="2017-01-01" style="width:120px">
-            To: <input class="easyui-datebox" id="DwTime" value="2017-12-30" style="width:120px">
+            开始时间: <input class="easyui-datebox" id="StTime"  style="width:120px">
+            To: <input class="easyui-datebox" id="DwTime"  style="width:120px">
             &nbsp;&nbsp; &nbsp;&nbsp;
           
             营销员:

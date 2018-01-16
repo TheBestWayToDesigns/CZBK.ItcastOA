@@ -8,6 +8,7 @@
     <title>日程信息</title>
 
     <link href="~/Content/themes/icon.css" rel="stylesheet" />
+    <link href="~/Scripts/Kindeditor/themes/default/default.css"  rel="stylesheet" />
     <script src="~/Scripts/jquery-1.7.1.min.js"></script>
 
     <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
@@ -35,6 +36,7 @@
                 });
             }
         });
+        
 
         $(document).ready(function () {
             $.post("/EverDayWork/GetAllDownLeader", {}, function (data) {
@@ -1561,7 +1563,7 @@
             <tr><td>用户编号</td><td><input type="text" name="UserID" id="UpdateUserID" /></td></tr>
             <tr><td>日程时间</td><td><input type="text" class="easyui-datetimebox" name="ScheduleTime" id="UpdateScheduleTime" /></td></tr>
             <tr><td>日程创建时间</td><td><input type="text" name="ScheduleAddTime" id="UpdateScheduleAddTime" /></td></tr>
-            <tr><td>日程内容</td><td><textarea class="easyui-textarea" name="ScheduleText" id="UpdateScheduleText" style="width:302px;height:158px"></textarea></td></tr>
+            <tr><td>日程内容</td><td><textarea  name="ScheduleText" id="UpdateScheduleText" style="width:302px;height:158px;visibility:hidden"></textarea></td></tr>
             <tr>
                 <td>日程类型</td>
                 <td>

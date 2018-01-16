@@ -8,6 +8,9 @@ using CZBK.ItcastOA.Model;
 using CZBK.ItcastOA.Model.SearchParam;
 using System.IO;
 using System.Data;
+using NPOI.SS.UserModel;
+using CZBK.ItcastOA.Model.OutExcel;
+using NPOI.HSSF.Util;
 
 namespace CZBK.ItcastOA.WebApp.Controllers
 {
@@ -672,6 +675,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             return dml == null ? 0 : Convert.ToDecimal(dml);
         }
+        //导出报表
         public FileResult DownLoadExcel()
         {
             DataTable Tdt = new DataTable();
@@ -682,10 +686,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             Tdt.Columns.Add("KhPer", typeof(string));
             DataRow dr = Tdt.NewRow();
             dr["id"] = 0;
-            dr["SqBaoJiaPer"] = "SqBaoJiaPer";
-            dr["Comname"] = "Comname";
-            dr["KhName"] = "KhName";
-            dr["KhPer"] = "KhPer";
+            dr["SqBaoJiaPer"] = "SqBaoJiaPer1";
+            dr["Comname"] = "Comname2";
+            dr["KhName"] = "KhName3";
+            dr["KhPer"] = "KhPer4";
             Tdt.Rows.Add(dr);
             DataTable dt = Tdt;//获取需要导出的datatable数据  
                                //创建Excel文件的对象     
@@ -697,18 +701,49 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 NPOI.SS.UserModel.ISheet sheet1 = book.CreateSheet("Sheet1");
                 //给sheet1添加第一行的头部标题  
                 NPOI.SS.UserModel.IRow row1 = sheet1.CreateRow(0);
-                //row1.RowStyle.FillBackgroundColor = "";  
+
+
+                sheet1.CreateFreezePane(1, 1);// 冻结  
+                                              // 设置列宽  
+                IFont font = book.CreateFont();
+                font.FontName = "宋体";
+                font.FontHeightInPoints = 10;
+                // 普通单元格样式  
+                ICellStyle style = book.CreateCellStyle();
+                style.SetFont(font);
+                style.Alignment = HorizontalAlignment.Center;// 左右居中  
+                style.VerticalAlignment = VerticalAlignment.Center;// 上下居中  
+                style.WrapText = true;
+                style.LeftBorderColor = HSSFColor.Black.Index;
+                style.BorderLeft = BorderStyle.Thin;
+                style.RightBorderColor = HSSFColor.Black.Index;
+                style.BorderRight = BorderStyle.Thin;
+                style.TopBorderColor = HSSFColor.Black.Index;
+                style.BorderTop = BorderStyle.Thin;
+                style.BottomBorderColor = HSSFColor.Black.Index;
+                style.BorderBottom = BorderStyle.Thin;
+                // style.setBorderBottom(HSSFCellStyle.BORDER_THIN); // 设置单元格的边框为粗体  
+                // style.setBottomBorderColor(HSSFColor.BLACK.index); // 设置单元格的边框颜色．  
+                // style.setFillForegroundColor(HSSFColor.WHITE.index);// 设置单元格的背景颜色．
+
+                // ICellStyle style = OutExcel.Cellstyle();
                 for (int i = 0; i < dt.Columns.Count; i++)
                 {
                     row1.CreateCell(i).SetCellValue(dt.Columns[i].ColumnName);
+                    sheet1.SetColumnWidth(i, 6000);
                 }
                 //将数据逐步写入sheet1各个行  
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
+
                     NPOI.SS.UserModel.IRow rowtemp = sheet1.CreateRow(i + 1);
                     for (int j = 0; j < dt.Columns.Count; j++)
                     {
-                        rowtemp.CreateCell(j).SetCellValue(dt.Rows[i][j].ToString().Trim());
+
+                        ICell icl = rowtemp.CreateCell(j);
+                        icl.SetCellValue(dt.Rows[i][j].ToString().Trim());
+                        icl.CellStyle = style;
+                       
                     }
                 }
                 string strdate = DateTime.Now.ToString("yyyyMMddhhmmss");//获取当前时间  
