@@ -352,8 +352,10 @@
             if (item.text == "个人日总结") {
                 return;
             } else if (item.text == "部门日总结") {
-                $.post("/EverDayWork/GetScheduleInfoForTab", { "anhao":9 }, function (Info) {
+
+                $.post("/EverDayWork/GetScheduleInfoForTab", { "anhao": 9, "time": $("#RiQiBeiFenText").val() }, function (Info) {
                     if (Info.lsift == undefined) {
+                        $.messager.alert("ts","无数据！","errer")
                         $("#AllInfoWindowDiv").window("close");
                         return;
                     }
