@@ -36,6 +36,8 @@
             }
         });
 
+        var ButtomLeaderDJ = 0;
+
         $(document).ready(function () {
             $('#calendarSmallDiv').menu('appendItem', {
                 id: "info1",
@@ -49,11 +51,17 @@
             });
             $.post("/EverDayWork/GetAllDownLeader", {}, function (data) {
                 var a = 0;
+                var b = 0;
                 for (var i = 0; i < data.length; i++) {
-                    if (parseInt(data[i].DJ) > a) {
-                        a = parseInt(data[i].DJ);
+                    var c = parseInt(data[i].DJ);
+                    if (c > a) {
+                        a = c;
+                    }
+                    if (c > b && c != 10) {
+                        b = c;
                     }
                 }
+                ButtomLeaderDJ = b-1;
                 for (var k = 1; k <= a; k++) {
                     for (var i = 0; i < data.length; i++) {
                         if(k==1){
@@ -69,7 +77,7 @@
                                     $('#calendarSmallDiv').menu('appendItem', {
                                         parent: $('#calendarSmallDiv').menu('getItem', $('#info' + data[i].UpID)[0]).target,
                                         id: 'info' + data[i].ID,
-                                        text: data[i].name,
+                                        text: data[i].name + "(" + data[i].DJ + ")",
                                         iconCls: 'icon-blank'
                                     });
                                 }
@@ -87,7 +95,7 @@
                                     $('#calendarSmallDiv').menu('appendItem', {
                                         parent: $('#calendarSmallDiv').menu('getItem', $('#info'+data[i].UpID)[0]).target,
                                         id: 'info' + data[i].ID,
-                                        text: data[i].name,
+                                        text: data[i].name + "(" + data[i].DJ+ ")",
                                         iconCls: 'icon-blank'
                                     });
                                 }
@@ -341,15 +349,40 @@
 
         //菜单单击事件
         function menuHandler(item) {
-            if (item.text == "个人日总结" || item.text == "部门日总结") {
+            if (item.text == "个人日总结") {
+                return;
+            } else if (item.text == "部门日总结") {
+                $.post("/EverDayWork/GetScheduleInfoForTab", { "anhao":9 }, function (Info) {
+                    if (Info.lsift == undefined) {
+                        $("#AllInfoWindowDiv").window("close");
+                        return;
+                    }
+                    $("#ScheduleInfoTab").html("<tr id='FirstTrID'><td>创建人</td><td>创建时间</td><td>内容</td><td>类型</td><td>查看文件</td><td>查阅意见</td></tr>");
+                    $.each(Info.lsift, function (index, item) {
+                        $("#ScheduleInfoTab").append("<tr style='font-size:7px'><td>" + item["Name"] + "</td><td>" + ChangeDateFormat2(item["ScheduleTime"])
+                            + "</td><td style='width:300px'>" + item["ScheduleText"] + "</td><td>" + item["ScheduleTypeName"]
+                            + "</td><td><a href='#' onclick='CheckSchFile(this)' class='l-btn' style='margin:0px 5px;padding:2px 8px'>查看文件</a><input type='hidden' value='" + item["FileItemID"] + "'/></td>"
+                            + "<td>" + item["TextReadBak"] + "<input type='hidden' value='" + item["ScheduleID"] + "'/></td></tr>");
+                    })
+                    $("#SchTypeCount").html("<b>日程类型统计：</b>" + Info.scheduleSumStr);
+                    $("#AllInfoWindowDiv").window("center");
+                    $("#AllInfoWindowDiv").window("open");
+                })
                 return;
             }
             $("#FirstTrID").nextAll().remove();
+            $("#ScheduleInfoTab").html("");
             $("#infoTopText").html("<b style='font-size:20px'>" + $("#RiQiBeiFenText").val() + "工作表总结</b>");
             $("#ZXPerson").html("<b>撰写人：</b>" + item.text);
-            var id = item.ID + "";
-            if (id.indexOf("info")<0) {
+            $("#ZXpersonID").val(item.id);
+            if ((item.id).indexOf("info") < 0) {
+                $("#ScheduleInfoTab").html("");
                 $.post("/EverDayWork/GetScheduleInfoForTab", { "id": item.id, "time": $("#RiQiBeiFenText").val() }, function (Info) {
+                    if (Info.lsift == undefined) {
+                        $("#AllInfoWindowDiv").window("close");
+                        return;
+                    }
+                    $("#ScheduleInfoTab").html("<tr id='FirstTrID'><td>创建人</td><td>创建时间</td><td>内容</td><td>类型</td><td>查看文件</td><td>查看审核意见</td></tr>");
                     $.each(Info.lsift, function (index, item) {
                         $("#ScheduleInfoTab").append("<tr style='font-size:7px'><td>"+item["Name"]+"</td><td>" + ChangeDateFormat2(item["ScheduleTime"])
                             + "</td><td style='width:350px'>" + item["ScheduleText"] + "</td><td>" + item["ScheduleTypeName"]
@@ -361,18 +394,46 @@
                     $("#AllInfoWindowDiv").window("open");
                 })
             }
-            if (id.indexOf("info") >= 0) {
-                $.post("/EverDayWork/GetScheduleInfoForTab", { "id": item.id, "time": $("#RiQiBeiFenText").val() }, function (Info) {
-                    $.each(Info.lsift, function (index, item) {
-                        $("#ScheduleInfoTab").append("<tr style='font-size:7px'><td>" + ChangeDateFormat2(item["ScheduleTime"])
-                            + "</td><td style='width:300px'>" + item["ScheduleText"] + "</td><td>" + item["ScheduleTypeName"]
-                            + "</td><td><a href='#' onclick='CheckSchFile(this)' class='l-btn' style='margin:0px 5px;padding:2px 8px'>查看文件</a><input type='hidden' value='" + item["FileItemID"] + "'/></td>"
-                            + "<td><a href='#' onclick='CheckYiJian(this)' class='l-btn' style='margin:0px 5px;padding:2px 8px'>查看审核意见</a><input type='hidden' value='" + item["ScheduleID"] + "'/></td></tr>");
+            if ((item.id).indexOf("info") >= 0) {
+                var start = (item.text).lastIndexOf("(");
+                if (start >= 0) {
+                    var end = (item.text).lastIndexOf(")");
+                    var str = (item.text).substring(start + 1, end);
+                    var DJ = parseInt(str);
+                } else {
+                    var DJ = 1;
+                }
+                if (DJ >= ButtomLeaderDJ) {
+                    $.post("/EverDayWork/GetScheduleInfoForTab", { "id": item.id, "time": $("#RiQiBeiFenText").val() }, function (Info) {
+                        if (Info.lsift == undefined) {
+                            $("#AllInfoWindowDiv").window("close");
+                            return;
+                        }
+                        $("#ScheduleInfoTab").html("<tr id='FirstTrID'><td>创建人</td><td>创建时间</td><td>内容</td><td>类型</td><td>查看文件</td><td>查阅意见</td></tr>");
+                        $.each(Info.lsift, function (index, item) {
+                            $("#ScheduleInfoTab").append("<tr style='font-size:7px'><td>" + item["Name"] + "</td><td>" + ChangeDateFormat2(item["ScheduleTime"])
+                                + "</td><td style='width:300px'>" + item["ScheduleText"] + "</td><td>" + item["ScheduleTypeName"]
+                                + "</td><td><a href='#' onclick='CheckSchFile(this)' class='l-btn' style='margin:0px 5px;padding:2px 8px'>查看文件</a><input type='hidden' value='" + item["FileItemID"] + "'/></td>"
+                                + "<td>" + item["TextReadBak"] + "<input type='hidden' value='" + item["ScheduleID"] + "'/></td></tr>");
+                        })
+                        $("#SchTypeCount").html("<b>日程类型统计：</b>" + Info.scheduleSumStr);
+                        $("#AllInfoWindowDiv").window("center");
+                        $("#AllInfoWindowDiv").window("open");
                     })
-                    $("#SchTypeCount").html("<b>日程类型统计：</b>" + Info.scheduleSumStr);
-                    $("#AllInfoWindowDiv").window("center");
-                    $("#AllInfoWindowDiv").window("open");
-                })
+                } else {
+                    $.post("/EverDayWork/GetScheduleInfoForTab2", { "id": item.id, "time": $("#RiQiBeiFenText").val() }, function (Info) {
+                        if (Info == undefined) {
+                            return;
+                        }
+                        $("#ScheduleInfoTab").html("<tr><td>下属领导</td><td>日总结信息</td></tr>")
+                        $.each(Info, function (index, item) {
+                            $("#ScheduleInfoTab").append("<tr><td>" + item.Name + "</td><td>" + item.Text + "<input type='hidden' value='" + item.ID + "'/></td></tr>");
+                        })
+                        $("#SchTypeCount").html("");
+                        $("#AllInfoWindowDiv").window("center");
+                        $("#AllInfoWindowDiv").window("open");
+                    })
+                }
             }
         }
 
@@ -1087,9 +1148,10 @@
 
         //查看审核意见(总结报表用)
         function CheckYiJian(s) {
-            var schid = $(s).next().val();
+            var schid = $(s).next().val();//日程id
             
         }
+
 
 
         //查看审核查阅意见
@@ -1454,17 +1516,44 @@
             }
             //给予意见
             function JiYuYiJianBtn() {
-                YiYueBtn();//触发已阅
                 $("#JiYuYiJianDiv").window("open");
             }
             //已阅
             function YiYueBtn() {
-
+                var riqi = $("#RiQiBeiFenText").val();
+                var zxpersonStr = $("#ZXpersonID").val();
+                var zxr = zxpersonStr.replace("info", "");
+                $.post("/EverDayWork/YiYueBtnFunc", { "id": zxr,"time":riqi,"yesorno":true}, function (data) {
+                    if (data.ret == "ok") {
+                        $.messager.alert("提示","已阅成功！");
+                    }
+                    if (data.ret == "no") {
+                        $.messager.alert("提示", "已阅失败！");
+                    }
+                })
+            }
+            //提交给予意见
+            function OkToAddYiJian() {
+                var riqi = $("#RiQiBeiFenText").val();
+                var zxpersonStr = $("#ZXpersonID").val();
+                var zxr = zxpersonStr.replace("info", "");
+                var yj = $("#yijianID").val();
+                $.post("/EverDayWork/GeiYJBtnFunc", { "id": zxr, "time": riqi, "yesorno": true ,"yj":yj}, function (data) {
+                    if (data.ret == "ok") {
+                        cancel();
+                        $.messager.alert("提示", "给予意见成功！");
+                    }
+                    if (data.ret == "no") {
+                        $.messager.alert("提示", "操作失败！");
+                    }
+                })
             }
             //窗口取消
             function cancel() {
                 $("#JiYuYiJianDiv").window("close");
                 $("#yijianID").val("");
+                $("#ShenHeYJID").val("");
+                $("#ShenHeYJDiv").window("close");
             }
 
     </script>
@@ -1825,15 +1914,8 @@
                     <!--表头-->
                 </div>
                 <div>
-                    <table id="ScheduleInfoTab" border="1" style="margin-right:auto;margin-left:auto;padding:0px,5px;border-collapse:collapse">
-                        <tr id="FirstTrID">
-                            <td>创建人</td>
-                            <td>创建时间</td>
-                            <td>内容</td>
-                            <td>类型</td>
-                            <td>查看日程详细</td>
-                            <td>查看审核意见</td>
-                        </tr>
+                    <table id="ScheduleInfoTab" border="1" style="margin-right:auto;margin-left:auto;padding:0px,5px;border-collapse:collapse;text-align:center">
+                        
                     </table>
                 </div>
                 <div id="ScheduleTypeNumberDiv">
@@ -1845,6 +1927,7 @@
                 </div>
                 <div style="display:none">
                     <input type="text" id="RiQiBeiFenText" />
+                    <input type="text" id="ZXpersonID" />
                 </div>
             </div>
             <!------------------复核意见区域----------------------->
@@ -1870,6 +1953,14 @@
             <div style="padding:5px;text-align:center;">
                 <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="OkToAddYiJian()">确定</a>
                 <a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="cancel()">取消</a>
+            </div>
+        </div>
+
+        <!-------------------查看审核意见--------------------------->
+        <div id="ShenHeYJDiv" class="easyui-window" title="审核意见" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:230px">
+            <h3>意见：</h3>&nbsp;<textarea id="ShenHeYJID" style="width:201px;height:100px;resize:none"></textarea>
+            <div style="padding:5px;text-align:center;">
+                <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="cancel()">确定</a>
             </div>
         </div>
 

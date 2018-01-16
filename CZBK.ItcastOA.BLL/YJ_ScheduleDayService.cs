@@ -23,6 +23,7 @@ namespace CZBK.ItcastOA.BLL
             //true 对日程整体建议
             ysa.UpSdeDayID = ysdday.IFours?null:Addta.WriteUserID;
             ysa.TheSdeDayID = Addta.ID;
+            this.GetCurrentDbSession.YJ_ScheduleActionDal.AddEntity(ysa);
             return this.GetCurrentDbSession.SaveChanges();
         }
         #endregion
