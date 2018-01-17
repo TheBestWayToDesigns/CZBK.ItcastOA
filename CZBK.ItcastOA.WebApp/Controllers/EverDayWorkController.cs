@@ -1527,16 +1527,21 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //获取所有下级领导
         public ActionResult GetAllDownLeader()
         {
+            //获取当前登陆人员的所有下属信息
             List<Uidorname> list = GetAllDownUser();
+            //有下属信息
             List<LeaderFJ> leader = new List<LeaderFJ>();
+            //无下属信息，赋予上级信息
             List<LeaderFJ> BottomUser = new List<LeaderFJ>();
+            var Loads_ = ScheduleUserService.LoadEntities(x => x.Del == null);
             if (list != null && list[0] != null)
             {
                 foreach (var a in list)
                 {
-                    var rtmp = ScheduleUserService.LoadEntities(x => x.UpID == a.ID).DefaultIfEmpty().ToList();
+                    var rtmp = Loads_.Where(x => x.UpID == a.ID).DefaultIfEmpty().ToList();
                     if(rtmp!=null && rtmp[0] != null)
                     {
+                        //有下级进入方法
                         LeaderFJ lfj = new LeaderFJ();
                         lfj.ID = a.ID;
                         lfj.name = a.name;
@@ -1547,9 +1552,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                         LeaderFJ lfj = new LeaderFJ();
                         lfj.ID = a.ID;
                         lfj.name = a.name;
-                        lfj.DJ = 10;
+                        lfj.DJ = int.MaxValue;
                         lfj.SerchType = 1;
-                        var one = ScheduleUserService.LoadEntities(x => x.UserID == a.ID).FirstOrDefault();
+                        var one = Loads_.Where(x => x.UserID == a.ID).FirstOrDefault();
                         if(one != null)
                         {
                             lfj.UpID = one.UpID;
@@ -1575,7 +1580,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     lfj.ID = ID;
                     lfj.DJ = DJ;
                     lfj.name = name;
-                    var one = ScheduleUserService.LoadEntities(x => x.UserID == lfj.ID).FirstOrDefault();
+                    var one = Loads_.Where(x => x.UserID == lfj.ID).FirstOrDefault();
                     if(one != null && lfj.DJ != 1)
                     {
                         lfj.UpID = one.UpID;
@@ -1609,12 +1614,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             List<LeaderFJ> SYLeader = new List<LeaderFJ>();
             List<LeaderFJ> firstLeader = new List<LeaderFJ>();
-
+            var loadchens = ScheduleUserService.LoadEntities(x => x.Del == null).DefaultIfEmpty();
             foreach (var a in leader)
             {
                 if (a != null)
                 {
-                    var zaipanduan = ScheduleUserService.LoadEntities(x => x.UserID == a.ID && x.UpID == LoginUser.ID).DefaultIfEmpty().ToList();
+                    var zaipanduan = loadchens.Where(x => x.UserID == a.ID && x.UpID == LoginUser.ID).DefaultIfEmpty().ToList();
                     if (zaipanduan != null && zaipanduan[0] != null)
                     {
                         a.DJ = 1;
@@ -1624,8 +1629,27 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     }
                     else
                     {
-                        a.DJ = 10;
-                        SYLeader.Add(a);
+                        
+                        int Thisdj = 10;
+                        int? thisUpid = null;
+                        var Thispd = loadchens.Where(x => x.UserID == a.ID).DefaultIfEmpty().ToList();
+                        foreach (var aa in Thispd) {
+                            var ler = leader.Where(x => x.ID == aa.UpID).FirstOrDefault();
+                            
+                            Thisdj = ler!=null?ler.DJ + 1 : 10;
+                            thisUpid = ler != null ? ler.ID:null;
+                        }
+                        
+                        a.DJ = Thisdj;
+                        if (a.DJ == 10)
+                        {
+                            SYLeader.Add(a);
+                        }
+                        else
+                        {
+                            a.UpID = thisUpid;
+                            firstLeader.Add(a);
+                        }                        
                     }
                 }
                 else
@@ -1878,44 +1902,58 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        //已阅
+        //获取点击已阅人员
         public ActionResult YiYueBtnFunc()
         {
-            var id = Convert.ToInt32(Request["id"]);
             string time = Request["time"];
             time = time.Replace("年", "-");
             time = time.Replace("月", "-");
             time = time.Replace("日", "");
             DateTime dt = Convert.ToDateTime(time);
-            bool yesorno = Convert.ToBoolean(Request["yesorno"]);
-            YjsdayClass yc = new YjsdayClass();
-            yc.YesOrNo = true;
-            yc.Ysdy.ISeeAddtime = DateTime.Now;
-            yc.Ysdy.SchenuleTime = dt;
-            yc.Ysdy.ISee = true;
-            yc.Ysdy.YJUserinfoID = LoginUser.ID;
-            yc.IFours = yesorno;
-            if (YJ_ScheduleDayService.NewAddSEDDAY(yc))
-            {
-                return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(new { ret = "no" }, JsonRequestBehavior.AllowGet);
-            }
+            string rtr = YJ_ScheduleDayService.GetReadPerson(dt,0);
+            var ThisDat= YJ_ScheduleDayService.LoadEntities(x => x.DEL == 0 && x.SchenuleTime == dt&&x.YJText!=null).DefaultIfEmpty();
+            var temp = from a in ThisDat
+                       select new {
+                           a.ID,
+                           a.TextID,
+                           a.AddYJtime,
+                           a.ISee,
+                           a.ISeeAddtime,
+                           a.SchenuleTime,
+                           a.SeeUserInfoList,
+                           a.WriteUserID,
+                           a.YJText,
+                           YJUserinfoIDname=a.UserInfo1.PerSonName,
+                           a.YJUserinfoID
+                       };
+            temp = ThisDat.ToList()[0] == null ? null: temp;
+           return Json(new { rtr= rtr,temp=temp } , JsonRequestBehavior.AllowGet); 
         }
 
         //给予意见
         public ActionResult GeiYJBtnFunc()
         {
-            var id = Convert.ToInt32(Request["id"]);
+            int? id = Convert.ToInt32(Request["id"]);
+            if (id != 0) {
+                int? thisid = YJ_ScheduleDayService.LoadEntities(X => X.ID == id).FirstOrDefault().YJUserinfoID;
+                if (thisid == LoginUser.ID)
+                {
+                    return Json(new { ret = "Isdistc" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            
+            bool yesorno = Convert.ToBoolean(Request["yesorno"]);
+            string yj = Request["yj"];
+            //写入新信息之前判断 不可重复给予建议
+            int count= YJ_ScheduleActionService.LoadEntities(x => x.TheSdeDayID == LoginUser.ID && x.UpSdeDayID == null).Count();
+            if (count > 0)
+            { return Json(new { ret = "distinctJY" }, JsonRequestBehavior.AllowGet); }
+
             string time = Request["time"];
             time = time.Replace("年", "-");
             time = time.Replace("月", "-");
             time = time.Replace("日", "");
-            DateTime dt = Convert.ToDateTime(time);
-            bool yesorno = Convert.ToBoolean(Request["yesorno"]);
-            string yj = Request["yj"];
+            DateTime dt = Convert.ToDateTime(time);           
             YjsdayClass yc = new YjsdayClass();
             yc.YesOrNo = true;
             YJ_ScheduleDay ysdy = new YJ_ScheduleDay();
@@ -1923,9 +1961,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             ysdy.SchenuleTime = dt;
             ysdy.ISee = true;
             ysdy.YJUserinfoID = LoginUser.ID;
-            ysdy.YJText = yj;
+            ysdy.YJText = yj.Length>0?yj:null;
+            ysdy.ISeeAddtime = DateTime.Now;
+            ysdy.WriteUserID = id==0?null:id;
             yc.Ysdy = ysdy;
             yc.IFours = yesorno;
+            
             if (YJ_ScheduleDayService.NewAddSEDDAY(yc))
             {
                 return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);

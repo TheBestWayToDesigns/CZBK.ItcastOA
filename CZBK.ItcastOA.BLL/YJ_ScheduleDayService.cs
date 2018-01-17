@@ -15,12 +15,14 @@ namespace CZBK.ItcastOA.BLL
         public bool NewAddSEDDAY(YjsdayClass ysdday)
         {
             ysdday.Ysdy.DEL = 0;
-            var textid = GetCurrentDbSession.YJ_ScheduleDayDal.LoadEntities(x => x.DEL == 0).Max(m => m.TextID);
-            ysdday.Ysdy.TextID = textid != null ? textid + 1 : 0;
+
+            var textid = GetCurrentDbSession.YJ_ScheduleDayDal.LoadEntities(x => x.DEL == 0&&x.SchenuleTime==ysdday.Ysdy.SchenuleTime).Max(m => m.TextID);
+            ysdday.Ysdy.TextID = !ysdday.IFours ?null: textid != null ? textid + 1 : 0;
             
             var Addta = this.GetCurrentDbSession.YJ_ScheduleDayDal.AddEntity(ysdday.Ysdy);
             YJ_ScheduleAction ysa = new YJ_ScheduleAction();
             //true 对日程整体建议
+
             ysa.UpSdeDayID = ysdday.IFours?null:Addta.WriteUserID;
             ysa.TheSdeDayID = Addta.ID;
             this.GetCurrentDbSession.YJ_ScheduleActionDal.AddEntity(ysa);
@@ -37,7 +39,11 @@ namespace CZBK.ItcastOA.BLL
                 var disct = temp.GroupBy(x => x.YJUserinfoID).Where(m => m.Count() > 0).ToList();
                 foreach (var str in disct)
                 {
-                    retStr = retStr + str.Key + ",";
+                    if (str.Key == null)
+                    { continue; }
+                    int id = (int)str.Key;
+                    
+                    retStr = retStr + this.GetCurrentDbSession.UserInfoDal.LoadEntities(x => x.ID == id).FirstOrDefault().PerSonName + ",";
                 }
             }
             return retStr;
