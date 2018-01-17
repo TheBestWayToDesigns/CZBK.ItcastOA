@@ -59,7 +59,9 @@
                 onChange: function () {
                     var BMID = $("#BMSTUInput").combobox("getValue");
                     $("#STUInput").combobox("loadData", {});
-                    $("#STUInput").combobox("setValue", "");
+                    try {
+                        $("#STUInput").combobox("setValue", "");
+                    } catch (e) { }
                     $("#STUInput").combobox("reload", "/ShareFileOrNotice/GetShareToUser?BMID=" + BMID);
                 }
             })
@@ -68,7 +70,9 @@
                 onChange: function () {
                     var BMID = $("#BMNUInput").combobox("getValue");
                     $("#STUNInput").combobox("loadData", {});
-                    $("#STUNInput").combobox("setValue", "");
+                    try{
+                        $("#STUNInput").combobox("setValue", "");
+                    }catch(e){}
                     $("#STUNInput").combobox("reload", "/ShareFileOrNotice/GetShareToUser?BMID=" + BMID);
                 }
             })
@@ -107,14 +111,19 @@
             });
 
             $("#AddNoticeBtn").click(function () {
+                $("#NoticestrID").val("");
+                $("#BeiZhuArea").val("");
+                $("#ShowAddBMOrUser").val("");
                 $("#BMDIV").css("display", "none");
                 $("#ADDBUMENDIV").css("display", "none");
                 $("#BMUSERDIV").css("display", "none");
-                $("#BMNUInput").combobox("setValue", "");
-                $("#STUNInput").combobox("setValue", "");
-                $("#NoticestrID").val("");
-                $("#BeiZhuArea").val("");
                 $("#AddShareFileTab input[type='radio']").removeAttr('checked');
+                try{
+                    $("#BMNUInput").combobox("setValue", "");
+                    $("#STUNInput").combobox("setValue", "");
+                }catch(e){
+
+                }
                 AddANotice();
             });
 
@@ -124,9 +133,13 @@
                 $("#BMDIV").css("display", "none");
                 $("#ADDBUMENDIV").css("display", "none");
                 $("#BMUSERDIV").css("display", "none");
-                $("#BMNUInput").combobox("setValue", "");
-                $("#STUNInput").combobox("setValue", "");
                 $("#NoticestrID").val("");
+                try {
+                    $("#BMNUInput").combobox("setValue", "");
+                    $("#STUNInput").combobox("setValue", "");
+                } catch (e) {
+
+                }
                 $.post("/ShareFileOrNotice/GetAllUserID", {}, function (listID) {
                     $("#NoticestrID").val(listID);
                 });
@@ -139,9 +152,13 @@
                 $("#BMDIV").css("display", "block");
                 $("#ADDBUMENDIV").css("display", "block");
                 $("#BMUSERDIV").css("display", "none");
-                $("#BMNUInput").combobox("setValue", "");
-                $("#STUNInput").combobox("setValue", "");
                 $("#NoticestrID").val("");
+                try {
+                    $("#BMNUInput").combobox("setValue", "");
+                    $("#STUNInput").combobox("setValue", "");
+                } catch (e) {
+
+                }
             });
 
             $("#ByOneByOne").click(function () {
@@ -150,9 +167,13 @@
                 $("#BMDIV").css("display", "block");
                 $("#ADDBUMENDIV").css("display", "none");
                 $("#BMUSERDIV").css("display", "block");
-                $("#BMNUInput").combobox("setValue", "");
-                $("#STUNInput").combobox("setValue", "");
                 $("#NoticestrID").val("");
+                try {
+                    $("#BMNUInput").combobox("setValue", "");
+                    $("#STUNInput").combobox("setValue", "");
+                } catch (e) {
+
+                }
             });
         });
 
@@ -317,6 +338,7 @@
             var row = $('#tt').datagrid('getSelected');
             $.post("/ShareFileOrNotice/GetNoticeAllText", { "id": row.ID }, function (noticeText) {
                 $("#AllNoticeText").val(noticeText);
+                document.getElementById("AllNoticeText").setAttribute("readonly",true);
             });
             $("#CheckAllDIV").css("display", "block");
             $('#CheckAllDIV').dialog({
@@ -433,7 +455,6 @@
                         $.post("/ShareFileOrNotice/DelLaJiFile", { "urlstr": urlstr }, function (data) { })
                         remval();
                         $('#AddShareFileDIV').dialog('close');
-                        $("#BeiFenFileUrlID").val("")
                     }
                 }], onClose: function () {
                     remval();
@@ -446,16 +467,18 @@
                 $("#ModelFInput").combobox("setValue", "");
                 $("#BMSTUInput").combobox("setValue", "");
                 $("#STUInput").combobox("setValue", "");
-                $("#BeiZhuId").val("");
-                $("#uploadShareFileID").val("");
-                $("#fileUrlID").val("");
-                $("#STUstrID").val("");
-                $("#ShowAddUsers").val("");
-                $("#BeiZhuId").val("");
-                $("#AddShareFileDIV input[type='radio']").removeAttr('checked');
             }
             catch (e) {
             }
+            $("#BeiZhuId").val("");
+            $("#uploadShareFileID").val("");
+            $("#fileUrlID").val("");
+            $("#STUstrID").val("");
+            $("#ShowAddUsers").val("");
+            $("#BeiZhuId").val("");
+            $("#AddShareFileDIV input[type='radio']").removeAttr('checked');
+            $("#fileUrlID").val("");
+            $("#BeiFenFileUrlID").val("");
         }
         //添加公告通知
         function AddANotice() {
@@ -503,19 +526,23 @@
                 }, {
                     text: '取消',
                     handler: function () {
-                        $("#BMNUInput").combobox("setValue", "");
                         $("#BeiZhuArea").val("");
                         $("#NoticeTextID").val("");
                         $("#STUNInput").val("");
                         $("#NoticestrID").val("");
                         $('#AddNoticeDIV').dialog('close');
+                        try {
+                            $("#BMNUInput").combobox("setValue", "");
+                        } catch (e) { }
                     }
                 }], onClose: function () {
-                    $("#BMNUInput").combobox("setValue", "");
                     $("#BeiZhuArea").val("");
                     $("#NoticeTextID").val("");
                     $("#STUNInput").val("");
                     $("#NoticestrID").val("");
+                    try {
+                        $("#BMNUInput").combobox("setValue", "");
+                    } catch (e) { }
                 }
             });
         }
@@ -769,6 +796,7 @@
                     var row = $('#tt').datagrid('getSelected');
                     $.post("/ShareFileOrNotice/DelShareFile", { "id": row.ID }, function (data) {
                         if (data.ret == "ok") {
+                            cleanDatagrid();
                             $('#tt').datagrid("reload");
                         }
                         else {
@@ -863,7 +891,7 @@
     <div id="CheckAllDIV">
         <table>
             <tr><td><h1>通知全部内容</h1></td></tr>
-            <tr><td><textarea id="AllNoticeText" style="width:475px;height:320px;font-size:15px"></textarea></td></tr>
+            <tr><td><textarea id="AllNoticeText" style="width:475px;height:320px;font-size:15px;resize:none"></textarea></td></tr>
         </table>
     </div>
 
@@ -1016,7 +1044,7 @@
                 </div>
                 <div>
                     <b><input type="hidden" name="NoticestrName" id="NoticestrID" /></b>
-                    <b><textarea id="ShowAddBMOrUser" style="width:300px;height:30px;display:none"></textarea></b>
+                    <b><textarea id="ShowAddBMOrUser" style="width:300px;height:30px;display:none;resize:none"></textarea></b>
                 </div>
             </div>
             <table>

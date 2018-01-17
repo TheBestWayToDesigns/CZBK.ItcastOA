@@ -352,10 +352,10 @@
             if (item.text == "个人日总结") {
                 return;
             } else if (item.text == "部门日总结") {
-
+                $("#infoTopText").html("<b style='font-size:20px'>" + $("#RiQiBeiFenText").val() + "工作表总结</b>");
                 $.post("/EverDayWork/GetScheduleInfoForTab", { "anhao": 9, "time": $("#RiQiBeiFenText").val() }, function (Info) {
                     if (Info.lsift == undefined) {
-                        $.messager.alert("ts","无数据！","errer")
+                        $.messager.alert("提示","无数据！","errer")
                         $("#AllInfoWindowDiv").window("close");
                         return;
                     }
@@ -1277,6 +1277,11 @@
             $("#AddExamineScheduleDiv").window('close');
             $("#CheckScheduleInfoDiv").window('close');
             $("#SeeTextReadBakDiv").window("close");
+            $("#JiYuYiJianDiv").window("close");
+            $("#ShenHeYJDiv").window("close");
+
+            $("#yijianID").val("");
+            $("#ShenHeYJID").val("");
             $(".SmallWindow textarea").val("");
             $(".SmallWindow input").val("");
         }
@@ -1549,13 +1554,6 @@
                         $.messager.alert("提示", "操作失败！");
                     }
                 })
-            }
-            //窗口取消
-            function cancel() {
-                $("#JiYuYiJianDiv").window("close");
-                $("#yijianID").val("");
-                $("#ShenHeYJID").val("");
-                $("#ShenHeYJDiv").window("close");
             }
 
     </script>
@@ -1842,7 +1840,7 @@
                 </table>
                 <div style="padding:5px;text-align:center;">
                     <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="OkToAddExamineSchedule()">确定</a>
-                    <a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="cancel()">取消</a>
+                    <a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="cancel()" >取消</a>
                 </div>
             </form>
         }

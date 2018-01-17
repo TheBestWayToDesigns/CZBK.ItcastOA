@@ -451,6 +451,25 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 if (temp.ShareUser == uid) {
                     if (ShareFileOrNoticeService.DeleteEntity(temp))
                     {
+                        int type = temp.TypeID;
+                        if (type == 1)
+                        {
+                            string[] str = temp.FileURL.Split(',');
+                            var list = str.ToList();
+                            if (list != null)
+                            {
+                                foreach (var a in list)
+                                {
+                                    if (a != "")
+                                    {
+                                        if (Directory.Exists(Path.GetDirectoryName(Request.MapPath(a))))
+                                        {
+                                            System.IO.File.Delete(Request.MapPath(a));
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
                     }
                     else
