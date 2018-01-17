@@ -37,8 +37,14 @@
         });
 
         var ButtomLeaderDJ = 0;
-
+        //给予意见 分类
+        var JYbool;
+        var JYid;
         $(document).ready(function () {
+           
+        })
+        //读取下来分类
+        function loadmenu() {
             $('#calendarSmallDiv').menu('appendItem', {
                 id: "info1",
                 text: '个人日总结',
@@ -50,6 +56,7 @@
                 iconCls: 'icon-blank'
             });
             $.post("/EverDayWork/GetAllDownLeader", {}, function (data) {
+                alert(1)
                 var a = 0;
                 var b = 0;
                 for (var i = 0; i < data.length; i++) {
@@ -61,10 +68,10 @@
                         b = c;
                     }
                 }
-                ButtomLeaderDJ = b-1;
+                ButtomLeaderDJ = b - 1;
                 for (var k = 1; k <= a; k++) {
                     for (var i = 0; i < data.length; i++) {
-                        if(k==1){
+                        if (k == 1) {
                             if (data[i].DJ == 1) {
                                 if (data[i].SerchType == 1) {
                                     $('#calendarSmallDiv').menu('appendItem', {
@@ -91,11 +98,11 @@
                                         text: data[i].name,
                                         iconCls: 'icon-blank'
                                     });
-                                } else {    
+                                } else {
                                     $('#calendarSmallDiv').menu('appendItem', {
-                                        parent: $('#calendarSmallDiv').menu('getItem', $('#info'+data[i].UpID)[0]).target,
+                                        parent: $('#calendarSmallDiv').menu('getItem', $('#info' + data[i].UpID)[0]).target,
                                         id: 'info' + data[i].ID,
-                                        text: data[i].name + "(" + data[i].DJ+ ")",
+                                        text: data[i].name + "(" + data[i].DJ + ")",
                                         iconCls: 'icon-blank'
                                     });
                                 }
@@ -104,9 +111,8 @@
                     }
                 }
             })
-        })
-
-
+        }
+        
         function show_X(event) {
             x = event.clientX;
             return x;
@@ -238,6 +244,7 @@
                     $("#BMInfoShowDiv").css("display", "none");
                     $("#SearchboxDiv").css("display", "none");
                     loadCalendar();
+                    loadmenu();
                 }
             })
             $("#AddScheduleBtn").click(function () {
@@ -345,14 +352,26 @@
                     loadExamineSchedule(pars);
                 }
             })
+            //关闭信息总汇触发事件
+            $("#AllInfoWindowDiv").window({
+                onClose: function () {
+                    $("#weritPerson").html("");
+                    $(".appedDIV").remove();
+                }
+            })
         });
 
         //菜单单击事件
         function menuHandler(item) {
+            $("#AllInfoWindowDiv").window({
+                width: $(document).width() / 1.2,
+                height:$(document).height() / 1.2
+            });
+            $("#infoTopText").html("<b style='font-size:20px'>" + $("#RiQiBeiFenText").val() + "工作表总结</b>");
             if (item.text == "个人日总结") {
                 return;
             } else if (item.text == "部门日总结") {
-
+                GetSeePerson();
                 $.post("/EverDayWork/GetScheduleInfoForTab", { "anhao": 9, "time": $("#RiQiBeiFenText").val() }, function (Info) {
                     if (Info.lsift == undefined) {
                         $.messager.alert("ts","无数据！","errer")
@@ -373,10 +392,10 @@
                 return;
             }
             $("#FirstTrID").nextAll().remove();
-            $("#ScheduleInfoTab").html("");
-            $("#infoTopText").html("<b style='font-size:20px'>" + $("#RiQiBeiFenText").val() + "工作表总结</b>");
+            $("#ScheduleInfoTab").html("");           
             $("#ZXPerson").html("<b>撰写人：</b>" + item.text);
             $("#ZXpersonID").val(item.id);
+            
             if ((item.id).indexOf("info") < 0) {
                 $("#ScheduleInfoTab").html("");
                 $.post("/EverDayWork/GetScheduleInfoForTab", { "id": item.id, "time": $("#RiQiBeiFenText").val() }, function (Info) {
@@ -405,8 +424,10 @@
                 } else {
                     var DJ = 1;
                 }
+               
                 if (DJ >= ButtomLeaderDJ) {
                     $.post("/EverDayWork/GetScheduleInfoForTab", { "id": item.id, "time": $("#RiQiBeiFenText").val() }, function (Info) {
+
                         if (Info.lsift == undefined) {
                             $("#AllInfoWindowDiv").window("close");
                             return;
@@ -427,7 +448,7 @@
                         if (Info == undefined) {
                             return;
                         }
-                        $("#ScheduleInfoTab").html("<tr><td>下属领导</td><td>日总结信息</td></tr>")
+                        $("#ScheduleInfoTab").html("<tr><td>人员名称</td><td>日总结信息</td></tr>")
                         $.each(Info, function (index, item) {
                             $("#ScheduleInfoTab").append("<tr><td>" + item.Name + "</td><td>" + item.Text + "<input type='hidden' value='" + item.ID + "'/></td></tr>");
                         })
@@ -437,6 +458,7 @@
                     })
                 }
             }
+            
         }
 
 
@@ -693,8 +715,10 @@
 
         //加载大日历表筛选页面
         function loadCalendar() {
+           
             $("#TTdiv").css("display", "none");
             var mydate = new Date();
+           
             $("#calendarDiv").calendar({
                 fit:true,
                 border: false,
@@ -706,7 +730,7 @@
                 month: mydate.getMonth()+1,
                 current: new Date(mydate.getYear(), mydate.getMonth(), mydate.getDay()),
                 onSelect: function (date) {
-                    $("#RiQiBeiFenText").val(date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate()+"日");
+                    $("#RiQiBeiFenText").val(date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日");
                     var x = show_X(event);
                     var y = show_Y(event);
                     $('#calendarSmallDiv').menu('show', {
@@ -715,6 +739,7 @@
                     });
                 }
             });
+          
             $("#calendarDiv").css("display", "block");
         }
 
@@ -1517,39 +1542,72 @@
                 });
             }
             //给予意见
-            function JiYuYiJianBtn() {
+            function JiYuYiJianBtn(obj, id) {                
+                JYid =id==undefined?0: id;
+                JYbool = obj == 0 ? true : false;
                 $("#JiYuYiJianDiv").window("open");
             }
             //已阅
             function YiYueBtn() {
-                var riqi = $("#RiQiBeiFenText").val();
-                var zxpersonStr = $("#ZXpersonID").val();
-                var zxr = zxpersonStr.replace("info", "");
-                $.post("/EverDayWork/YiYueBtnFunc", { "id": zxr,"time":riqi,"yesorno":true}, function (data) {
-                    if (data.ret == "ok") {
-                        $.messager.alert("提示","已阅成功！");
-                    }
-                    if (data.ret == "no") {
-                        $.messager.alert("提示", "已阅失败！");
-                    }
-                })
+               
             }
             //提交给予意见
             function OkToAddYiJian() {
                 var riqi = $("#RiQiBeiFenText").val();
-                var zxpersonStr = $("#ZXpersonID").val();
-                var zxr = zxpersonStr.replace("info", "");
                 var yj = $("#yijianID").val();
-                $.post("/EverDayWork/GeiYJBtnFunc", { "id": zxr, "time": riqi, "yesorno": true ,"yj":yj}, function (data) {
+                $.post("/EverDayWork/GeiYJBtnFunc", { "id": JYid, "time": riqi, "yesorno": JYbool, "yj": yj }, function (data) {
+                    if (data.ret == "Isdistc") {
+                        $.messager.alert("提示", "不可给予自己反馈建议！");
+                    }
                     if (data.ret == "ok") {
                         cancel();
-                        $.messager.alert("提示", "给予意见成功！");
+                        GetSeePerson();
                     }
                     if (data.ret == "no") {
                         $.messager.alert("提示", "操作失败！");
                     }
+                    if (data.ret == "distinctJY") {
+                        $.messager.alert("提示", "不可重复提交信息！");
+                    }
                 })
             }
+        //获取点击已阅人员
+            function GetSeePerson() {
+                $(".appedDIV").remove();
+                var riqi = $("#RiQiBeiFenText").val();
+                $.post("/EverDayWork/YiYueBtnFunc", { "time": riqi, }, function (dat) {
+                  
+                    if (dat.rtr == undefined)
+                    {
+                        return;
+                    }
+                    if (dat.rtr.length > 2)
+                    {
+                        $("#weritPerson").html("");
+                        $("#weritPerson").html(dat.rtr);
+                    }
+                    if (dat.temp == null) {
+                        return;
+                    }
+                    if (dat.temp.length > 0) {
+                        $.each(dat.temp, function (index, val) {                            
+                            var divA = "<div title=\" " + val["YJUserinfoIDname"] + " \" class='easyui-layout appedDIV'   style='height:250px; '>  <div id='p1' data-options=\" region:'west' \"   title='" + val["TextID"] + "' style='width:220px;padding:10px'>";
+
+                            var span = " <span>人员名称:" + val["YJUserinfoIDname"] + "</span></br><span>时间:" + ChangeDateFormat(val["AddYJtime"]) + "</span></br>" +
+                                "<span><a href=\"javascript:OkToAddYiJian()\" class=\"l-btn\" style='margin:0px 5px;padding:2px 8px '>已阅</a></span><span><a href=\"javascript:JiYuYiJianBtn(1," + val["ID"] + ")\" class=\"l-btn\" style='margin:0px 5px;padding:2px 8px '>反馈</a></span>"
+
+                            var divB = "</div> <div id='p2' data-options=\"region:'center'\" title=\"Center\" style=\"padding:5px;background:#eee;\">" + val["YJText"] + "</div></div>";
+
+                            $("#MasessAPPED").append(divA + span + divB);
+                            $(".appedDIV").layout({
+                            });
+                        })
+                      
+                    }
+                    
+                });
+            }
+            
             //窗口取消
             function cancel() {
                 $("#JiYuYiJianDiv").window("close");
@@ -1565,7 +1623,7 @@
     <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink " style="width:150px; padding:8px;">
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuSchedule" style="width:98%;margin:10px auto">日程信息</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuDownUser" style="width:98%;margin:10px auto">下级日程信息</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuExamineSchedule" style="width:98%;margin:10px auto">中层领导已审核的日程</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuExamineSchedule" style="width:98%;margin:10px auto">中层审核日程</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuAllScheduleInfo" style="width:98%;margin:10px auto">总结报表</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuScheduleType" style="width:98%;margin:10px auto">日程状态</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuFileType" style="width:98%;margin:10px auto">管理上传文件类型</a>
@@ -1909,8 +1967,8 @@
     </div>
 
     <!-------------------信息汇总窗口区域--------------------------->
-    <div id="AllInfoWindowDiv" class="easyui-window" title="信息汇总" closed="true" collapsible="false" minimizable="false" maximizable="false" style="width:800px;height:auto;padding:5px;">
-        <div class="easyui-accordion" data-options="multiple:true">
+    <div id="AllInfoWindowDiv" class="easyui-window" title="信息汇总" closed="true" collapsible="false" minimizable="false" maximizable="false" style="padding:5px;">
+        <div class="easyui-accordion" data-options="multiple:true" id="MasessAPPED">
             <div>
                 <div id="infoTopText" style="text-align:center">
                     <!--表头-->
@@ -1923,9 +1981,12 @@
                 <div id="ScheduleTypeNumberDiv">
                     <div id="ZXPerson" style="width:15%;float:right"></div>
                     <div id="SchTypeCount" style="width:85%"></div>
+                    <div id="YiYuePersonsID"  style="height:30px;">
+                        <b style="font-size:20px">已阅人员：</b><b id="weritPerson"></b>
+                    </div>
                 </div>
                 <div style="text-align:right">
-                    <a href="javascript:YiYueBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>已阅</a><a href="javascript:JiYuYiJianBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>给予意见</a>
+                    <a href="javascript:OkToAddYiJian()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>已阅</a><a href="javascript:JiYuYiJianBtn(0)" class="l-btn" style='margin:0px 5px;padding:2px 8px '>给予意见</a>
                 </div>
                 <div style="display:none">
                     <input type="text" id="RiQiBeiFenText" />
@@ -1933,18 +1994,8 @@
                 </div>
             </div>
             <!------------------复核意见区域----------------------->
-            <div title="复核意见区" id="FuHeYiJianDiv" class="easyui-layout" style="height:200px">
-                <div id="YiYuePersonsID" data-options="region:'north',collapsible:false" style="height:30px;">
-                    <b style="font-size:20px">已阅人员：</b>
-                </div>
-                <div id="InfoShowDiv" data-options="region:'west',collapsible:false" style="width:100px;">
-                    <label>人员名称:</label>
-                    <label>时间:</label>
-                    <label><a href="javascript:YiYueBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>已阅</a></label>
-                    <label><a href="javascript:JiYuYiJianBtn()" class="l-btn" style='margin:0px 5px;padding:2px 8px '>反馈</a></label>
-                </div>
-                <div id="FuHeYJDivID" data-options="region:'center'" style="padding:5px;background:#eee;"></div>
-            </div>
+            <div title="复核意见区" class="easyui-layout" data-options="collapsible:false" style=""></div>
+           
         </div>
     </div>
 
