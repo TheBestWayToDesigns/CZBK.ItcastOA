@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="38639b506e3a4aa591ee5f325d6e102d" Name="关系图1" ZoomLevel="34" ShowGrid="false" SnapToGrid="false">
+      <Diagram DiagramId="38639b506e3a4aa591ee5f325d6e102d" Name="关系图1" ZoomLevel="74" ShowGrid="false" SnapToGrid="false">
         <EntityTypeShape EntityType="OAModel.ActionInfo" Width="1.5" PointX="4.2151268643808839" PointY="0.68115941700352467" />
         <EntityTypeShape EntityType="OAModel.Department" Width="1.5" PointX="6.268568933213146" PointY="0.771739125505287" />
         <EntityTypeShape EntityType="OAModel.R_UserInfo_ActionInfo" Width="2.625" PointX="11.046568520461678" PointY="3.5306372545797045" />
@@ -101,7 +101,6 @@
         <AssociationConnector Association="OAModel.FK_ExamineSchedule_UserInfo" />
         <EntityTypeShape EntityType="OAModel.YJ_ScheduleAction" Width="1.5" PointX="25.806372414316204" PointY="8.1429969624604386" />
         <EntityTypeShape EntityType="OAModel.YJ_ScheduleDay" Width="1.5" PointX="23.556372414316204" PointY="7.2834083394135636" />
-        <AssociationConnector Association="OAModel.FK_YJ_ScheduleDay_Writeuserid_Userinfo" />
         <AssociationConnector Association="OAModel.FK_YJ_ScheduleDay_yjuserid_userinfo" />
         <AssociationConnector Association="OAModel.FK_YJ_ScheduleAction_thesdeday" />
         <AssociationConnector Association="OAModel.FK_YJ_ScheduleAction_UPSdeday" />

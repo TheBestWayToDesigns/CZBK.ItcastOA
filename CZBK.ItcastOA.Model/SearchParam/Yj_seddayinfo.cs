@@ -15,6 +15,7 @@ namespace CZBK.ItcastOA.Model.SearchParam
         public long PersonID { get; set; }
         public long DataID { get; set; }
         public bool YesOrNo { get; set; }
+        public bool NewAdditem { get; set; }
 
       
 

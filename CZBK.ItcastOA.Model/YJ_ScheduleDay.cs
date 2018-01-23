@@ -22,7 +22,7 @@ namespace CZBK.ItcastOA.Model
     
         public long ID { get; set; }
         public Nullable<System.DateTime> SchenuleTime { get; set; }
-        public Nullable<int> WriteUserID { get; set; }
+        public Nullable<long> WriteUserID { get; set; }
         public Nullable<int> TextID { get; set; }
         public string YJText { get; set; }
         public Nullable<int> YJUserinfoID { get; set; }
@@ -32,7 +32,6 @@ namespace CZBK.ItcastOA.Model
         public Nullable<short> DEL { get; set; }
         public string SeeUserInfoList { get; set; }
     
-        public virtual UserInfo UserInfo { get; set; }
         public virtual UserInfo UserInfo1 { get; set; }
         public virtual ICollection<YJ_ScheduleAction> YJ_ScheduleAction { get; set; }
         public virtual ICollection<YJ_ScheduleAction> YJ_ScheduleAction1 { get; set; }

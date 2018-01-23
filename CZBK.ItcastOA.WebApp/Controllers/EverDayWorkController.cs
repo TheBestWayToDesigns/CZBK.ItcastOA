@@ -567,13 +567,14 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             var textReadBak = Request["TextReadBak"];
             var id = Convert.ToInt64(Request["ReviewScheduleID"]);
+            var tablerows = Request["tablerows"].ToString();
             var temp = ScheduleService.LoadEntities(x => x.ID == id).FirstOrDefault();
             var user = UserInfoService.LoadEntities(x => x.ID == LoginUser.ID).FirstOrDefault();
             temp.TextReadUser = LoginUser.ID;
             temp.TextReadBak = textReadBak;
             temp.TextReadTime = DateTime.Now;
             ScheduleService.EditEntity(temp);
-            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+            return Json(new { ret = "ok" , trows = tablerows,text=textReadBak }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -1492,6 +1493,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public void AgainAndAgain(List<LeaderFJ> listLFJ, List<LeaderFJ> UpYiJiLeader)
         {
             List<LeaderFJ> CiJiLeader = new List<LeaderFJ>();
+          
             foreach (var a in UpYiJiLeader)
             {
                 var temp = ScheduleUserService.LoadEntities(x => x.UpID == a.ID).DefaultIfEmpty().ToList();
@@ -1534,45 +1536,18 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             //无下属信息，赋予上级信息
             List<LeaderFJ> BottomUser = new List<LeaderFJ>();
             var Loads_ = ScheduleUserService.LoadEntities(x => x.Del == null);
-            if (list != null && list[0] != null)
-            {
-                foreach (var a in list)
-                {
-                    var rtmp = Loads_.Where(x => x.UpID == a.ID).DefaultIfEmpty().ToList();
-                    if(rtmp!=null && rtmp[0] != null)
-                    {
-                        //有下级进入方法
-                        LeaderFJ lfj = new LeaderFJ();
-                        lfj.ID = a.ID;
-                        lfj.name = a.name;
-                        lfj.DJ = 0;
-                        leader.Add(lfj);
-                    }else
-                    {
-                        LeaderFJ lfj = new LeaderFJ();
-                        lfj.ID = a.ID;
-                        lfj.name = a.name;
-                        lfj.DJ = int.MaxValue;
-                        lfj.SerchType = 1;
-                        var one = Loads_.Where(x => x.UserID == a.ID).FirstOrDefault();
-                        if(one != null)
-                        {
-                            lfj.UpID = one.UpID;
-                        }
-                        BottomUser.Add(lfj);
-                    }
-                }
-            }
+            GetUpDownUserID(list, leader, BottomUser, Loads_);
+
             if (list != null && list[0] != null)
             {
 
-                List<LeaderFJ> SYLeader= new List<LeaderFJ>();
+                List<LeaderFJ> SYLeader = new List<LeaderFJ>();
                 SYLeader = GetVoidLeader(leader, BottomUser).ToList();
                 List<LeaderFJ> new1 = new List<LeaderFJ>();
                 foreach (var a in SYLeader)
                 {
-                    int? ID= a.ID;
-                    int DJ=a.DJ;
+                    int? ID = a.ID;
+                    int DJ = a.DJ;
                     string name = a.name;
                     int SerchType = a.SerchType;
                     int? UpID = a.UpID;
@@ -1581,7 +1556,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     lfj.DJ = DJ;
                     lfj.name = name;
                     var one = Loads_.Where(x => x.UserID == lfj.ID).FirstOrDefault();
-                    if(one != null && lfj.DJ != 1)
+                    if (one != null && lfj.DJ != 1)
                     {
                         lfj.UpID = one.UpID;
                     }
@@ -1593,9 +1568,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     new1.Add(lfj);
                 }
                 new1.AddRange(SYLeader);
-                if(new1.Count<1 || new1[0] == null)
+                if (new1.Count < 1 || new1[0] == null)
                 {
-                    foreach(var a in BottomUser)
+                    foreach (var a in BottomUser)
                     {
                         a.DJ = 1;
                         a.UpID = 1;
@@ -1607,6 +1582,47 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             else
             {
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取下属信息 分类方法
+        /// </summary>
+        /// <param name="list">所有下属信息</param>
+        /// <param name="leader">返回有下属的ID</param>
+        /// <param name="BottomUser">底层ID</param>
+        /// <param name="Loads_"></param>
+        private static void GetUpDownUserID(List<Uidorname> list, List<LeaderFJ> leader, List<LeaderFJ> BottomUser, IQueryable<ScheduleUser> Loads_)
+        {
+            if (list != null && list[0] != null)
+            {
+                foreach (var a in list)
+                {
+                    var rtmp = Loads_.Where(x => x.UpID == a.ID).DefaultIfEmpty().ToList();
+                    if (rtmp != null && rtmp[0] != null)
+                    {
+                        //有下级进入方法
+                        LeaderFJ lfj = new LeaderFJ();
+                        lfj.ID = a.ID;
+                        lfj.name = a.name;
+                        lfj.DJ = 0;
+                        leader.Add(lfj);
+                    }
+                    else
+                    {
+                        LeaderFJ lfj = new LeaderFJ();
+                        lfj.ID = a.ID;
+                        lfj.name = a.name;
+                        lfj.DJ = 10;
+                        lfj.SerchType = 1;
+                        var one = Loads_.Where(x => x.UserID == a.ID).FirstOrDefault();
+                        if (one != null)
+                        {
+                            lfj.UpID = one.UpID;
+                        }
+                        BottomUser.Add(lfj);
+                    }
+                }
             }
         }
 
@@ -1657,6 +1673,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     continue;
                 }
             }
+
             AgainAndAgain(SYLeader, firstLeader);
 
             List<LeaderFJ> llfj = new List<LeaderFJ>();
@@ -1717,6 +1734,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             sift.ScheduleTypeName = a.ScheduleType.ItemText;
                             sift.ScheduleID = a.ID;
                             sift.FileItemID = a.FileItemID;
+                            sift.TextReadBak = a.TextReadBak;
                             sift.Name = a.UserInfo.PerSonName;
                             Lsift.Add(sift);
                         }
@@ -1746,85 +1764,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 {
                     return null;
                 }              
-                #region MyRegion
-                //List<Uidorname> list = GetAllDownUser();
-                //if (list == null || list[0] == null)
-                //{
-                //    return Json(new { ret = "no" }, JsonRequestBehavior.AllowGet);
-                //}
-                //var temp = UserInfoService.LoadEntities(x => x.ID == LoginUser.ID).FirstOrDefault();
-                //if (temp != null)
-                //{
-                //    var rtmp = UserInfoService.LoadEntities(x => x.BuMenID == temp.BuMenID).DefaultIfEmpty().ToList();
-                //    if (rtmp != null && rtmp[0] != null)
-                //    {
-                //        bool yesorno = false;
-                //        foreach (var a in rtmp)
-                //        {
-                //            Uidorname udname = new Uidorname();
-                //            udname.ID = a.ID;
-                //            udname.name = a.PerSonName;
-                //            if (!list.Contains(udname))
-                //            {
-                //                yesorno = true;
-                //                break;
-                //            }
-                //        }
-                //        if (yesorno)
-                //        {
-                //            return Json(new { ret = "no" }, JsonRequestBehavior.AllowGet);
-                //        }
-                //        else
-                //        {
-                //            List<SchInfoForTab> Lsift = new List<SchInfoForTab>();
-                //            List<Schedule> sch = new List<Schedule>();
-                //            foreach (var a in rtmp)
-                //            {
-                //                if (a.ID == LoginUser.ID)
-                //                {
-                //                    continue;
-                //                }
-                //                var finish = ScheduleService.LoadEntities(x => x.TextReadBak != "未查阅" && x.UserID == a.ID).DefaultIfEmpty().ToList();
-                //                if (finish != null && finish[0] != null)
-                //                {
-                //                    sch.AddRange(finish);
-                //                }
-                //            }
-                //            var ScheduleSum = sch.Where((x, i) => sch.FindIndex(z => z.ScheduleTypeID == x.ScheduleTypeID) == i).ToList();
-                //            string ScheduleSumStr = "";
-                //            foreach (var a in ScheduleSum)
-                //            {
-                //                var rtmp1 = sch.Where(x => x.ScheduleTypeID == a.ScheduleTypeID).DefaultIfEmpty().ToList();
-                //                if (rtmp != null && rtmp1[0] != null)
-                //                {
-                //                    ScheduleSumStr = ScheduleSumStr + a.ScheduleType.ItemText + ":<b>" + rtmp.Count + "</b> ";
-                //                }
-                //            }
-                //            foreach (var a in sch)
-                //            {
-                //                SchInfoForTab sift = new SchInfoForTab();
-                //                sift.ScheduleTime = a.ScheduleTime;
-                //                sift.ScheduleText = a.ScheduleText;
-                //                sift.ScheduleTypeName = a.ScheduleType.ItemText;
-                //                sift.ScheduleID = a.ID;
-                //                sift.FileItemID = a.FileItemID;
-                //                sift.Name = a.UserInfo.PerSonName;
-                //                sift.TextReadBak = a.TextReadBak;
-                //                Lsift.Add(sift);
-                //            }
-                //            return Json(new { lsift = Lsift, scheduleSumStr = ScheduleSumStr }, JsonRequestBehavior.AllowGet);
-                //        }
-                //    }
-                //    else
-                //    {
-                //        return Json(new { ret = "no" }, JsonRequestBehavior.AllowGet);
-                //    }
-                //}
-                //else
-                //{
-                //    return Json(new { ret = "no" }, JsonRequestBehavior.AllowGet);
-                //}
-                #endregion
+           
             }
             return Json(new { lsift = Lsift, scheduleSumStr = ScheduleSumStr }, JsonRequestBehavior.AllowGet);
         }
@@ -1834,7 +1774,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             List<Schedule> list = new List<Schedule>();
             foreach (var a in tempSUser)
             {
-                var ss = ScheduleService.LoadEntities(x => x.TextReadUser == id && x.UserID == a.UserID).DefaultIfEmpty().ToList();
+                var ss = ScheduleService.LoadEntities(x => x.UserID == a.UserID).DefaultIfEmpty().ToList();
                 list.AddRange(ss);
             }
             List<Schedule> schlist = list.Where(x => x.ScheduleTime > dt && x.ScheduleTime < end).DefaultIfEmpty().ToList();
@@ -1856,6 +1796,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             foreach (var a in schlist)
             {
                 SchInfoForTab sift = new SchInfoForTab();
+                sift.ID= a.ID;
                 sift.ScheduleTime = a.ScheduleTime;
                 sift.ScheduleText = a.ScheduleText;
                 sift.ScheduleTypeName = a.ScheduleType.ItemText;
@@ -1912,6 +1853,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             DateTime dt = Convert.ToDateTime(time);
             string rtr = YJ_ScheduleDayService.GetReadPerson(dt,0);
             var ThisDat= YJ_ScheduleDayService.LoadEntities(x => x.DEL == 0 && x.SchenuleTime == dt&&x.YJText!=null).DefaultIfEmpty();
+          
             var temp = from a in ThisDat
                        select new {
                            a.ID,
@@ -1923,38 +1865,123 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            a.SeeUserInfoList,
                            a.WriteUserID,
                            a.YJText,
-                           YJUserinfoIDname=a.UserInfo1.PerSonName,
-                           a.YJUserinfoID
+                           YJUserinfoIDname = a.UserInfo1.PerSonName,
+                           a.YJUserinfoID,
                        };
-            temp = ThisDat.ToList()[0] == null ? null: temp;
-           return Json(new { rtr= rtr,temp=temp } , JsonRequestBehavior.AllowGet); 
+            if (ThisDat.ToList()[0] == null)
+            {
+                temp = null;
+                return Json(new { rtr = rtr, temp = temp }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                List<YJ_DAY> lyjd = new List<YJ_DAY>();
+                foreach (var a in temp)
+                {
+                    YJ_DAY yjl = new YJ_DAY();
+                    yjl.ID = a.ID;
+                    yjl.TextID = a.TextID;
+                    yjl.AddYJtime = a.AddYJtime;
+                    yjl.ISee = a.ISee;
+                    yjl.ISeeAddtime = a.ISeeAddtime;
+                    yjl.SchenuleTime = a.SchenuleTime;
+                    yjl.SeeUserInfoList = a.SeeUserInfoList;
+                    yjl.WriteUserID = a.WriteUserID;
+                    yjl.YJText = a.YJText;
+                    yjl.YJUserinfoIDname = a.YJUserinfoIDname;
+                    yjl.YJUserinfoID = a.YJUserinfoID;
+                    yjl.uPjyname = a.WriteUserID == null ? "" : YJ_ScheduleDayService.LoadEntities(x => x.ID == a.WriteUserID).First().UserInfo1.PerSonName;
+                    if (a.SeeUserInfoList != null)
+                    {
+                        var namearry = a.SeeUserInfoList.Split(',') ;
+                        foreach (var sr in namearry)
+                        {
+                            if (sr.Length <= 0)
+                            {
+                                continue;
+                            }
+                            int? strid = Convert.ToInt32(sr);
+                            var name= UserInfoService.LoadEntities(x => x.ID == strid).FirstOrDefault().PerSonName;
+                            yjl.thislistname = yjl.thislistname + name + ",";
+                        }
+                    }
+                    lyjd.Add(yjl);
+                }
+                return Json(new { rtr = rtr, temp = lyjd }, JsonRequestBehavior.AllowGet);
+            }
+            
+           
+          
         }
 
         //给予意见
         public ActionResult GeiYJBtnFunc()
         {
             int? id = Convert.ToInt32(Request["id"]);
-            if (id != 0) {
-                int? thisid = YJ_ScheduleDayService.LoadEntities(X => X.ID == id).FirstOrDefault().YJUserinfoID;
-                if (thisid == LoginUser.ID)
-                {
-                    return Json(new { ret = "Isdistc" }, JsonRequestBehavior.AllowGet);
-                }
-            }
-            
-            bool yesorno = Convert.ToBoolean(Request["yesorno"]);
-            string yj = Request["yj"];
-            //写入新信息之前判断 不可重复给予建议
-            int count= YJ_ScheduleActionService.LoadEntities(x => x.TheSdeDayID == LoginUser.ID && x.UpSdeDayID == null).Count();
-            if (count > 0)
-            { return Json(new { ret = "distinctJY" }, JsonRequestBehavior.AllowGet); }
-
             string time = Request["time"];
             time = time.Replace("年", "-");
             time = time.Replace("月", "-");
             time = time.Replace("日", "");
-            DateTime dt = Convert.ToDateTime(time);           
+            DateTime dt = Convert.ToDateTime(time);
+           
+            
+            bool yesorno = Convert.ToBoolean(Request["yesorno"]);
+            //yesorno  等于 false 是已阅按钮
+            if (!yesorno) {
+                if (id != 0)
+                {
+                    var thisid = YJ_ScheduleDayService.LoadEntities(X =>  X.YJUserinfoID == LoginUser.ID && X.ID == id).FirstOrDefault();
+                    if (thisid != null)
+                    {
+                        return Json(new { ret = "dcyy" }, JsonRequestBehavior.AllowGet);
+                    }
+                    //写入新信息之前判断 不可重复给予建议
+                    var thisfst = YJ_ScheduleDayService.LoadEntities(x => x.ID == id).FirstOrDefault();
+                    if (thisfst != null)
+                    {
+                        if (thisfst.SeeUserInfoList != null)
+                        {
+                            var spt = thisfst.SeeUserInfoList.Split(',');
+                            if (spt.Contains(LoginUser.ID.ToString()))
+                            {
+                                { return Json(new { ret = "不可重复提交信息" }, JsonRequestBehavior.AllowGet); }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        { return Json(new { ret = "没有找到要给予信息的ID" }, JsonRequestBehavior.AllowGet); }
+                    }
+                }
+                else {
+                    var thisid = YJ_ScheduleDayService.LoadEntities(X => X.SchenuleTime == dt && X.YJUserinfoID == LoginUser.ID && X.YJText == null).FirstOrDefault();
+                    if (thisid != null)
+                    {
+                        return Json(new { ret = "dcyy" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                
+            }
+            string yj = Request["yj"];
             YjsdayClass yc = new YjsdayClass();
+            yc.NewAdditem = false;
+            if (id != 0)
+            {
+                var cos = YJ_ScheduleDayService.LoadEntities(X => X.ID == id).FirstOrDefault();
+                if (cos == null)
+                {
+                    yc.NewAdditem = true;
+                }
+                else
+                {
+                    int? thisid = YJ_ScheduleDayService.LoadEntities(X => X.ID == id).FirstOrDefault().YJUserinfoID;
+                    if (thisid == LoginUser.ID)
+                    {
+                        return Json(new { ret = "Isdistc" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                        
+            }
             yc.YesOrNo = true;
             YJ_ScheduleDay ysdy = new YJ_ScheduleDay();
             ysdy.AddYJtime = DateTime.Now;
@@ -1975,6 +2002,123 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             {
                 return Json(new { ret = "no" }, JsonRequestBehavior.AllowGet);
             }
+        }
+        //返回提示信息
+        public ActionResult GetTimesTS() {
+
+            var time = DateTime.Now;
+            int MaxInt = DateTime.DaysInMonth(time.Year, time.Month);
+            DateTime Utime = new DateTime(time.Year, time.Month, 1);
+            DateTime Dtime = new DateTime(time.Year, time.Month, MaxInt);
+
+            List<Uidorname> list = GetAllDownUser();
+            //有下属信息
+            List<LeaderFJ> leader = new List<LeaderFJ>();
+            //无下属信息，赋予上级信息
+            List<LeaderFJ> BottomUser = new List<LeaderFJ>();
+            GetUpDownUserID(list, leader, BottomUser, ScheduleUserService.LoadEntities(x => x.Del == null));
+
+            List<RetDayCount> lrdc = new List<RetDayCount>();
+
+            var temp = YJ_ScheduleDayService.LoadEntities(x => x.SchenuleTime >= Utime && x.SchenuleTime <= Dtime).DefaultIfEmpty().ToList();
+            if (temp[0] == null)
+            {
+                return Json(new { ter = lrdc }, JsonRequestBehavior.AllowGet);
+            }
+            //按时间循环
+            for (int i = 0; i < MaxInt; i++) {
+               
+                DateTime FDtime = new DateTime(time.Year, time.Month, i+1);
+                RetDayCount rdc = new RetDayCount();
+                rdc.time = FDtime;
+                rdc.day = i+1;
+                rdc.LdcPerson = new List<DCperson>();
+                foreach (var l in leader) {
+                    #region MyRegion
+                    DCperson dp = new DCperson();
+                   
+                    var TempC = temp.Where(x => x.SchenuleTime == FDtime && x.YJUserinfoID == l.ID&&x.TextID!=null&&x.TextID>=0).DefaultIfEmpty().ToList();
+                    if (i == 2&&l.name=="张廷宇")
+                    {
+                        string ss = "";
+                    }
+                    if (TempC.Count() > 0)
+                    {
+                        if (TempC[0] != null)
+                        {
+                            dp.Person = TempC[0].UserInfo1.PerSonName;
+                            dp.count = 0;
+                            foreach (var pc in TempC)
+                            {
+                                string s = pc.SeeUserInfoList;
+                                if (s == null)
+                                {
+                                    dp.count++;
+                                }
+                                else
+                                {
+                                    var Sst = s.Split(',');
+                                    if (!Sst.Contains(LoginUser.ID.ToString()))
+                                    {
+                                        dp.count++;
+                                    }
+                                }
+                            }
+                            if (dp.count > 0) {
+                                rdc.LdcPerson.Add(dp);
+                            }
+                            
+                        }
+                    }
+                    #endregion
+                }
+                //找到当天我创建的信息
+                if (temp[0] == null)
+                {
+                    return Json(new { ter = lrdc }, JsonRequestBehavior.AllowGet);
+                }              
+                var TempCc = temp.Where(x => x.SchenuleTime == FDtime && x.YJUserinfoID == LoginUser.ID&&x.TextID>=-1).DefaultIfEmpty().ToList();
+                if (TempCc[0] != null) {
+                    List<DCperson> dp = new List<DCperson>();
+                    foreach (var upjy in TempCc)
+                    {
+                        if (upjy.YJ_ScheduleAction1.All(x => x.YJ_ScheduleDay!= null)) {
+                            var tts = upjy.YJ_ScheduleAction1.Where(x => x.YJ_ScheduleDay.DEL==0).ToList();
+                            foreach (var at in tts) {
+                                var splic= at.YJ_ScheduleDay.SeeUserInfoList != null ? at.YJ_ScheduleDay.SeeUserInfoList.Split(',') : null;
+                                if (splic != null) {
+                                    if (splic.Contains(LoginUser.ID.ToString()))
+                                    {
+                                        continue;
+                                    }
+                                }                                
+                                var lyj=leader.Where(sc => at.YJ_ScheduleDay.YJUserinfoID == sc.ID).ToList();
+                                if (lyj.Count==0) {
+                                   var dpw= dp.Where(x => x.Person == at.YJ_ScheduleDay.UserInfo1.PerSonName).FirstOrDefault();
+                                    if (dpw != null)
+                                    {
+                                        dpw.count++;
+                                    }
+                                    else
+                                    {
+                                        DCperson dp_0 = new DCperson();
+                                        dp_0.Person = at.YJ_ScheduleDay.UserInfo1.PerSonName;
+                                        dp_0.count=1;
+                                        dp.Add(dp_0);
+                                    }
+                                }
+                                
+                            }
+                        }
+                    }
+                    rdc.LdcPerson.AddRange(dp);
+                }
+                
+                
+                lrdc.Add(rdc);
+            }
+            
+            return Json(new { ter = lrdc }, JsonRequestBehavior.AllowGet);
         }
 
     }
@@ -2009,6 +2153,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
     }
     public class SchInfoForTab
     {
+        public long ID { get; set; }
         public DateTime ScheduleTime { get; set; }
         public string ScheduleText { get; set;}
         public string ScheduleTypeName { get; set; }
