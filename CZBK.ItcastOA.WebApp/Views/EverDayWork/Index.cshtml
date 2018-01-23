@@ -222,7 +222,6 @@
             $("#ByDUid2").click(function () {
                 $("#DownUserCombox2").css("display", "block");
                 $("#DownBuMenCombox2").css("display", "none");
-
                 $("#tt").datagrid({ toolbar: "#ChooseSerchTypeDIV2,#DownUserCombox2" });
             })
             $("#AddFileTypeBtn").click(function () {
@@ -1919,22 +1918,22 @@
         }
     </div>
 
-    <div id="ChooseSerchTypeDIV2" style="width:auto;height:30px;float:left;display:none">
-        <div style="padding:5px;height:25px;float:left;line-height:25px">
-            <b>请选择查找类型：</b>
-            <label><input type="radio" name="SerchType2" id="ByDBMid2" value="BM" />根据下级部门查询</label>
-            <label><input type="radio" name="SerchType2" id="ByDUid2" value="User" />根据下级员工</label>
+    <div id="ChooseSerchTypeDIV2" style="width:auto;float:left;height:30px;display:none">
+        <div style="margin:2px;height:25px;float:left;line-height:25px">
+            <b>查找类型：</b>
+            <label><input type="radio" name="SerchType2" id="ByDBMid2" value="BM" />根据下属部门</label>
+            <label><input type="radio" name="SerchType2" id="ByDUid2" value="User" />根据下属员工</label>
         </div>
         <!---------------下级部门下拉框-------------------->
-        <div id="DownBuMenCombox2" style="padding:4px;height:25px;float:left;line-height:25px">
-            <b>下级部门：</b>
+        <div id="DownBuMenCombox2" style="margin:2px;height:25px;float:left;line-height:25px">
+            <b>下属部门:</b>
             <input id="DBMInput2" class="easyui-combobox" name="DownBuMenName"
                    url="/EverDayWork/GetDownBuMenall"
                    valueField="BMID"
                    textField="Name"
                    panelHeight="auto"
                    style="width:100px" />
-            <b>下级部门所有成员</b>
+            <b>下属部门成员:</b>
             <input id="DBMUserInput2" class="easyui-combobox" name="DownBuMenUserName"
                    valueField="ID"
                    textField="name"
@@ -1942,8 +1941,8 @@
                    style="width:100px" />
         </div>
         <!---------------下级用户下拉框-------------------->
-        <div id="DownUserCombox2" style="padding:4px;height:25px;float:left;line-height:25px">
-            <b>下级部门成员：</b>
+        <div id="DownUserCombox2" style="margin:2px;height:25px;float:left;line-height:25px">
+            <b>下属部门成员:</b>
             <input id="DUInput2" name="DownUserName"
                    class="easyui-combobox"
                    url="/EverDayWork/GetDownUserall"
@@ -1955,10 +1954,10 @@
     </div>
 
     <!----------------搜索框--------------------->
-    <div id="SearchboxDiv" style="width:auto;height:30px;display:none;line-height:30px;">
+    <div id="SearchboxDiv" style="width:auto;height:30px;line-height:30px;float:left">
         <b>&nbsp;&nbsp;&nbsp;&nbsp;</b>
-        起始时间：<input type="text" id="start" name="start" class="easyui-datebox" style="height:18px;width:100px;line-height:18px" />
-        结束时间：<input type="text" id="end" name="end" class="easyui-datebox" style="height:18px;width:100px;line-height:18px" />
+        从：<input type="text" id="start" name="start" class="easyui-datebox" style="height:18px;width:100px;line-height:18px" />
+        到：<input type="text" id="end" name="end" class="easyui-datebox" style="height:18px;width:100px;line-height:18px" />
         <input type="button" onclick="DoSerch()" value="查询" />
     </div>
 
