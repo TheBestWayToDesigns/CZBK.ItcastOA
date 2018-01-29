@@ -480,6 +480,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _T_YSItemsDal = value; }
         }
 	
+		private IUserbakDal _UserbakDal;
+        public IUserbakDal UserbakDal
+        {
+            get
+            {
+                if(_UserbakDal == null)
+                {
+                   // _UserbakDal = new UserbakDal();
+				    _UserbakDal =AbstractFactory.CreateUserbakDal();
+                }
+                return _UserbakDal;
+            }
+            set { _UserbakDal = value; }
+        }
+	
 		private IUserInfoDal _UserInfoDal;
         public IUserInfoDal UserInfoDal
         {

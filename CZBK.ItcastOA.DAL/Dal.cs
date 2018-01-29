@@ -166,6 +166,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class UserbakDal :BaseDal<Userbak>,IUserbakDal
+    {
+
+    }
+		
 	public partial class UserInfoDal :BaseDal<UserInfo>,IUserInfoDal
     {
 

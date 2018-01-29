@@ -165,6 +165,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IUserbakService : IBaseService<Userbak>
+    {
+       
+    }   
+	
 	public partial interface IUserInfoService : IBaseService<UserInfo>
     {
        

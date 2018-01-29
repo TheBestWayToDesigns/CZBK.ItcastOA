@@ -68,7 +68,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     //作为Memcache的key
                     string sessionId =Guid.NewGuid().ToString();
                     //使用Memcache代替Session解决数据在不同Web服务器之间共享的问题。
-                    Common.MemcacheHelper.Set(sessionId,Common.SerializerHelper.SerializeToString(userInfo), DateTime.Now.AddHours(1));
+                    Common.MemcacheHelper.Set(sessionId,Common.SerializerHelper.SerializeToString(userInfo), DateTime.Now.AddHours(5));
                     object obj = Common.MemcacheHelper.Get("Allstr");
                     if (obj==null)
                     { Common.MemcacheHelper.Set("Allstr", 0); }
@@ -90,18 +90,18 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     }
                     if (Convert.ToBoolean(userInfo.ThisMastr))
                     {
-                        return Json("master");
+                        return Json( new{ ret= "master",uid=userInfo.ID,uname=userInfo.PerSonName },JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
-                        return Json("ok");
+                        return Json(new { ret = "ok", uid = userInfo.ID, uname = userInfo.PerSonName }, JsonRequestBehavior.AllowGet);
                     }
                    
                }
             }
            else
            {
-                return Json("IsNotName");
+                return Json(new { ret = "IsNotName" }, JsonRequestBehavior.AllowGet);
            }
 
         }

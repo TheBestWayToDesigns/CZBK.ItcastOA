@@ -419,6 +419,19 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IT_YSItemsDal;
         }
 		
+	    public static IUserbakDal CreateUserbakDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".UserbakDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IUserbakDal;
+        }
+		
 	    public static IUserInfoDal CreateUserInfoDal()
         {
 

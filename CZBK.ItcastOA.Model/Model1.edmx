@@ -407,6 +407,21 @@
           <Property Name="DEL" Type="smallint" />
           <Property Name="Remark" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="Userbak">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserInfoID" Type="int" Nullable="false" />
+          <Property Name="OldUserID" Type="int" Nullable="false" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Gender" Type="smallint" />
+          <Property Name="BigPhoto" Type="nvarchar" MaxLength="50" />
+          <Property Name="minPhoto" Type="nvarchar" MaxLength="50" />
+          <Property Name="Addess" Type="nvarchar" MaxLength="150" />
+          <Property Name="del" Type="bit" />
+          <Property Name="Birthday" Type="datetime" />
+        </EntityType>
         <EntityType Name="UserInfo">
           <Key>
             <PropertyRef Name="ID" />
@@ -1113,6 +1128,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Userbak_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="Userbak" Type="Self.Userbak" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Userbak">
+              <PropertyRef Name="UserInfoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UserInfoDepartment_Department">
           <End Role="Department" Type="Self.Department" Multiplicity="1" />
           <End Role="UserInfoDepartment" Type="Self.UserInfoDepartment" Multiplicity="*" />
@@ -1400,6 +1427,7 @@
           <EntitySet Name="T_WinBak" EntityType="Self.T_WinBak" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_WinBakFaHuo" EntityType="Self.T_WinBakFaHuo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_YSItems" EntityType="Self.T_YSItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Userbak" EntityType="Self.Userbak" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfoDepartment" EntityType="Self.UserInfoDepartment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfoRoleInfo" EntityType="Self.UserInfoRoleInfo" Schema="dbo" store:Type="Tables" />
@@ -1596,6 +1624,10 @@
           <AssociationSet Name="FK_UpShenHe" Association="Self.FK_UpShenHe">
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Userbak_UserInfo" Association="Self.FK_Userbak_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="Userbak" EntitySet="Userbak" />
           </AssociationSet>
           <AssociationSet Name="FK_UserInfoDepartment_Department" Association="Self.FK_UserInfoDepartment_Department">
             <End Role="Department" EntitySet="Department" />
@@ -1987,6 +2019,11 @@
             <End Role="YJ_ScheduleDay" EntitySet="YJ_ScheduleDay" />
             <End Role="YJ_ScheduleAction" EntitySet="YJ_ScheduleAction" />
           </AssociationSet>
+          <EntitySet Name="Userbaks" EntityType="OAModel.Userbak" />
+          <AssociationSet Name="FK_Userbak_UserInfo" Association="OAModel.FK_Userbak_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="Userbak" EntitySet="Userbaks" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ActionInfo">
           <Key>
@@ -2331,6 +2368,7 @@
           <NavigationProperty Name="ScheduleUsers1" Relationship="OAModel.FK_ScheduleUser_UserInfo1" FromRole="UserInfo" ToRole="ScheduleUser" />
           <NavigationProperty Name="ExamineSchedules" Relationship="OAModel.FK_ExamineSchedule_UserInfo" FromRole="UserInfo" ToRole="ExamineSchedule" />
           <NavigationProperty Name="YJ_ScheduleDay1" Relationship="OAModel.FK_YJ_ScheduleDay_yjuserid_userinfo" FromRole="UserInfo" ToRole="YJ_ScheduleDay" />
+          <NavigationProperty Name="Userbaks" Relationship="OAModel.FK_Userbak_UserInfo" FromRole="UserInfo" ToRole="Userbak" />
         </EntityType>
         <Association Name="FK_Bumen">
           <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
@@ -3329,6 +3367,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Userbak">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserInfoID" Type="Int32" Nullable="false" />
+          <Property Name="OldUserID" Type="Int32" Nullable="false" />
+          <Property Name="CardNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="Int16" />
+          <Property Name="BigPhoto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="minPhoto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Addess" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="del" Type="Boolean" />
+          <Property Name="Birthday" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_Userbak_UserInfo" FromRole="Userbak" ToRole="UserInfo" />
+        </EntityType>
+        <Association Name="FK_Userbak_UserInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+          <End Type="OAModel.Userbak" Role="Userbak" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Userbak">
+              <PropertyRef Name="UserInfoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3927,6 +3993,22 @@
                 <ScalarProperty Name="TextID" ColumnName="TextID" />
                 <ScalarProperty Name="WriteUserID" ColumnName="WriteUserID" />
                 <ScalarProperty Name="SchenuleTime" ColumnName="SchenuleTime" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Userbaks">
+            <EntityTypeMapping TypeName="OAModel.Userbak">
+              <MappingFragment StoreEntitySet="Userbak">
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="del" ColumnName="del" />
+                <ScalarProperty Name="Addess" ColumnName="Addess" />
+                <ScalarProperty Name="minPhoto" ColumnName="minPhoto" />
+                <ScalarProperty Name="BigPhoto" ColumnName="BigPhoto" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="OldUserID" ColumnName="OldUserID" />
+                <ScalarProperty Name="UserInfoID" ColumnName="UserInfoID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

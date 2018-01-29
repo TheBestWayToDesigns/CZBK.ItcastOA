@@ -165,6 +165,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IUserbakDal :IBaseDal<Userbak>
+    {
+      
+    }
+	
 	public partial interface IUserInfoDal :IBaseDal<UserInfo>
     {
       

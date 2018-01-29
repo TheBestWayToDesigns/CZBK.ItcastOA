@@ -46,6 +46,7 @@ namespace CZBK.ItcastOA.Model
             this.ScheduleUsers1 = new HashSet<ScheduleUser>();
             this.ExamineSchedules = new HashSet<ExamineSchedule>();
             this.YJ_ScheduleDay1 = new HashSet<YJ_ScheduleDay>();
+            this.Userbaks = new HashSet<Userbak>();
         }
     
         public int ID { get; set; }
@@ -128,5 +129,7 @@ namespace CZBK.ItcastOA.Model
         public virtual ICollection<ExamineSchedule> ExamineSchedules { get; set; }
         [JsonIgnore]
         public virtual ICollection<YJ_ScheduleDay> YJ_ScheduleDay1 { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Userbak> Userbaks { get; set; }
     }
 }

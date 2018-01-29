@@ -259,6 +259,14 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class UserbakService :BaseService<Userbak>,IUserbakService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.UserbakDal;
+        }
+    }   
+	
 	public partial class UserInfoService :BaseService<UserInfo>,IUserInfoService
     {
         public override void SetCurretnDal()

@@ -1,0 +1,1776 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="caigouModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="T_BaiFenbi">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Beifenbi" Type="int" Nullable="false" />
+          <Property Name="Qianfenbi" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="bak" Type="nvarchar" MaxLength="50" />
+          <Property Name="Times" Type="datetime" />
+          <Property Name="Items" Type="int" />
+        </EntityType>
+        <EntityType Name="T_BmName">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Bmname" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“caigou.dbo.T_Caigou”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="T_Caigou">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Danjia" />
+            <PropertyRef Name="Shuliang" />
+            <PropertyRef Name="ClassId" />
+            <PropertyRef Name="Dbdj" />
+            <PropertyRef Name="Dbsum" />
+            <PropertyRef Name="Qf" />
+            <PropertyRef Name="Th" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Wupin" Type="nvarchar" MaxLength="250" />
+          <Property Name="Danjia" Type="decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="Shuliang" Type="decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="Danwei" Type="nvarchar" MaxLength="300" />
+          <Property Name="ClassId" Type="bigint" Nullable="false" />
+          <Property Name="Xinghao" Type="nvarchar(max)" />
+          <Property Name="Dbname" Type="nvarchar" MaxLength="150" />
+          <Property Name="Dbdj" Type="decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="Dbsum" Type="decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="Qf" Type="int" Nullable="false" />
+          <Property Name="Th" Type="int" Nullable="false" />
+          <Property Name="Shuilv" Type="nvarchar" MaxLength="150" />
+          <Property Name="T_CgxjId" Type="bigint" />
+          <Property Name="Yunfei" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="NowDayTime" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="T_CarUsers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="C_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="C_Number" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="C_LCS" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Gs" Type="int" Nullable="false" />
+          <Property Name="bak" Type="nvarchar" MaxLength="150" />
+          <Property Name="Leixing" Type="int" />
+        </EntityType>
+        <EntityType Name="T_CgUser">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Comname" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Qygl" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Qylx" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Loginname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PassWord" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Jgdmzh" Type="nvarchar" MaxLength="50" />
+          <Property Name="Sh" Type="nvarchar" MaxLength="50" />
+          <Property Name="Fddbr" Type="nvarchar" MaxLength="50" />
+          <Property Name="Lxr" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Lxdh" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Emal" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Zyyw" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Zctime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_Cgxj">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="clname" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="ggxh" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="cpcd" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="cpsl" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="bmname" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="bz" Type="nvarchar" MaxLength="450" />
+          <Property Name="cpdw" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Sctime" Type="datetime" Nullable="false" />
+          <Property Name="Cjtime" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Delet" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Overtime" Type="datetime" Nullable="false" />
+          <Property Name="Zt" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="WOver" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Lebie" Type="int" />
+          <Property Name="dlt" Type="int" />
+        </EntityType>
+        <EntityType Name="T_Classes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Years" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_CMZtable">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Bumen" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Person" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Leibie" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Danwei" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Gotime" Type="datetime" Nullable="false" />
+          <Property Name="Gom" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Backtime" Type="datetime" Nullable="false" />
+          <Property Name="Backmuent" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Fzr" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="dlt" Type="int" Nullable="false" />
+          <Property Name="SavTime" Type="datetime" Nullable="false" />
+          <Property Name="See" Type="int" />
+          <Property Name="dlt_all" Type="int" />
+        </EntityType>
+        <EntityType Name="T_Dw">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Danwei" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_EverMonthhaoyou">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Carnumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="itime" Type="datetime" Nullable="false" />
+          <Property Name="mvalue" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="dlt" Type="int" />
+          <Property Name="dlt_time" Type="datetime" />
+          <Property Name="Person_id" Type="bigint" />
+          <Property Name="jisu" Type="int" />
+        </EntityType>
+        <EntityType Name="T_Gonggao">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Gonggao" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_Gongwen">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Wtime" Type="datetime" Nullable="false" />
+          <Property Name="Text_" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Head" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Leibie" Type="int" Nullable="false" />
+          <Property Name="Personid" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_Huobukaoqin">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Bumen" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Person" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Intime" Type="datetime" Nullable="false" />
+          <Property Name="lrtime" Type="datetime" Nullable="false" />
+          <Property Name="Fzr" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="dlt" Type="int" Nullable="false" />
+          <Property Name="SenHe" Type="int" />
+          <Property Name="KaoqinTime" Type="int" />
+        </EntityType>
+        <EntityType Name="T_HuoyunErverday">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Time" Type="datetime" Nullable="false" />
+          <Property Name="CarNumberid" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CarPersonid" Type="bigint" Nullable="false" />
+          <Property Name="money" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Gls" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="dlt" Type="int" Nullable="false" />
+          <Property Name="items" Type="int" />
+        </EntityType>
+        <EntityType Name="T_HuoyunLCS">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Carnumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Times" Type="datetime" Nullable="false" />
+          <Property Name="Carname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Lcs" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="dlt" Type="int" />
+          <Property Name="Intime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_HuoyunLj">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Gqf" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Fakuan" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Xcf" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Bxfy" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Jcf" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="jwlxh" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Lj" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Gz" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Flf" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Clf" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Qt" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Gy" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Ltt" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="dlt" Type="int" />
+        </EntityType>
+        <EntityType Name="T_HuoyunMoth">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Gqf" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Fakuan" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Xcf" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Bxfy" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Jcf" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="jwlxh" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Lj" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Gz" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Flf" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Clf" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Qt" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Gy" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Ltt" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="dlt" Type="int" />
+          <Property Name="Dtime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_Leibie">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Item_id" Type="bigint" Nullable="false" />
+          <Property Name="Item_con" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_lnlyysjt">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="Comname" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Photo" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Lxperson" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Lxqq" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Qqquen" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="JsPhoto" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="T_LoginBak">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoginUser" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="LoginIP" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LoginTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_MAIN_GUNDONG">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Text" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Leixing" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_OutDORshijian">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SJtime" Type="datetime" Nullable="false" />
+          <Property Name="SqpersonId" Type="bigint" Nullable="false" />
+          <Property Name="dlt" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_Over_car">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UseCar_id" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Car_person_id" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Car_number" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Out_car" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Back_car" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="gss" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="dlt" Type="int" Nullable="false" />
+          <Property Name="Save_Time" Type="datetime" Nullable="false" />
+          <Property Name="ShiJiFaCheTime" Type="datetime" />
+          <Property Name="ShiJiShouCheTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="T_Person">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonName" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Bumen" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Userpassword" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_Personmoney">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Company" Type="decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="CgxjId" Type="bigint" Nullable="false" />
+          <Property Name="Jsfs" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Bz" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Cpcz" Type="nvarchar" MaxLength="350" Nullable="false" />
+          <Property Name="Cpcd" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Cppp" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Xjzt" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Sctime" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Cjtime" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Overtime" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="clname" Type="nvarchar" MaxLength="350" Nullable="false" />
+          <Property Name="ggxh" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="cpdw" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="cpsl" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="bmname" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Zbzt" Type="nvarchar" MaxLength="150" />
+          <Property Name="ZbPerson" Type="nvarchar" MaxLength="150" />
+          <Property Name="Zbje" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="Zbbz" Type="nvarchar" MaxLength="150" />
+          <Property Name="bzs" Type="nvarchar" MaxLength="210" Nullable="false" />
+          <Property Name="yunfei" Type="decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="xjbz" Type="nvarchar(max)" />
+          <Property Name="Lebie" Type="int" />
+        </EntityType>
+        <EntityType Name="T_QJDtable">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Bumen" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="QJleibie" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ftime" Type="datetime" Nullable="false" />
+          <Property Name="fmuent" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Ttime" Type="datetime" Nullable="false" />
+          <Property Name="Tmuent" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="QJshiyou" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="Fzr" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="dlt" Type="int" Nullable="false" />
+          <Property Name="SavTime" Type="datetime" Nullable="false" />
+          <Property Name="See" Type="int" />
+          <Property Name="dlt_all" Type="int" />
+        </EntityType>
+        <EntityType Name="T_Qx_bumen">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="User_Qx" Type="int" Nullable="false" />
+          <Property Name="Bumen_id" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_SqTable">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="clname" Type="nvarchar" MaxLength="350" Nullable="false" />
+          <Property Name="ggxh" Type="nvarchar" MaxLength="350" Nullable="false" />
+          <Property Name="cpcd" Type="nvarchar" MaxLength="350" Nullable="false" />
+          <Property Name="cpsl" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="bmname" Type="nvarchar" MaxLength="350" Nullable="false" />
+          <Property Name="bz" Type="nvarchar" MaxLength="350" Nullable="false" />
+          <Property Name="cpdw" Type="nvarchar" MaxLength="350" Nullable="false" />
+          <Property Name="SqTime" Type="nvarchar" MaxLength="350" Nullable="false" />
+          <Property Name="Dyt" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Sqperson" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Sqbumen" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Deletes" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Dsname" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Money" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="Cgxj_id" Type="bigint" />
+          <Property Name="Sl" Type="nvarchar" MaxLength="50" />
+          <Property Name="Cgname" Type="nvarchar" MaxLength="50" />
+          <Property Name="Caiwu" Type="nvarchar" MaxLength="50" />
+          <Property Name="Cwname" Type="nvarchar" MaxLength="50" />
+          <Property Name="Lebie" Type="int" />
+        </EntityType>
+        <EntityType Name="T_SysUsers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Rname" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_Tiaodian">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Tiaodian" Type="nvarchar" MaxLength="350" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_UseCart">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Thetime" Type="datetime" Nullable="false" />
+          <Property Name="CartPerson" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Cartccr" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="cclcs" Type="int" />
+          <Property Name="sclcs" Type="int" />
+          <Property Name="Gotime" Type="datetime" />
+          <Property Name="Backtime" Type="datetime" />
+          <Property Name="Goaddess" Type="nvarchar" MaxLength="150" />
+          <Property Name="Toyes" Type="nvarchar" MaxLength="50" />
+          <Property Name="Tono" Type="nvarchar" MaxLength="50" />
+          <Property Name="xsgss" Type="nvarchar" MaxLength="50" />
+          <Property Name="Toshiyou" Type="nvarchar" MaxLength="150" />
+          <Property Name="Txt" Type="nvarchar" MaxLength="250" />
+          <Property Name="CartNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Cartname" Type="nvarchar" MaxLength="50" />
+          <Property Name="bmfzr" Type="nvarchar" MaxLength="50" />
+          <Property Name="dlt" Type="int" Nullable="false" />
+          <Property Name="savetime" Type="datetime" Nullable="false" />
+          <Property Name="Bumen" Type="nvarchar" MaxLength="50" />
+          <Property Name="Mw_dlt" Type="int" />
+          <Property Name="YXB_sh" Type="int" />
+        </EntityType>
+        <EntityType Name="T_Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="PersonID" Type="bigint" />
+          <Property Name="RName" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Bumen" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Guishu" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="IsDelete" Type="int" />
+          <Property Name="IsLogin" Type="bit" />
+          <Property Name="Qx" Type="int" />
+          <Property Name="Bj_qx" Type="int" />
+          <Property Name="Wuguan" Type="int" />
+          <Property Name="Caiwu" Type="int" />
+          <Property Name="Huoyun" Type="int" />
+          <Property Name="admin" Type="int" />
+          <Property Name="yingxiao" Type="int" />
+          <Property Name="NewXinzi" Type="int" />
+          <Property Name="KQshenhe" Type="int" />
+          <Property Name="OldGZ" Type="int" />
+        </EntityType>
+        <EntityType Name="T_Users_content">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Users_id" Type="bigint" Nullable="false" />
+          <Property Name="zhiwu" Type="nvarchar" MaxLength="50" />
+          <Property Name="photo" Type="nvarchar" MaxLength="50" />
+          <Property Name="qq" Type="nvarchar" MaxLength="50" />
+          <Property Name="photo_x" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="T_Wuguan">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Personname" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Bumen" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Wupin" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Zhuangtai" Type="int" Nullable="false" />
+          <Property Name="Shuliang" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Guige" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Sqtime" Type="datetime" Nullable="false" />
+          <Property Name="Shtime" Type="datetime" Nullable="false" />
+          <Property Name="Money" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SumMoney" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Danwei" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Beizhu" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="SHperson" Type="nvarchar" MaxLength="50" />
+          <Property Name="dlt" Type="int" />
+          <Property Name="prt" Type="int" />
+        </EntityType>
+        <EntityType Name="T_Wuguanchuku">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WP_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="carnumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="danwei" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="shuliang" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="money" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ctime" Type="datetime" Nullable="false" />
+          <Property Name="bak" Type="nvarchar" MaxLength="50" />
+          <Property Name="dlt" Type="int" />
+          <Property Name="dlt_time" Type="datetime" />
+          <Property Name="Person_id" Type="bigint" />
+          <Property Name="jisu" Type="int" />
+        </EntityType>
+        <EntityType Name="T_ZaoBiaoFanWei">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Zbid" Type="int" Nullable="false" />
+          <Property Name="Zbname" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_T_Users_T_Users">
+          <End Role="T_Users" Type="Self.T_Users" Multiplicity="1" />
+          <End Role="T_Users1" Type="Self.T_Users" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="T_Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="T_Users1">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="caigouModelStoreContainer">
+          <EntitySet Name="T_BaiFenbi" EntityType="Self.T_BaiFenbi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_BmName" EntityType="Self.T_BmName" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_CarUsers" EntityType="Self.T_CarUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_CgUser" EntityType="Self.T_CgUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Cgxj" EntityType="Self.T_Cgxj" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Classes" EntityType="Self.T_Classes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_CMZtable" EntityType="Self.T_CMZtable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Dw" EntityType="Self.T_Dw" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_EverMonthhaoyou" EntityType="Self.T_EverMonthhaoyou" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Gonggao" EntityType="Self.T_Gonggao" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Gongwen" EntityType="Self.T_Gongwen" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Huobukaoqin" EntityType="Self.T_Huobukaoqin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_HuoyunErverday" EntityType="Self.T_HuoyunErverday" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_HuoyunLCS" EntityType="Self.T_HuoyunLCS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_HuoyunLj" EntityType="Self.T_HuoyunLj" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_HuoyunMoth" EntityType="Self.T_HuoyunMoth" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Leibie" EntityType="Self.T_Leibie" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_lnlyysjt" EntityType="Self.T_lnlyysjt" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_LoginBak" EntityType="Self.T_LoginBak" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_MAIN_GUNDONG" EntityType="Self.T_MAIN_GUNDONG" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_OutDORshijian" EntityType="Self.T_OutDORshijian" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Over_car" EntityType="Self.T_Over_car" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Person" EntityType="Self.T_Person" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Personmoney" EntityType="Self.T_Personmoney" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_QJDtable" EntityType="Self.T_QJDtable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Qx_bumen" EntityType="Self.T_Qx_bumen" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_SqTable" EntityType="Self.T_SqTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_SysUsers" EntityType="Self.T_SysUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Tiaodian" EntityType="Self.T_Tiaodian" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_UseCart" EntityType="Self.T_UseCart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Users" EntityType="Self.T_Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Users_content" EntityType="Self.T_Users_content" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Wuguan" EntityType="Self.T_Wuguan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Wuguanchuku" EntityType="Self.T_Wuguanchuku" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_ZaoBiaoFanWei" EntityType="Self.T_ZaoBiaoFanWei" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Caigou" EntityType="Self.T_Caigou" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[T_Caigou].[id] AS [id], 
+[T_Caigou].[Name] AS [Name], 
+[T_Caigou].[Wupin] AS [Wupin], 
+[T_Caigou].[Danjia] AS [Danjia], 
+[T_Caigou].[Shuliang] AS [Shuliang], 
+[T_Caigou].[Danwei] AS [Danwei], 
+[T_Caigou].[ClassId] AS [ClassId], 
+[T_Caigou].[Xinghao] AS [Xinghao], 
+[T_Caigou].[Dbname] AS [Dbname], 
+[T_Caigou].[Dbdj] AS [Dbdj], 
+[T_Caigou].[Dbsum] AS [Dbsum], 
+[T_Caigou].[Qf] AS [Qf], 
+[T_Caigou].[Th] AS [Th], 
+[T_Caigou].[Shuilv] AS [Shuilv], 
+[T_Caigou].[T_CgxjId] AS [T_CgxjId], 
+[T_Caigou].[Yunfei] AS [Yunfei], 
+[T_Caigou].[NowDayTime] AS [NowDayTime]
+FROM [dbo].[T_Caigou] AS [T_Caigou]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_T_Users_T_Users" Association="Self.FK_T_Users_T_Users">
+            <End Role="T_Users" EntitySet="T_Users" />
+            <End Role="T_Users1" EntitySet="T_Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="caigouModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="T_BaiFenbi">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Beifenbi" Type="Int32" Nullable="false" />
+          <Property Name="Qianfenbi" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="bak" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Times" Type="DateTime" Precision="3" />
+          <Property Name="Items" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_BmName">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Bmname" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_CarUsers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="C_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="C_Number" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="C_LCS" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Gs" Type="Int32" Nullable="false" />
+          <Property Name="bak" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Leixing" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_CgUser">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Comname" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Qygl" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Qylx" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Loginname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PassWord" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Jgdmzh" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Sh" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Fddbr" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Lxr" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Lxdh" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Emal" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Zyyw" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Zctime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="T_Cgxj">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="clname" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ggxh" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="cpcd" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="cpsl" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="bmname" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="bz" Type="String" MaxLength="450" FixedLength="false" Unicode="true" />
+          <Property Name="cpdw" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Sctime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Cjtime" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Delet" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Overtime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Zt" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="WOver" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Lebie" Type="Int32" />
+          <Property Name="dlt" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_Classes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Years" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_CMZtable">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Bumen" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Person" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Leibie" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Danwei" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Gotime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Gom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Backtime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Backmuent" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Fzr" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="dlt" Type="Int32" Nullable="false" />
+          <Property Name="SavTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="See" Type="Int32" />
+          <Property Name="dlt_all" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_Dw">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Danwei" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_EverMonthhaoyou">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Carnumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="itime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="mvalue" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="dlt" Type="Int32" />
+          <Property Name="dlt_time" Type="DateTime" Precision="3" />
+          <Property Name="Person_id" Type="Int64" />
+          <Property Name="jisu" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_Gonggao">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Gonggao" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_Gongwen">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Wtime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Text_" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Head" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Leibie" Type="Int32" Nullable="false" />
+          <Property Name="Personid" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_Huobukaoqin">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Bumen" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Person" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Intime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="lrtime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Fzr" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="dlt" Type="Int32" Nullable="false" />
+          <Property Name="SenHe" Type="Int32" />
+          <Property Name="KaoqinTime" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_HuoyunErverday">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CarNumberid" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CarPersonid" Type="Int64" Nullable="false" />
+          <Property Name="money" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Gls" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="dlt" Type="Int32" Nullable="false" />
+          <Property Name="items" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_HuoyunLCS">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Carnumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Times" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Carname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Lcs" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="dlt" Type="Int32" />
+          <Property Name="Intime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="T_HuoyunLj">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Gqf" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Fakuan" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Xcf" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Bxfy" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Jcf" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="jwlxh" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Lj" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Gz" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Flf" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Clf" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Qt" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Gy" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Ltt" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="dlt" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_HuoyunMoth">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Gqf" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Fakuan" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Xcf" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Bxfy" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Jcf" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="jwlxh" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Lj" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Gz" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Flf" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Clf" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Qt" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Gy" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Ltt" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="dlt" Type="Int32" />
+          <Property Name="Dtime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="T_Leibie">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Item_id" Type="Int64" Nullable="false" />
+          <Property Name="Item_con" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_lnlyysjt">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="Comname" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Photo" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Lxperson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Lxqq" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Qqquen" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="JsPhoto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="T_LoginBak">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoginUser" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LoginIP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LoginTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="T_MAIN_GUNDONG">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Text" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Leixing" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_OutDORshijian">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SJtime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SqpersonId" Type="Int64" Nullable="false" />
+          <Property Name="dlt" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_Over_car">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UseCar_id" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Car_person_id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Car_number" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Out_car" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Back_car" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="gss" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="dlt" Type="Int32" Nullable="false" />
+          <Property Name="Save_Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ShiJiFaCheTime" Type="DateTime" Precision="3" />
+          <Property Name="ShiJiShouCheTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="T_Person">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Bumen" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Username" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Userpassword" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_Personmoney">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Company" Type="Decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="CgxjId" Type="Int64" Nullable="false" />
+          <Property Name="Jsfs" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Bz" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Cpcz" Type="String" MaxLength="350" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Cpcd" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Cppp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Xjzt" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Sctime" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Cjtime" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Overtime" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="clname" Type="String" MaxLength="350" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ggxh" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="cpdw" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="cpsl" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="bmname" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Zbzt" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ZbPerson" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Zbje" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="Zbbz" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="bzs" Type="String" MaxLength="210" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="yunfei" Type="Decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="xjbz" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Lebie" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_QJDtable">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Bumen" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="QJleibie" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ftime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fmuent" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Ttime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Tmuent" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="QJshiyou" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Fzr" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="dlt" Type="Int32" Nullable="false" />
+          <Property Name="SavTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="See" Type="Int32" />
+          <Property Name="dlt_all" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_Qx_bumen">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="User_Qx" Type="Int32" Nullable="false" />
+          <Property Name="Bumen_id" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_SqTable">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="clname" Type="String" MaxLength="350" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ggxh" Type="String" MaxLength="350" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="cpcd" Type="String" MaxLength="350" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="cpsl" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="bmname" Type="String" MaxLength="350" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="bz" Type="String" MaxLength="350" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="cpdw" Type="String" MaxLength="350" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SqTime" Type="String" MaxLength="350" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Dyt" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Sqperson" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Sqbumen" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Deletes" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Dsname" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Money" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="Cgxj_id" Type="Int64" />
+          <Property Name="Sl" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Cgname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Caiwu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Cwname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Lebie" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_SysUsers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Rname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_Tiaodian">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Tiaodian" Type="String" MaxLength="350" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_UseCart">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Thetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CartPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Cartccr" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="cclcs" Type="Int32" />
+          <Property Name="sclcs" Type="Int32" />
+          <Property Name="Gotime" Type="DateTime" Precision="3" />
+          <Property Name="Backtime" Type="DateTime" Precision="3" />
+          <Property Name="Goaddess" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Toyes" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Tono" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="xsgss" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Toshiyou" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Txt" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CartNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Cartname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="bmfzr" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="dlt" Type="Int32" Nullable="false" />
+          <Property Name="savetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Bumen" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Mw_dlt" Type="Int32" />
+          <Property Name="YXB_sh" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PersonID" Type="Int64" />
+          <Property Name="RName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Bumen" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Guishu" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsDelete" Type="Int32" />
+          <Property Name="IsLogin" Type="Boolean" />
+          <Property Name="Qx" Type="Int32" />
+          <Property Name="Bj_qx" Type="Int32" />
+          <Property Name="Wuguan" Type="Int32" />
+          <Property Name="Caiwu" Type="Int32" />
+          <Property Name="Huoyun" Type="Int32" />
+          <Property Name="admin" Type="Int32" />
+          <Property Name="yingxiao" Type="Int32" />
+          <Property Name="NewXinzi" Type="Int32" />
+          <Property Name="KQshenhe" Type="Int32" />
+          <Property Name="OldGZ" Type="Int32" />
+          <NavigationProperty Name="T_Users1" Relationship="Self.FK_T_Users_T_Users" FromRole="T_Users" ToRole="T_Users1" />
+          <NavigationProperty Name="T_Users2" Relationship="Self.FK_T_Users_T_Users" FromRole="T_Users1" ToRole="T_Users" />
+        </EntityType>
+        <EntityType Name="T_Users_content">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Users_id" Type="Int64" Nullable="false" />
+          <Property Name="zhiwu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="photo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="qq" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="photo_x" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="T_Wuguan">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Personname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Bumen" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Wupin" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Zhuangtai" Type="Int32" Nullable="false" />
+          <Property Name="Shuliang" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Guige" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Sqtime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Shtime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Money" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SumMoney" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Danwei" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Beizhu" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SHperson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="dlt" Type="Int32" />
+          <Property Name="prt" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_Wuguanchuku">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WP_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="carnumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="danwei" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="shuliang" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="money" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ctime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="bak" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="dlt" Type="Int32" />
+          <Property Name="dlt_time" Type="DateTime" Precision="3" />
+          <Property Name="Person_id" Type="Int64" />
+          <Property Name="jisu" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_ZaoBiaoFanWei">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Zbid" Type="Int32" Nullable="false" />
+          <Property Name="Zbname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_Caigou">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Danjia" />
+            <PropertyRef Name="Shuliang" />
+            <PropertyRef Name="ClassId" />
+            <PropertyRef Name="Dbdj" />
+            <PropertyRef Name="Dbsum" />
+            <PropertyRef Name="Qf" />
+            <PropertyRef Name="Th" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Wupin" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Danjia" Type="Decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="Shuliang" Type="Decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="Danwei" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="ClassId" Type="Int64" Nullable="false" />
+          <Property Name="Xinghao" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Dbname" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Dbdj" Type="Decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="Dbsum" Type="Decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="Qf" Type="Int32" Nullable="false" />
+          <Property Name="Th" Type="Int32" Nullable="false" />
+          <Property Name="Shuilv" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="T_CgxjId" Type="Int64" />
+          <Property Name="Yunfei" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="NowDayTime" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_T_Users_T_Users">
+          <End Role="T_Users" Type="Self.T_Users" Multiplicity="1" />
+          <End Role="T_Users1" Type="Self.T_Users" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="T_Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="T_Users1">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="caigouEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="T_BaiFenbi" EntityType="Self.T_BaiFenbi" />
+          <EntitySet Name="T_BmName" EntityType="Self.T_BmName" />
+          <EntitySet Name="T_CarUsers" EntityType="Self.T_CarUsers" />
+          <EntitySet Name="T_CgUser" EntityType="Self.T_CgUser" />
+          <EntitySet Name="T_Cgxj" EntityType="Self.T_Cgxj" />
+          <EntitySet Name="T_Classes" EntityType="Self.T_Classes" />
+          <EntitySet Name="T_CMZtable" EntityType="Self.T_CMZtable" />
+          <EntitySet Name="T_Dw" EntityType="Self.T_Dw" />
+          <EntitySet Name="T_EverMonthhaoyou" EntityType="Self.T_EverMonthhaoyou" />
+          <EntitySet Name="T_Gonggao" EntityType="Self.T_Gonggao" />
+          <EntitySet Name="T_Gongwen" EntityType="Self.T_Gongwen" />
+          <EntitySet Name="T_Huobukaoqin" EntityType="Self.T_Huobukaoqin" />
+          <EntitySet Name="T_HuoyunErverday" EntityType="Self.T_HuoyunErverday" />
+          <EntitySet Name="T_HuoyunLCS" EntityType="Self.T_HuoyunLCS" />
+          <EntitySet Name="T_HuoyunLj" EntityType="Self.T_HuoyunLj" />
+          <EntitySet Name="T_HuoyunMoth" EntityType="Self.T_HuoyunMoth" />
+          <EntitySet Name="T_Leibie" EntityType="Self.T_Leibie" />
+          <EntitySet Name="T_lnlyysjt" EntityType="Self.T_lnlyysjt" />
+          <EntitySet Name="T_LoginBak" EntityType="Self.T_LoginBak" />
+          <EntitySet Name="T_MAIN_GUNDONG" EntityType="Self.T_MAIN_GUNDONG" />
+          <EntitySet Name="T_OutDORshijian" EntityType="Self.T_OutDORshijian" />
+          <EntitySet Name="T_Over_car" EntityType="Self.T_Over_car" />
+          <EntitySet Name="T_Person" EntityType="Self.T_Person" />
+          <EntitySet Name="T_Personmoney" EntityType="Self.T_Personmoney" />
+          <EntitySet Name="T_QJDtable" EntityType="Self.T_QJDtable" />
+          <EntitySet Name="T_Qx_bumen" EntityType="Self.T_Qx_bumen" />
+          <EntitySet Name="T_SqTable" EntityType="Self.T_SqTable" />
+          <EntitySet Name="T_SysUsers" EntityType="Self.T_SysUsers" />
+          <EntitySet Name="T_Tiaodian" EntityType="Self.T_Tiaodian" />
+          <EntitySet Name="T_UseCart" EntityType="Self.T_UseCart" />
+          <EntitySet Name="T_Users" EntityType="Self.T_Users" />
+          <EntitySet Name="T_Users_content" EntityType="Self.T_Users_content" />
+          <EntitySet Name="T_Wuguan" EntityType="Self.T_Wuguan" />
+          <EntitySet Name="T_Wuguanchuku" EntityType="Self.T_Wuguanchuku" />
+          <EntitySet Name="T_ZaoBiaoFanWei" EntityType="Self.T_ZaoBiaoFanWei" />
+          <EntitySet Name="T_Caigou" EntityType="Self.T_Caigou" />
+          <AssociationSet Name="FK_T_Users_T_Users" Association="Self.FK_T_Users_T_Users">
+            <End Role="T_Users" EntitySet="T_Users" />
+            <End Role="T_Users1" EntitySet="T_Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="caigouModelStoreContainer" CdmEntityContainer="caigouEntities">
+          <EntitySetMapping Name="T_BaiFenbi">
+            <EntityTypeMapping TypeName="caigouModel.T_BaiFenbi">
+              <MappingFragment StoreEntitySet="T_BaiFenbi">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Beifenbi" ColumnName="Beifenbi" />
+                <ScalarProperty Name="Qianfenbi" ColumnName="Qianfenbi" />
+                <ScalarProperty Name="bak" ColumnName="bak" />
+                <ScalarProperty Name="Times" ColumnName="Times" />
+                <ScalarProperty Name="Items" ColumnName="Items" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_BmName">
+            <EntityTypeMapping TypeName="caigouModel.T_BmName">
+              <MappingFragment StoreEntitySet="T_BmName">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Bmname" ColumnName="Bmname" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_CarUsers">
+            <EntityTypeMapping TypeName="caigouModel.T_CarUsers">
+              <MappingFragment StoreEntitySet="T_CarUsers">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="C_Name" ColumnName="C_Name" />
+                <ScalarProperty Name="C_Number" ColumnName="C_Number" />
+                <ScalarProperty Name="C_LCS" ColumnName="C_LCS" />
+                <ScalarProperty Name="Gs" ColumnName="Gs" />
+                <ScalarProperty Name="bak" ColumnName="bak" />
+                <ScalarProperty Name="Leixing" ColumnName="Leixing" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_CgUser">
+            <EntityTypeMapping TypeName="caigouModel.T_CgUser">
+              <MappingFragment StoreEntitySet="T_CgUser">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Comname" ColumnName="Comname" />
+                <ScalarProperty Name="Qygl" ColumnName="Qygl" />
+                <ScalarProperty Name="Qylx" ColumnName="Qylx" />
+                <ScalarProperty Name="Loginname" ColumnName="Loginname" />
+                <ScalarProperty Name="PassWord" ColumnName="PassWord" />
+                <ScalarProperty Name="Jgdmzh" ColumnName="Jgdmzh" />
+                <ScalarProperty Name="Sh" ColumnName="Sh" />
+                <ScalarProperty Name="Fddbr" ColumnName="Fddbr" />
+                <ScalarProperty Name="Lxr" ColumnName="Lxr" />
+                <ScalarProperty Name="Lxdh" ColumnName="Lxdh" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Emal" ColumnName="Emal" />
+                <ScalarProperty Name="Zyyw" ColumnName="Zyyw" />
+                <ScalarProperty Name="Zctime" ColumnName="Zctime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Cgxj">
+            <EntityTypeMapping TypeName="caigouModel.T_Cgxj">
+              <MappingFragment StoreEntitySet="T_Cgxj">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="clname" ColumnName="clname" />
+                <ScalarProperty Name="ggxh" ColumnName="ggxh" />
+                <ScalarProperty Name="cpcd" ColumnName="cpcd" />
+                <ScalarProperty Name="cpsl" ColumnName="cpsl" />
+                <ScalarProperty Name="bmname" ColumnName="bmname" />
+                <ScalarProperty Name="bz" ColumnName="bz" />
+                <ScalarProperty Name="cpdw" ColumnName="cpdw" />
+                <ScalarProperty Name="Sctime" ColumnName="Sctime" />
+                <ScalarProperty Name="Cjtime" ColumnName="Cjtime" />
+                <ScalarProperty Name="Delet" ColumnName="Delet" />
+                <ScalarProperty Name="Overtime" ColumnName="Overtime" />
+                <ScalarProperty Name="Zt" ColumnName="Zt" />
+                <ScalarProperty Name="WOver" ColumnName="WOver" />
+                <ScalarProperty Name="Lebie" ColumnName="Lebie" />
+                <ScalarProperty Name="dlt" ColumnName="dlt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Classes">
+            <EntityTypeMapping TypeName="caigouModel.T_Classes">
+              <MappingFragment StoreEntitySet="T_Classes">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Years" ColumnName="Years" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_CMZtable">
+            <EntityTypeMapping TypeName="caigouModel.T_CMZtable">
+              <MappingFragment StoreEntitySet="T_CMZtable">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Bumen" ColumnName="Bumen" />
+                <ScalarProperty Name="Person" ColumnName="Person" />
+                <ScalarProperty Name="Leibie" ColumnName="Leibie" />
+                <ScalarProperty Name="Danwei" ColumnName="Danwei" />
+                <ScalarProperty Name="Gotime" ColumnName="Gotime" />
+                <ScalarProperty Name="Gom" ColumnName="Gom" />
+                <ScalarProperty Name="Backtime" ColumnName="Backtime" />
+                <ScalarProperty Name="Backmuent" ColumnName="Backmuent" />
+                <ScalarProperty Name="Fzr" ColumnName="Fzr" />
+                <ScalarProperty Name="dlt" ColumnName="dlt" />
+                <ScalarProperty Name="SavTime" ColumnName="SavTime" />
+                <ScalarProperty Name="See" ColumnName="See" />
+                <ScalarProperty Name="dlt_all" ColumnName="dlt_all" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Dw">
+            <EntityTypeMapping TypeName="caigouModel.T_Dw">
+              <MappingFragment StoreEntitySet="T_Dw">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Danwei" ColumnName="Danwei" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_EverMonthhaoyou">
+            <EntityTypeMapping TypeName="caigouModel.T_EverMonthhaoyou">
+              <MappingFragment StoreEntitySet="T_EverMonthhaoyou">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Carnumber" ColumnName="Carnumber" />
+                <ScalarProperty Name="itime" ColumnName="itime" />
+                <ScalarProperty Name="mvalue" ColumnName="mvalue" />
+                <ScalarProperty Name="dlt" ColumnName="dlt" />
+                <ScalarProperty Name="dlt_time" ColumnName="dlt_time" />
+                <ScalarProperty Name="Person_id" ColumnName="Person_id" />
+                <ScalarProperty Name="jisu" ColumnName="jisu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Gonggao">
+            <EntityTypeMapping TypeName="caigouModel.T_Gonggao">
+              <MappingFragment StoreEntitySet="T_Gonggao">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Gonggao" ColumnName="Gonggao" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Gongwen">
+            <EntityTypeMapping TypeName="caigouModel.T_Gongwen">
+              <MappingFragment StoreEntitySet="T_Gongwen">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Wtime" ColumnName="Wtime" />
+                <ScalarProperty Name="Text_" ColumnName="Text_" />
+                <ScalarProperty Name="Head" ColumnName="Head" />
+                <ScalarProperty Name="Leibie" ColumnName="Leibie" />
+                <ScalarProperty Name="Personid" ColumnName="Personid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Huobukaoqin">
+            <EntityTypeMapping TypeName="caigouModel.T_Huobukaoqin">
+              <MappingFragment StoreEntitySet="T_Huobukaoqin">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Bumen" ColumnName="Bumen" />
+                <ScalarProperty Name="Person" ColumnName="Person" />
+                <ScalarProperty Name="Intime" ColumnName="Intime" />
+                <ScalarProperty Name="lrtime" ColumnName="lrtime" />
+                <ScalarProperty Name="Fzr" ColumnName="Fzr" />
+                <ScalarProperty Name="dlt" ColumnName="dlt" />
+                <ScalarProperty Name="SenHe" ColumnName="SenHe" />
+                <ScalarProperty Name="KaoqinTime" ColumnName="KaoqinTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_HuoyunErverday">
+            <EntityTypeMapping TypeName="caigouModel.T_HuoyunErverday">
+              <MappingFragment StoreEntitySet="T_HuoyunErverday">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="CarNumberid" ColumnName="CarNumberid" />
+                <ScalarProperty Name="CarPersonid" ColumnName="CarPersonid" />
+                <ScalarProperty Name="money" ColumnName="money" />
+                <ScalarProperty Name="Gls" ColumnName="Gls" />
+                <ScalarProperty Name="dlt" ColumnName="dlt" />
+                <ScalarProperty Name="items" ColumnName="items" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_HuoyunLCS">
+            <EntityTypeMapping TypeName="caigouModel.T_HuoyunLCS">
+              <MappingFragment StoreEntitySet="T_HuoyunLCS">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Carnumber" ColumnName="Carnumber" />
+                <ScalarProperty Name="Times" ColumnName="Times" />
+                <ScalarProperty Name="Carname" ColumnName="Carname" />
+                <ScalarProperty Name="Lcs" ColumnName="Lcs" />
+                <ScalarProperty Name="dlt" ColumnName="dlt" />
+                <ScalarProperty Name="Intime" ColumnName="Intime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_HuoyunLj">
+            <EntityTypeMapping TypeName="caigouModel.T_HuoyunLj">
+              <MappingFragment StoreEntitySet="T_HuoyunLj">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Gqf" ColumnName="Gqf" />
+                <ScalarProperty Name="Fakuan" ColumnName="Fakuan" />
+                <ScalarProperty Name="Xcf" ColumnName="Xcf" />
+                <ScalarProperty Name="Bxfy" ColumnName="Bxfy" />
+                <ScalarProperty Name="Jcf" ColumnName="Jcf" />
+                <ScalarProperty Name="jwlxh" ColumnName="jwlxh" />
+                <ScalarProperty Name="Lj" ColumnName="Lj" />
+                <ScalarProperty Name="Gz" ColumnName="Gz" />
+                <ScalarProperty Name="Flf" ColumnName="Flf" />
+                <ScalarProperty Name="Clf" ColumnName="Clf" />
+                <ScalarProperty Name="Qt" ColumnName="Qt" />
+                <ScalarProperty Name="Gy" ColumnName="Gy" />
+                <ScalarProperty Name="Ltt" ColumnName="Ltt" />
+                <ScalarProperty Name="dlt" ColumnName="dlt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_HuoyunMoth">
+            <EntityTypeMapping TypeName="caigouModel.T_HuoyunMoth">
+              <MappingFragment StoreEntitySet="T_HuoyunMoth">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Gqf" ColumnName="Gqf" />
+                <ScalarProperty Name="Fakuan" ColumnName="Fakuan" />
+                <ScalarProperty Name="Xcf" ColumnName="Xcf" />
+                <ScalarProperty Name="Bxfy" ColumnName="Bxfy" />
+                <ScalarProperty Name="Jcf" ColumnName="Jcf" />
+                <ScalarProperty Name="jwlxh" ColumnName="jwlxh" />
+                <ScalarProperty Name="Lj" ColumnName="Lj" />
+                <ScalarProperty Name="Gz" ColumnName="Gz" />
+                <ScalarProperty Name="Flf" ColumnName="Flf" />
+                <ScalarProperty Name="Clf" ColumnName="Clf" />
+                <ScalarProperty Name="Qt" ColumnName="Qt" />
+                <ScalarProperty Name="Gy" ColumnName="Gy" />
+                <ScalarProperty Name="Ltt" ColumnName="Ltt" />
+                <ScalarProperty Name="dlt" ColumnName="dlt" />
+                <ScalarProperty Name="Dtime" ColumnName="Dtime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Leibie">
+            <EntityTypeMapping TypeName="caigouModel.T_Leibie">
+              <MappingFragment StoreEntitySet="T_Leibie">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Item_id" ColumnName="Item_id" />
+                <ScalarProperty Name="Item_con" ColumnName="Item_con" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_lnlyysjt">
+            <EntityTypeMapping TypeName="caigouModel.T_lnlyysjt">
+              <MappingFragment StoreEntitySet="T_lnlyysjt">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Comname" ColumnName="Comname" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="Lxperson" ColumnName="Lxperson" />
+                <ScalarProperty Name="Lxqq" ColumnName="Lxqq" />
+                <ScalarProperty Name="Qqquen" ColumnName="Qqquen" />
+                <ScalarProperty Name="JsPhoto" ColumnName="JsPhoto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_LoginBak">
+            <EntityTypeMapping TypeName="caigouModel.T_LoginBak">
+              <MappingFragment StoreEntitySet="T_LoginBak">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="LoginUser" ColumnName="LoginUser" />
+                <ScalarProperty Name="LoginIP" ColumnName="LoginIP" />
+                <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_MAIN_GUNDONG">
+            <EntityTypeMapping TypeName="caigouModel.T_MAIN_GUNDONG">
+              <MappingFragment StoreEntitySet="T_MAIN_GUNDONG">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Leixing" ColumnName="Leixing" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_OutDORshijian">
+            <EntityTypeMapping TypeName="caigouModel.T_OutDORshijian">
+              <MappingFragment StoreEntitySet="T_OutDORshijian">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="SJtime" ColumnName="SJtime" />
+                <ScalarProperty Name="SqpersonId" ColumnName="SqpersonId" />
+                <ScalarProperty Name="dlt" ColumnName="dlt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Over_car">
+            <EntityTypeMapping TypeName="caigouModel.T_Over_car">
+              <MappingFragment StoreEntitySet="T_Over_car">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="UseCar_id" ColumnName="UseCar_id" />
+                <ScalarProperty Name="Car_person_id" ColumnName="Car_person_id" />
+                <ScalarProperty Name="Car_number" ColumnName="Car_number" />
+                <ScalarProperty Name="Out_car" ColumnName="Out_car" />
+                <ScalarProperty Name="Back_car" ColumnName="Back_car" />
+                <ScalarProperty Name="gss" ColumnName="gss" />
+                <ScalarProperty Name="dlt" ColumnName="dlt" />
+                <ScalarProperty Name="Save_Time" ColumnName="Save_Time" />
+                <ScalarProperty Name="ShiJiFaCheTime" ColumnName="ShiJiFaCheTime" />
+                <ScalarProperty Name="ShiJiShouCheTime" ColumnName="ShiJiShouCheTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Person">
+            <EntityTypeMapping TypeName="caigouModel.T_Person">
+              <MappingFragment StoreEntitySet="T_Person">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="PersonName" ColumnName="PersonName" />
+                <ScalarProperty Name="Bumen" ColumnName="Bumen" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Userpassword" ColumnName="Userpassword" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Personmoney">
+            <EntityTypeMapping TypeName="caigouModel.T_Personmoney">
+              <MappingFragment StoreEntitySet="T_Personmoney">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="CgxjId" ColumnName="CgxjId" />
+                <ScalarProperty Name="Jsfs" ColumnName="Jsfs" />
+                <ScalarProperty Name="Bz" ColumnName="Bz" />
+                <ScalarProperty Name="Cpcz" ColumnName="Cpcz" />
+                <ScalarProperty Name="Cpcd" ColumnName="Cpcd" />
+                <ScalarProperty Name="Cppp" ColumnName="Cppp" />
+                <ScalarProperty Name="Xjzt" ColumnName="Xjzt" />
+                <ScalarProperty Name="Sctime" ColumnName="Sctime" />
+                <ScalarProperty Name="Cjtime" ColumnName="Cjtime" />
+                <ScalarProperty Name="Overtime" ColumnName="Overtime" />
+                <ScalarProperty Name="clname" ColumnName="clname" />
+                <ScalarProperty Name="ggxh" ColumnName="ggxh" />
+                <ScalarProperty Name="cpdw" ColumnName="cpdw" />
+                <ScalarProperty Name="cpsl" ColumnName="cpsl" />
+                <ScalarProperty Name="bmname" ColumnName="bmname" />
+                <ScalarProperty Name="Zbzt" ColumnName="Zbzt" />
+                <ScalarProperty Name="ZbPerson" ColumnName="ZbPerson" />
+                <ScalarProperty Name="Zbje" ColumnName="Zbje" />
+                <ScalarProperty Name="Zbbz" ColumnName="Zbbz" />
+                <ScalarProperty Name="bzs" ColumnName="bzs" />
+                <ScalarProperty Name="yunfei" ColumnName="yunfei" />
+                <ScalarProperty Name="xjbz" ColumnName="xjbz" />
+                <ScalarProperty Name="Lebie" ColumnName="Lebie" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_QJDtable">
+            <EntityTypeMapping TypeName="caigouModel.T_QJDtable">
+              <MappingFragment StoreEntitySet="T_QJDtable">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Bumen" ColumnName="Bumen" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="QJleibie" ColumnName="QJleibie" />
+                <ScalarProperty Name="ftime" ColumnName="ftime" />
+                <ScalarProperty Name="fmuent" ColumnName="fmuent" />
+                <ScalarProperty Name="Ttime" ColumnName="Ttime" />
+                <ScalarProperty Name="Tmuent" ColumnName="Tmuent" />
+                <ScalarProperty Name="QJshiyou" ColumnName="QJshiyou" />
+                <ScalarProperty Name="Fzr" ColumnName="Fzr" />
+                <ScalarProperty Name="dlt" ColumnName="dlt" />
+                <ScalarProperty Name="SavTime" ColumnName="SavTime" />
+                <ScalarProperty Name="See" ColumnName="See" />
+                <ScalarProperty Name="dlt_all" ColumnName="dlt_all" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Qx_bumen">
+            <EntityTypeMapping TypeName="caigouModel.T_Qx_bumen">
+              <MappingFragment StoreEntitySet="T_Qx_bumen">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="User_Qx" ColumnName="User_Qx" />
+                <ScalarProperty Name="Bumen_id" ColumnName="Bumen_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_SqTable">
+            <EntityTypeMapping TypeName="caigouModel.T_SqTable">
+              <MappingFragment StoreEntitySet="T_SqTable">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="clname" ColumnName="clname" />
+                <ScalarProperty Name="ggxh" ColumnName="ggxh" />
+                <ScalarProperty Name="cpcd" ColumnName="cpcd" />
+                <ScalarProperty Name="cpsl" ColumnName="cpsl" />
+                <ScalarProperty Name="bmname" ColumnName="bmname" />
+                <ScalarProperty Name="bz" ColumnName="bz" />
+                <ScalarProperty Name="cpdw" ColumnName="cpdw" />
+                <ScalarProperty Name="SqTime" ColumnName="SqTime" />
+                <ScalarProperty Name="Dyt" ColumnName="Dyt" />
+                <ScalarProperty Name="Sqperson" ColumnName="Sqperson" />
+                <ScalarProperty Name="Sqbumen" ColumnName="Sqbumen" />
+                <ScalarProperty Name="Deletes" ColumnName="Deletes" />
+                <ScalarProperty Name="Dsname" ColumnName="Dsname" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
+                <ScalarProperty Name="Cgxj_id" ColumnName="Cgxj_id" />
+                <ScalarProperty Name="Sl" ColumnName="Sl" />
+                <ScalarProperty Name="Cgname" ColumnName="Cgname" />
+                <ScalarProperty Name="Caiwu" ColumnName="Caiwu" />
+                <ScalarProperty Name="Cwname" ColumnName="Cwname" />
+                <ScalarProperty Name="Lebie" ColumnName="Lebie" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_SysUsers">
+            <EntityTypeMapping TypeName="caigouModel.T_SysUsers">
+              <MappingFragment StoreEntitySet="T_SysUsers">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Rname" ColumnName="Rname" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Tiaodian">
+            <EntityTypeMapping TypeName="caigouModel.T_Tiaodian">
+              <MappingFragment StoreEntitySet="T_Tiaodian">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tiaodian" ColumnName="Tiaodian" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_UseCart">
+            <EntityTypeMapping TypeName="caigouModel.T_UseCart">
+              <MappingFragment StoreEntitySet="T_UseCart">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Thetime" ColumnName="Thetime" />
+                <ScalarProperty Name="CartPerson" ColumnName="CartPerson" />
+                <ScalarProperty Name="Cartccr" ColumnName="Cartccr" />
+                <ScalarProperty Name="cclcs" ColumnName="cclcs" />
+                <ScalarProperty Name="sclcs" ColumnName="sclcs" />
+                <ScalarProperty Name="Gotime" ColumnName="Gotime" />
+                <ScalarProperty Name="Backtime" ColumnName="Backtime" />
+                <ScalarProperty Name="Goaddess" ColumnName="Goaddess" />
+                <ScalarProperty Name="Toyes" ColumnName="Toyes" />
+                <ScalarProperty Name="Tono" ColumnName="Tono" />
+                <ScalarProperty Name="xsgss" ColumnName="xsgss" />
+                <ScalarProperty Name="Toshiyou" ColumnName="Toshiyou" />
+                <ScalarProperty Name="Txt" ColumnName="Txt" />
+                <ScalarProperty Name="CartNumber" ColumnName="CartNumber" />
+                <ScalarProperty Name="Cartname" ColumnName="Cartname" />
+                <ScalarProperty Name="bmfzr" ColumnName="bmfzr" />
+                <ScalarProperty Name="dlt" ColumnName="dlt" />
+                <ScalarProperty Name="savetime" ColumnName="savetime" />
+                <ScalarProperty Name="Bumen" ColumnName="Bumen" />
+                <ScalarProperty Name="Mw_dlt" ColumnName="Mw_dlt" />
+                <ScalarProperty Name="YXB_sh" ColumnName="YXB_sh" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Users">
+            <EntityTypeMapping TypeName="caigouModel.T_Users">
+              <MappingFragment StoreEntitySet="T_Users">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="RName" ColumnName="RName" />
+                <ScalarProperty Name="Bumen" ColumnName="Bumen" />
+                <ScalarProperty Name="Guishu" ColumnName="Guishu" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsLogin" ColumnName="IsLogin" />
+                <ScalarProperty Name="Qx" ColumnName="Qx" />
+                <ScalarProperty Name="Bj_qx" ColumnName="Bj_qx" />
+                <ScalarProperty Name="Wuguan" ColumnName="Wuguan" />
+                <ScalarProperty Name="Caiwu" ColumnName="Caiwu" />
+                <ScalarProperty Name="Huoyun" ColumnName="Huoyun" />
+                <ScalarProperty Name="admin" ColumnName="admin" />
+                <ScalarProperty Name="yingxiao" ColumnName="yingxiao" />
+                <ScalarProperty Name="NewXinzi" ColumnName="NewXinzi" />
+                <ScalarProperty Name="KQshenhe" ColumnName="KQshenhe" />
+                <ScalarProperty Name="OldGZ" ColumnName="OldGZ" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Users_content">
+            <EntityTypeMapping TypeName="caigouModel.T_Users_content">
+              <MappingFragment StoreEntitySet="T_Users_content">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Users_id" ColumnName="Users_id" />
+                <ScalarProperty Name="zhiwu" ColumnName="zhiwu" />
+                <ScalarProperty Name="photo" ColumnName="photo" />
+                <ScalarProperty Name="qq" ColumnName="qq" />
+                <ScalarProperty Name="photo_x" ColumnName="photo_x" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Wuguan">
+            <EntityTypeMapping TypeName="caigouModel.T_Wuguan">
+              <MappingFragment StoreEntitySet="T_Wuguan">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Personname" ColumnName="Personname" />
+                <ScalarProperty Name="Bumen" ColumnName="Bumen" />
+                <ScalarProperty Name="Wupin" ColumnName="Wupin" />
+                <ScalarProperty Name="Zhuangtai" ColumnName="Zhuangtai" />
+                <ScalarProperty Name="Shuliang" ColumnName="Shuliang" />
+                <ScalarProperty Name="Guige" ColumnName="Guige" />
+                <ScalarProperty Name="Sqtime" ColumnName="Sqtime" />
+                <ScalarProperty Name="Shtime" ColumnName="Shtime" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
+                <ScalarProperty Name="SumMoney" ColumnName="SumMoney" />
+                <ScalarProperty Name="Danwei" ColumnName="Danwei" />
+                <ScalarProperty Name="Beizhu" ColumnName="Beizhu" />
+                <ScalarProperty Name="SHperson" ColumnName="SHperson" />
+                <ScalarProperty Name="dlt" ColumnName="dlt" />
+                <ScalarProperty Name="prt" ColumnName="prt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Wuguanchuku">
+            <EntityTypeMapping TypeName="caigouModel.T_Wuguanchuku">
+              <MappingFragment StoreEntitySet="T_Wuguanchuku">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="WP_Name" ColumnName="WP_Name" />
+                <ScalarProperty Name="carnumber" ColumnName="carnumber" />
+                <ScalarProperty Name="danwei" ColumnName="danwei" />
+                <ScalarProperty Name="shuliang" ColumnName="shuliang" />
+                <ScalarProperty Name="money" ColumnName="money" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="bak" ColumnName="bak" />
+                <ScalarProperty Name="dlt" ColumnName="dlt" />
+                <ScalarProperty Name="dlt_time" ColumnName="dlt_time" />
+                <ScalarProperty Name="Person_id" ColumnName="Person_id" />
+                <ScalarProperty Name="jisu" ColumnName="jisu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_ZaoBiaoFanWei">
+            <EntityTypeMapping TypeName="caigouModel.T_ZaoBiaoFanWei">
+              <MappingFragment StoreEntitySet="T_ZaoBiaoFanWei">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Zbid" ColumnName="Zbid" />
+                <ScalarProperty Name="Zbname" ColumnName="Zbname" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Caigou">
+            <EntityTypeMapping TypeName="caigouModel.T_Caigou">
+              <MappingFragment StoreEntitySet="T_Caigou">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Wupin" ColumnName="Wupin" />
+                <ScalarProperty Name="Danjia" ColumnName="Danjia" />
+                <ScalarProperty Name="Shuliang" ColumnName="Shuliang" />
+                <ScalarProperty Name="Danwei" ColumnName="Danwei" />
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+                <ScalarProperty Name="Xinghao" ColumnName="Xinghao" />
+                <ScalarProperty Name="Dbname" ColumnName="Dbname" />
+                <ScalarProperty Name="Dbdj" ColumnName="Dbdj" />
+                <ScalarProperty Name="Dbsum" ColumnName="Dbsum" />
+                <ScalarProperty Name="Qf" ColumnName="Qf" />
+                <ScalarProperty Name="Th" ColumnName="Th" />
+                <ScalarProperty Name="Shuilv" ColumnName="Shuilv" />
+                <ScalarProperty Name="T_CgxjId" ColumnName="T_CgxjId" />
+                <ScalarProperty Name="Yunfei" ColumnName="Yunfei" />
+                <ScalarProperty Name="NowDayTime" ColumnName="NowDayTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

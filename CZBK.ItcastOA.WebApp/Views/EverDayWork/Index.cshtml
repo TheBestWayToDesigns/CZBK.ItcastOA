@@ -6,13 +6,9 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>日程信息</title>
-
     <link href="~/Content/themes/icon.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
-
     <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
-    <link href="~/Content/themes/icon.css" rel="stylesheet" />
-    <link href="~/Content/demo/demo.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
     <script src="~/Scripts/jquery.easyui.min.js"></script>
     <script src="~/Scripts/easyui-lang-zh_CN.js"></script>
     <script src="~/Scripts/datapattern.js"></script>
@@ -1629,7 +1625,15 @@
 
             }
     </script>
+    <style >
+        .cstable {
+            padding:2px;
+        }
+            .cstable tr {
 
+            }
+       
+    </style>
 </head>
 <body class="easyui-layout">
     <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink " style="width:150px; padding:8px;">
@@ -1766,7 +1770,8 @@
     <!---------------添加日程----------------->
     <div id="AddScheduleDIV" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddSchedule", "EverDayWork", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddSchedule" }, new { id = "addschedulefrom" }))
-        {<table id="AddScheduleTab">
+        { 
+            <table id="AddScheduleTab" class="cstable">
                 <tr><td>日程时间</td><td><input type="text" class="easyui-datetimebox" name="ScheduleTime" id="ScheduleTime" /></td></tr>
                 <tr><td>日程内容</td><td><textarea class="easyui-textarea" name="ScheduleText" id="ScheduleText" style="width:302px;height:158px"></textarea></td></tr>
                 <tr>
@@ -1778,6 +1783,7 @@
                                url="/EverDayWork/GetScheduleTypeall"
                                valueField="ID"
                                textField="ItemText"
+                               panelHeight="auto"
                                style="width:100px" />
                     </td>
                 </tr>
@@ -2036,101 +2042,3 @@
 </body>
 </html>
 
-
-
-@*<div id="tb" style="padding:5px;height:auto">
-        <div style="margin-bottom:5px">
-            &nbsp;&nbsp; &nbsp;&nbsp;
-            开始时间: <input class="easyui-datebox" id="StTime" value="2017-01-01" style="width:120px">
-            To: <input class="easyui-datebox" id="DwTime" value="2017-12-30" style="width:120px">
-            &nbsp;&nbsp; &nbsp;&nbsp;
-
-            营销员:
-            <select class="easyui-combobox" panelHeight="auto" id="Person" style="width:100px">
-                @{foreach (UserInfo Item in ViewBag.user)
-                    {
-                        <option value="@Item.ID">@Item.UName</option>
-                    }
-                }
-            </select> &nbsp;&nbsp; &nbsp;&nbsp;
-
-            <span id="SpanYyZt">
-                原因:
-                <select class="easyui-combobox" id="YyZt" panelHeight="auto" style="width:100px">
-                    <option value="-99">失败</option>
-                    @{foreach (T_YSItems Item in ViewBag.items)
-                        {
-                            <option value="@Item.ID">@Item.MyText</option>
-                        }
-                    }
-                </select>
-            </span>&nbsp;&nbsp; &nbsp;&nbsp;
-        </div>
-        <div style="">
-            &nbsp;&nbsp; &nbsp;&nbsp;
-
-            客户名称:
-            <select class="easyui-combobox" panelHeight="auto" id="KHname" style="width:auto">
-                @{foreach (YXB_Kh_list Item in ViewBag.KeHuName)
-                    {
-                        <option value="@Item.id">@Item.KHname</option>
-                    }
-                }
-            </select> &nbsp;&nbsp; &nbsp;&nbsp;
-            供货地点:&nbsp;&nbsp;省份
-            <input class="easyui-combobox" id="Province"
-                   name="Province"
-                   url="/YXBJ/GetAddress?parentiD=0&MyColums=Province"
-                   valueField="ID"
-                   textField="MyTexts"
-                   panelHeight="auto" style="width:100px" />
-            &nbsp;&nbsp;城市
-            <input class="easyui-combobox"
-                   id="City"
-                   name="City"
-                   url=""
-                   valueField="ID"
-                   textField="MyTexts"
-                   panelHeight="auto" style="width:100px" />
-            &nbsp;&nbsp;区/县
-            <input class="easyui-combobox"
-                   id="Village"
-                   name="Village"
-                   url=""
-                   valueField="ID"
-                   textField="MyTexts"
-                   panelHeight="auto" style="width:100px" />
-        </div>
-        <div>
-            <span id="CanPinSelect">
-                &nbsp;&nbsp; &nbsp;&nbsp;
-                产品名称:
-
-                <input class="easyui-combobox"
-                       id="CPname"
-                       name="CPname"
-                       url="/MasterBaoJia/GetCPname?Action=1"
-                       valueField="ID"
-                       textField="MyText"
-                       panelHeight="auto" style="width:auto" />
-
-                &nbsp;&nbsp; &nbsp;&nbsp;
-                产品型号:
-                <input class="easyui-combobox"
-                       id="CPxh"
-                       name="CPxh"
-                       url="/MasterBaoJia/GetCPname?Action=2"
-                       valueField="ID"
-                       textField="MyText"
-                       panelHeight="auto" style="width:100px" />
-
-            </span>
-            &nbsp;&nbsp; &nbsp;&nbsp;
-            <a href="#" class="easyui-linkbutton" id="qingkou" iconCls="icon-reload">清空</a>
-            <a href="#" class="easyui-linkbutton" id="Sousuo" iconCls="icon-search">搜索1</a>
-
-            <a href="#" class="easyui-linkbutton" id="Sousuo_win" iconCls="icon-search">搜索2</a>
-
-        </div>
-
-    </div>*@

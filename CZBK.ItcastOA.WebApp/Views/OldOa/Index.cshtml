@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+@using OldOaModel
+<script>
+    var name = "@ViewBag.user.Name";
+    var pass = "@ViewBag.user.Password";
+    location.href = "http://192.168.0.7/login.ashx?UserName=" + name + "&&UserPwd="+pass+"&&Login=true";
+</script>
+<h2 >@ViewBag.user.Name</h2>

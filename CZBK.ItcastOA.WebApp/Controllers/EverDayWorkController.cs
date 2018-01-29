@@ -294,6 +294,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            ScheduleUpdateTime = a.ScheduleUpdateTime,
                            ScheduleText = a.ScheduleText,
                            ScheduleTypeID = a.ScheduleType.ItemText,
+                           ScheduleId=a.ScheduleTypeID,
                            TextReadBak = a.TextReadBak,
                            TextReadUser = a.UserInfo1.PerSonName,
                            TextReadTime = a.TextReadTime,
@@ -2038,10 +2039,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     DCperson dp = new DCperson();
                    
                     var TempC = temp.Where(x => x.SchenuleTime == FDtime && x.YJUserinfoID == l.ID&&x.TextID!=null&&x.TextID>=0).DefaultIfEmpty().ToList();
-                    if (i == 2&&l.name=="张廷宇")
-                    {
-                        string ss = "";
-                    }
+                    //if (i == 2&&l.name=="张廷宇")
+                    //{
+                    //    string ss = "";
+                    //}
                     if (TempC.Count() > 0)
                     {
                         if (TempC[0] != null)

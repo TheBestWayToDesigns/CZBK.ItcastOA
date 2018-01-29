@@ -19,7 +19,7 @@ namespace CZBK.ItcastOA.WebApp.Models
             }
             catch (Exception e)
             {
-
+                string s = e.ToString();
             }
         }
     }
