@@ -1778,6 +1778,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 var ss = ScheduleService.LoadEntities(x => x.UserID == a.UserID).DefaultIfEmpty().ToList();
                 list.AddRange(ss);
             }
+            var mstdata = ScheduleService.LoadEntities(x => x.UserID == id).DefaultIfEmpty().ToList();
+            list.AddRange(mstdata);
             List<Schedule> schlist = list.Where(x => x.ScheduleTime > dt && x.ScheduleTime < end).DefaultIfEmpty().ToList();
             if (schlist == null && schlist[0] == null)
             {

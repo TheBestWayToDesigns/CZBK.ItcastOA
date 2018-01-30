@@ -87,11 +87,49 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            AddTime=a.NewTime,
                            KHfaren=a.KHfaren,
                            KHSGAdrss = a.KHSGAdrss,
-                           BeiZhu = a.BeiZhu                           
+                           BeiZhu = a.BeiZhu,
+                           KHphoto= a.KHphoto,
+                           KHzhiwu= a.KHzhiwu,
+                           All_I= a.All_I,
+                           Remark= a.Remark,
+                           NewTime = a.NewTime,
+                           DelFlag = a.DelFlag,
+                           AddUser = a.AddUser
+                                                      
                        };
             return Json(new { rows = temp, total = totalCount }, JsonRequestBehavior.AllowGet);
         }
 
+        //修改客户信息
+        public ActionResult EditYXB_KH_list(YXB_Kh_list khlist) {
+            if (YXB_Kh_listService.EditEntity(khlist))
+            {
+                return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+            }
+            else {
+                return Json(new { ret = "err" }, JsonRequestBehavior.AllowGet);
+            }
+            
+        }
+        //软删除客户信息
+        public ActionResult Del_KH_list()
+        {
+            var id = Request["ID"] == null ? 0 : Convert.ToInt64(Request["ID"]);
+            var dellist= YXB_Kh_listService.LoadEntities(x => x.id == id).FirstOrDefault();
+            if (dellist == null) {
+                return Json(new { ret = "not" }, JsonRequestBehavior.AllowGet);
+            }
+            dellist.DelFlag = 1;
+                if (YXB_Kh_listService.EditEntity(dellist))
+            {
+                return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { ret = "err" }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
         public ActionResult GetKhList()
         {
             var aifo = YXB_Kh_listService.LoadEntities(x => x.DelFlag == delFlag && x.AddUser == LoginUser.ID);
