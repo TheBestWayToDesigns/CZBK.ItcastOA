@@ -1372,7 +1372,22 @@
                         document.getElementById("BeiZhu").value = document.getElementById("BeiZhuArea").value;
                         var fileup = document.getElementById("fileupid").value;
                         var fileupurl = document.getElementById("Url").value;
-
+                        
+                        var typedata = $("#ScheduleType").combobox("getValue")
+                        var timedata = $("#ScheduleTime").datetimebox("getValue");
+                        var texts = $("#ScheduleText").val();
+                        if (typedata.length <= 0) {
+                            $.messager.alert("提示", "日程类型不可为空！")
+                            return;
+                        }
+                        if (timedata.length <= 0) {
+                            $.messager.alert("提示", "日期不可为空！")
+                            return;
+                        }
+                        if (texts.length <= 0) {
+                            $.messager.alert("提示", "内容不可为空！")
+                            return;
+                        }
                         if (fileup.trim().length > 0)
                         {
                             if (fileupurl.trim().length <= 0) {

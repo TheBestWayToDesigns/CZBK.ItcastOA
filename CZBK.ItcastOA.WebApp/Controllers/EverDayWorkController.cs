@@ -283,6 +283,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 10;
             int totalCount;
+
             var temp = ScheduleService.LoadPageEntities(pageIndex, pageSize, out totalCount, x => x.UserID == LoginUser.ID, x => x.ID, false);
             var Rtmp = from a in temp
                        select new
@@ -301,7 +302,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            FileItemID = a.FileItemID,
                            ReadUser = a.TextReadUser
                        };
-            return Json(new { rows = Rtmp, total = totalCount }, JsonRequestBehavior.AllowGet);
+            return Json(new { rows = Rtmp, total = totalCount  }, JsonRequestBehavior.AllowGet);
         }
 
         //获取Type状态信息
@@ -938,6 +939,32 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             if (temp != null)
             {
                 return Json(new { UserID = temp.UserInfo.PerSonName, ScheduleTime = temp.ScheduleTime, ScheduleAddTime = temp.ScheduleAddTime, ScheduleTypeID = temp.ScheduleType.ItemText, ScheduleText = temp.ScheduleText }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
+        }
+        //获取日程详细信息(修改日程用)
+        public ActionResult GetScheduleInfoForEditSch()
+        {
+            long id = Convert.ToInt64(Request["id"]);
+            var temp = ScheduleService.LoadEntities(x => x.ID == id).FirstOrDefault();
+            if (temp != null)
+            {
+                return Json(new {
+                    ID =temp.ID ,
+                    UserID =temp.UserID ,
+                    ScheduleTime =temp.ScheduleTime ,
+                    ScheduleAddTime =temp.ScheduleAddTime ,
+                    ScheduleUpdateTime = temp.ScheduleUpdateTime,
+                    ScheduleText = temp.ScheduleText,
+                    ScheduleTypeID = temp.ScheduleTypeID,
+                    TextReadBak = temp.TextReadBak,
+                    TextReadUser = temp.TextReadUser,
+                    TextReadTime = temp.TextReadTime,
+                    FileItemID = temp.FileItemID
+                }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -1772,15 +1799,23 @@ namespace CZBK.ItcastOA.WebApp.Controllers
 
         private object GetDayZongjie(int? id, ref List<SchInfoForTab> Lsift,ref string ScheduleSumStr,DateTime dt,DateTime end) {
             var tempSUser = ScheduleUserService.LoadEntities(x => x.UpID == id).DefaultIfEmpty();
-            List<Schedule> list = new List<Schedule>();
+            List<Schedule> schlist = new List<Schedule>();
             foreach (var a in tempSUser)
             {
-                var ss = ScheduleService.LoadEntities(x => x.UserID == a.UserID).DefaultIfEmpty().ToList();
-                list.AddRange(ss);
+                var ss1 = ScheduleService.LoadEntities(x => x.UserID == a.UserID && x.ScheduleTime > dt && x.ScheduleTime < end).ToList();
+                if (ss1.Count > 0) {
+                    schlist.AddRange(ss1);
+                }
+                //var ss = ScheduleService.LoadEntities(x => x.UserID == a.UserID && x.ScheduleTime > dt && x.ScheduleTime < end).DefaultIfEmpty().ToList();
+                
             }
-            var mstdata = ScheduleService.LoadEntities(x => x.UserID == id).DefaultIfEmpty().ToList();
-            list.AddRange(mstdata);
-            List<Schedule> schlist = list.Where(x => x.ScheduleTime > dt && x.ScheduleTime < end).DefaultIfEmpty().ToList();
+            var mstdata = ScheduleService.LoadEntities(x => x.UserID == id && x.ScheduleTime > dt && x.ScheduleTime < end).ToList();
+            if (mstdata.Count > 0)
+            {
+                schlist.AddRange(mstdata);
+            }
+          
+            //List<Schedule> schlist = list;
             if (schlist == null && schlist[0] == null)
             {
                 return null;

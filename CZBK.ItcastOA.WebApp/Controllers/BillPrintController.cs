@@ -15,7 +15,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IT_BaoxiaoItemsService T_BaoxiaoItemsService { get; set; }
         IBLL.IT_JieKuanBillService T_JieKuanBillService { get; set; }
         IBLL.IBumenInfoSetService BumenInfoSetService { get; set; }
-        IBLL.IUserInfoService UserInfoService { get; set; } 
+        IBLL.IUserInfoService UserInfoService { get; set; }
+        IBLL.IT_ZhiPiaoTongService T_ZhiPiaoTongService { get; set; }
 
         public ActionResult Index()
         {
@@ -185,8 +186,61 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return Json(new { rows = temp, total = totalCount }, JsonRequestBehavior.AllowGet);
 
         }
+        //获取收款收据
+        public ActionResult GetZhipiaotong() {           
+            int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 15;
+            int totalCount = 0;
+            int BillId = Request["BillId"] == null ? 0 : int.Parse(Request["BillId"]);
+            var Adata = T_ZhiPiaoTongService.LoadPageEntities(pageIndex, pageSize, out totalCount, x => x.del==false&&x.AddUser==LoginUser.ID, x => x.NewTime, false);
 
+            var temp = from a in Adata
+                       select new
+                       {
+                           a.ID,
+                           a.ComName,
+                           a.Bumen,
+                           a.Money,
+                           a.Skbak,
+                           a.Fangshi,
+                           a.NewTime,
+                           a.AddTime,
+                       };
+            return Json(new { rows = temp, total = totalCount }, JsonRequestBehavior.AllowGet);
+        }
+        //创建与修改收款收据
+        public ActionResult AddZPT(T_ZhiPiaoTong TZP) {
 
+            if (TZP.ID > 0) {
+                T_ZhiPiaoTong zpt = T_ZhiPiaoTongService.LoadEntities(x => x.ID == TZP.ID).FirstOrDefault();
+                zpt.Money = TZP.Money;
+                zpt.Bumen = TZP.Bumen;
+                zpt.ComName = TZP.ComName;
+                zpt.Fangshi = TZP.Fangshi;
+                zpt.Skbak = TZP.Skbak;
+                if (T_ZhiPiaoTongService.EditEntity(zpt)) {
+                    return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else {
+                TZP.AddTime = DateTime.Now;
+                TZP.AddUser = LoginUser.ID;
+                TZP.del = false;
+                T_ZhiPiaoTongService.AddEntity(TZP);
+                return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { ret = "err" }, JsonRequestBehavior.AllowGet);
+        }
+        //软删除收款收据数据
+        public ActionResult DelZPT() {
+            long id = Convert.ToInt64(Request["ID"]);
+            T_ZhiPiaoTong tzpt= T_ZhiPiaoTongService.LoadEntities(x => x.ID == id).FirstOrDefault();
+            tzpt.del = true;
+            if (T_ZhiPiaoTongService.EditEntity(tzpt)) {
+                return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+        }
         //添加或修改报销数据列表
         public ActionResult AddOrEditBxlistBill(T_BaoxiaoItems jkb)
         {

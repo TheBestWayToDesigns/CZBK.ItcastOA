@@ -185,12 +185,21 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             {
                 tbop.DelFlag = delFlag;
                 tbop.AddTime = MvcApplication.GetT_time();
-                string Ttime = Request["GhTime"];
-                var tsplit = Ttime.Split('/');
-                tbop.GhTime = new DateTime(int.Parse(tsplit[2]), int.Parse(tsplit[1]), int.Parse(tsplit[0]));
-                string stoptime = Request["stoptime"];
-                var stoptime_ = stoptime.Split('/');
-                tbop.StopTime = new DateTime(int.Parse(stoptime_[2]), int.Parse(stoptime_[1]), int.Parse(stoptime_[0]));
+              
+                try
+                {
+                    tbop.GhTime = Convert.ToDateTime(Request["GhTime"]);
+                    tbop.StopTime= Convert.ToDateTime(Request["stoptime"]); 
+                }
+                catch {
+                    string Ttime = Request["GhTime"];
+                    var tsplit = Ttime.Split('/');
+                    tbop.GhTime = new DateTime(int.Parse(tsplit[2]), int.Parse(tsplit[1]), int.Parse(tsplit[0]));
+                    string stoptime = Request["stoptime"];
+                    var stoptime_ = stoptime.Split('/');
+                    tbop.StopTime = new DateTime(int.Parse(stoptime_[2]), int.Parse(stoptime_[1]), int.Parse(stoptime_[0]));
+                }
+               
                 
             }
            
@@ -285,10 +294,11 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return GetysbBaojia(bj.BaoJiaTop_id);
         }
 
-        public ActionResult GetysbBaojia(long BaoJiaTop_id)
+        public ActionResult GetysbBaojia(long? BaoJiaTop_id)
         {
-            
-            var Adata = YXB_BaojiaService.LoadEntities(x => x.BaoJiaTop_id == BaoJiaTop_id && x.DelFlag==delFlag);
+            long? frid = Request["khid"] == null ?  BaoJiaTop_id :Convert.ToInt64(Request["khid"]);
+
+            var Adata = YXB_BaojiaService.LoadEntities(x => x.BaoJiaTop_id == frid && x.DelFlag==delFlag);
             var temp = from a in Adata
                        select new
                        {
@@ -304,7 +314,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                        };
             return Json(new { rows = temp, ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
-       //获取产品报价后信息
+       
+        //获取产品报价后信息
         public ActionResult GetBaoJiaMoney()
         {
             var baojiatopid =  Convert.ToInt64(Request["khid"]);

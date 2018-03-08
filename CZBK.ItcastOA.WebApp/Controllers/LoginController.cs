@@ -53,12 +53,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
            {
                 if (userInfo.UPwd != userPwd)
                 {
-                    return Json("IsNotPass");
+                    return Json(new { ret = "IsNotPass" }, JsonRequestBehavior.AllowGet);
                 }
                 //检查使用时间
                 if (userInfo.OverTime < MvcApplication.GetT_time())
                 {
-                    return Content("no:使用时间到期!!");
+                    return Json(new { ret = "使用时间到期" }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
@@ -88,13 +88,15 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                         cook1.Expires = DateTime.Now.AddDays(3);
                         cook1.HttpOnly = true;
                     }
+                    object cjson = Common.MemcacheHelper.Get(sessionId);                    
+                    UserInfo Loguserinfo = cjson != null? Common.SerializerHelper.DeserializeToObject<UserInfo>(cjson.ToString()):null;
                     if (Convert.ToBoolean(userInfo.ThisMastr))
                     {
-                        return Json( new{ ret= "master",uid=userInfo.ID,uname=userInfo.PerSonName },JsonRequestBehavior.AllowGet);
+                        return Json( new{ ret= "master", temp = Loguserinfo, uid =userInfo.ID,uname=userInfo.PerSonName,cooks=sessionId },JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
-                        return Json(new { ret = "ok", uid = userInfo.ID, uname = userInfo.PerSonName }, JsonRequestBehavior.AllowGet);
+                        return Json(new { ret = "ok",temp= Loguserinfo, uid = userInfo.ID, uname = userInfo.PerSonName, cooks = sessionId }, JsonRequestBehavior.AllowGet);
                     }
                    
                }

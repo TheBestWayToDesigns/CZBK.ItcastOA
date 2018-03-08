@@ -67,6 +67,7 @@ namespace CZBK.ItcastOA.Model
         public DbSet<YJ_ScheduleAction> YJ_ScheduleAction { get; set; }
         public DbSet<YJ_ScheduleDay> YJ_ScheduleDay { get; set; }
         public DbSet<Userbak> Userbaks { get; set; }
+        public DbSet<T_ZhiPiaoTong> T_ZhiPiaoTong { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

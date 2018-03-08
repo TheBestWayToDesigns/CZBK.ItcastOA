@@ -165,6 +165,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IT_ZhiPiaoTongService : IBaseService<T_ZhiPiaoTong>
+    {
+       
+    }   
+	
 	public partial interface IUserbakService : IBaseService<Userbak>
     {
        

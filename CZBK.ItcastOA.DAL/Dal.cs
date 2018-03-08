@@ -166,6 +166,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class T_ZhiPiaoTongDal :BaseDal<T_ZhiPiaoTong>,IT_ZhiPiaoTongDal
+    {
+
+    }
+		
 	public partial class UserbakDal :BaseDal<Userbak>,IUserbakDal
     {
 

@@ -34,6 +34,8 @@
         $(function () {
             $("#NewBill").hide();
             $("#NewBaoXiaoBill").hide();
+            $("#NewZPT").hide();
+            
             //初始化欠款dialg显示信息
             $("#Qiankuandiv").dialog({
                 title: "欠款报销明细表",
@@ -55,8 +57,10 @@
                 $('#tt').resizeDataGrid(0, 0, 200, 500);
             });
             $("#AddBxBill").css("display", "none");
+            $("#AddZPT").css("display", "none");
             $("#AddJieKuanBill").css("display", "none");
             $("#PrintDIV").css("display", "none");
+            $("#PrintZPT").css("display", "none");
             $("#AddBxBillData").css("display", "none");
             $("#BxBillShow").css("display", "none");             
             $("#addta").css("display", "none");
@@ -111,13 +115,7 @@
                 $("#PrintDIV").jqprint();
             })    
             $("#NewBill").click(function () {
-                // $("#BillTimeID").datebox("setValue",'');
-                //$("#BuMenid").combobox("setValue", '');
-                //$("#Jkperson").combobox("setValue", '');
-                //$("#Jkdanwei").combobox("setValue", '');
-                //$("#JieKuanMoneyID").val("");
-                //$("#FaHuoBak").combobox("setValue", '');
-                //$("#CardNumberID").combobox("setValue", '');
+               
                 $("#AddJieKuanBill").css("display", "block");
                 $('#AddJieKuanBill').dialog({
                     title: "添加用户信息",
@@ -145,22 +143,6 @@
                                 $.messager.alert("提示", "请选择借款人部门！");
                                 return;
                             }
-                            //if (jkp == null || jkp == "") {
-                            //    $.messager.alert("提示", "请选择借款人或手动输入！");
-                            //    return;
-                            //} else if (!isNaN(parseInt(jkp))) {
-                               
-                            //    $("#Jkperson1").val(jkp);
-                            //} else {
-                            //    $.post("/BillPrint/ReturnUserID", { "personName": jkp, "BuMenID": bm }, function (data) {
-                            //        if (data.ret == "ok") {
-                            //            $("#Jkperson1").val(data.uid);
-                            //        } else if (data.ret == "no") {
-                            //            $.messager.alert("提示", data.uid);
-                            //            return;
-                            //        }
-                            //    });
-                            //}
                             if (jkdw == null || jkdw == "") {
                                 $.messager.alert("提示", "请选择收款单位或手动输入！");
                                 return;
@@ -199,7 +181,12 @@
             $("#BtnBaoXiao").click(function () {
                 LoadBaoXiao();
             })
+            $("#Zhipiaotong").click(function () {
+                $('#tt').datagrid('loadData', { total: 0, rows: [] });
+                LoadZhipiaotong();
+            })
             $("#NewBaoXiaoBill").click(function () {
+            
                 $("#AddBxBill").css("display", "block");
                 $('#AddBxBill').dialog({
                     title: "新建报销单据",
@@ -229,6 +216,32 @@
                         text: '取消',
                         handler: function () {
                             $('#AddBxBill').dialog('close');
+                        }
+                    }]
+                });
+            })
+            $("#NewZPT").click(function () {
+                $("#ZPTID").val("0")
+                $("#AddZPT").css("display", "block");
+                $('#AddZPT').dialog({
+                    title: "新建收款收据",
+                    width: 600,
+                    height: 400,
+                    collapsible: true,
+                    resizable: true,
+                    modal: true,
+                    buttons: [{
+                        text: '确定',
+                        iconCls: 'icon-ok',
+                        handler: function () {
+                            
+                            $("#ZPTFrom").submit();//提交表单     
+                            $('#AddZPT').dialog('close');
+                        }
+                    }, {
+                        text: '取消',
+                        handler: function () {
+                            $('#AddZPT').dialog('close');
                         }
                     }]
                 });
@@ -293,6 +306,8 @@
                 onLoadSuccess: function () {
                     $("#NewBill").show();
                     $("#NewBaoXiaoBill").hide();
+                    $("#NewZPT").hide();
+
                 }
             });
         }
@@ -343,11 +358,65 @@
                 ]],
                 onLoadSuccess: function () {
                     $("#NewBaoXiaoBill").show();
+                    $("#NewZPT").hide();
                     $("#NewBill").hide();
                 }
             });
         }
-       
+        function LoadZhipiaotong(pars) {
+            $('#tt').datagrid({
+                url: '/BillPrint/GetZhipiaotong',
+                title: '收款收据',
+                width: $("#dgdiv").width() - 2,
+                height: $("#dgdiv").height() - 2,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime 
+                     {
+                         field: 'NewTime', title: '收款日期', formatter: function (value, row, index) {
+                             var str = ChangeDateFormat(value);
+                             return str;
+                         }
+                     },
+                    { field: 'ComName', title: '收款单位（交款人）' },                   
+                     {
+                         field: 'AddTime', title: '创建单据时间', formatter: function (value, row, index) {
+                             var str = ChangeDateFormatHours_Minute(value);
+                             return str;
+                         }
+                     },
+                    { field: 'Money', title: '金额' },
+                     { field: 'Fangshi', title: '结算方式' },
+                       { field: 'Skbak', title: '收款事由' },
+                       { field: 'Bumen', title: '部门' },
+                       {
+                           field: "Print", title: "打印预览", formatter: function (value, row, index) {
+                               return "<a href='javascript:ZPTPrint()' class='l-btn' style='padding:2px 5px;'>打印预览</a>";
+                           }
+                       },
+                     {
+                         field: "ddz", title: "作废", formatter: function (value, row, index) {
+                             return "<a href='javascript:bxpzdel()' class='l-btn' style='padding:2px 5px;'>作废</a>";
+                         }
+                     }
+
+                ]],
+                onLoadSuccess: function () {
+                    $("#NewZPT").show();
+                    $("#NewBaoXiaoBill").hide();
+                    $("#NewBill").hide();
+                }
+            });
+        }
         function afterEdit(data) {
             if (data.ret == "ok") {
                 try {
@@ -355,7 +424,12 @@
                     $('#AddJieKuanBill').dialog('close');
                     $('#AddBxBill').dialog('close');
                 }
-                catch (e) { }              
+                catch (e) { }
+                try {
+                    $('#tt').datagrid('reload');
+                    $('#AddBxBill').dialog('close');
+                }
+                catch (e) { }
                 try {
                     $('#BillShow').datagrid('reload');
                 }
@@ -379,6 +453,7 @@
                 num.substring(num.length - (4 * i + 3));
             return (((sign) ? '' : '-') + num + '.' + cents);
         }
+        //借款单打印数据传输
         function DigPrint() {
             var rows = $('#tt').datagrid('getSelections');
             if (rows.length != 1) {
@@ -437,6 +512,83 @@
                 }]
             });
            
+        }
+        //收款收据打印数据传输
+        function ZPTPrint() {
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+            clenr()
+            $("#td_skdw").text(rows[0].ComName);
+            $("#td_jsfs").text(rows[0].Fangshi);
+            $("#td_sksy").text(rows[0].Skbak);
+            $("#td_bm").text(rows[0].Bumen);
+
+          
+            var strM = rows[0].Money + "";          
+            var spm = strM.split('.');
+            if (spm.length > 1) {
+                var dismall = spm[1].split('');
+                $("#m_1").text(dismall[0]);
+                $("#m_0").text(dismall[1]);
+                
+            }
+            if (spm.length >= 1) {
+                var bigmall = spm[0].split('');
+                $("#t_" + bigmall.length).text("￥");
+                $.each(bigmall, function (index, val) {  
+                    $("#t_" +( (bigmall.length-1) - index)).text(val);
+                })
+            }
+            if ($("#m_1").text().length <= 0) {
+                $("#m_1").text("0");
+            }
+            if ($("#m_0").text().length <= 0) {
+                $("#m_0").text("0");
+            }
+            var Moneyd = rows[0].Money;
+            Moneyd = formatCurrency(Moneyd.toFixed(2))
+            $("#td_dsmoney").text(Arabia_to_Chinese(strM));
+            var Dtime = ChangeDateFormat(rows[0].NewTime).split("-");
+            $("#zptyear").text(Dtime[0])
+            $("#zptmonth").text(Dtime[1])
+            $("#zptdata").text(Dtime[2])
+            //$("#Ptble tr>td:nth-child(2)").css("text-align", "left")
+            $("#PrintZPT").css("display", "block");
+            $('#PrintZPT').dialog({
+                title: "打印预览",
+                width: $(document).width() / 1.5,
+                height: $(document).height() / 1.5,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '打印',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+                        $("#Zpttble tr>td:nth-child(1)").text("");
+
+                        $("#Zpttble tr:eq(0) td:eq(2) ").text("");
+
+                        $("#Zpttble tr:eq(2) td:eq(2) ").text("");
+                        $("#Zpttble tr:eq(2) td:eq(3) ").text("");
+                        
+                        $("#Zpttble tr:eq(3) td:eq(1) ").text("");
+                        $("#Zpttble tr:eq(3) td:eq(3) ").text("");
+                        $("#Zpttble tr:eq(3) td:eq(4) ").text("");
+                       // $("#JKDprint").jqprint();
+                    }
+                }, {
+                    text: '取消',
+                    handler: function () {
+                        $('#PrintZPT').dialog('close');
+                    }
+                }]
+            });
+
         }
         function DigBaoXiaoshow() {
             $(".combo-text").css("width", 400);
@@ -638,6 +790,23 @@
                 ei++;
             })
         }
+        function clenr() {
+            $("#t_0").text("");
+            $("#t_1").text("");
+            $("#t_2").text("");
+            $("#t_3").text("");
+            $("#t_4").text("");
+            $("#t_5").text("");
+            $("#t_6").text("");
+            $("#t_7").text("");
+            $("#m_0").text("");
+            $("#m_1").text("");
+            $("#td_skdw").text("");
+            $("#td_jsfs").text("");
+            $("#td_sksy").text("");
+            $("#td_bm").text("");
+            $("#td_dsmoney").text("");
+        }
         function addbxlist() {
             if ($('#BaoXiaoName').combobox("getText") == "")
             {
@@ -793,7 +962,7 @@
             padding:10px;
         }
         .JKtable input {
-            width:200%;
+            width:100%;
             height:150%;
         }
         .Ptable {
@@ -812,6 +981,16 @@
             width:670px;
             height:10px;
         }
+         .zpttable {
+            BORDER-COLLAPSE: collapse; width:700px; font-size:10px;text-align:center;
+        }
+        .zpttable tr td {
+            height:15px;
+        }
+        .inheght tr td {
+           font-size:10px;
+        }
+        
     </style>
 </head>
 <body class="easyui-layout">
@@ -880,7 +1059,7 @@
         <div id="PrintDIV" style="width:100%;margin:0px; padding:0px;overflow:hidden">
             <div id="JKDprint" style="width:100%;margin-left:16px; padding:0px;">
                 <div style="height:90px;text-align:center;width:840px; font-size:18px">
-                    <span id="bannar1" >辽&nbsp;&nbsp;宁&nbsp;&nbsp;衍&nbsp;&nbsp;水&nbsp;&nbsp;集&nbsp;&nbsp;团</span><br />
+                    <span id="bannar1" >&nbsp;&nbsp;&nbsp;</span><br />
                     <span id="bannar2">借&nbsp;款&nbsp;单</span><br />
                     <div style="width:840px;text-align:right; margin-top:20px;">
                         <span id="Stime" class="Printcc" style="margin-right:70px;font-size:14px;" >
@@ -904,14 +1083,109 @@
                 </table>
             </div>
         </div>
+        <!-- 收款收据显示页面-->
+        <div id="PrintZPT" style="width:100%;margin:0px; padding:0px;overflow:hidden">
+            <div id="JKDprint" style="width:100%;margin-left:16px; padding:0px;">
+                <div style="height:50px;text-align:center;width:700px; font-size:18px;margin-top:10px;">
+                    <span id="bannar1">收款收据</span><br />
+                    <div style="width:700px;text-align:center; margin-top:2px;">
+                        <span id="Stime" class="Printcc" style="font-size:14px;">
+                            <a id="zptyear" style="margin-right:5px;">2017</a>
+                            <a id="zptmonth" style="margin-right:10px;">11</a>
+                            <a id="zptdata" style="margin-right:16px;">11</a>
+                        </span>
+                    </div>
+                </div>
+                <table id="Zpttble" class="zpttable" borderColor="#000000" cellSpacing="0" bgColor="#ffffff" border="1">
+                    <tr>
+                        <td style="width:150px;">收款单位<br />(收款人)</td>
+                        <td style="width:150px; text-align:left; padding-left:10px;" id="td_skdw"></td>
+                        <td colspan="1" style="width:100px;">付款单位<br />(收款人)</td>
+                        <td colspan="12" style="width:300px;text-align:left; padding-left:10px;">辽宁衍水水工水泥制品集团有限公司</td>
+                    </tr>
+                    <tr class="inheght">
+                        <td rowspan="2">人民币<br/>大写</td>
+                        <td colspan="3" rowspan="2" style="width:360px;text-align:left; padding-left:10px;" id="td_dsmoney"></td>
+                        <td  id="">千</td>
+                        <td  id="">百</td>
+                        <td  id="">十</td>
+                        <td  id="">万</td>
+                        <td  id="">千</td>
+                        <td  id="">百</td>
+                        <td id="">十</td>
+                        <td  id="">元</td>
+                        <td  id="" >角</td>
+                        <td id="">分</td>
+                        <td  style="text-align:left; padding-left:10px;" >结算方式</td>
+                    </tr>
+                    <tr class="inheght" >
+                        <td id="t_7"></td>
+                        <td id="t_6"></td>
+                        <td id="t_5"></td>
+                        <td id="t_4"></td>
+                        <td id="t_3"></td>
+                        <td id="t_2"></td>
+                        <td id="t_1"></td>
+                        <td id="t_0"></td>
+                        <td id="m_1"></td>
+                        <td id="m_0"></td>
+                        <td id="td_jsfs"></td>
+                    </tr>
+                    <tr class="inheght">
+                        <td rowspan="2" >收款事由</td>
+                        <td colspan="3" rowspan="2" style="width:360px;text-align:left; padding-left:10px;"  id="td_sksy"></td>
+                        <td colspan="3" rowspan="2">经<br />办</td>
+                        <td colspan="3">部门</td>
+                        <td colspan="5" style="text-align:left; padding-left:10px;" id="td_bm"></td>
+                        
+                    </tr>
+                    <tr class="inheght">
+                        <td colspan="3">人员</td>
+                        <td colspan="5"></td>
+                    </tr>
+                   <tr>
+                       <td colspan="2" rowspan="2">
+                           上述款项照数收讫无误<br />
+                           收款单位财会专用章<br />
+                           （领款人签章）
+                       </td>
+                       <td colspan="2">会计主管</td>
+                       <td colspan="4"></td>
+                       <td colspan="5">出纳</td>
+                       <td colspan="3">交款人</td>
+                   </tr>
+                    <tr><td colspan="2"></td>
+                       <td colspan="4"></td>
+                       <td colspan="5"></td>
+                       <td colspan="3"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="AddZPT" style="height:100%; width:100%;">
+            @using (Ajax.BeginForm("AddZPT", "BillPrint", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "ZPTFrom" }))
+            {
+                <input type="hidden" id="ZPTID" name="ID" />
+                <table class="JKtable">
+                    <thead>
+                        <tr><td>收款日期</td><td><input type="text" class="easyui-datebox" name="NewTime" id="zptNewTime" /></td></tr>    
+                        <tr><td>收款单位</td><td><input type="text" name="ComName" id="zptComName" /></td></tr>                      
+                        <tr><td>金额</td><td><input type="text" name="Money" id="zptMoney"  onkeyup="num(this)" /></td></tr>                     
+                        <tr><td>结算方式</td><td><input type="text" name="Fangshi" id="zptFangshi" /></td></tr> 
+                        <tr><td>收款事由</td><td><input type="text" name="Skbak" id="zptComName" /></td></tr>  
+                        <tr><td>部门</td><td><input type="text" name="Bumen" id="zptBumen" /></td></tr>                      
+                    </thead>
+                </table>
+            }
+        </div>  
         <div id="AddBxBill" style="height:100%; width:100%;">
             @using (Ajax.BeginForm("AddOrEditBxBill", "BillPrint", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "BXBillFrom" }))
             {
                 <input type="hidden" id="BxID" name="ID" />
                 <table class="JKtable">
                     <thead>
-                        <tr><td>单据时间</td><td><input type="text" class="easyui-datebox" name="IntTime" id="BxTime" /></td></tr>                        
-                        <tr><td>报销单位</td><td><input type="text" name="BaoxianDanwei" id="BxDw" /></td></tr>                       
+                        <tr><td>单据时间</td><td><input type="text" class="easyui-datebox" name="IntTime" id="BxTime" /></td></tr>
+                        <tr><td>报销单位</td><td><input type="text" name="BaoxianDanwei" id="BxDw" /></td></tr>
                     </thead>
                 </table>
             }
@@ -968,6 +1242,7 @@
             <div title="搜索选项" data-options="iconCls:'icon-search'" style="overflow:auto;padding:10px;">
                 <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="BtnJkd">借款单</a>
                 <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="BtnBaoXiao">报销单据封面</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="Zhipiaotong">支票通</a>
                 <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="Winlb">公路费报销凭证</a>
             </div>
             <div title="其他选项" data-options="iconCls:'icon-ok'" style="padding:10px;">
@@ -996,6 +1271,7 @@
         <div>
             <a href="#" class="easyui-linkbutton" id="NewBill" iconCls="icon-add">新建借款单</a>
             <a href="#" class="easyui-linkbutton" id="NewBaoXiaoBill" iconCls="icon-add">新建报销单据</a>
+            <a href="#" class="easyui-linkbutton" id="NewZPT" iconCls="icon-add">新建收款收据</a>
          </div>
     </div>
     <div id="addta" class="addta" style="padding:5px;height:auto;">        

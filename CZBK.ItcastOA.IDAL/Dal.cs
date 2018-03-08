@@ -165,6 +165,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IT_ZhiPiaoTongDal :IBaseDal<T_ZhiPiaoTong>
+    {
+      
+    }
+	
 	public partial interface IUserbakDal :IBaseDal<Userbak>
     {
       

@@ -74,6 +74,8 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IT_YSItemsDal T_YSItemsDal{get;set;}
 	
+		IT_ZhiPiaoTongDal T_ZhiPiaoTongDal{get;set;}
+	
 		IUserbakDal UserbakDal{get;set;}
 	
 		IUserInfoDal UserInfoDal{get;set;}
