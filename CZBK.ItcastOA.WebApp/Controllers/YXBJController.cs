@@ -22,6 +22,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IT_BoolItemService T_BoolItemService { get; set; }
         IBLL.IT_YSItemsService T_YSItemsService { get; set; }
         IBLL.IYXB_WinCanPinService YXB_WinCanPinService { get; set; }
+
+        IBLL.IWXX_FormIDService WXX_FormIDService { get; set; }
         short delFlag = (short)DelFlagEnum.Normarl;
         public ActionResult Index()
         {
@@ -673,6 +675,55 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return Json(new { ret = "no", msg = "修改失败！" }, JsonRequestBehavior.AllowGet); ;
         }
 
+        #region 微信接口
+        //创建ID
+        public ActionResult AddFromId() {
+            
+            WXX_FormID wfm = new WXX_FormID();
+            wfm.FormID= Request["FromID"].ToString();
+            wfm.AddTime = MvcApplication.GetT_time();
+            wfm.AddUserID = LoginUser.ID;
+            wfm.CanUse = 0;
+            wfm.StopTime = wfm.AddTime.AddDays(7);
+            try
+            {
+                WXX_FormIDService.AddEntity(wfm);
+                return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) {
+                return Json(new { ret = "err",str=e.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+            
+
+        }
+        //查找ID
+        public ActionResult SechFromId() {
+            DateTime dtime = MvcApplication.GetT_time();
+            var wxx=WXX_FormIDService.LoadEntities(x => x.AddUserID == LoginUser.ID && x.StopTime > dtime).DefaultIfEmpty();
+            if (wxx.ToList()[0] != null)
+            {
+                var Minwxx = wxx.OrderBy(x => x.StopTime).FirstOrDefault();
+                return Json(new { ret = "ok", Minwx = Minwxx }, JsonRequestBehavior.AllowGet);
+            }
+            else {
+                return Json(new { ret = "no", str = "查询信息空~" },JsonRequestBehavior.AllowGet);
+            }
+            
+        }
+        //删除ID
+        public ActionResult DelFromId() {
+            long TabId = Convert.ToInt64(Request["ID"]);
+            var wxx= WXX_FormIDService.LoadEntities(x => x.ID == TabId).FirstOrDefault();
+            if (wxx!=null) {
+                
+               return Json(new { ret = WXX_FormIDService.DeleteEntity(wxx) ? "ok" : "无法删除信息，联系管理员" },JsonRequestBehavior.AllowGet);
+            }else
+            {
+                return Json(new { str="删除失败，没有找到要删除的信息！"},JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        #endregion
 
     }
     public class RetcTEMP {

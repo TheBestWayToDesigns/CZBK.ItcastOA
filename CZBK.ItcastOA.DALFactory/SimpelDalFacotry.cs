@@ -458,6 +458,19 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IUserInfoDal;
         }
 		
+	    public static IWXX_FormIDDal CreateWXX_FormIDDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".WXX_FormIDDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IWXX_FormIDDal;
+        }
+		
 	    public static IYJ_ScheduleActionDal CreateYJ_ScheduleActionDal()
         {
 

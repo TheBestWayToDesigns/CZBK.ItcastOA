@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="38639b506e3a4aa591ee5f325d6e102d" Name="关系图1" ZoomLevel="74" ShowGrid="false" SnapToGrid="false">
+      <Diagram DiagramId="38639b506e3a4aa591ee5f325d6e102d" Name="关系图1" ZoomLevel="63" ShowGrid="false" SnapToGrid="false">
         <EntityTypeShape EntityType="OAModel.ActionInfo" Width="1.5" PointX="4.2151268643808839" PointY="0.68115941700352467" />
         <EntityTypeShape EntityType="OAModel.Department" Width="1.5" PointX="6.268568933213146" PointY="0.771739125505287" />
         <EntityTypeShape EntityType="OAModel.R_UserInfo_ActionInfo" Width="2.625" PointX="11.046568520461678" PointY="3.5306372545797045" />
@@ -107,6 +107,7 @@
         <EntityTypeShape EntityType="OAModel.Userbak" Width="1.5" PointX="20.125" PointY="7.4748840332031214" />
         <AssociationConnector Association="OAModel.FK_Userbak_UserInfo" />
         <EntityTypeShape EntityType="OAModel.T_ZhiPiaoTong" Width="1.5" PointX="7.375" PointY="4.75" />
+        <EntityTypeShape EntityType="OAModel.WXX_FormID" Width="1.5" PointX="35.968254234815426" PointY="18.380952446278712" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

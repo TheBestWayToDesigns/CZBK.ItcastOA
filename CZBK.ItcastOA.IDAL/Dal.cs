@@ -180,6 +180,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IWXX_FormIDDal :IBaseDal<WXX_FormID>
+    {
+      
+    }
+	
 	public partial interface IYJ_ScheduleActionDal :IBaseDal<YJ_ScheduleAction>
     {
       

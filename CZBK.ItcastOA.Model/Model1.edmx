@@ -477,6 +477,17 @@
           <Property Name="RoleInfo_ID" Type="int" Nullable="false" />
           <Property Name="UserInfo_ID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="WXX_FormID">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FormID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AddUserID" Type="int" Nullable="false" />
+          <Property Name="AddTime" Type="datetime" Nullable="false" />
+          <Property Name="StopTime" Type="datetime" Nullable="false" />
+          <Property Name="CanUse" Type="smallint" Nullable="false" />
+        </EntityType>
         <EntityType Name="YJ_ScheduleAction">
           <Key>
             <PropertyRef Name="ID" />
@@ -1447,6 +1458,7 @@
           <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfoDepartment" EntityType="Self.UserInfoDepartment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfoRoleInfo" EntityType="Self.UserInfoRoleInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WXX_FormID" EntityType="Self.WXX_FormID" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YJ_ScheduleAction" EntityType="Self.YJ_ScheduleAction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YJ_ScheduleDay" EntityType="Self.YJ_ScheduleDay" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YXB_Baojia" EntityType="Self.YXB_Baojia" Schema="dbo" store:Type="Tables" />
@@ -2041,6 +2053,7 @@
             <End Role="Userbak" EntitySet="Userbaks" />
           </AssociationSet>
           <EntitySet Name="T_ZhiPiaoTong" EntityType="OAModel.T_ZhiPiaoTong" />
+          <EntitySet Name="WXX_FormID" EntityType="OAModel.WXX_FormID" />
           </EntityContainer>
         <EntityType Name="ActionInfo">
           <Key>
@@ -3427,6 +3440,17 @@
           <Property Name="AddTime" Type="DateTime" Precision="3" />
           <Property Name="AddUser" Type="Int32" />
         </EntityType>
+        <EntityType Name="WXX_FormID">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FormID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AddUserID" Type="Int32" Nullable="false" />
+          <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StopTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CanUse" Type="Int16" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4057,6 +4081,18 @@
                 <ScalarProperty Name="Skbak" ColumnName="Skbak" />
                 <ScalarProperty Name="Money" ColumnName="Money" />
                 <ScalarProperty Name="ComName" ColumnName="ComName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WXX_FormID">
+            <EntityTypeMapping TypeName="OAModel.WXX_FormID">
+              <MappingFragment StoreEntitySet="WXX_FormID">
+                <ScalarProperty Name="CanUse" ColumnName="CanUse" />
+                <ScalarProperty Name="StopTime" ColumnName="StopTime" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="AddUserID" ColumnName="AddUserID" />
+                <ScalarProperty Name="FormID" ColumnName="FormID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

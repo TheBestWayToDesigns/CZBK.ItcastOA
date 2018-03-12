@@ -1615,7 +1615,9 @@
             var yxy = $('#Person').combobox('getValue');
             yxy =yxy==undefined?0: yxy.trim().length < 0 ? 0 : yxy;
             var khn = $('#KHname').combobox('getValue');
-            khn = yxy == undefined ? 0 : khn.trim().length < 0 ? 0 : khn;
+          
+            khn = yxy == undefined ? 0 : khn == undefined ? 0 : khn;
+            
             showdilag2();
             var pars = {
                 UpTime: UpTime, DwTime: DwTime, yxy: yxy, khn: khn,  addess: RetAddess()
@@ -1659,7 +1661,13 @@
                      { field: 'KHphoto', title: '联系人电话', align: 'center' },
                       { field: 'KHfaren', title: '法人', align: 'center' },
                       { field: 'KHphoto', title: '施工地址', align: 'center' },
-                      { field: 'KHfaren', title: '备注', align: 'center' }
+                      { field: 'KHfaren', title: '备注', align: 'center' },
+                      {
+                          field: 'deletes', title: '操作', align: 'center', formatter: function (value, row, index) {
+                             str = "<a href='javascript:delBBdate(" + row.ID + ")' class='l-btn deletes' style='padding:2px 5px 2px 5px' >删除</a>";
+                             return str;
+                          }
+                      }
                 ]],
                 toolbar:"",
                 onLoadSuccess: function () {
@@ -1793,6 +1801,15 @@
             } else {
                 $.message.alert("提示","未知错误，请联系管理员");
             }
+        }
+
+        function delBBdate(val) {
+            $.post("/MasterBaoJia/DELbbdata", {id:val}, function (data) {
+                if (data.ret == "ok") {
+                    $("#Citytt").datagrid("reload");
+                }
+
+            })
         }
 
     </script>

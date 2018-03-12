@@ -180,6 +180,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IWXX_FormIDService : IBaseService<WXX_FormID>
+    {
+       
+    }   
+	
 	public partial interface IYJ_ScheduleActionService : IBaseService<YJ_ScheduleAction>
     {
        

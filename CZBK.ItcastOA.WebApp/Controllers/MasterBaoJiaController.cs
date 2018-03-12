@@ -1046,6 +1046,13 @@ namespace CZBK.ItcastOA.WebApp.Controllers
 
            
         }
+        public ActionResult DELbbdata() {
+            int ID =Convert.ToInt32( Request["ID"]);
+            YXB_Kh_list yhl = YXB_Kh_listService.LoadEntities(x => x.id == ID).FirstOrDefault();
+            yhl.DelFlag = 1;
+            YXB_Kh_listService.EditEntity(yhl);
+            return Json(new { ret="ok"},JsonRequestBehavior.AllowGet);
+        }
 
     }
    

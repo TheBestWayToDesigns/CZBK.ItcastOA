@@ -525,6 +525,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _UserInfoDal = value; }
         }
 	
+		private IWXX_FormIDDal _WXX_FormIDDal;
+        public IWXX_FormIDDal WXX_FormIDDal
+        {
+            get
+            {
+                if(_WXX_FormIDDal == null)
+                {
+                   // _WXX_FormIDDal = new WXX_FormIDDal();
+				    _WXX_FormIDDal =AbstractFactory.CreateWXX_FormIDDal();
+                }
+                return _WXX_FormIDDal;
+            }
+            set { _WXX_FormIDDal = value; }
+        }
+	
 		private IYJ_ScheduleActionDal _YJ_ScheduleActionDal;
         public IYJ_ScheduleActionDal YJ_ScheduleActionDal
         {
