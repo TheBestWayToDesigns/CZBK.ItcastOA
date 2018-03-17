@@ -12,13 +12,17 @@
 
     <title>营销报价界面</title>
     <link href="~/Content/themes/icon.css" rel="stylesheet" type="text/css" />
+   
     <link href="~/bootsarp/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/mobile-calendar-master/src/calendar.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/Content/guodu/modernizr.js">
     <link rel="stylesheet" href="~/Content/guodu/style.css" media="screen" type="text/css" />
+
+    <link href="~/bootsarp/css/bootstrap-switch.min.css" rel="stylesheet" />
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="~/bootsarp/js/bootstrap.min.js"></script>
     <script src="~/Content/guodu/modernizr.js"></script>
+    <script src="~/bootsarp/js/bootstrap-switch.min.js"></script>
     <style>
         .font { font-size:10px
         }
@@ -37,6 +41,7 @@
         var Shifouhanshui;
         var PiaoJiu;
         var Shkhidselect;
+        var state_=false;
         $(function () {
             //默认绑定省
             ProviceBind();
@@ -49,13 +54,14 @@
             })
             $("#CPBJ_div2").css("display", "none");
             $("#vvv").css("display", "none");
-           
+
             $("tr").click(function () {
                 var id_ = $(this).attr("id");
                 $("#wellinput").val(id_);
             })
             //添加客户信息
             $("#addKH").click(function () {
+                
                 var KHname = $("#KHname");
                 var KHperson = $("#KHperson");
                 var KHzhiwu = $("#KHzhiwu");
@@ -86,10 +92,10 @@
                 //        return;
                 //    }
                 //}
-               
+                
                 $.ajax({
                     url: "/YXBJ/AddYXB_KH_list",
-                    data: { KHname: ay[0].val(), KHperson: ay[1].val(), KHzhiwu: ay[2].val(), KHphoto: ay[3].val(), KHfaren: ay[4].val(), KHSGAdrss: ay[5].val(), BeiZhu:ay[6].val() },
+                    data: { KHname: ay[0].val(), KHperson: ay[1].val(), KHzhiwu: ay[2].val(), KHphoto: ay[3].val(), KHfaren: ay[4].val(), KHSGAdrss: ay[5].val(), BeiZhu:ay[6].val() ,sta:state_},
                     type: "POST",
                     dataType: 'json',
                     beforeSend: function () {
@@ -103,7 +109,7 @@
                             alertshow("法人不可重复");
                         }
                         else if (serverData == "errer") {
-                            alertshow("客户名称不可重复");
+                            alertshow("客户名称不可重复,如果是借用资质请选择借用资质！");
                         }
                         else {
                             alertshow("系统错误联系管理员"+serverData);
@@ -170,7 +176,7 @@
                         var mse = items.ID == PiaoJiu ? "selected='selected'" : "";
                         $("#PiaoJiu").append("<option value='" + items.ID + "' " + mse + " >" + items.MyTexts + "</option>");
                     })
-                    
+
                 });
                 $("#Loading").hide();
             });
@@ -188,7 +194,7 @@
                     var stoptime = document.getElementById("stopTime").value;
                     var addess_1 = $("#Province").val();
                     var addess_2 = $("#City").val();
-                    var addess_3 = $("#Village").val();                  
+                    var addess_3 = $("#Village").val();
                     if (addess_1 =="-1") {
                         alertshow("没有选中省份！");
                         return;
@@ -239,7 +245,7 @@
                             alertshow(serverData.msg);
                             $("#CPBJ_div1").css("display", cpdiv == "block" ? "none" : "");
                             $("#CPBJ_div2").css("display", cpdiv1 == "block" ? "none" : "");
-                                                      
+
                         }
                         else if (serverData.ret == "load") {
                             $("#CPBJ_div1").css("display", cpdiv == "block" ? "none" : "");
@@ -248,13 +254,13 @@
                         else {
                             alertshow(serverData.msg);
                         };
-                       
+
                     });
                     //获取列表
                     $.post("/YXBJ/GetysbBaojia", {
                         "BaoJiaTop_id": editID,
                     }, function (sdta) {
-                       
+
                         if (sdta.ret == "ok") {
                             loadkis(sdta)
                         }
@@ -277,7 +283,7 @@
                 $("#OrHanSui").val("");
                 $("#khidselect").val("");
                 $("#PiaoJiu").val("");
-                
+
                 //Province
                 //City
                 //Village
@@ -289,7 +295,7 @@
                 $("#CPDengji").val("");
                 $("#Tbvlo tr:not(:first)").empty();
                 ProviceBind();
-              
+
                 $("#City").html("");
                 var Citystr = "<option value='-1'>==请选择城市===</option>";
                 $("#City").append(Citystr);
@@ -302,10 +308,10 @@
                 var cc = $("#GhTime").val();
             });
             //创建报价名称、型号、数量
-            $("body").delegate('#AddBaojiaoOne', 'click', function () {               
+            $("body").delegate('#AddBaojiaoOne', 'click', function () {
                 //数据验证
                 if (editID > 0) {
-                   
+
                     if ($("#CPname").val()== "-1") {
                         alertshow("产品名称不可为空！")
                         document.getElementById("CPname").focus();
@@ -354,7 +360,7 @@
                     "editID": editID,
                     "delID": $(this).attr("id")
                 }, function (serverData) {
-                    if (serverData.ret == "ok") {                       
+                    if (serverData.ret == "ok") {
                         loadkis(serverData)
                     }
                 })
@@ -384,7 +390,7 @@
                     })
                 }
                 else if (this.name == "eidttop") {
-                  
+
                     $.post("/YXBJ/EditBaoJiaTop", {
                         "khid": $(this).attr("id")
                     }, function (sdata) {
@@ -409,7 +415,7 @@
                             $("#City").html("");
                             var str = "<option value='-1'>==请选择城市===</option>";
                             $.post("/YXBJ/GetAddress", { "parentiD": provice, "MyColums": "City" }, function (serverData) {
-                                //从服务器获取数据进行绑定                    
+                                //从服务器获取数据进行绑定
                                 $.each(serverData, function (i, item) {
                                     var Sstr = item.ID == sdata.City ? "selected='selected'" : "";
                                     str += "<option  value='" + item.ID + "' " + Sstr + "  >" + item.MyTexts + "</option>";
@@ -417,14 +423,14 @@
                                 //将数据添加到省份这个下拉框里面
                                 $("#City").append(str);
                             })
-                          
+
                             provice = sdata.City;
                             $("#Village").html("");
                             var str = "<option  value='-1'>==请选择区域===</option>";
                             //将市的ID拿到数据库进行查询，查询出他的下级进行绑定
 
                             $.post("/YXBJ/GetAddress", { "parentiD": provice, "MyColums": "Village" }, function (serverData) {
-                                //从服务器获取数据进行绑定                    
+                                //从服务器获取数据进行绑定
                                 $.each(serverData, function (i, item) {
                                     var Sstr = item.ID == sdata.Village ? "selected='selected'" : "";
                                     str += "<option value='" + item.ID + "' " + Sstr + ">" + item.MyTexts + "</option>";
@@ -432,7 +438,7 @@
                                 //将数据添加到省份这个下拉框里面
                                 $("#Village").append(str);
                             })
-                          
+
                         }
                         //else if (sdata.ret == "no")
                         //{
@@ -451,7 +457,12 @@
             //显示客户信息
             $("body").delegate('#tb tr td a', 'click', function () {
                 khid = $(this).attr("id");
-                loadBaojiadata(1);
+                var mode = $(this).attr("name")
+                if (mode == "edit") { }
+                else {
+                    loadBaojiadata(1);
+                }
+                
             })
             function loadkis(serverData) {
                 $("#Loading").show();
@@ -464,7 +475,18 @@
                 }
                 $("#Loading").hide();
             }
-            
+              
+
+                $('[name="status"]').bootstrapSwitch({
+                    onText: "借用资质",
+                    offText: "未借用资质",
+                onColor:"success",
+                offColor:"info",
+                size: "normal",
+                onSwitchChange:function(event,state){                
+                    state_ = state;               
+                          }              
+                })
         })
       
         function ProviceBind(obj) {
@@ -584,7 +606,7 @@
             $('#Pageul').children().filter('li').remove(); //动态删除
             $.post("/YXBJ/GetList", { "page": artPage, "rows": Rows }, function (serverData) {
                 for (var i = 0; i < serverData.rows.length; i++) {
-                    var trHTML = "<tr  class='font'><td>" + serverData.rows[i].KHname + "</td><td>" + serverData.rows[i].KHfaren + "</td><td>" + ChangeDateFormat(serverData.rows[i].AddTime) + "</td><td><a  class='btn  btn-info btn-sm' role='button' href='#'  id='" + serverData.rows[i].ID + "' name=''>查看</a></td></tr>"
+                    var trHTML = "<tr  class='font'><td>" + serverData.rows[i].KHname + "</td><td>" + serverData.rows[i].KHfaren + "</td><td>" + ChangeDateFormat(serverData.rows[i].AddTime) + "</td><td><a  class='btn  btn-info btn-sm' role='button' href='#'  id='" + serverData.rows[i].ID + "' name=''>查看</a>&nbsp&nbsp<a  class='btn  btn-info btn-sm' role='button' href='#'  id='" + serverData.rows[i].ID + "' name='edit'>修改</a></td></tr>"
                     $("#tb").append(trHTML);
                 }
                 Aconunt = serverData.total;
@@ -726,8 +748,8 @@
                 </nav>
             </div>
             <div id="addList" role="tabpanel" class="tab-pane">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content" id="CPBJ_div1">
+                
+                    <div class="" id="CPBJ_div1">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title">产品报价</h4>
@@ -792,7 +814,7 @@
                     </div><!-- /.modal-content -->
 
 
-                    <div class="modal-content" id="CPBJ_div2">
+                    <div class="" id="CPBJ_div2">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title">产品报价</h4>
@@ -828,11 +850,10 @@
                                     <td>创建时间</td>
                                     <td >操作</td>
                                 </tr>
-                            </thead>
-
+                            </thead> 
                         </table>
                     </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
+           
             </div>
 
             <div class="modal fade bs-example-modal-sm select" id="selectMOD" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -903,13 +924,15 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group ">
-                                <input placeholder="客户名称" class="form-control " type="text" name="KHname" id="KHname" />
+                                <input placeholder="客户名称" class="form-control " type="text" name="KHname" id="KHname" />                               
+                                <input name="status" type="checkbox" data-size="small"> 
                                 <input placeholder="客户联系人" class="form-control" type="text" name="KHperson" id="KHperson" />
                                 <input placeholder="联系人职务" class="form-control" type="text" name="KHzhiwu" id="KHzhiwu" />
                                 <input placeholder="联系人电话" class="form-control" type="text" name="KHphoto" id="KHphoto" />
                                 <input placeholder="法人" class="form-control" type="text" name="KHfaren" id="KHfaren" />
                                 <input placeholder="施工地址" class="form-control" type="text" name="KHSGAdrss" id="KHSGAdrss" />
                                 <input placeholder="备注" class="form-control" type="text" name="BeiZhu" id="BeiZhu" />
+
                             </div>
                         </div>
                         <div class="modal-footer">

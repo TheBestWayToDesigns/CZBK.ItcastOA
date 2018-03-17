@@ -45,9 +45,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             khlist.NewTime = DateTime.Now;
             khlist.AddUser = LoginUser.ID;
             khlist.All_I = 0;
+            khlist.JieZhiZi = Convert.ToBoolean( Request["sta"]);
             //判断客户名称是否重复
             var isdistic = YXB_Kh_listService.LoadEntities(x => x.KHname == khlist.KHname&&x.AddUser==LoginUser.ID).FirstOrDefault();
-            if (isdistic!= null)
+            if (isdistic!= null&&khlist.JieZhiZi==false)
             {
                 return Json("errer", JsonRequestBehavior.AllowGet);
             }

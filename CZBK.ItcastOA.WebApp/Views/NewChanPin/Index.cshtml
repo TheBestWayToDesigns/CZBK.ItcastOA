@@ -46,6 +46,7 @@
                 if ($(this).text().trim() == "首页") {
                     if (Tpage)
                     { loadCpxh('1', Rows); }
+
                     else {
                         loaddata('1', Rows);
                     }
@@ -144,7 +145,7 @@
             //删除信息
             $("body").delegate('#tb tr td a', 'click', function () {
                 yesorno = $(this).attr("name");
-                alert(yesorno)
+                //alert(yesorno)
                 Del = $(this).attr("id");
                 $("#thishi").click();               
             }) 

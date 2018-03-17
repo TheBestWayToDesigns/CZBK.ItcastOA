@@ -33,6 +33,7 @@ namespace CZBK.ItcastOA.Model
         public short All_I { get; set; }
         public string KHSGAdrss { get; set; }
         public string BeiZhu { get; set; }
+        public Nullable<bool> JieZhiZi { get; set; }
     
         public virtual UserInfo UserInfo { get; set; }
         public virtual ICollection<T_BaoJiaToP> T_BaoJiaToP { get; set; }

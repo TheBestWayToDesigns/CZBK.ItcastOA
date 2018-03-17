@@ -570,6 +570,7 @@
           <Property Name="All_I" Type="smallint" Nullable="false" />
           <Property Name="KHSGAdrss" Type="nvarchar(max)" />
           <Property Name="BeiZhu" Type="nvarchar(max)" />
+          <Property Name="JieZhiZi" Type="bit" />
         </EntityType>
         <EntityType Name="YXB_WinCanPin">
           <Key>
@@ -2171,6 +2172,7 @@
           <NavigationProperty Name="T_BaoJiaToP" Relationship="OAModel.FK_T_BaoJiaToP_YXB_Kh_list" FromRole="YXB_Kh_list" ToRole="T_BaoJiaToP" />
           <Property Name="KHSGAdrss" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="BeiZhu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="JieZhiZi" Type="Boolean" />
         </EntityType>
         <EntityType Name="Login_list">
           <Key>
@@ -3545,6 +3547,7 @@
     <EntitySetMapping Name="YXB_Kh_list">
             <EntityTypeMapping TypeName="OAModel.YXB_Kh_list">
               <MappingFragment StoreEntitySet="YXB_Kh_list">
+                <ScalarProperty Name="JieZhiZi" ColumnName="JieZhiZi" />
                 <ScalarProperty Name="BeiZhu" ColumnName="BeiZhu" />
                 <ScalarProperty Name="KHSGAdrss" ColumnName="KHSGAdrss" />
                 <ScalarProperty Name="All_I" ColumnName="All_I" />
