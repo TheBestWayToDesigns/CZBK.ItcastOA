@@ -57,7 +57,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 YXB_Kh_listService.AddEntity(khlist);
                 return Json("OK", JsonRequestBehavior.AllowGet);
             }
-            #region 判断法人是否重复
+            #region 判断法人是否重复1
             //var isnull = YXB_Kh_listService.LoadEntities(x => x.KHfaren == khlist.KHfaren).FirstOrDefault();
             //if (isnull == null)
             //{
