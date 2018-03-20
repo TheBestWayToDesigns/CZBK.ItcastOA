@@ -26,7 +26,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var u = UserInfoService.LoadEntities(x => x.ID == khid).FirstOrDefault();
             if (Sort != null)
             {
-                u.Sort = Sort;
+                u.PerSonName = Sort;
             }                        
             u.UPwd = Model.Enum.AddMD5.GaddMD5(Pass);
             UserInfoService.EditEntity(u);
