@@ -186,6 +186,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class WXXUserInfoDal :BaseDal<WXXUserInfo>,IWXXUserInfoDal
+    {
+
+    }
+		
 	public partial class YJ_ScheduleActionDal :BaseDal<YJ_ScheduleAction>,IYJ_ScheduleActionDal
     {
 

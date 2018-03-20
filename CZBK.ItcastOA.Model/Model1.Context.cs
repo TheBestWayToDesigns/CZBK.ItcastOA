@@ -69,6 +69,7 @@ namespace CZBK.ItcastOA.Model
         public DbSet<Userbak> Userbaks { get; set; }
         public DbSet<T_ZhiPiaoTong> T_ZhiPiaoTong { get; set; }
         public DbSet<WXX_FormID> WXX_FormID { get; set; }
+        public DbSet<WXXUserInfo> WXXUserInfoes { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

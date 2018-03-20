@@ -488,6 +488,14 @@
           <Property Name="StopTime" Type="datetime" Nullable="false" />
           <Property Name="CanUse" Type="smallint" Nullable="false" />
         </EntityType>
+        <EntityType Name="WXXUserInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UID" Type="int" Nullable="false" />
+          <Property Name="WXID" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="YJ_ScheduleAction">
           <Key>
             <PropertyRef Name="ID" />
@@ -1229,6 +1237,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_WXXUserInfo_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="WXXUserInfo" Type="Self.WXXUserInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXUserInfo">
+              <PropertyRef Name="UID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_YJ_ScheduleAction_thesdeday">
           <End Role="YJ_ScheduleDay" Type="Self.YJ_ScheduleDay" Multiplicity="1" />
           <End Role="YJ_ScheduleAction" Type="Self.YJ_ScheduleAction" Multiplicity="*" />
@@ -1460,6 +1480,7 @@
           <EntitySet Name="UserInfoDepartment" EntityType="Self.UserInfoDepartment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfoRoleInfo" EntityType="Self.UserInfoRoleInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WXX_FormID" EntityType="Self.WXX_FormID" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WXXUserInfo" EntityType="Self.WXXUserInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YJ_ScheduleAction" EntityType="Self.YJ_ScheduleAction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YJ_ScheduleDay" EntityType="Self.YJ_ScheduleDay" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YXB_Baojia" EntityType="Self.YXB_Baojia" Schema="dbo" store:Type="Tables" />
@@ -1677,6 +1698,10 @@
           <AssociationSet Name="FK_UserInfoRoleInfo_UserInfo" Association="Self.FK_UserInfoRoleInfo_UserInfo">
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="UserInfoRoleInfo" EntitySet="UserInfoRoleInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WXXUserInfo_UserInfo" Association="Self.FK_WXXUserInfo_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="WXXUserInfo" EntitySet="WXXUserInfo" />
           </AssociationSet>
           <AssociationSet Name="FK_YJ_ScheduleAction_thesdeday" Association="Self.FK_YJ_ScheduleAction_thesdeday">
             <End Role="YJ_ScheduleDay" EntitySet="YJ_ScheduleDay" />
@@ -2055,6 +2080,11 @@
           </AssociationSet>
           <EntitySet Name="T_ZhiPiaoTong" EntityType="OAModel.T_ZhiPiaoTong" />
           <EntitySet Name="WXX_FormID" EntityType="OAModel.WXX_FormID" />
+          <EntitySet Name="WXXUserInfoes" EntityType="OAModel.WXXUserInfo" />
+          <AssociationSet Name="FK_WXXUserInfo_UserInfo" Association="OAModel.FK_WXXUserInfo_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="WXXUserInfo" EntitySet="WXXUserInfoes" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ActionInfo">
           <Key>
@@ -2401,6 +2431,7 @@
           <NavigationProperty Name="ExamineSchedules" Relationship="OAModel.FK_ExamineSchedule_UserInfo" FromRole="UserInfo" ToRole="ExamineSchedule" />
           <NavigationProperty Name="YJ_ScheduleDay1" Relationship="OAModel.FK_YJ_ScheduleDay_yjuserid_userinfo" FromRole="UserInfo" ToRole="YJ_ScheduleDay" />
           <NavigationProperty Name="Userbaks" Relationship="OAModel.FK_Userbak_UserInfo" FromRole="UserInfo" ToRole="Userbak" />
+          <NavigationProperty Name="WXXUserInfoes" Relationship="OAModel.FK_WXXUserInfo_UserInfo" FromRole="UserInfo" ToRole="WXXUserInfo" />
         </EntityType>
         <Association Name="FK_Bumen">
           <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
@@ -3453,6 +3484,27 @@
           <Property Name="StopTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CanUse" Type="Int16" Nullable="false" />
         </EntityType>
+        <EntityType Name="WXXUserInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UID" Type="Int32" Nullable="false" />
+          <Property Name="WXID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_WXXUserInfo_UserInfo" FromRole="WXXUserInfo" ToRole="UserInfo" />
+        </EntityType>
+        <Association Name="FK_WXXUserInfo_UserInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+          <End Type="OAModel.WXXUserInfo" Role="WXXUserInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXUserInfo">
+              <PropertyRef Name="UID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4096,6 +4148,15 @@
                 <ScalarProperty Name="AddTime" ColumnName="AddTime" />
                 <ScalarProperty Name="AddUserID" ColumnName="AddUserID" />
                 <ScalarProperty Name="FormID" ColumnName="FormID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WXXUserInfoes">
+            <EntityTypeMapping TypeName="OAModel.WXXUserInfo">
+              <MappingFragment StoreEntitySet="WXXUserInfo">
+                <ScalarProperty Name="WXID" ColumnName="WXID" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

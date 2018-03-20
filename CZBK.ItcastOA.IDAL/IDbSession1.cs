@@ -82,6 +82,8 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IWXX_FormIDDal WXX_FormIDDal{get;set;}
 	
+		IWXXUserInfoDal WXXUserInfoDal{get;set;}
+	
 		IYJ_ScheduleActionDal YJ_ScheduleActionDal{get;set;}
 	
 		IYJ_ScheduleDayDal YJ_ScheduleDayDal{get;set;}

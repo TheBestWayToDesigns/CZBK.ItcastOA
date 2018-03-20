@@ -15,6 +15,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         // GET: /Login/
         IBLL.IUserInfoService UserInfoService { get; set; }
         IBLL.IRoleInfoService RoleInfoService { get; set; }
+        IBLL.IWXXUserInfoService WXXUserInfoService { get; set; }
         public ActionResult Index()
         {
             CheckCookieInfo();
@@ -92,13 +93,33 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     UserInfo Loguserinfo = cjson != null? Common.SerializerHelper.DeserializeToObject<UserInfo>(cjson.ToString()):null;
                     if (Convert.ToBoolean(userInfo.ThisMastr))
                     {
+                        if(Request["wx"] == "yes")
+                        {
+                            if (!CheckWXopenid(userInfo.ID))
+                            {
+                                return Json(new { ret = "master", temp = Loguserinfo, uid = userInfo.ID, uname = userInfo.PerSonName, cooks = sessionId, bol = false }, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                return Json(new { ret = "master", temp = Loguserinfo, uid = userInfo.ID, uname = userInfo.PerSonName, cooks = sessionId, bol = true }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
                         return Json( new{ ret= "master", temp = Loguserinfo, uid =userInfo.ID,uname=userInfo.PerSonName,cooks=sessionId },JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
+                        if (Request["wx"] == "yes")
+                        {
+                            if (!CheckWXopenid(userInfo.ID))
+                            {
+                                return Json(new { ret = "ok", temp = Loguserinfo, uid = userInfo.ID, uname = userInfo.PerSonName, cooks = sessionId, bol = false }, JsonRequestBehavior.AllowGet);
+                            }else
+                            {
+                                return Json(new { ret = "ok", temp = Loguserinfo, uid = userInfo.ID, uname = userInfo.PerSonName, cooks = sessionId, bol = true }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
                         return Json(new { ret = "ok",temp= Loguserinfo, uid = userInfo.ID, uname = userInfo.PerSonName, cooks = sessionId }, JsonRequestBehavior.AllowGet);
                     }
-                   
                }
             }
            else
@@ -109,8 +130,60 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         }
         #endregion
 
+        #region 微信用（绑定微信账号）
+        //检查是否已绑定微信openid
+        public bool CheckWXopenid( int uid)
+        {
+            var temp = WXXUserInfoService.LoadEntities(x => x.UID == uid).FirstOrDefault();
+            if(temp != null)
+            {
+                return temp.WXID == null ? false : true;
+            }else
+            {
+                return false;
+            }
+        }
+        //给未绑定用户绑定微信openid
+        public void AddWXOpenID()
+        {
+            var uid = Convert.ToInt32(Request["uid"]);
+            var temp = WXXUserInfoService.LoadEntities(x => x.UID == uid).FirstOrDefault();
+            if (temp == null)
+            {
+                WXXUserInfo wxxu = new WXXUserInfo();
+                wxxu.UID = uid;
+                if (Request["openid"] != null)
+                {
+                    wxxu.WXID = Request["openid"];
+                }
+                WXXUserInfoService.AddEntity(wxxu);
+            }else
+            {
+                temp.WXID = Request["openid"];
+                WXXUserInfoService.EditEntity(temp);
+            }
+        }
+        //改绑微信openid
+        public ActionResult EditWXOpenID()
+        {
+            var uid = Convert.ToInt32(Request["uid"]);
+            var temp = WXXUserInfoService.LoadEntities(x => x.UID == uid).FirstOrDefault();
+            if(temp != null)
+            {
+                temp.WXID = Request["openid"];
+            }
+            if (WXXUserInfoService.EditEntity(temp))
+            {
+                return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+            }else
+            {
+                return Json(new { ret = "no " }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        #endregion
+
         #region 展示验证码
-          public ActionResult ShowValidateCode()
+        public ActionResult ShowValidateCode()
         {
             Common.ValidateCode validateCode = new Common.ValidateCode();
             string code=validateCode.CreateValidateCode(4);
