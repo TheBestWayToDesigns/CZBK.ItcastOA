@@ -91,34 +91,20 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     }
                     object cjson = Common.MemcacheHelper.Get(sessionId);                    
                     UserInfo Loguserinfo = cjson != null? Common.SerializerHelper.DeserializeToObject<UserInfo>(cjson.ToString()):null;
+
+                    bool wxbol = false;
+                    if (Request["wx"] == "yes")
+                    {                        
+                            wxbol = CheckWXopenid(userInfo.ID);
+                    }
+
                     if (Convert.ToBoolean(userInfo.ThisMastr))
-                    {
-                        if(Request["wx"] == "yes")
-                        {
-                            if (!CheckWXopenid(userInfo.ID))
-                            {
-                                return Json(new { ret = "master", temp = Loguserinfo, uid = userInfo.ID, uname = userInfo.PerSonName, cooks = sessionId, bol = false }, JsonRequestBehavior.AllowGet);
-                            }
-                            else
-                            {
-                                return Json(new { ret = "master", temp = Loguserinfo, uid = userInfo.ID, uname = userInfo.PerSonName, cooks = sessionId, bol = true }, JsonRequestBehavior.AllowGet);
-                            }
-                        }
-                        return Json( new{ ret= "master", temp = Loguserinfo, uid =userInfo.ID,uname=userInfo.PerSonName,cooks=sessionId },JsonRequestBehavior.AllowGet);
+                    {                        
+                        return Json( new{ ret= "master", temp = Loguserinfo, uid =userInfo.ID,uname=userInfo.PerSonName,cooks=sessionId,bol=wxbol },JsonRequestBehavior.AllowGet);
                     }
                     else
-                    {
-                        if (Request["wx"] == "yes")
-                        {
-                            if (!CheckWXopenid(userInfo.ID))
-                            {
-                                return Json(new { ret = "ok", temp = Loguserinfo, uid = userInfo.ID, uname = userInfo.PerSonName, cooks = sessionId, bol = false }, JsonRequestBehavior.AllowGet);
-                            }else
-                            {
-                                return Json(new { ret = "ok", temp = Loguserinfo, uid = userInfo.ID, uname = userInfo.PerSonName, cooks = sessionId, bol = true }, JsonRequestBehavior.AllowGet);
-                            }
-                        }
-                        return Json(new { ret = "ok",temp= Loguserinfo, uid = userInfo.ID, uname = userInfo.PerSonName, cooks = sessionId }, JsonRequestBehavior.AllowGet);
+                    {                      
+                        return Json(new { ret = "ok",temp= Loguserinfo, uid = userInfo.ID, uname = userInfo.PerSonName, cooks = sessionId, bol = wxbol }, JsonRequestBehavior.AllowGet);
                     }
                }
             }
