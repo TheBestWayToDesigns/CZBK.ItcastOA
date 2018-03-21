@@ -1105,7 +1105,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 var Money = bjinfo.WIN == 1 ? bjinfo.WinMoney : (bjinfo.EditQianMoney == null? bjinfo.BaoJiaMoney:bjinfo.EditQianMoney);
                 var YunFei = bjinfo.WIN == 1 ? bjinfo.WinYunFei : (bjinfo.EditQianYunFei == null ? bjinfo.BaoJiaYunFei : bjinfo.EditQianYunFei);
                 var sumMM = Money + YunFei;
-                var addTime = bjinfo.UpdataTime == null ? bjinfo.AddTime : bjinfo.UpdataTime;
+                var BaoJiaTime = bjinfo.UpdataTime == null ? bjinfo.BaoJiaTime : bjinfo.UpdataTime;
                 string temp = "{\"touser\": \"" + rtmp.WXID + "\"," +
                        "\"template_id\": \"3zN541eDUYsMVVZnqf6GEuZr7KDdOC1jamBsgEKHXY0\", " +
                        "\"topcolor\": \"#FF0000\", " +
@@ -1117,7 +1117,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                        "\"keyword3\": { \"value\": \""+ Money + "元\"}," +
                        "\"keyword4\": { \"value\": \""+ YunFei + "元\"}," +
                        "\"keyword5\": { \"value\": \""+ sumMM + "元\"}," +
-                       "\"keyword6\": { \"value\": \""+ addTime +"\"}," +
+                       "\"keyword6\": { \"value\": \""+ BaoJiaTime + "\"}," +
                        "\"remark\": {\"value\": \"\" }}}";
                 #endregion
                 //核心代码
