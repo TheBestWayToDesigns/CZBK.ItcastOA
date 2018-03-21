@@ -18,6 +18,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IWXXUserInfoService WXXUserInfoService { get; set; }
         public ActionResult Index()
         {
+            WechatCheckSerer wcs = new WechatCheckSerer();
+            bool b = wcs.CheckServer();
+            if (b == true)
+            {
+                return View();
+            }
             CheckCookieInfo();
             return View();
             
@@ -305,4 +311,80 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         }
         #endregion
     }
+
+    #region 微信用于验证token
+    /// <summary>
+    /// 验证微信平台填写的服务器地址的有效性
+    /// </summary>
+    public class WechatCheckSerer
+    {
+        /// <summary>
+        /// 验证微信平台填写的服务器地址的有效性
+        /// </summary>
+        public bool CheckServer()
+        {
+            string _token = "yssgoa";
+            string _timestamp = HttpContext.Current.Request["timestamp"];
+            string _nonce = HttpContext.Current.Request["nonce"];
+            string _singature = HttpContext.Current.Request["signature"];
+            string _echostr = HttpContext.Current.Request["echostr"];
+            if (CheckSignAture(_token, _timestamp, _nonce, _singature))
+            {
+                if (!string.IsNullOrEmpty(_echostr))
+                {
+                    HttpContext.Current.Response.Write(_echostr);
+                    HttpContext.Current.Response.End();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }else
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// 验证签名是否一致
+        /// </summary>
+        /// <param name="token">微信平台设置的口令</param>
+        /// <param name="timestamp">时间戳</param>
+        /// <param name="nonce">随机数</param>
+        /// <param name="signature">微信加密签名</param>
+        /// <returns></returns>
+        public bool CheckSignAture(string token, string timestamp, string nonce, string signature)
+        {
+            string[] strs = new string[] { token, timestamp, nonce };//把参数放到数组
+            Array.Sort(strs);//加密/校验流程1、数组排序
+            string sign = string.Join("", strs);
+            sign = GetSHA1Str(sign);
+            if (sign == signature)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// SHA1加密方法
+        /// </summary>
+        /// <param name="str">需要加密的字符串</param>
+        /// <returns></returns>
+        public string GetSHA1Str(string str)
+        {
+            byte[] _byte = Encoding.Default.GetBytes(str);
+            HashAlgorithm ha = new SHA1CryptoServiceProvider();
+            _byte = ha.ComputeHash(_byte);
+            StringBuilder sha1Str = new StringBuilder();
+            foreach (byte b in _byte)
+            {
+                sha1Str.AppendFormat("{0:x2}", b);
+            }
+            return sha1Str.ToString();
+        }
+    }
+    #endregion
 }

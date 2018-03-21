@@ -11,6 +11,9 @@ using System.Data;
 using NPOI.SS.UserModel;
 using CZBK.ItcastOA.Model.OutExcel;
 using NPOI.HSSF.Util;
+using System.Net;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace CZBK.ItcastOA.WebApp.Controllers
 {
@@ -29,6 +32,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IT_WinBakFaHuoService T_WinBakFaHuoService { get; set; }
         IBLL.IYXB_BaoJiaEidtMoneyService YXB_BaoJiaEidtMoneyService { get; set; }
         IBLL.IYXB_WinCanPinService YXB_WinCanPinService { get; set; }
+        IBLL.IWXX_FormIDService WXX_FormIDService { get; set; }
+        IBLL.IWXXUserInfoService WXXUserInfoService { get; set; }
 
 
 
@@ -169,7 +174,14 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var temp = YXB_BaojiaService.LoadEntities(x => x.id == bjid).FirstOrDefault();
             temp.ZhuangTai = Convert.ToInt32(ckid);
             YXB_BaojiaService.EditEntity(temp);
-            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+
+            #region 调用微信通知方法
+            var uid = temp.T_BaoJiaToP.YXB_Kh_list.AddUser;
+            var bjTopID = temp.BaoJiaTop_id;
+            var strReturn = SendTempletMessge(uid,temp);
+            #endregion
+
+            return Json(new { ret = "ok", strReturn= strReturn }, JsonRequestBehavior.AllowGet);
         }
         //信息完成处理
         public ActionResult WinChuLi(T_WinBak Twbak)
@@ -1054,8 +1066,102 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return Json(new { ret="ok"},JsonRequestBehavior.AllowGet);
         }
 
+        #region 微信通知用
+        public string SendTempletMessge(int uid,YXB_Baojia bjinfo)
+        {
+            //var user = UserInfoService.LoadEntities(x => x.ID == uid).FirstOrDefault();
+            var rtmp = WXXUserInfoService.LoadEntities(x => x.UID == uid).FirstOrDefault();
+            if(rtmp == null)
+            {
+                return null;
+            }
+            string strReturn = string.Empty;
+            try
+            {
+                #region 获取access_token
+                string apiurl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxc67a3c17709458e5&secret=34a9647b2c1120e443cdf14b1a0d6b46";
+                WebRequest request = WebRequest.Create(@apiurl);
+                request.Method = "POST";
+                WebResponse response = request.GetResponse();
+                Stream stream = response.GetResponseStream();
+                Encoding encode = Encoding.UTF8;
+                StreamReader reader = new StreamReader(stream, encode);
+                string detail = reader.ReadToEnd();
+                var jd = JsonConvert.DeserializeObject<WXApi>(detail);
+                string token = (String)jd.access_token;
+                DateTime dtime = MvcApplication.GetT_time();
+                var wxx = WXX_FormIDService.LoadEntities(x => x.AddUserID == uid && x.StopTime > dtime).DefaultIfEmpty();
+                WXX_FormID Minwxx = new WXX_FormID();
+                if (wxx.ToList()[0] != null)
+                {
+                    Minwxx = wxx.OrderBy(x => x.StopTime).FirstOrDefault();
+                }else
+                {
+                    return null;
+                }
+                #endregion
+                #region 组装信息推送，并返回结果（其它模版消息于此类似）
+                string url = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=" + token;
+                var Money = bjinfo.WIN == 1 ? bjinfo.WinMoney : (bjinfo.EditQianMoney == null? bjinfo.BaoJiaMoney:bjinfo.EditQianMoney);
+                var YunFei = bjinfo.WIN == 1 ? bjinfo.WinYunFei : (bjinfo.EditQianYunFei == null ? bjinfo.BaoJiaYunFei : bjinfo.EditQianYunFei);
+                var sumMM = Money + YunFei;
+                var addTime = bjinfo.UpdataTime == null ? bjinfo.AddTime : bjinfo.UpdataTime;
+                string temp = "{\"touser\": \"" + rtmp.WXID + "\"," +
+                       "\"template_id\": \"3zN541eDUYsMVVZnqf6GEuZr7KDdOC1jamBsgEKHXY0\", " +
+                       "\"topcolor\": \"#FF0000\", " +
+                       "\"form_id\": \"" +Minwxx.FormID+"\","+
+                       "\"data\": " +
+                       "{\"first\": {\"value\": \"您好，您有一条报价通知信息\"}," +
+                       "\"keyword1\": { \"value\": \""+ bjinfo.T_ChanPinName1.MyTexts +"("+ bjinfo.T_ChanPinName2.MyTexts +")\"}," +
+                       "\"keyword2\": { \"value\": \""+ bjinfo.CPShuLiang +"\"}," +
+                       "\"keyword3\": { \"value\": \""+ Money + "元\"}," +
+                       "\"keyword4\": { \"value\": \""+ YunFei + "元\"}," +
+                       "\"keyword5\": { \"value\": \""+ sumMM + "元\"}," +
+                       "\"keyword6\": { \"value\": \""+ addTime +"\"}," +
+                       "\"remark\": {\"value\": \"\" }}}";
+                #endregion
+                //核心代码
+                GetResponseData(temp, @url);
+                strReturn = "推送成功";
+                //删除使用过的formid
+                WXX_FormIDService.DeleteEntity(Minwxx);
+            }
+            catch (Exception ex)
+            {
+                strReturn = ex.Message;
+            }
+            return strReturn;
+        }
+        public string GetResponseData(string JSONData, string Url)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(JSONData);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
+            request.Method = "POST";
+            request.ContentLength = bytes.Length;
+            request.ContentType = "json";
+            Stream reqstream = request.GetRequestStream();
+            reqstream.Write(bytes, 0, bytes.Length);
+            //声明一个HttpWebRequest请求
+            request.Timeout = 90000;
+            //设置连接超时时间
+            request.Headers.Set("Pragma", "no-cache");
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            Stream streamReceive = response.GetResponseStream();
+            Encoding encoding = Encoding.UTF8;
+            StreamReader streamReader = new StreamReader(streamReceive, encoding);
+            string strResult = streamReader.ReadToEnd();
+            streamReceive.Dispose();
+            streamReader.Dispose();
+            return strResult;
+        }
+        #endregion
+
     }
-   
+
+}
+//微信通知用实体类
+public class WXApi{
+    public string access_token { set; get; }
 }
 public class cls {
     public long ID { get; set; }

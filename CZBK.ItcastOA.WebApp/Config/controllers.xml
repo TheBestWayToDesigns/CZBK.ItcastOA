@@ -58,8 +58,9 @@
     <property name="T_ChanPinNameService" ref="T_ChanPinNameService" />
     <property name="T_WinBakFaHuoService" ref="T_WinBakFaHuoService" />
     <property name="YXB_BaoJiaEidtMoneyService" ref="YXB_BaoJiaEidtMoneyService" />
-    <property name="YXB_WinCanPinService" ref="YXB_WinCanPinService" />
-    
+    <property name="YXB_WinCanPinService" ref="YXB_WinCanPinService" /> 
+    <property name="WXXUserInfoService" ref="WXXUserInfoService" />
+    <property name="WXX_FormIDService" ref="WXX_FormIDService" />
   </object>
   <object type="CZBK.ItcastOA.WebApp.Controllers.GeRenController, CZBK.ItcastOA.WebApp" singleton="false" >
     <property name="UserInfoService" ref="UserInfoService" />
