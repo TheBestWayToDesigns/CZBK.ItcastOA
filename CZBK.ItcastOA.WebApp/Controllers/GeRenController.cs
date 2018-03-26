@@ -54,7 +54,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //获取所有人员小号信息
         public ActionResult GetAllUserXH()
         {
-            var temp = UserInfoService.LoadEntities(x => x.ID > 0).DefaultIfEmpty().ToList();
+            var temp = UserInfoService.LoadEntities(x => x.ID > 0 && x.UserXiaoHao != null).DefaultIfEmpty().ToList();
             if(temp != null || temp[0] != null)
             {
                 var remp = from a in temp
