@@ -291,6 +291,14 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class WXXUserInfoService :BaseService<WXXUserInfo>,IWXXUserInfoService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.WXXUserInfoDal;
+        }
+    }   
+	
 	public partial class YJ_ScheduleActionService :BaseService<YJ_ScheduleAction>,IYJ_ScheduleActionService
     {
         public override void SetCurretnDal()

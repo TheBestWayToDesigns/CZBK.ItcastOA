@@ -728,6 +728,7 @@
             }
             $.post("/MasterBaoJia/CheckBaoJiaYes", { "bjid": rows[0].ID, "ckid": p }, function (data) {
                 if (data.ret == "ok") {
+                    alert(data.strReturn)
                     $('#tt').datagrid("reload");
                 }
                 else {

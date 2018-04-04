@@ -108,6 +108,8 @@
         <AssociationConnector Association="OAModel.FK_Userbak_UserInfo" />
         <EntityTypeShape EntityType="OAModel.T_ZhiPiaoTong" Width="1.5" PointX="7.375" PointY="4.75" />
         <EntityTypeShape EntityType="OAModel.WXX_FormID" Width="1.5" PointX="35.968254234815426" PointY="18.380952446278712" />
+        <EntityTypeShape EntityType="OAModel.WXXUserInfo" Width="1.5" PointX="20.125" PointY="12.457712809244789" />
+        <AssociationConnector Association="OAModel.FK_WXXUserInfo_UserInfo" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

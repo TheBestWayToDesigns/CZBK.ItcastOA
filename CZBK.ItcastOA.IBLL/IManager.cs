@@ -185,6 +185,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IWXXUserInfoService : IBaseService<WXXUserInfo>
+    {
+       
+    }   
+	
 	public partial interface IYJ_ScheduleActionService : IBaseService<YJ_ScheduleAction>
     {
        

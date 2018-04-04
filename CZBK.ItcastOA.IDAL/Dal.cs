@@ -185,6 +185,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IWXXUserInfoDal :IBaseDal<WXXUserInfo>
+    {
+      
+    }
+	
 	public partial interface IYJ_ScheduleActionDal :IBaseDal<YJ_ScheduleAction>
     {
       
