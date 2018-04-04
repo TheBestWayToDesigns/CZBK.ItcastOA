@@ -471,6 +471,71 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IWXX_FormIDDal;
         }
 		
+	    public static IWXXBaoJiaQuanXianDal CreateWXXBaoJiaQuanXianDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".WXXBaoJiaQuanXianDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IWXXBaoJiaQuanXianDal;
+        }
+		
+	    public static IWXXMenuInfoDal CreateWXXMenuInfoDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".WXXMenuInfoDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IWXXMenuInfoDal;
+        }
+		
+	    public static IWXXPhoneNumDal CreateWXXPhoneNumDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".WXXPhoneNumDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IWXXPhoneNumDal;
+        }
+		
+	    public static IWXXScoreInfoDal CreateWXXScoreInfoDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".WXXScoreInfoDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IWXXScoreInfoDal;
+        }
+		
+	    public static IWXXScoreUserDal CreateWXXScoreUserDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".WXXScoreUserDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IWXXScoreUserDal;
+        }
+		
 	    public static IWXXUserInfoDal CreateWXXUserInfoDal()
         {
 

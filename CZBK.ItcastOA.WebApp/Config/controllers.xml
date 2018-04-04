@@ -35,6 +35,9 @@
     <property name="YXB_BaojiaService" ref="YXB_BaojiaService" />
     <property name="UserInfoService" ref="UserInfoService" />
     <property name="YXB_Kh_listService" ref="YXB_Kh_listService" />
+    <property name="WXXBaoJiaQuanXianService" ref="WXXBaoJiaQuanXianService" />
+    <property name="WXXMenuInfoService" ref="WXXMenuInfoService" />
+    <property name="BumenInfoSetService" ref="BumenInfoSetService" />
   </object>
  <object type="CZBK.ItcastOA.WebApp.Controllers.YXBJController, CZBK.ItcastOA.WebApp" singleton="false" >
   <property name="YXB_BaojiaService" ref="YXB_BaojiaService" />
@@ -64,6 +67,7 @@
   </object>
   <object type="CZBK.ItcastOA.WebApp.Controllers.GeRenController, CZBK.ItcastOA.WebApp" singleton="false" >
     <property name="UserInfoService" ref="UserInfoService" />
+    <property name="WXXPhoneNumService" ref="WXXPhoneNumService" />
   </object>
   <object type="CZBK.ItcastOA.WebApp.Controllers.NewChanPinController, CZBK.ItcastOA.WebApp" singleton="false" >
     <property name="T_ChanPinNameService" ref="T_ChanPinNameService" />
@@ -115,6 +119,15 @@
   <object type="CZBK.ItcastOA.WebApp.Controllers.OldOaController, CZBK.ItcastOA.WebApp" singleton="false" >
     <property name="UserbakService" ref="UserbakService" />
   </object>
+
+  <object type="CZBK.ItcastOA.WebApp.Controllers.WXXController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="UserInfoService" ref="UserInfoService" />
+    <property name="WXXScoreInfoService" ref="WXXScoreInfoService" />
+    <property name="WXXScoreUserService" ref="WXXScoreUserService" />
+  </object>
+
+
+
 
   <!--intentionally do NOT register the AccountController or the ValuesController with the container; demonstrates that the underlying
   default controller factory will properly (attempt to!) resolve all controllers not registered with Spring.NET

@@ -291,6 +291,46 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class WXXBaoJiaQuanXianService :BaseService<WXXBaoJiaQuanXian>,IWXXBaoJiaQuanXianService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.WXXBaoJiaQuanXianDal;
+        }
+    }   
+	
+	public partial class WXXMenuInfoService :BaseService<WXXMenuInfo>,IWXXMenuInfoService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.WXXMenuInfoDal;
+        }
+    }   
+	
+	public partial class WXXPhoneNumService :BaseService<WXXPhoneNum>,IWXXPhoneNumService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.WXXPhoneNumDal;
+        }
+    }   
+	
+	public partial class WXXScoreInfoService :BaseService<WXXScoreInfo>,IWXXScoreInfoService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.WXXScoreInfoDal;
+        }
+    }   
+	
+	public partial class WXXScoreUserService :BaseService<WXXScoreUser>,IWXXScoreUserService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.WXXScoreUserDal;
+        }
+    }   
+	
 	public partial class WXXUserInfoService :BaseService<WXXUserInfo>,IWXXUserInfoService
     {
         public override void SetCurretnDal()

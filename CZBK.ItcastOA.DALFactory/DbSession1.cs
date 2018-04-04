@@ -540,6 +540,81 @@ namespace CZBK.ItcastOA.DALFactory
             set { _WXX_FormIDDal = value; }
         }
 	
+		private IWXXBaoJiaQuanXianDal _WXXBaoJiaQuanXianDal;
+        public IWXXBaoJiaQuanXianDal WXXBaoJiaQuanXianDal
+        {
+            get
+            {
+                if(_WXXBaoJiaQuanXianDal == null)
+                {
+                   // _WXXBaoJiaQuanXianDal = new WXXBaoJiaQuanXianDal();
+				    _WXXBaoJiaQuanXianDal =AbstractFactory.CreateWXXBaoJiaQuanXianDal();
+                }
+                return _WXXBaoJiaQuanXianDal;
+            }
+            set { _WXXBaoJiaQuanXianDal = value; }
+        }
+	
+		private IWXXMenuInfoDal _WXXMenuInfoDal;
+        public IWXXMenuInfoDal WXXMenuInfoDal
+        {
+            get
+            {
+                if(_WXXMenuInfoDal == null)
+                {
+                   // _WXXMenuInfoDal = new WXXMenuInfoDal();
+				    _WXXMenuInfoDal =AbstractFactory.CreateWXXMenuInfoDal();
+                }
+                return _WXXMenuInfoDal;
+            }
+            set { _WXXMenuInfoDal = value; }
+        }
+	
+		private IWXXPhoneNumDal _WXXPhoneNumDal;
+        public IWXXPhoneNumDal WXXPhoneNumDal
+        {
+            get
+            {
+                if(_WXXPhoneNumDal == null)
+                {
+                   // _WXXPhoneNumDal = new WXXPhoneNumDal();
+				    _WXXPhoneNumDal =AbstractFactory.CreateWXXPhoneNumDal();
+                }
+                return _WXXPhoneNumDal;
+            }
+            set { _WXXPhoneNumDal = value; }
+        }
+	
+		private IWXXScoreInfoDal _WXXScoreInfoDal;
+        public IWXXScoreInfoDal WXXScoreInfoDal
+        {
+            get
+            {
+                if(_WXXScoreInfoDal == null)
+                {
+                   // _WXXScoreInfoDal = new WXXScoreInfoDal();
+				    _WXXScoreInfoDal =AbstractFactory.CreateWXXScoreInfoDal();
+                }
+                return _WXXScoreInfoDal;
+            }
+            set { _WXXScoreInfoDal = value; }
+        }
+	
+		private IWXXScoreUserDal _WXXScoreUserDal;
+        public IWXXScoreUserDal WXXScoreUserDal
+        {
+            get
+            {
+                if(_WXXScoreUserDal == null)
+                {
+                   // _WXXScoreUserDal = new WXXScoreUserDal();
+				    _WXXScoreUserDal =AbstractFactory.CreateWXXScoreUserDal();
+                }
+                return _WXXScoreUserDal;
+            }
+            set { _WXXScoreUserDal = value; }
+        }
+	
 		private IWXXUserInfoDal _WXXUserInfoDal;
         public IWXXUserInfoDal WXXUserInfoDal
         {

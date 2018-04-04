@@ -185,6 +185,31 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IWXXBaoJiaQuanXianDal :IBaseDal<WXXBaoJiaQuanXian>
+    {
+      
+    }
+	
+	public partial interface IWXXMenuInfoDal :IBaseDal<WXXMenuInfo>
+    {
+      
+    }
+	
+	public partial interface IWXXPhoneNumDal :IBaseDal<WXXPhoneNum>
+    {
+      
+    }
+	
+	public partial interface IWXXScoreInfoDal :IBaseDal<WXXScoreInfo>
+    {
+      
+    }
+	
+	public partial interface IWXXScoreUserDal :IBaseDal<WXXScoreUser>
+    {
+      
+    }
+	
 	public partial interface IWXXUserInfoDal :IBaseDal<WXXUserInfo>
     {
       

@@ -82,6 +82,16 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IWXX_FormIDDal WXX_FormIDDal{get;set;}
 	
+		IWXXBaoJiaQuanXianDal WXXBaoJiaQuanXianDal{get;set;}
+	
+		IWXXMenuInfoDal WXXMenuInfoDal{get;set;}
+	
+		IWXXPhoneNumDal WXXPhoneNumDal{get;set;}
+	
+		IWXXScoreInfoDal WXXScoreInfoDal{get;set;}
+	
+		IWXXScoreUserDal WXXScoreUserDal{get;set;}
+	
 		IWXXUserInfoDal WXXUserInfoDal{get;set;}
 	
 		IYJ_ScheduleActionDal YJ_ScheduleActionDal{get;set;}
