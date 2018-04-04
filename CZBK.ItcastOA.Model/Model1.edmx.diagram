@@ -110,6 +110,16 @@
         <EntityTypeShape EntityType="OAModel.WXX_FormID" Width="1.5" PointX="35.968254234815426" PointY="18.380952446278712" />
         <EntityTypeShape EntityType="OAModel.WXXUserInfo" Width="1.5" PointX="20.125" PointY="12.457712809244789" />
         <AssociationConnector Association="OAModel.FK_WXXUserInfo_UserInfo" />
+        <EntityTypeShape EntityType="OAModel.WXXBaoJiaQuanXian" Width="1.5" PointX="20.469362646809671" PointY="4.4969616419794978" />
+        <EntityTypeShape EntityType="OAModel.WXXMenuInfo" Width="1.5" PointX="8.75" PointY="0.94067529149822526" />
+        <EntityTypeShape EntityType="OAModel.WXXPhoneNum" Width="1.5" PointX="0.75" PointY="9.9406752914982253" />
+        <AssociationConnector Association="OAModel.FK_WXXBaoJiaQuanXian_UserInfo" />
+        <EntityTypeShape EntityType="OAModel.WXXScoreInfo" Width="1.5" PointX="20.125" PointY="22.598979085286459" />
+        <EntityTypeShape EntityType="OAModel.WXXScoreUser" Width="1.5" PointX="20.125" PointY="0.87894653320312521" />
+        <AssociationConnector Association="OAModel.FK_WXXScoreInfo_BeiGeiFenUserInfo1" />
+        <AssociationConnector Association="OAModel.FK_WXXScoreInfo_GeiFenUserInfo1" />
+        <AssociationConnector Association="OAModel.FK_WXXScoreUser_UserInfo" />
+        <AssociationConnector Association="OAModel.FK_WXXScoreUser_UserInfo1" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

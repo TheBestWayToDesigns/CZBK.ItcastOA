@@ -441,7 +441,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="UName" Type="nvarchar" MaxLength="32" />
           <Property Name="UPwd" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="PerSonName" Type="nvarchar" MaxLength="150" />
@@ -487,6 +487,53 @@
           <Property Name="AddTime" Type="datetime" Nullable="false" />
           <Property Name="StopTime" Type="datetime" Nullable="false" />
           <Property Name="CanUse" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WXXBaoJiaQuanXian">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="CanSeeNum" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="WXXMenuInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="EngName" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="WXXPhoneNum">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UID" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="BuMen" Type="nvarchar" MaxLength="50" />
+          <Property Name="XiaoHao" Type="int" />
+          <Property Name="DaHao" Type="bigint" />
+        </EntityType>
+        <EntityType Name="WXXScoreInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BeiGiveScoreUserID" Type="int" />
+          <Property Name="GiveScoreUserID" Type="int" />
+          <Property Name="Score" Type="real" />
+          <Property Name="State" Type="smallint" />
+          <Property Name="AddTime" Type="datetime" />
+          <Property Name="ChangeStateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="WXXScoreUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UID" Type="int" />
+          <Property Name="CanGiveScoreUserID" Type="int" />
         </EntityType>
         <EntityType Name="WXXUserInfo">
           <Key>
@@ -1237,6 +1284,66 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_WXXBaoJiaQuanXian_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="0..1" />
+          <End Role="WXXBaoJiaQuanXian" Type="Self.WXXBaoJiaQuanXian" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXBaoJiaQuanXian">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WXXScoreInfo_BeiGeiFenUserInfo1">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="0..1" />
+          <End Role="WXXScoreInfo" Type="Self.WXXScoreInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXScoreInfo">
+              <PropertyRef Name="BeiGiveScoreUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WXXScoreInfo_GeiFenUserInfo1">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="0..1" />
+          <End Role="WXXScoreInfo" Type="Self.WXXScoreInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXScoreInfo">
+              <PropertyRef Name="GiveScoreUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WXXScoreUser_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="0..1" />
+          <End Role="WXXScoreUser" Type="Self.WXXScoreUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXScoreUser">
+              <PropertyRef Name="UID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WXXScoreUser_UserInfo1">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="0..1" />
+          <End Role="WXXScoreUser" Type="Self.WXXScoreUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXScoreUser">
+              <PropertyRef Name="CanGiveScoreUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_WXXUserInfo_UserInfo">
           <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
           <End Role="WXXUserInfo" Type="Self.WXXUserInfo" Multiplicity="*" />
@@ -1480,6 +1587,11 @@
           <EntitySet Name="UserInfoDepartment" EntityType="Self.UserInfoDepartment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfoRoleInfo" EntityType="Self.UserInfoRoleInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WXX_FormID" EntityType="Self.WXX_FormID" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WXXBaoJiaQuanXian" EntityType="Self.WXXBaoJiaQuanXian" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WXXMenuInfo" EntityType="Self.WXXMenuInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WXXPhoneNum" EntityType="Self.WXXPhoneNum" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WXXScoreInfo" EntityType="Self.WXXScoreInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WXXScoreUser" EntityType="Self.WXXScoreUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WXXUserInfo" EntityType="Self.WXXUserInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YJ_ScheduleAction" EntityType="Self.YJ_ScheduleAction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YJ_ScheduleDay" EntityType="Self.YJ_ScheduleDay" Schema="dbo" store:Type="Tables" />
@@ -1698,6 +1810,26 @@
           <AssociationSet Name="FK_UserInfoRoleInfo_UserInfo" Association="Self.FK_UserInfoRoleInfo_UserInfo">
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="UserInfoRoleInfo" EntitySet="UserInfoRoleInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WXXBaoJiaQuanXian_UserInfo" Association="Self.FK_WXXBaoJiaQuanXian_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="WXXBaoJiaQuanXian" EntitySet="WXXBaoJiaQuanXian" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WXXScoreInfo_BeiGeiFenUserInfo1" Association="Self.FK_WXXScoreInfo_BeiGeiFenUserInfo1">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="WXXScoreInfo" EntitySet="WXXScoreInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WXXScoreInfo_GeiFenUserInfo1" Association="Self.FK_WXXScoreInfo_GeiFenUserInfo1">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="WXXScoreInfo" EntitySet="WXXScoreInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WXXScoreUser_UserInfo" Association="Self.FK_WXXScoreUser_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="WXXScoreUser" EntitySet="WXXScoreUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WXXScoreUser_UserInfo1" Association="Self.FK_WXXScoreUser_UserInfo1">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="WXXScoreUser" EntitySet="WXXScoreUser" />
           </AssociationSet>
           <AssociationSet Name="FK_WXXUserInfo_UserInfo" Association="Self.FK_WXXUserInfo_UserInfo">
             <End Role="UserInfo" EntitySet="UserInfo" />
@@ -2085,6 +2217,31 @@
             <End Role="UserInfo" EntitySet="UserInfoes" />
             <End Role="WXXUserInfo" EntitySet="WXXUserInfoes" />
           </AssociationSet>
+          <EntitySet Name="WXXBaoJiaQuanXians" EntityType="OAModel.WXXBaoJiaQuanXian" />
+          <EntitySet Name="WXXMenuInfoes" EntityType="OAModel.WXXMenuInfo" />
+          <EntitySet Name="WXXPhoneNums" EntityType="OAModel.WXXPhoneNum" />
+          <AssociationSet Name="FK_WXXBaoJiaQuanXian_UserInfo" Association="OAModel.FK_WXXBaoJiaQuanXian_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="WXXBaoJiaQuanXian" EntitySet="WXXBaoJiaQuanXians" />
+          </AssociationSet>
+          <EntitySet Name="WXXScoreInfoes" EntityType="OAModel.WXXScoreInfo" />
+          <EntitySet Name="WXXScoreUsers" EntityType="OAModel.WXXScoreUser" />
+          <AssociationSet Name="FK_WXXScoreInfo_BeiGeiFenUserInfo1" Association="OAModel.FK_WXXScoreInfo_BeiGeiFenUserInfo1">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="WXXScoreInfo" EntitySet="WXXScoreInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WXXScoreInfo_GeiFenUserInfo1" Association="OAModel.FK_WXXScoreInfo_GeiFenUserInfo1">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="WXXScoreInfo" EntitySet="WXXScoreInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WXXScoreUser_UserInfo" Association="OAModel.FK_WXXScoreUser_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="WXXScoreUser" EntitySet="WXXScoreUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WXXScoreUser_UserInfo1" Association="OAModel.FK_WXXScoreUser_UserInfo1">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="WXXScoreUser" EntitySet="WXXScoreUsers" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ActionInfo">
           <Key>
@@ -2432,6 +2589,11 @@
           <NavigationProperty Name="YJ_ScheduleDay1" Relationship="OAModel.FK_YJ_ScheduleDay_yjuserid_userinfo" FromRole="UserInfo" ToRole="YJ_ScheduleDay" />
           <NavigationProperty Name="Userbaks" Relationship="OAModel.FK_Userbak_UserInfo" FromRole="UserInfo" ToRole="Userbak" />
           <NavigationProperty Name="WXXUserInfoes" Relationship="OAModel.FK_WXXUserInfo_UserInfo" FromRole="UserInfo" ToRole="WXXUserInfo" />
+          <NavigationProperty Name="WXXBaoJiaQuanXians" Relationship="OAModel.FK_WXXBaoJiaQuanXian_UserInfo" FromRole="UserInfo" ToRole="WXXBaoJiaQuanXian" />
+          <NavigationProperty Name="WXXScoreInfoes" Relationship="OAModel.FK_WXXScoreInfo_BeiGeiFenUserInfo1" FromRole="UserInfo" ToRole="WXXScoreInfo" />
+          <NavigationProperty Name="WXXScoreInfoes1" Relationship="OAModel.FK_WXXScoreInfo_GeiFenUserInfo1" FromRole="UserInfo" ToRole="WXXScoreInfo" />
+          <NavigationProperty Name="WXXScoreUsers" Relationship="OAModel.FK_WXXScoreUser_UserInfo" FromRole="UserInfo" ToRole="WXXScoreUser" />
+          <NavigationProperty Name="WXXScoreUsers1" Relationship="OAModel.FK_WXXScoreUser_UserInfo1" FromRole="UserInfo" ToRole="WXXScoreUser" />
         </EntityType>
         <Association Name="FK_Bumen">
           <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
@@ -3505,6 +3667,118 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="WXXBaoJiaQuanXian">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="CanSeeNum" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_WXXBaoJiaQuanXian_UserInfo" FromRole="WXXBaoJiaQuanXian" ToRole="UserInfo" />
+        </EntityType>
+        <EntityType Name="WXXMenuInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EngName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="WXXPhoneNum">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BuMen" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="XiaoHao" Type="Int32" />
+          <Property Name="DaHao" Type="Int64" />
+        </EntityType>
+        <Association Name="FK_WXXBaoJiaQuanXian_UserInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
+          <End Type="OAModel.WXXBaoJiaQuanXian" Role="WXXBaoJiaQuanXian" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXBaoJiaQuanXian">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="WXXScoreInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BeiGiveScoreUserID" Type="Int32" />
+          <Property Name="GiveScoreUserID" Type="Int32" />
+          <Property Name="Score" Type="Single" />
+          <Property Name="State" Type="Int16" />
+          <Property Name="AddTime" Type="DateTime" Precision="3" />
+          <Property Name="ChangeStateTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_WXXScoreInfo_BeiGeiFenUserInfo1" FromRole="WXXScoreInfo" ToRole="UserInfo" />
+          <NavigationProperty Name="UserInfo1" Relationship="OAModel.FK_WXXScoreInfo_GeiFenUserInfo1" FromRole="WXXScoreInfo" ToRole="UserInfo" />
+        </EntityType>
+        <EntityType Name="WXXScoreUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UID" Type="Int32" />
+          <Property Name="CanGiveScoreUserID" Type="Int32" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_WXXScoreUser_UserInfo" FromRole="WXXScoreUser" ToRole="UserInfo" />
+          <NavigationProperty Name="UserInfo1" Relationship="OAModel.FK_WXXScoreUser_UserInfo1" FromRole="WXXScoreUser" ToRole="UserInfo" />
+        </EntityType>
+        <Association Name="FK_WXXScoreInfo_BeiGeiFenUserInfo1">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
+          <End Type="OAModel.WXXScoreInfo" Role="WXXScoreInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXScoreInfo">
+              <PropertyRef Name="BeiGiveScoreUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WXXScoreInfo_GeiFenUserInfo1">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
+          <End Type="OAModel.WXXScoreInfo" Role="WXXScoreInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXScoreInfo">
+              <PropertyRef Name="GiveScoreUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WXXScoreUser_UserInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
+          <End Type="OAModel.WXXScoreUser" Role="WXXScoreUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXScoreUser">
+              <PropertyRef Name="UID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WXXScoreUser_UserInfo1">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
+          <End Type="OAModel.WXXScoreUser" Role="WXXScoreUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXScoreUser">
+              <PropertyRef Name="CanGiveScoreUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4156,6 +4430,58 @@
             <EntityTypeMapping TypeName="OAModel.WXXUserInfo">
               <MappingFragment StoreEntitySet="WXXUserInfo">
                 <ScalarProperty Name="WXID" ColumnName="WXID" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WXXBaoJiaQuanXians">
+            <EntityTypeMapping TypeName="OAModel.WXXBaoJiaQuanXian">
+              <MappingFragment StoreEntitySet="WXXBaoJiaQuanXian">
+                <ScalarProperty Name="CanSeeNum" ColumnName="CanSeeNum" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WXXMenuInfoes">
+            <EntityTypeMapping TypeName="OAModel.WXXMenuInfo">
+              <MappingFragment StoreEntitySet="WXXMenuInfo">
+                <ScalarProperty Name="EngName" ColumnName="EngName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WXXPhoneNums">
+            <EntityTypeMapping TypeName="OAModel.WXXPhoneNum">
+              <MappingFragment StoreEntitySet="WXXPhoneNum">
+                <ScalarProperty Name="DaHao" ColumnName="DaHao" />
+                <ScalarProperty Name="XiaoHao" ColumnName="XiaoHao" />
+                <ScalarProperty Name="BuMen" ColumnName="BuMen" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WXXScoreInfoes">
+            <EntityTypeMapping TypeName="OAModel.WXXScoreInfo">
+              <MappingFragment StoreEntitySet="WXXScoreInfo">
+                <ScalarProperty Name="ChangeStateTime" ColumnName="ChangeStateTime" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="GiveScoreUserID" ColumnName="GiveScoreUserID" />
+                <ScalarProperty Name="BeiGiveScoreUserID" ColumnName="BeiGiveScoreUserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WXXScoreUsers">
+            <EntityTypeMapping TypeName="OAModel.WXXScoreUser">
+              <MappingFragment StoreEntitySet="WXXScoreUser">
+                <ScalarProperty Name="CanGiveScoreUserID" ColumnName="CanGiveScoreUserID" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>

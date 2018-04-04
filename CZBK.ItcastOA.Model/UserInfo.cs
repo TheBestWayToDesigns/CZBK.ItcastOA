@@ -48,6 +48,11 @@ namespace CZBK.ItcastOA.Model
             this.YJ_ScheduleDay1 = new HashSet<YJ_ScheduleDay>();
             this.Userbaks = new HashSet<Userbak>();
             this.WXXUserInfoes = new HashSet<WXXUserInfo>();
+            this.WXXBaoJiaQuanXians = new HashSet<WXXBaoJiaQuanXian>();
+            this.WXXScoreInfoes = new HashSet<WXXScoreInfo>();
+            this.WXXScoreInfoes1 = new HashSet<WXXScoreInfo>();
+            this.WXXScoreUsers = new HashSet<WXXScoreUser>();
+            this.WXXScoreUsers1 = new HashSet<WXXScoreUser>();
         }
     
         public int ID { get; set; }
@@ -69,7 +74,6 @@ namespace CZBK.ItcastOA.Model
         public string PerSonName { get; set; }
         public Nullable<int> QuXian { get; set; }
         public Nullable<int> BuMenID { get; set; }
-
         [JsonIgnore]
         public virtual BumenInfoSet BumenInfoSet { get; set; }
         [JsonIgnore]
@@ -134,5 +138,15 @@ namespace CZBK.ItcastOA.Model
         public virtual ICollection<Userbak> Userbaks { get; set; }
         [JsonIgnore]
         public virtual ICollection<WXXUserInfo> WXXUserInfoes { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<WXXBaoJiaQuanXian> WXXBaoJiaQuanXians { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<WXXScoreInfo> WXXScoreInfoes { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<WXXScoreInfo> WXXScoreInfoes1 { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<WXXScoreUser> WXXScoreUsers { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<WXXScoreUser> WXXScoreUsers1 { get; set; }
     }
 }

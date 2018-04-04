@@ -186,6 +186,31 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class WXXBaoJiaQuanXianDal :BaseDal<WXXBaoJiaQuanXian>,IWXXBaoJiaQuanXianDal
+    {
+
+    }
+		
+	public partial class WXXMenuInfoDal :BaseDal<WXXMenuInfo>,IWXXMenuInfoDal
+    {
+
+    }
+		
+	public partial class WXXPhoneNumDal :BaseDal<WXXPhoneNum>,IWXXPhoneNumDal
+    {
+
+    }
+		
+	public partial class WXXScoreInfoDal :BaseDal<WXXScoreInfo>,IWXXScoreInfoDal
+    {
+
+    }
+		
+	public partial class WXXScoreUserDal :BaseDal<WXXScoreUser>,IWXXScoreUserDal
+    {
+
+    }
+		
 	public partial class WXXUserInfoDal :BaseDal<WXXUserInfo>,IWXXUserInfoDal
     {
 

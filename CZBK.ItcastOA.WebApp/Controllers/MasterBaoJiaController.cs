@@ -101,7 +101,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             else
             {
-                List<SlcClass> templist;
+                List<SlcClass> templist =new List<SlcClass>();
                 LoadBaojia(pageIndex, pageSize, out totalCount, out templist, delflg, win, true);
                 return Json(new { rows = templist, ret = delflg, total = totalCount }, JsonRequestBehavior.AllowGet);
             }

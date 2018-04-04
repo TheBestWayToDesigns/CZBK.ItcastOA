@@ -185,6 +185,31 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IWXXBaoJiaQuanXianService : IBaseService<WXXBaoJiaQuanXian>
+    {
+       
+    }   
+	
+	public partial interface IWXXMenuInfoService : IBaseService<WXXMenuInfo>
+    {
+       
+    }   
+	
+	public partial interface IWXXPhoneNumService : IBaseService<WXXPhoneNum>
+    {
+       
+    }   
+	
+	public partial interface IWXXScoreInfoService : IBaseService<WXXScoreInfo>
+    {
+       
+    }   
+	
+	public partial interface IWXXScoreUserService : IBaseService<WXXScoreUser>
+    {
+       
+    }   
+	
 	public partial interface IWXXUserInfoService : IBaseService<WXXUserInfo>
     {
        
