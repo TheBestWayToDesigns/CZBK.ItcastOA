@@ -12,6 +12,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IUserInfoService UserInfoService { get; set; }
         IBLL.IWXXScoreInfoService WXXScoreInfoService { get; set; }
         IBLL.IWXXScoreUserService WXXScoreUserService { get; set; }
+        IBLL.IBumenInfoSetService BumenInfoSetService { get; set; }
         //
         // GET: /WXX/
 
@@ -106,12 +107,16 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             return Json(new { ret = "no", msg = "数据库中无数据！" }, JsonRequestBehavior.AllowGet);
         }
+
+
+        #region 微信后台管理员工具（评分权限）
         //获取评分人员1对1信息
         public ActionResult GetScoreUserInfo()
         {
             //判断是否为搜索
             var serchText = Request["serchText"] == "" || Request["serchText"] == null || Request["serchText"] == "null" ? "0" : Request["serchText"];
-            if (serchText != "0") {
+            if (serchText != "0")
+            {
                 var data = WXXScoreUserService.LoadEntities(x => x.UserInfo.PerSonName.Contains(serchText)).DefaultIfEmpty().ToList();
                 if (data != null && data[0] != null)
                 {
@@ -127,7 +132,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 return Json(new { ret = "no" }, JsonRequestBehavior.AllowGet);
             }
             var temp = WXXScoreUserService.LoadEntities(x => x.ID > 0).DefaultIfEmpty().ToList();
-            if(temp != null && temp[0] != null)
+            if (temp != null && temp[0] != null)
             {
                 var rtmp = from a in temp
                            select new
@@ -136,7 +141,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                Name = a.UserInfo.PerSonName,
                                Username = a.UserInfo1.PerSonName
                            };
-                return Json(new { ret = "ok", rows=rtmp }, JsonRequestBehavior.AllowGet);
+                return Json(new { ret = "ok", rows = rtmp }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { ret = "no", msg = "数据库表中无数据" }, JsonRequestBehavior.AllowGet);
         }
@@ -154,7 +159,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             int id = Convert.ToInt32(Request["id"]);
             var temp = WXXScoreUserService.LoadEntities(x => x.ID == id).FirstOrDefault();
-            if(temp != null)
+            if (temp != null)
             {
                 if (WXXScoreUserService.DeleteEntity(temp))
                 {
@@ -164,5 +169,41 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             return Json(new { ret = "no", msg = "数据库中无此数据，请仔细核对" }, JsonRequestBehavior.AllowGet);
         }
+        //获取所有部门或部门下属成员
+        public ActionResult GetAllBuMenORUser()
+        {
+            if(Request["BMorUser"] == "BM")
+            {
+                var temp = BumenInfoSetService.LoadEntities(x => x.ID > 0).DefaultIfEmpty().ToList();
+                if (temp != null && temp[0] != null)
+                {
+                    var rtmp = from a in temp
+                               select new
+                               {
+                                   ID =a.ID,
+                                   MyText = a.Name
+                               };
+                    return Json(new { ret = "ok", rows = rtmp }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { ret = "no", msg = "数据表中无数据" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var bmid = Convert.ToInt32(Request["BMid"]);
+                var temp = UserInfoService.LoadEntities(x => x.BuMenID == bmid).DefaultIfEmpty().ToList();
+                if (temp != null && temp[0] != null)
+                {
+                    var rtmp = from a in temp
+                               select new
+                               {
+                                   ID = a.ID,
+                                   MyText = a.PerSonName
+                               };
+                    return Json(new { ret = "ok", rows = rtmp }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { ret = "no", msg = "数据表中无数据" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        #endregion
     }
 }
