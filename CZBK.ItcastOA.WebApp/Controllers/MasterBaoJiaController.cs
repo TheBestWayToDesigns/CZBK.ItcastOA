@@ -42,7 +42,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public ActionResult Index()
         {
             //用户名列表
-            ViewBag.user = UserInfoService.LoadEntities(x => x.DelFlag != 1  && x.Click == null && (x.BuMenID == 1||x.BuMenID==20)).ToList();
+            ViewBag.user = UserInfoService.LoadEntities(x => x.DelFlag != 1  && x.Click == null && x.BuMenID ==LoginUser.BuMenID ).ToList();
             //状态列表
             ViewBag.items = T_YSItemsService.LoadEntities(x => x.Items == 1).ToList();
             //客户名称 与 项目名称列表
@@ -266,6 +266,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             uim.PageIndex = pageIndex;
             uim.PageSize = pageSize;
             uim.TotalCount = 0;
+            uim.BumenID = LoginUser.BuMenID;
             var temp1 = YXB_BaojiaService.LoadSearchEntities(uim);
             var temp = from a in temp1
                        select new SlcClass
@@ -317,10 +318,11 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
             int TotalCount = 0;
-            var Tbjtop = T_BaoJiaToPService.LoadEntities(a => a.DelFlag == 0 && a.YXB_Baojia.All(x => x.WIN == 0)).DefaultIfEmpty().ToList();
+            var Tbjtop = T_BaoJiaToPService.LoadEntities(a => a.DelFlag == 0 && a.YXB_Baojia.All(x => x.WIN == 0)&&a.YXB_Kh_list.UserInfo.BuMenID==LoginUser.BuMenID).DefaultIfEmpty().ToList();
             List<T_BaoJiaToP> tbjp = new List<T_BaoJiaToP>();
             foreach (var t in Tbjtop)
             {
+                
                 if (t == null)
                 {
                     List<SlcClass> lscs = new List<SlcClass>();
@@ -367,7 +369,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             {
                 return Json(new { ret = "no" }, JsonRequestBehavior.AllowGet);
             }
-            var temp = T_BaoJiaToPService.LoadEntities(x => x.id == id).FirstOrDefault();
+            var temp = T_BaoJiaToPService.LoadEntities(x => x.id == id&&x.YXB_Kh_list.UserInfo.BuMenID==LoginUser.BuMenID).FirstOrDefault();
             string XiangMuName = temp.KHComname;
             string HanShuiStr = temp.HanShuiID == null ? "" : temp.T_BoolItem.str;
             string bak = temp.T_WinBak.FirstOrDefault() == null ? "" : temp.T_WinBak.FirstOrDefault().Bak;
@@ -851,18 +853,18 @@ namespace CZBK.ItcastOA.WebApp.Controllers
 
         private void LoadBaojia(int pageIndex, int pageSize, out int toalCount, out List<SlcClass> templist, int delflg, int win, bool isbool)
         {
-            var Adata = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out toalCount, x => x.DelFlag == 0 && x.WIN == win && x.ZhuangTai == delflg, x => x.AddTime, false);
+            var Adata = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out toalCount, x => x.DelFlag == 0 && x.WIN == win && x.ZhuangTai == delflg && x.T_BaoJiaToP.YXB_Kh_list.UserInfo.BuMenID == LoginUser.BuMenID, x => x.AddTime, false);
             if (delflg == 1)
             {
-                Adata = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out toalCount, x => x.DelFlag == 0 && x.WIN == win && (x.ZhuangTai == delflg || x.ZhuangTai > 0), x => x.AddTime, false);
+                Adata = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out toalCount, x => x.DelFlag == 0 && x.T_BaoJiaToP.YXB_Kh_list.UserInfo.BuMenID == LoginUser.BuMenID && x.WIN == win && (x.ZhuangTai == delflg || x.ZhuangTai > 0), x => x.AddTime, false);
             }
             else if (delflg > 1)
             {
                 delflg = delflg == 4 ? 1 : delflg;
-                Adata = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out toalCount, x => x.DelFlag == 0 && x.WIN == win && x.ZhuangTai == delflg, x => x.AddTime, false);
+                Adata = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out toalCount, x => x.DelFlag == 0 && x.WIN == win && x.ZhuangTai == delflg && x.T_BaoJiaToP.YXB_Kh_list.UserInfo.BuMenID == LoginUser.BuMenID, x => x.AddTime, false);
             }
             if (!isbool)
-            { Adata = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out toalCount, x => x.ZhuangTai == 1 && x.DelFlag == 0 && x.WIN == win, x => x.AddTime, false); }
+            { Adata = YXB_BaojiaService.LoadPageEntities(pageIndex, pageSize, out toalCount, x => x.ZhuangTai == 1 && x.DelFlag == 0 && x.WIN == win && x.T_BaoJiaToP.YXB_Kh_list.UserInfo.BuMenID == LoginUser.BuMenID, x => x.AddTime, false); }
 
             var temp = from a in Adata
                        select new SlcClass
@@ -1035,6 +1037,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             uip.Person = yxy;
             uip.KHname = khn;
             uip.addess = addess;
+            uip.BumenID = LoginUser.BuMenID;
             var temp_ = YXB_Kh_listService.loadBaoBeientities(uip);
 
            // var temp = T_BaoJiaToPService.LoadEntities(x => x.AddTime > UpTime && x.AddTime < DwTime).DefaultIfEmpty().ToList();
@@ -1052,7 +1055,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            NewTime = a.NewTime,
                            UName = a.UserInfo.PerSonName,
                            khsgaaddess=a.KHSGAdrss,
-                           bak=a.BeiZhu
+                           bak=a.BeiZhu,
+                           Jiezz=a.JieZhiZi,
+
+
                        };
             return Json(new { rows = temp, total = uip.TotalCount }, JsonRequestBehavior.AllowGet);
 

@@ -78,7 +78,7 @@
             GetItemMeun();
             
             var cur_time = new Date();
-            $("#StTime").datebox("setValue", myformatter(cur_time));
+            $("#StTime").datebox("setValue", cur_time.getFullYear()+"-01-01");
             $("#DwTime").datebox("setValue", myformatter(cur_time));
             win = 0;
             $(".Province").combobox({
@@ -190,6 +190,7 @@
                     win: win
                 };
                 loadData(pars);
+                qingkou();
             })
             $("#Sousuo").click(function () {                
                 var UpTime = $('#StTime').combobox('getValue');
@@ -1480,8 +1481,7 @@
                     var a = "<a href='#' class='easyui-linkbutton l-btn l-btn-small' data-options='toggle:true,group:'g1'' id='" + data.rows[0].url + "' group='g1'><span class='l-btn-left'><span class='l-btn-text'>" + data.rows[0].title + "</span></span></a>";
                    // alert(data.rows[0].url)
                     $("#" + data.rows[0].url).show();
-                }                
-               
+                }  
             })
         }
         //报价审核
@@ -1663,6 +1663,11 @@
                       { field: 'KHfaren', title: '法人', align: 'center' },
                       { field: 'KHphoto', title: '施工地址', align: 'center' },
                       { field: 'KHfaren', title: '备注', align: 'center' },
+                       {
+                           field: 'Jiezz', title: '是否借资质', align: 'center', formatter: function (value, row, index) {
+                               return value == null ? "" : value ? "借用" : "未借";
+                           }
+                       },
                       {
                           field: 'deletes', title: '操作', align: 'center', formatter: function (value, row, index) {
                              str = "<a href='javascript:delBBdate(" + row.ID + ")' class='l-btn deletes' style='padding:2px 5px 2px 5px' >删除</a>";
@@ -1752,7 +1757,7 @@
         function showdilag2() {
             $('#City_Div').dialog({
                 title: "客户报备信息",
-                width: $("#dgdiv").width() / 2,
+                width: $("#dgdiv").width() /1.2,
                 height: $("#dgdiv").height() / 1.5,
                 collapsible: true,
                 resizable: true,

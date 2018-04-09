@@ -14,7 +14,7 @@ namespace CZBK.ItcastOA.BLL
     public partial class YXB_Kh_listService : BaseService<YXB_Kh_list>, IYXB_Kh_listService
     {
         public IQueryable<YXB_Kh_list> loadBaoBeientities(UserInfoParam ups) {
-            var temp = this.GetCurrentDbSession.YXB_Kh_listDal.LoadEntities(x => x.DelFlag == 0 && x.NewTime>=ups.Uptime&&x.NewTime<=ups.Dwtime).DefaultIfEmpty();
+            var temp = this.GetCurrentDbSession.YXB_Kh_listDal.LoadEntities(x => x.DelFlag == 0 && x.NewTime>=ups.Uptime&&x.NewTime<=ups.Dwtime&&x.UserInfo.BuMenID==ups.BumenID).DefaultIfEmpty();
             if (ups.Person > 0)
             {
                 temp = temp.Where(x => x.AddUser == ups.Person);

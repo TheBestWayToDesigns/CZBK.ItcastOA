@@ -14,8 +14,8 @@ namespace CZBK.ItcastOA.BLL
         public IQueryable<YXB_Baojia> LoadSearchEntities(Model.SearchParam.UserInfoParam sisp)
         {
             
-            var temp = this.GetCurrentDbSession.YXB_BaojiaDal.LoadEntities(u => u.AddTime >= sisp.Uptime && u.AddTime <= sisp.Dwtime&&u.DelFlag==0);
-
+            var temp = this.GetCurrentDbSession.YXB_BaojiaDal.LoadEntities(u => u.AddTime >= sisp.Uptime && u.AddTime <= sisp.Dwtime&&u.DelFlag==0&&u.UserInfo.BuMenID == sisp.BumenID);
+      
             //temp.Where(u=>u.T_BaoJiaToP.T_WinBak)
             if (sisp.zt != 0)
             {
