@@ -40,8 +40,6 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //添加评分记录
         public ActionResult AddScoreInfo()
         {
-            if (Request["BJ"] == "add")
-            {
                 WXXScoreInfo wxxsi = new WXXScoreInfo();
                 wxxsi.GiveScoreUserID = LoginUser.ID;
                 wxxsi.BeiGiveScoreUserID = Convert.ToInt32(Request["uid"]);
@@ -54,30 +52,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 }
                 WXXScoreInfoService.AddEntity(wxxsi);
                 return Json(new { ret = "ok", msg = "评分成功" }, JsonRequestBehavior.AllowGet);
-            } else
-            {
-                long id = Convert.ToInt64(Request["id"]);
-                var temp = WXXScoreInfoService.LoadEntities(x => x.ID == id).FirstOrDefault();
-                if(temp != null)
-                {
-                    temp.Score = Convert.ToSingle(Request["Score"]);
-                    temp.Score = Convert.ToSingle(Request["Score"]);
-                    temp.State = Convert.ToBoolean(Request["BeSure"]) == true ? (short)1 : (short)0;
-                    temp.AddTime = DateTime.Now;
-                    if (temp.State == 1)
-                    {
-                        temp.ChangeStateTime = DateTime.Now;
-                    }
-                    if (WXXScoreInfoService.EditEntity(temp))
-                    {
-                        return Json(new { ret = "ok", msg = "修改评分成功" }, JsonRequestBehavior.AllowGet);
-                    }else
-                    {
-                        return Json(new { ret = "no", msg = "修改失败" }, JsonRequestBehavior.AllowGet);
-                    }
-                }
-                return Json(new { ret = "no", msg = "数据库中无此数据" }, JsonRequestBehavior.AllowGet);
-            }
+            
         }
         //确认当前评分
         public ActionResult ConfirmThisScore()
@@ -100,12 +75,42 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public ActionResult GetScoreInfo()
         {
             var state = Convert.ToInt16(Request["State"]);
-            var temp = WXXScoreInfoService.LoadEntities(x => x.State == state).DefaultIfEmpty().ToList();
+            var temp = WXXScoreInfoService.LoadEntities(x => x.State == state && x.GiveScoreUserID == LoginUser.ID).DefaultIfEmpty().ToList();
             if(temp != null &&temp[0] != null)
             {
-                return Json(new { ret = "ok", msg = "确认成功" }, JsonRequestBehavior.AllowGet);
+                List<WXXSCOREINFO> sinfo = new List<WXXSCOREINFO>();
+                foreach(var a in temp)
+                {
+                    WXXSCOREINFO wxxinfo = new WXXSCOREINFO();
+                    wxxinfo.ID = a.ID;
+                    wxxinfo.Score = a.Score;
+                    wxxinfo.State = a.State;
+                    wxxinfo.GiveScoreUserID = a.GiveScoreUserID;
+                    wxxinfo.GiveScoreUserName = a.UserInfo1.PerSonName;
+                    wxxinfo.BeiGiveScoreUserID = a.BeiGiveScoreUserID;
+                    wxxinfo.BeiGiveScoreUserName = a.UserInfo.PerSonName;
+                    wxxinfo.AddTime = a.AddTime;
+                    wxxinfo.ChangeStateTime = a.ChangeStateTime;
+                    sinfo.Add(wxxinfo);
+                }
+                return Json(new { ret = "ok", rows = sinfo }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { ret = "no", msg = "数据库中无数据！" }, JsonRequestBehavior.AllowGet);
+        }
+        //作废删除某条评分数据
+        public ActionResult DelScoreInfo()
+        {
+            long id = Convert.ToInt64(Request["id"]);
+            var temp = WXXScoreInfoService.LoadEntities(x => x.ID == id).FirstOrDefault();
+            if (temp != null)
+            {
+                if (WXXScoreInfoService.DeleteEntity(temp))
+                {
+                    return Json(new { ret = "ok", msg = "删除成功" }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { ret = "no", msg = "删除失败" }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { ret = "no", msg = "数据库中无此数据" }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -205,5 +210,17 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
         }
         #endregion
+    }
+    public class WXXSCOREINFO
+    {
+        public long ID { get; set; }
+        public Nullable<int> BeiGiveScoreUserID { get; set; }
+        public string BeiGiveScoreUserName{ get; set; }
+        public string GiveScoreUserName { get; set; }
+        public Nullable<int> GiveScoreUserID { get; set; }
+        public Nullable<float> Score { get; set; }
+        public Nullable<short> State { get; set; }
+        public Nullable<System.DateTime> AddTime { get; set; }
+        public Nullable<System.DateTime> ChangeStateTime { get; set; }
     }
 }
