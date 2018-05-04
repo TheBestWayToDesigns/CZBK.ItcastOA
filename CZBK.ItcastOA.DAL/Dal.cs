@@ -81,6 +81,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class Seb_NumberDal :BaseDal<Seb_Number>,ISeb_NumberDal
+    {
+
+    }
+		
 	public partial class ShareFileOrNoticeDal :BaseDal<ShareFileOrNotice>,IShareFileOrNoticeDal
     {
 
@@ -97,6 +102,11 @@ namespace CZBK.ItcastOA.DAL
     }
 		
 	public partial class SysFieldDal :BaseDal<SysField>,ISysFieldDal
+    {
+
+    }
+		
+	public partial class T_BaojiaItemIDDal :BaseDal<T_BaojiaItemID>,IT_BaojiaItemIDDal
     {
 
     }
@@ -136,6 +146,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class T_jxzztjbDal :BaseDal<T_jxzztjb>,IT_jxzztjbDal
+    {
+
+    }
+		
 	public partial class T_SczzDanjuDal :BaseDal<T_SczzDanju>,IT_SczzDanjuDal
     {
 
@@ -166,7 +181,17 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class T_YXbj_masterDal :BaseDal<T_YXbj_master>,IT_YXbj_masterDal
+    {
+
+    }
+		
 	public partial class T_ZhiPiaoTongDal :BaseDal<T_ZhiPiaoTong>,IT_ZhiPiaoTongDal
+    {
+
+    }
+		
+	public partial class User_Person_sltDal :BaseDal<User_Person_slt>,IUser_Person_sltDal
     {
 
     }

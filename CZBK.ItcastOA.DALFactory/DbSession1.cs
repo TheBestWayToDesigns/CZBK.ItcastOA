@@ -225,6 +225,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _ScheduleUserDal = value; }
         }
 	
+		private ISeb_NumberDal _Seb_NumberDal;
+        public ISeb_NumberDal Seb_NumberDal
+        {
+            get
+            {
+                if(_Seb_NumberDal == null)
+                {
+                   // _Seb_NumberDal = new Seb_NumberDal();
+				    _Seb_NumberDal =AbstractFactory.CreateSeb_NumberDal();
+                }
+                return _Seb_NumberDal;
+            }
+            set { _Seb_NumberDal = value; }
+        }
+	
 		private IShareFileOrNoticeDal _ShareFileOrNoticeDal;
         public IShareFileOrNoticeDal ShareFileOrNoticeDal
         {
@@ -283,6 +298,21 @@ namespace CZBK.ItcastOA.DALFactory
                 return _SysFieldDal;
             }
             set { _SysFieldDal = value; }
+        }
+	
+		private IT_BaojiaItemIDDal _T_BaojiaItemIDDal;
+        public IT_BaojiaItemIDDal T_BaojiaItemIDDal
+        {
+            get
+            {
+                if(_T_BaojiaItemIDDal == null)
+                {
+                   // _T_BaojiaItemIDDal = new T_BaojiaItemIDDal();
+				    _T_BaojiaItemIDDal =AbstractFactory.CreateT_BaojiaItemIDDal();
+                }
+                return _T_BaojiaItemIDDal;
+            }
+            set { _T_BaojiaItemIDDal = value; }
         }
 	
 		private IT_BaoJiaToPDal _T_BaoJiaToPDal;
@@ -390,6 +420,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _T_JieKuanBillDal = value; }
         }
 	
+		private IT_jxzztjbDal _T_jxzztjbDal;
+        public IT_jxzztjbDal T_jxzztjbDal
+        {
+            get
+            {
+                if(_T_jxzztjbDal == null)
+                {
+                   // _T_jxzztjbDal = new T_jxzztjbDal();
+				    _T_jxzztjbDal =AbstractFactory.CreateT_jxzztjbDal();
+                }
+                return _T_jxzztjbDal;
+            }
+            set { _T_jxzztjbDal = value; }
+        }
+	
 		private IT_SczzDanjuDal _T_SczzDanjuDal;
         public IT_SczzDanjuDal T_SczzDanjuDal
         {
@@ -480,6 +525,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _T_YSItemsDal = value; }
         }
 	
+		private IT_YXbj_masterDal _T_YXbj_masterDal;
+        public IT_YXbj_masterDal T_YXbj_masterDal
+        {
+            get
+            {
+                if(_T_YXbj_masterDal == null)
+                {
+                   // _T_YXbj_masterDal = new T_YXbj_masterDal();
+				    _T_YXbj_masterDal =AbstractFactory.CreateT_YXbj_masterDal();
+                }
+                return _T_YXbj_masterDal;
+            }
+            set { _T_YXbj_masterDal = value; }
+        }
+	
 		private IT_ZhiPiaoTongDal _T_ZhiPiaoTongDal;
         public IT_ZhiPiaoTongDal T_ZhiPiaoTongDal
         {
@@ -493,6 +553,21 @@ namespace CZBK.ItcastOA.DALFactory
                 return _T_ZhiPiaoTongDal;
             }
             set { _T_ZhiPiaoTongDal = value; }
+        }
+	
+		private IUser_Person_sltDal _User_Person_sltDal;
+        public IUser_Person_sltDal User_Person_sltDal
+        {
+            get
+            {
+                if(_User_Person_sltDal == null)
+                {
+                   // _User_Person_sltDal = new User_Person_sltDal();
+				    _User_Person_sltDal =AbstractFactory.CreateUser_Person_sltDal();
+                }
+                return _User_Person_sltDal;
+            }
+            set { _User_Person_sltDal = value; }
         }
 	
 		private IUserbakDal _UserbakDal;

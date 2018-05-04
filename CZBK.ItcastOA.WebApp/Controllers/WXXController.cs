@@ -210,6 +210,11 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
         }
         #endregion
+
+        public ActionResult modes() {
+            return Redirect(Url.Action("", ""));
+           return Json("",JsonRequestBehavior.AllowGet);
+        }
     }
     public class WXXSCOREINFO
     {

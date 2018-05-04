@@ -53,6 +53,8 @@ namespace CZBK.ItcastOA.Model
             this.WXXScoreInfoes1 = new HashSet<WXXScoreInfo>();
             this.WXXScoreUsers = new HashSet<WXXScoreUser>();
             this.WXXScoreUsers1 = new HashSet<WXXScoreUser>();
+            this.T_YXbj_master = new HashSet<T_YXbj_master>();
+            this.User_Person_slt = new HashSet<User_Person_slt>();
         }
     
         public int ID { get; set; }
@@ -74,6 +76,7 @@ namespace CZBK.ItcastOA.Model
         public string PerSonName { get; set; }
         public Nullable<int> QuXian { get; set; }
         public Nullable<int> BuMenID { get; set; }
+
         [JsonIgnore]
         public virtual BumenInfoSet BumenInfoSet { get; set; }
         [JsonIgnore]
@@ -148,5 +151,9 @@ namespace CZBK.ItcastOA.Model
         public virtual ICollection<WXXScoreUser> WXXScoreUsers { get; set; }
         [JsonIgnore]
         public virtual ICollection<WXXScoreUser> WXXScoreUsers1 { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<T_YXbj_master> T_YXbj_master { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<User_Person_slt> User_Person_slt { get; set; }
     }
 }

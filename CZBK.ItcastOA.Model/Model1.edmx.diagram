@@ -120,6 +120,18 @@
         <AssociationConnector Association="OAModel.FK_WXXScoreInfo_GeiFenUserInfo1" />
         <AssociationConnector Association="OAModel.FK_WXXScoreUser_UserInfo" />
         <AssociationConnector Association="OAModel.FK_WXXScoreUser_UserInfo1" />
+        <EntityTypeShape EntityType="OAModel.Seb_Number" Width="1.5" PointX="24.1250005" PointY="23.968272298177084" />
+        <EntityTypeShape EntityType="OAModel.T_BaojiaItemID" Width="1.5" PointX="20.8750005" PointY="29.90753173828125" />
+        <EntityTypeShape EntityType="OAModel.T_jxzztjb" Width="1.5" PointX="26.3750005" PointY="19.440114746093748" />
+        <EntityTypeShape EntityType="OAModel.T_YXbj_master" Width="1.5" PointX="23.1250005" PointY="11.812021891276039" />
+        <EntityTypeShape EntityType="OAModel.User_Person_slt" Width="1.5" PointX="20.125" PointY="26.245524902343746" />
+        <AssociationConnector Association="OAModel.FK_T_jxzztjb_BumenInfoSet" />
+        <AssociationConnector Association="OAModel.FK_T_jxzztjb_Seb_Number" />
+        <AssociationConnector Association="OAModel.FK_T_jxzztjb_Seb_Number_Imgname" />
+        <AssociationConnector Association="OAModel.FK_T_YXbj_master_T_BaojiaItemID" />
+        <AssociationConnector Association="OAModel.FK_T_jxzztjb_User_Person_slt" />
+        <AssociationConnector Association="OAModel.FK_T_YXbj_master_UserInfo" />
+        <AssociationConnector Association="OAModel.FK_User_Person_slt_UserInfo" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

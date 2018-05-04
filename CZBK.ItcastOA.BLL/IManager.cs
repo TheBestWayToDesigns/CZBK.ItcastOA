@@ -123,6 +123,14 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class Seb_NumberService :BaseService<Seb_Number>,ISeb_NumberService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.Seb_NumberDal;
+        }
+    }   
+	
 	public partial class ShareFileOrNoticeService :BaseService<ShareFileOrNotice>,IShareFileOrNoticeService
     {
         public override void SetCurretnDal()
@@ -152,6 +160,14 @@ namespace CZBK.ItcastOA.BLL
         public override void SetCurretnDal()
         {
             CurrentDal = this.GetCurrentDbSession.SysFieldDal;
+        }
+    }   
+	
+	public partial class T_BaojiaItemIDService :BaseService<T_BaojiaItemID>,IT_BaojiaItemIDService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.T_BaojiaItemIDDal;
         }
     }   
 	
@@ -211,6 +227,14 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class T_jxzztjbService :BaseService<T_jxzztjb>,IT_jxzztjbService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.T_jxzztjbDal;
+        }
+    }   
+	
 	public partial class T_SczzDanjuService :BaseService<T_SczzDanju>,IT_SczzDanjuService
     {
         public override void SetCurretnDal()
@@ -259,11 +283,27 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class T_YXbj_masterService :BaseService<T_YXbj_master>,IT_YXbj_masterService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.T_YXbj_masterDal;
+        }
+    }   
+	
 	public partial class T_ZhiPiaoTongService :BaseService<T_ZhiPiaoTong>,IT_ZhiPiaoTongService
     {
         public override void SetCurretnDal()
         {
             CurrentDal = this.GetCurrentDbSession.T_ZhiPiaoTongDal;
+        }
+    }   
+	
+	public partial class User_Person_sltService :BaseService<User_Person_slt>,IUser_Person_sltService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.User_Person_sltDal;
         }
     }   
 	

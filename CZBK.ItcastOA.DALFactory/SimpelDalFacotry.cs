@@ -198,6 +198,19 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IScheduleUserDal;
         }
 		
+	    public static ISeb_NumberDal CreateSeb_NumberDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".Seb_NumberDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as ISeb_NumberDal;
+        }
+		
 	    public static IShareFileOrNoticeDal CreateShareFileOrNoticeDal()
         {
 
@@ -248,6 +261,19 @@ namespace CZBK.ItcastOA.DALFactory
 
 
             return obj as ISysFieldDal;
+        }
+		
+	    public static IT_BaojiaItemIDDal CreateT_BaojiaItemIDDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".T_BaojiaItemIDDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IT_BaojiaItemIDDal;
         }
 		
 	    public static IT_BaoJiaToPDal CreateT_BaoJiaToPDal()
@@ -341,6 +367,19 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IT_JieKuanBillDal;
         }
 		
+	    public static IT_jxzztjbDal CreateT_jxzztjbDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".T_jxzztjbDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IT_jxzztjbDal;
+        }
+		
 	    public static IT_SczzDanjuDal CreateT_SczzDanjuDal()
         {
 
@@ -419,6 +458,19 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IT_YSItemsDal;
         }
 		
+	    public static IT_YXbj_masterDal CreateT_YXbj_masterDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".T_YXbj_masterDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IT_YXbj_masterDal;
+        }
+		
 	    public static IT_ZhiPiaoTongDal CreateT_ZhiPiaoTongDal()
         {
 
@@ -430,6 +482,19 @@ namespace CZBK.ItcastOA.DALFactory
 
 
             return obj as IT_ZhiPiaoTongDal;
+        }
+		
+	    public static IUser_Person_sltDal CreateUser_Person_sltDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".User_Person_sltDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IUser_Person_sltDal;
         }
 		
 	    public static IUserbakDal CreateUserbakDal()

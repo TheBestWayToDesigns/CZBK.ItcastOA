@@ -80,6 +80,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface ISeb_NumberDal :IBaseDal<Seb_Number>
+    {
+      
+    }
+	
 	public partial interface IShareFileOrNoticeDal :IBaseDal<ShareFileOrNotice>
     {
       
@@ -96,6 +101,11 @@ namespace CZBK.ItcastOA.IDAL
     }
 	
 	public partial interface ISysFieldDal :IBaseDal<SysField>
+    {
+      
+    }
+	
+	public partial interface IT_BaojiaItemIDDal :IBaseDal<T_BaojiaItemID>
     {
       
     }
@@ -135,6 +145,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IT_jxzztjbDal :IBaseDal<T_jxzztjb>
+    {
+      
+    }
+	
 	public partial interface IT_SczzDanjuDal :IBaseDal<T_SczzDanju>
     {
       
@@ -165,7 +180,17 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IT_YXbj_masterDal :IBaseDal<T_YXbj_master>
+    {
+      
+    }
+	
 	public partial interface IT_ZhiPiaoTongDal :IBaseDal<T_ZhiPiaoTong>
+    {
+      
+    }
+	
+	public partial interface IUser_Person_sltDal :IBaseDal<User_Person_slt>
     {
       
     }

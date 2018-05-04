@@ -80,6 +80,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface ISeb_NumberService : IBaseService<Seb_Number>
+    {
+       
+    }   
+	
 	public partial interface IShareFileOrNoticeService : IBaseService<ShareFileOrNotice>
     {
        
@@ -96,6 +101,11 @@ namespace CZBK.ItcastOA.IBLL
     }   
 	
 	public partial interface ISysFieldService : IBaseService<SysField>
+    {
+       
+    }   
+	
+	public partial interface IT_BaojiaItemIDService : IBaseService<T_BaojiaItemID>
     {
        
     }   
@@ -135,6 +145,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IT_jxzztjbService : IBaseService<T_jxzztjb>
+    {
+       
+    }   
+	
 	public partial interface IT_SczzDanjuService : IBaseService<T_SczzDanju>
     {
        
@@ -165,7 +180,17 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IT_YXbj_masterService : IBaseService<T_YXbj_master>
+    {
+       
+    }   
+	
 	public partial interface IT_ZhiPiaoTongService : IBaseService<T_ZhiPiaoTong>
+    {
+       
+    }   
+	
+	public partial interface IUser_Person_sltService : IBaseService<User_Person_slt>
     {
        
     }   

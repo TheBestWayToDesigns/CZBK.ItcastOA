@@ -40,6 +40,8 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IScheduleUserDal ScheduleUserDal{get;set;}
 	
+		ISeb_NumberDal Seb_NumberDal{get;set;}
+	
 		IShareFileOrNoticeDal ShareFileOrNoticeDal{get;set;}
 	
 		IShareTypeDal ShareTypeDal{get;set;}
@@ -47,6 +49,8 @@ namespace CZBK.ItcastOA.IDAL
 		IsysdiagramDal sysdiagramDal{get;set;}
 	
 		ISysFieldDal SysFieldDal{get;set;}
+	
+		IT_BaojiaItemIDDal T_BaojiaItemIDDal{get;set;}
 	
 		IT_BaoJiaToPDal T_BaoJiaToPDal{get;set;}
 	
@@ -62,6 +66,8 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IT_JieKuanBillDal T_JieKuanBillDal{get;set;}
 	
+		IT_jxzztjbDal T_jxzztjbDal{get;set;}
+	
 		IT_SczzDanjuDal T_SczzDanjuDal{get;set;}
 	
 		IT_SczzItemDal T_SczzItemDal{get;set;}
@@ -74,7 +80,11 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IT_YSItemsDal T_YSItemsDal{get;set;}
 	
+		IT_YXbj_masterDal T_YXbj_masterDal{get;set;}
+	
 		IT_ZhiPiaoTongDal T_ZhiPiaoTongDal{get;set;}
+	
+		IUser_Person_sltDal User_Person_sltDal{get;set;}
 	
 		IUserbakDal UserbakDal{get;set;}
 	

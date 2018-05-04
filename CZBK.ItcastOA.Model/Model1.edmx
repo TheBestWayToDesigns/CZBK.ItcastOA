@@ -182,6 +182,16 @@
           <Property Name="UpID" Type="int" />
           <Property Name="Del" Type="smallint" />
         </EntityType>
+        <EntityType Name="Seb_Number">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ttext" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Del" Type="float" Nullable="false" />
+          <Property Name="Items" Type="int" />
+          <Property Name="Bak" Type="nvarchar" MaxLength="150" />
+        </EntityType>
         <EntityType Name="ShareFileOrNotice">
           <Key>
             <PropertyRef Name="ID" />
@@ -228,6 +238,14 @@
           <Property Name="CreatePerson" Type="nvarchar" MaxLength="200" />
           <Property Name="UpdateTime" Type="datetime" />
           <Property Name="UpdatePerson" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="T_BaojiaItemID">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Str_url" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="del" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="T_BaoJiaToP">
           <Key>
@@ -329,6 +347,30 @@
           <Property Name="Bak" Type="nvarchar(max)" />
           <Property Name="Del" Type="smallint" />
         </EntityType>
+        <EntityType Name="T_jxzztjb">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="Addtime" Type="datetime" Nullable="false" />
+          <Property Name="Wtime" Type="datetime" Nullable="false" />
+          <Property Name="ImgName_ID" Type="bigint" Nullable="false" />
+          <Property Name="UPslt_ID" Type="bigint" Nullable="false" />
+          <Property Name="Seb_number_ID" Type="bigint" Nullable="false" />
+          <Property Name="ImgNumber" Type="nvarchar(max)" />
+          <Property Name="Iint" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Slt_kg" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Slt_hege" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Slt_hegeNo" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Slt_Feipin" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Slt_BFB" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="StupTime" Type="datetime" />
+          <Property Name="OverTime" Type="datetime" />
+          <Property Name="ThisHaveTime" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="HaveTime" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="UpBumen_id" Type="int" />
+          <Property Name="del" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
         <EntityType Name="T_SczzDanju">
           <Key>
             <PropertyRef Name="ID" />
@@ -407,6 +449,14 @@
           <Property Name="DEL" Type="smallint" />
           <Property Name="Remark" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="T_YXbj_master">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="BaojiaItemID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="T_ZhiPiaoTong">
           <Key>
             <PropertyRef Name="ID" />
@@ -421,6 +471,17 @@
           <Property Name="NewTime" Type="datetime" />
           <Property Name="AddTime" Type="datetime" />
           <Property Name="AddUser" Type="int" />
+        </EntityType>
+        <EntityType Name="User_Person_slt">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Wage_slt" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Job_Name" Type="nvarchar" MaxLength="150" />
+          <Property Name="HoursWage" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AddTime" Type="datetime" />
         </EntityType>
         <EntityType Name="Userbak">
           <Key>
@@ -441,7 +502,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UName" Type="nvarchar" MaxLength="32" />
           <Property Name="UPwd" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="PerSonName" Type="nvarchar" MaxLength="150" />
@@ -1100,6 +1161,54 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_T_jxzztjb_BumenInfoSet">
+          <End Role="BumenInfoSet" Type="Self.BumenInfoSet" Multiplicity="0..1" />
+          <End Role="T_jxzztjb" Type="Self.T_jxzztjb" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BumenInfoSet">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_jxzztjb">
+              <PropertyRef Name="UpBumen_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_jxzztjb_Seb_Number">
+          <End Role="Seb_Number" Type="Self.Seb_Number" Multiplicity="1" />
+          <End Role="T_jxzztjb" Type="Self.T_jxzztjb" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seb_Number">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_jxzztjb">
+              <PropertyRef Name="Seb_number_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_jxzztjb_Seb_Number_Imgname">
+          <End Role="Seb_Number" Type="Self.Seb_Number" Multiplicity="1" />
+          <End Role="T_jxzztjb" Type="Self.T_jxzztjb" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seb_Number">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_jxzztjb">
+              <PropertyRef Name="ImgName_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_jxzztjb_User_Person_slt">
+          <End Role="User_Person_slt" Type="Self.User_Person_slt" Multiplicity="1" />
+          <End Role="T_jxzztjb" Type="Self.T_jxzztjb" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_Person_slt">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_jxzztjb">
+              <PropertyRef Name="UPslt_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_T_SczzItem_UserInfo">
           <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="0..1" />
           <End Role="T_SczzItem" Type="Self.T_SczzItem" Multiplicity="*" />
@@ -1186,6 +1295,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_T_YXbj_master_T_BaojiaItemID">
+          <End Role="T_BaojiaItemID" Type="Self.T_BaojiaItemID" Multiplicity="1" />
+          <End Role="T_YXbj_master" Type="Self.T_YXbj_master" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_BaojiaItemID">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_YXbj_master">
+              <PropertyRef Name="BaojiaItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_YXbj_master_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="T_YXbj_master" Type="Self.T_YXbj_master" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_YXbj_master">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TopName">
           <End Role="T_ShengChanZhiZhaoTopName" Type="Self.T_ShengChanZhiZhaoTopName" Multiplicity="1" />
           <End Role="T_SczzDanju" Type="Self.T_SczzDanju" Multiplicity="*" />
@@ -1207,6 +1340,18 @@
             </Principal>
             <Dependent Role="T_SczzDanju">
               <PropertyRef Name="UpShenHe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Person_slt_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="User_Person_slt" Type="Self.User_Person_slt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="User_Person_slt">
+              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1564,10 +1709,12 @@
           <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScheduleType" EntityType="Self.ScheduleType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScheduleUser" EntityType="Self.ScheduleUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Seb_Number" EntityType="Self.Seb_Number" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShareFileOrNotice" EntityType="Self.ShareFileOrNotice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShareType" EntityType="Self.ShareType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SysField" EntityType="Self.SysField" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_BaojiaItemID" EntityType="Self.T_BaojiaItemID" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_BaoJiaToP" EntityType="Self.T_BaoJiaToP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_BaoXiaoBill" EntityType="Self.T_BaoXiaoBill" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_BaoxiaoItems" EntityType="Self.T_BaoxiaoItems" Schema="dbo" store:Type="Tables" />
@@ -1575,13 +1722,16 @@
           <EntitySet Name="T_CanPan" EntityType="Self.T_CanPan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_ChanPinName" EntityType="Self.T_ChanPinName" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_JieKuanBill" EntityType="Self.T_JieKuanBill" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_jxzztjb" EntityType="Self.T_jxzztjb" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_SczzDanju" EntityType="Self.T_SczzDanju" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_SczzItem" EntityType="Self.T_SczzItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_ShengChanZhiZhaoTopName" EntityType="Self.T_ShengChanZhiZhaoTopName" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_WinBak" EntityType="Self.T_WinBak" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_WinBakFaHuo" EntityType="Self.T_WinBakFaHuo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_YSItems" EntityType="Self.T_YSItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_YXbj_master" EntityType="Self.T_YXbj_master" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_ZhiPiaoTong" EntityType="Self.T_ZhiPiaoTong" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_Person_slt" EntityType="Self.User_Person_slt" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Userbak" EntityType="Self.Userbak" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfoDepartment" EntityType="Self.UserInfoDepartment" Schema="dbo" store:Type="Tables" />
@@ -1751,6 +1901,22 @@
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="T_JieKuanBill" EntitySet="T_JieKuanBill" />
           </AssociationSet>
+          <AssociationSet Name="FK_T_jxzztjb_BumenInfoSet" Association="Self.FK_T_jxzztjb_BumenInfoSet">
+            <End Role="BumenInfoSet" EntitySet="BumenInfoSet" />
+            <End Role="T_jxzztjb" EntitySet="T_jxzztjb" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_jxzztjb_Seb_Number" Association="Self.FK_T_jxzztjb_Seb_Number">
+            <End Role="Seb_Number" EntitySet="Seb_Number" />
+            <End Role="T_jxzztjb" EntitySet="T_jxzztjb" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_jxzztjb_Seb_Number_Imgname" Association="Self.FK_T_jxzztjb_Seb_Number_Imgname">
+            <End Role="Seb_Number" EntitySet="Seb_Number" />
+            <End Role="T_jxzztjb" EntitySet="T_jxzztjb" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_jxzztjb_User_Person_slt" Association="Self.FK_T_jxzztjb_User_Person_slt">
+            <End Role="User_Person_slt" EntitySet="User_Person_slt" />
+            <End Role="T_jxzztjb" EntitySet="T_jxzztjb" />
+          </AssociationSet>
           <AssociationSet Name="FK_T_SczzItem_UserInfo" Association="Self.FK_T_SczzItem_UserInfo">
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="T_SczzItem" EntitySet="T_SczzItem" />
@@ -1779,6 +1945,14 @@
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="T_WinBakFaHuo" EntitySet="T_WinBakFaHuo" />
           </AssociationSet>
+          <AssociationSet Name="FK_T_YXbj_master_T_BaojiaItemID" Association="Self.FK_T_YXbj_master_T_BaojiaItemID">
+            <End Role="T_BaojiaItemID" EntitySet="T_BaojiaItemID" />
+            <End Role="T_YXbj_master" EntitySet="T_YXbj_master" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_YXbj_master_UserInfo" Association="Self.FK_T_YXbj_master_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="T_YXbj_master" EntitySet="T_YXbj_master" />
+          </AssociationSet>
           <AssociationSet Name="FK_TopName" Association="Self.FK_TopName">
             <End Role="T_ShengChanZhiZhaoTopName" EntitySet="T_ShengChanZhiZhaoTopName" />
             <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
@@ -1786,6 +1960,10 @@
           <AssociationSet Name="FK_UpShenHe" Association="Self.FK_UpShenHe">
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="T_SczzDanju" EntitySet="T_SczzDanju" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Person_slt_UserInfo" Association="Self.FK_User_Person_slt_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="User_Person_slt" EntitySet="User_Person_slt" />
           </AssociationSet>
           <AssociationSet Name="FK_Userbak_UserInfo" Association="Self.FK_Userbak_UserInfo">
             <End Role="UserInfo" EntitySet="UserInfo" />
@@ -2242,6 +2420,39 @@
             <End Role="UserInfo" EntitySet="UserInfoes" />
             <End Role="WXXScoreUser" EntitySet="WXXScoreUsers" />
           </AssociationSet>
+          <EntitySet Name="Seb_Number" EntityType="OAModel.Seb_Number" />
+          <EntitySet Name="T_BaojiaItemID" EntityType="OAModel.T_BaojiaItemID" />
+          <EntitySet Name="T_jxzztjb" EntityType="OAModel.T_jxzztjb" />
+          <EntitySet Name="T_YXbj_master" EntityType="OAModel.T_YXbj_master" />
+          <EntitySet Name="User_Person_slt" EntityType="OAModel.User_Person_slt" />
+          <AssociationSet Name="FK_T_jxzztjb_BumenInfoSet" Association="OAModel.FK_T_jxzztjb_BumenInfoSet">
+            <End Role="BumenInfoSet" EntitySet="BumenInfoSet" />
+            <End Role="T_jxzztjb" EntitySet="T_jxzztjb" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_jxzztjb_Seb_Number" Association="OAModel.FK_T_jxzztjb_Seb_Number">
+            <End Role="Seb_Number" EntitySet="Seb_Number" />
+            <End Role="T_jxzztjb" EntitySet="T_jxzztjb" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_jxzztjb_Seb_Number_Imgname" Association="OAModel.FK_T_jxzztjb_Seb_Number_Imgname">
+            <End Role="Seb_Number" EntitySet="Seb_Number" />
+            <End Role="T_jxzztjb" EntitySet="T_jxzztjb" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_YXbj_master_T_BaojiaItemID" Association="OAModel.FK_T_YXbj_master_T_BaojiaItemID">
+            <End Role="T_BaojiaItemID" EntitySet="T_BaojiaItemID" />
+            <End Role="T_YXbj_master" EntitySet="T_YXbj_master" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_jxzztjb_User_Person_slt" Association="OAModel.FK_T_jxzztjb_User_Person_slt">
+            <End Role="User_Person_slt" EntitySet="User_Person_slt" />
+            <End Role="T_jxzztjb" EntitySet="T_jxzztjb" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_YXbj_master_UserInfo" Association="OAModel.FK_T_YXbj_master_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="T_YXbj_master" EntitySet="T_YXbj_master" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Person_slt_UserInfo" Association="OAModel.FK_User_Person_slt_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="User_Person_slt" EntitySet="User_Person_slt" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ActionInfo">
           <Key>
@@ -2338,6 +2549,7 @@
           <NavigationProperty Name="UserInfoes" Relationship="OAModel.FK_Bumen" FromRole="BumenInfoSet" ToRole="UserInfo" />
           <NavigationProperty Name="T_JieKuanBill" Relationship="OAModel.FK_T_JieKuanBill_Bummen" FromRole="BumenInfoSet" ToRole="T_JieKuanBill" />
           <NavigationProperty Name="ScheduleTypes" Relationship="OAModel.FK_ScheduleType_Bumeninfo" FromRole="BumenInfoSet" ToRole="ScheduleType" />
+          <NavigationProperty Name="T_jxzztjb" Relationship="OAModel.FK_T_jxzztjb_BumenInfoSet" FromRole="BumenInfoSet" ToRole="T_jxzztjb" />
         </EntityType>
         <EntityType Name="YXB_Kh_list">
           <Key>
@@ -2594,6 +2806,8 @@
           <NavigationProperty Name="WXXScoreInfoes1" Relationship="OAModel.FK_WXXScoreInfo_GeiFenUserInfo1" FromRole="UserInfo" ToRole="WXXScoreInfo" />
           <NavigationProperty Name="WXXScoreUsers" Relationship="OAModel.FK_WXXScoreUser_UserInfo" FromRole="UserInfo" ToRole="WXXScoreUser" />
           <NavigationProperty Name="WXXScoreUsers1" Relationship="OAModel.FK_WXXScoreUser_UserInfo1" FromRole="UserInfo" ToRole="WXXScoreUser" />
+          <NavigationProperty Name="T_YXbj_master" Relationship="OAModel.FK_T_YXbj_master_UserInfo" FromRole="UserInfo" ToRole="T_YXbj_master" />
+          <NavigationProperty Name="User_Person_slt" Relationship="OAModel.FK_User_Person_slt_UserInfo" FromRole="UserInfo" ToRole="User_Person_slt" />
         </EntityType>
         <Association Name="FK_Bumen">
           <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
@@ -3779,6 +3993,162 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Seb_Number">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ttext" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Del" Type="Double" Nullable="false" />
+          <Property Name="Items" Type="Int32" />
+          <Property Name="Bak" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="T_jxzztjb" Relationship="OAModel.FK_T_jxzztjb_Seb_Number" FromRole="Seb_Number" ToRole="T_jxzztjb" />
+          <NavigationProperty Name="T_jxzztjb1" Relationship="OAModel.FK_T_jxzztjb_Seb_Number_Imgname" FromRole="Seb_Number" ToRole="T_jxzztjb" />
+        </EntityType>
+        <EntityType Name="T_BaojiaItemID">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Str_url" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="del" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="T_YXbj_master" Relationship="OAModel.FK_T_YXbj_master_T_BaojiaItemID" FromRole="T_BaojiaItemID" ToRole="T_YXbj_master" />
+        </EntityType>
+        <EntityType Name="T_jxzztjb">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="Addtime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Wtime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ImgName_ID" Type="Int64" Nullable="false" />
+          <Property Name="UPslt_ID" Type="Int64" Nullable="false" />
+          <Property Name="Seb_number_ID" Type="Int64" Nullable="false" />
+          <Property Name="ImgNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Iint" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Slt_kg" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Slt_hege" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Slt_hegeNo" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Slt_Feipin" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Slt_BFB" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="StupTime" Type="DateTime" Precision="3" />
+          <Property Name="OverTime" Type="DateTime" Precision="3" />
+          <Property Name="ThisHaveTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="HaveTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="UpBumen_id" Type="Int32" />
+          <Property Name="del" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="BumenInfoSet" Relationship="OAModel.FK_T_jxzztjb_BumenInfoSet" FromRole="T_jxzztjb" ToRole="BumenInfoSet" />
+          <NavigationProperty Name="Seb_Number" Relationship="OAModel.FK_T_jxzztjb_Seb_Number" FromRole="T_jxzztjb" ToRole="Seb_Number" />
+          <NavigationProperty Name="Seb_Number1" Relationship="OAModel.FK_T_jxzztjb_Seb_Number_Imgname" FromRole="T_jxzztjb" ToRole="Seb_Number" />
+          <NavigationProperty Name="User_Person_slt" Relationship="OAModel.FK_T_jxzztjb_User_Person_slt" FromRole="T_jxzztjb" ToRole="User_Person_slt" />
+        </EntityType>
+        <EntityType Name="T_YXbj_master">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="BaojiaItemID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="T_BaojiaItemID" Relationship="OAModel.FK_T_YXbj_master_T_BaojiaItemID" FromRole="T_YXbj_master" ToRole="T_BaojiaItemID" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_T_YXbj_master_UserInfo" FromRole="T_YXbj_master" ToRole="UserInfo" />
+        </EntityType>
+        <EntityType Name="User_Person_slt">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Wage_slt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Job_Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="HoursWage" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AddTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="T_jxzztjb" Relationship="OAModel.FK_T_jxzztjb_User_Person_slt" FromRole="User_Person_slt" ToRole="T_jxzztjb" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_User_Person_slt_UserInfo" FromRole="User_Person_slt" ToRole="UserInfo" />
+        </EntityType>
+        <Association Name="FK_T_jxzztjb_BumenInfoSet">
+          <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
+          <End Type="OAModel.T_jxzztjb" Role="T_jxzztjb" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BumenInfoSet">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_jxzztjb">
+              <PropertyRef Name="UpBumen_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_jxzztjb_Seb_Number">
+          <End Type="OAModel.Seb_Number" Role="Seb_Number" Multiplicity="1" />
+          <End Type="OAModel.T_jxzztjb" Role="T_jxzztjb" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seb_Number">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_jxzztjb">
+              <PropertyRef Name="Seb_number_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_jxzztjb_Seb_Number_Imgname">
+          <End Type="OAModel.Seb_Number" Role="Seb_Number" Multiplicity="1" />
+          <End Type="OAModel.T_jxzztjb" Role="T_jxzztjb" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seb_Number">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_jxzztjb">
+              <PropertyRef Name="ImgName_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_YXbj_master_T_BaojiaItemID">
+          <End Type="OAModel.T_BaojiaItemID" Role="T_BaojiaItemID" Multiplicity="1" />
+          <End Type="OAModel.T_YXbj_master" Role="T_YXbj_master" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_BaojiaItemID">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_YXbj_master">
+              <PropertyRef Name="BaojiaItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_jxzztjb_User_Person_slt">
+          <End Type="OAModel.User_Person_slt" Role="User_Person_slt" Multiplicity="1" />
+          <End Type="OAModel.T_jxzztjb" Role="T_jxzztjb" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_Person_slt">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_jxzztjb">
+              <PropertyRef Name="UPslt_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_YXbj_master_UserInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+          <End Type="OAModel.T_YXbj_master" Role="T_YXbj_master" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_YXbj_master">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Person_slt_UserInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+          <End Type="OAModel.User_Person_slt" Role="User_Person_slt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="User_Person_slt">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4483,6 +4853,72 @@
               <MappingFragment StoreEntitySet="WXXScoreUser">
                 <ScalarProperty Name="CanGiveScoreUserID" ColumnName="CanGiveScoreUserID" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Seb_Number">
+            <EntityTypeMapping TypeName="OAModel.Seb_Number">
+              <MappingFragment StoreEntitySet="Seb_Number">
+                <ScalarProperty Name="Bak" ColumnName="Bak" />
+                <ScalarProperty Name="Items" ColumnName="Items" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="Ttext" ColumnName="Ttext" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_BaojiaItemID">
+            <EntityTypeMapping TypeName="OAModel.T_BaojiaItemID">
+              <MappingFragment StoreEntitySet="T_BaojiaItemID">
+                <ScalarProperty Name="del" ColumnName="del" />
+                <ScalarProperty Name="Str_url" ColumnName="Str_url" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_jxzztjb">
+            <EntityTypeMapping TypeName="OAModel.T_jxzztjb">
+              <MappingFragment StoreEntitySet="T_jxzztjb">
+                <ScalarProperty Name="del" ColumnName="del" />
+                <ScalarProperty Name="UpBumen_id" ColumnName="UpBumen_id" />
+                <ScalarProperty Name="HaveTime" ColumnName="HaveTime" />
+                <ScalarProperty Name="ThisHaveTime" ColumnName="ThisHaveTime" />
+                <ScalarProperty Name="OverTime" ColumnName="OverTime" />
+                <ScalarProperty Name="StupTime" ColumnName="StupTime" />
+                <ScalarProperty Name="Slt_BFB" ColumnName="Slt_BFB" />
+                <ScalarProperty Name="Slt_Feipin" ColumnName="Slt_Feipin" />
+                <ScalarProperty Name="Slt_hegeNo" ColumnName="Slt_hegeNo" />
+                <ScalarProperty Name="Slt_hege" ColumnName="Slt_hege" />
+                <ScalarProperty Name="Slt_kg" ColumnName="Slt_kg" />
+                <ScalarProperty Name="Iint" ColumnName="Iint" />
+                <ScalarProperty Name="ImgNumber" ColumnName="ImgNumber" />
+                <ScalarProperty Name="Seb_number_ID" ColumnName="Seb_number_ID" />
+                <ScalarProperty Name="UPslt_ID" ColumnName="UPslt_ID" />
+                <ScalarProperty Name="ImgName_ID" ColumnName="ImgName_ID" />
+                <ScalarProperty Name="Wtime" ColumnName="Wtime" />
+                <ScalarProperty Name="Addtime" ColumnName="Addtime" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_YXbj_master">
+            <EntityTypeMapping TypeName="OAModel.T_YXbj_master">
+              <MappingFragment StoreEntitySet="T_YXbj_master">
+                <ScalarProperty Name="BaojiaItemID" ColumnName="BaojiaItemID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_Person_slt">
+            <EntityTypeMapping TypeName="OAModel.User_Person_slt">
+              <MappingFragment StoreEntitySet="User_Person_slt">
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="HoursWage" ColumnName="HoursWage" />
+                <ScalarProperty Name="Job_Name" ColumnName="Job_Name" />
+                <ScalarProperty Name="Wage_slt" ColumnName="Wage_slt" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

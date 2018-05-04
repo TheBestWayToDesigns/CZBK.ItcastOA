@@ -126,6 +126,13 @@
     <property name="WXXScoreUserService" ref="WXXScoreUserService" />
     <property name="BumenInfoSetService" ref="BumenInfoSetService" />
   </object>
+  <object type="CZBK.ItcastOA.WebApp.Controllers.SltJxzzController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="T_jxzztjbService" ref="T_jxzztjbService" />
+    <property name="Seb_NumberService" ref="Seb_NumberService" />
+    <property name="User_Person_sltService" ref="User_Person_sltService" />
+    <property name="BumenInfoSetService" ref="BumenInfoSetService" />
+    <property name="UserInfoService" ref="UserInfoService" />
+  </object>
 
 
 
