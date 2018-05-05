@@ -20,7 +20,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
 
         public ActionResult Index()
         {
-            var UserName = User_Person_sltService.LoadEntities(x => x.ID > 0).GroupBy(x => x.UserID).Select(x => x.First());
+            var UserName = User_Person_sltService.LoadEntities(x => x.ID > 0).GroupBy(x => x.UserID).Select(x => x.FirstOrDefault());
             //人员名称表
             ViewBag.sltUser = UserName.ToList();
             //零件名称表
@@ -103,29 +103,48 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var temp = from a in ups
                        select new
                        {
-                           a.ID,
-                           a.Job_Name,
-                           a.HoursWage,
-                           a.Wage_slt,
-                           a.AddTime
+                           ID=a.ID,
+                           Name = a.UserInfo.PerSonName,
+                           Job_Name = a.Job_Name,
+                           HoursWage= a.HoursWage,
+                           Wage_slt=a.Wage_slt,
+                           AddTime=a.AddTime
                        };
             
             return Json(new { rows = temp, total = TotalCount }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult AddeditSltPer(User_Person_slt ups) {
-
             if (ups.ID > 0)
             {
                 var isthis = User_Person_sltService.LoadEntities(x => x.ID == ups.ID).FirstOrDefault();
                 ups.UserInfo = isthis.UserInfo;
+                ups.AddTime = DateTime.Now;
                 User_Person_sltService.EditEntity(ups);
             }
             else {
+                ups.AddTime = DateTime.Now;
                 User_Person_sltService.AddEntity(ups);
             }
-            
-
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+        }
+        //修改信息前获取信息
+        public ActionResult GetPersonInfo()
+        {
+            int id = Convert.ToInt32(Request["id"]);
+            var temp = User_Person_sltService.LoadEntities(x => x.ID == id).FirstOrDefault();
+            return Json(temp, JsonRequestBehavior.AllowGet);
+        }
+        //获取机加车间人员名单
+        public ActionResult GetYuanGongList()
+        {
+            var temp = UserInfoService.LoadEntities(x => x.BuMenID == 2).DefaultIfEmpty().ToList();
+            var rtmp = from a in temp
+                           select new
+                           {
+                               ID = a.ID,
+                               Name = a.PerSonName
+                           };
+            return Json(rtmp, JsonRequestBehavior.AllowGet);
         }
     }
 }

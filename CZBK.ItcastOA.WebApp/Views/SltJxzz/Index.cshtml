@@ -123,11 +123,88 @@
             $(".panel-tool a").click(function () {
                 //$('#tt').resizeDataGrid(5, 15, 200, 500);
             })
-            $("Ygedit").click(function () {
+            $("#Ygedit").click(function () {
+                cleanDatagrid();
                 stlYgtab();
             })
-
+            $("#AddPersonInfoBtn").click(function () {
+                AddPersonInfo();
+            })
         });
+        //添加文件类型
+        function AddPersonInfo() {
+            $("#AddPersonInfoDIV").css("display", "block");
+            $('#AddPersonInfoDIV').dialog({
+                title: "添加员工信息",
+                width: 450,
+                height: 400,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '确定',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+                        var UserID = $("#UserIDForAddPerson").combobox("getValue");
+                        if (UserID.trim().length <= 0) {
+                            $.messager.alert("提示", "请选择员工！");
+                            return;
+                        }
+                        if ($("#Job_Name").val().trim().length <= 0) {
+                            $.messager.alert("提示", "请填写工种！");
+                            return;
+                        }
+                        if ($("#HoursWage").val().trim().length <= 0) {
+                            $.messager.alert("提示", "请填写时薪！");
+                            return;
+                        }
+                        if ($("#Wage_slt").val().trim().length <= 0) {
+                            $.messager.alert("提示", "请填写Wage_slt！");
+                            return;
+                        }
+                        $("#addpersoninfofrom").submit();//提交表单
+                    }
+                }, {
+                    text: '取消',
+                    handler: function () {
+                        $('#AddPersonInfoDIV').dialog('close');
+                    }
+                }]
+            });
+        }
+        function afterAddPersonInfo(data) {
+            if (data.ret == "ok") {
+                try {
+                    $('#tt').datagrid('reload');
+                    $('#AddPersonInfoDIV').dialog('close');
+                }
+                catch (e) {
+                }
+            }  else {
+                $.messager.alert("提醒", "操作错误!!", "error");
+            }
+        }
+        function editPersonData() {
+            var row = $('#tt').datagrid('getSelected');
+            $.post("/SltJxzz/GetPersonInfo", { "id": row.ID }, function (PersonInfo) {
+                $("#UserID").combobox("setdata", PersonInfo.UserID);
+                $("#Job_Name").val(PersonInfo.Job_Name);
+                $("#HoursWage").val(PersonInfo.HoursWage);
+                $("#Wage_slt").val(PersonInfo.Wage_slt);
+                $("#PersonInfoID").val(PersonInfo.ID);
+            })
+            AddPersonInfo();
+        }
+        //清空datagrid数据
+        function cleanDatagrid() {
+            var item = $('#tt').datagrid('getRows');
+            if (item) {
+                for (var i = item.length - 1; i >= 0; i--) {
+                    var index = $('#tt').datagrid('getRowIndex', item[i]);
+                    $('#tt').datagrid('deleteRow', index);
+                }
+            }
+        }
         function loadData_qian()
         {
 
@@ -159,7 +236,7 @@
         function stlYgtab(pars) {
             $('#tt').datagrid({
                 url: '/sltjxzz/sltperson',
-                title: '信息统计表',
+                title: '员工信息管理',
                 width: $("#dgdiv").width(),
                 height: $("#dgdiv").height() - 30,
                 fitColumns: true, //列自适应
@@ -173,33 +250,32 @@
                 pageNumber: 1,//当前页，默认的
                 pageList: [15, 25, 35],
                 queryParams: pars,//往后台传递参数
-
                 columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
-                      { field: 'TextName', title: '单据表头' },
-                      { field: 'ImageInt', title: '图纸编号', align: 'center' },
-                      { field: 'DjAddUser', title: '单据创建人', align: 'center' },
-
+                    { field: 'Name', title: '姓名', align: 'center' },
+                    { field: 'Job_Name', title: '工种', align: 'center'},
+                    { field: 'HoursWage', title: '时薪', align: 'center' },
+                   { field: 'Wage_slt', title: '工资', align: 'center' },
                    {
-                       field: 'AddTopTime', title: '创建时间',
+                       field: 'AddTime', title: '创建时间', align: 'center',
                        formatter: function (value, row, index) {
                            if (value != null)
                            { return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d"); }
                            else
                            { return value }
                        }
-                   }, {
-                        field: 'Bak', title: '备注'
-                    }, {
-                        field: 'Operator', title: '操作',
+                   },  {
+                       field: 'Operator', title: '操作', align: 'center',
                         formatter: function (value, row, index) {
-                            var str = "<a href='javascript:void(0)' ids='" + row.ID +
-                                "' class=' deletes' >查看</a>";
+                            var str = "<a href='javascript:editPersonData()' class='l-btn' style='margin:0px 5px;padding:2px 8px '" +
+                                "' class=' deletes' >修改</a>" + "<a href='javascript:delPersonData()' class='l-btn' style='margin:0px 5px;padding:2px 8px '" +
+                                "' class=' deletes' >删除</a>";
 
                             return str;
                         }
                     }
 
                 ]],
+                toolbar: "#AddPersonInfoBtnDiv",
                 onLoadSuccess: function () {
               
                 }
@@ -594,7 +670,38 @@
             <a href="#" class="easyui-linkbutton" id="Sousuo" iconCls="icon-search">搜索</a>
         </div>
     </div>
-
+    <!-------添加员工信息按钮-------->
+    <div id="AddPersonInfoBtnDiv" style="padding:5px;height:auto">
+        <div style="margin-bottom:5px">
+            <a href="#" class="easyui-linkbutton" id="AddPersonInfoBtn" iconCls="icon-add" plain="true">添加员工信息</a>
+        </div>
+    </div>
+    <!---------------添加/修改员工信息----------------->
+    <div id="AddPersonInfoDIV" style="height:100%; width:100%;display:none">
+        @using (Ajax.BeginForm("AddeditSltPer", "SltJxzz", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddPersonInfo" }, new { id = "addpersoninfofrom" }))
+        {<table id="AddPersonInfoTab">
+            <tr style="display:none"><td>编号</td><td><input type="text" class="easyui-textbox" name="ID" id="PersonInfoID" /></td></tr>
+            <tr><td>员工</td>
+                    <td>
+                        <!--从数据库取值的下拉菜单-->
+                        <input class="easyui-combobox" id="UserIDForAddPerson"
+                               name="UserID"
+                               url="/SltJxzz/GetYuanGongList"
+                               valueField="ID"
+                               textField="Name"
+                               panelHeight="auto"
+                               style="width:100px" />
+                    </td>
+            </tr>
+            <tr><td>工种</td><td><input type="text" class="easyui-textbox" name="Job_Name" id="Job_Name" /></td></tr>
+             <tr><td>时薪</td><td><input type="text" class="easyui-textbox" name="HoursWage" id="HoursWage" /></td></tr>
+             <tr><td>Wage_slt</td><td><input type="text" class="easyui-textbox" name="Wage_slt" id="Wage_slt" /></td></tr>
+        </table>
+            <table>
+                <tbody id="Selebody"></tbody>
+            </table>
+        }
+    </div>
     <!---------------修改用户信息--------------------->
     <div id="editDiv" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("WinChuL1i", "MasterBaoJia1", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "bollForm" }))
