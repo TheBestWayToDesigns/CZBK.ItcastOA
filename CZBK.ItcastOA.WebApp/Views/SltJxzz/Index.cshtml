@@ -112,31 +112,100 @@
                 $('#' + datagridId).resizeDataGrid(0,0, 200, 500);
             });
             $("#editDiv").css("display", "none");
-            //报价列表
-            $("#Sousuo").click(function () {
-                loadData_qian()
+            loadData();
 
+            $("#Ygedit").click(function () {
+                cleanDatagrid();
+                stlYgtab();
+                $("#adddatasDiv").hide()
+                $("#AddPersonInfoBtnDiv").show()
             })
             $("#Qingkong").click(function(){
                 Qingkong();
             })
-            $(".panel-tool a").click(function () {
-                //$('#tt').resizeDataGrid(5, 15, 200, 500);
+            $("#adddatas").click(function () {
+                AdddataInfo()
             })
-            $("#Ygedit").click(function () {
-                cleanDatagrid();
-                stlYgtab();
+            $("#sltdata").click(function () {
+                loadData();
+                $("#adddatasDiv").show()
+                $("#AddPersonInfoBtnDiv").hide()
             })
             $("#AddPersonInfoBtn").click(function () {
                 AddPersonInfo();
             })
+
+            $('#sltczz').combobox({
+                onChange: function (newValue, oldValue) {
+                    $.post("/Sltjxzz/GetPersonInfo", { "id": newValue }, function (rt) {
+                        $("#itGongzhong").val(rt.ret.Job_Name)
+                        $("#itwage").val(rt.ret.Wage_slt)
+                        $("#ithours").val(rt.ret.HoursWage)
+                        })
+                }
+            });
+            //选择人员后显示工资 工种及工时
+            //$("#UserIDForAddPerson").combobox({
+            //    onSelect: function () {
+            //        alert(1)
+            //        var BMID = $("#UserIDForAddPerson").combobox("getValue");
+            //        $.post("/sltxzz/GetPersonInfo", { "id": BMID }, function (rt) {
+            //            alert(rt);
+            //        })
+            //        //<input id="itGongzhong" type="text" readonly /> 
+            //        //    <td><input id="itwage" type="text" readonly /> </td>
+            //        //    <td><input id="ithours" type="text" readonly /> </td>
+
+            //    }
+            //})
         });
-        //添加文件类型
+
+        //添加人员信息
         function AddPersonInfo() {
             $("#AddPersonInfoDIV").css("display", "block");
             $('#AddPersonInfoDIV').dialog({
                 title: "添加员工信息",
                 width: 450,
+                height: 400,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '确定',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+                        var UserID = $("#UserIDForAddPerson").combobox("getValue");
+                        if (UserID.trim().length <= 0) {
+                            $.messager.alert("提示", "请选择员工！");
+                            return;
+                        }
+                        if ($("#Job_Name").val().trim().length <= 0) {
+                            $.messager.alert("提示", "请填写工种！");
+                            return;
+                        }
+                        if ($("#HoursWage").val().trim().length <= 0) {
+                            $.messager.alert("提示", "请填写时薪！");
+                            return;
+                        }
+                        if ($("#Wage_slt").val().trim().length <= 0) {
+                            $.messager.alert("提示", "请填写Wage_slt！");
+                            return;
+                        }
+                        $("#addpersoninfofrom").submit();//提交表单
+                    }
+                }, {
+                    text: '取消',
+                    handler: function () {
+                        $('#AddPersonInfoDIV').dialog('close');
+                    }
+                }]
+            });
+        }
+        function AdddataInfo() {
+            $("#adddiv").css("display", "block");
+            $('#adddiv').dialog({
+                title: "添加信息",
+                width:$(this).width()*0.8,
                 height: 400,
                 collapsible: true,
                 resizable: true,
@@ -186,12 +255,12 @@
         }
         function editPersonData() {
             var row = $('#tt').datagrid('getSelected');
-            $.post("/SltJxzz/GetPersonInfo", { "id": row.ID }, function (PersonInfo) {
-                $("#UserID").combobox("setdata", PersonInfo.UserID);
-                $("#Job_Name").val(PersonInfo.Job_Name);
-                $("#HoursWage").val(PersonInfo.HoursWage);
-                $("#Wage_slt").val(PersonInfo.Wage_slt);
-                $("#PersonInfoID").val(PersonInfo.ID);
+            $.post("/SltJxzz/GetPersonInfo", { "id": row.ID }, function (ret) {
+                $("#UserIDForAddPerson").combobox("setValue", ret.ret.UserID);
+                $("#Job_Name").val(ret.ret.Job_Name);
+                $("#HoursWage").val(ret.ret.HoursWage);
+                $("#Wage_slt").val(ret.ret.Wage_slt);
+                $("#PersonInfoID").val(ret.ret.ID);
             })
             AddPersonInfo();
         }
@@ -283,7 +352,7 @@
         }
         function loadData(pars) {
             $('#tt').datagrid({
-                url: '/SczzAdmin/Getdata',
+                url: '/Sltjxzz/Getdata',
                 title: '信息统计表',
                 width: $("#dgdiv").width(),
                 height: $("#dgdiv").height()-30,
@@ -300,204 +369,34 @@
                 queryParams: pars,//往后台传递参数
 
                 columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
-                      { field: 'TextName', title: '单据表头' },
-                      { field: 'ImageInt', title: '图纸编号', align: 'center' },
-                      { field: 'DjAddUser', title: '单据创建人', align: 'center' },
+                    {
+                        field: 'Addtime', title: '创建时间',
+                        formatter: function (value, row, index) {
+                            if (value != null)
+                            { return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d"); }
+                            else
+                            { return value }
+                        }
+                    },
+                      { field: 'bumne', title: '用工部门' },
+                     {
+                         field: 'Operator', title: '操作',
+                         formatter: function (value, row, index) {
+                             var str = "<a href='javascript:void(0)' ids='" + row.ID +
+                                 "' class=' deletes' >查看</a>";
 
-                   {field: 'AddTopTime', title: '创建时间',
-                   formatter: function (value, row, index) {
-                    if (value != null)
-                    { return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d"); }
-                    else
-                    { return value }
-                   }
-                    },
-                    { field: 'Jhpzr', title: '计划批准人', align: 'center' },
-                    {
-                        field: 'JhpzrEtime', title: '批准人审核', align: 'center',
-                        formatter: function (value, row, index) {
-                            if (value != null)
-                            { return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d"); }
-                            else
-                            { return value }
-                        }
-                    },
-                    { field: 'Jhtcr', title: '计划提出人', align: 'center' },
-                    {
-                        field: 'JhtcrEtime', title: '提出人审核', align: 'center',
-                        formatter: function (value, row, index) {
-                            if (value != null)
-                            { return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d"); }
-                            else
-                            { return value }
-                        }
-                    },
-                    { field: 'Jgcj', title: '加工车间', align: 'center' },
-                    {
-                        field: 'JgcjEtime', title: '车间审核', align: 'center',
-                        formatter: function (value, row, index) {
-                            if (value != null)
-                            { return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d"); }
-                            else
-                            { return value }
-                        }
-                    },
-                    { field: 'Jhzdr', title: '计划制定人', align: 'center' },
-                    {
-                        field: 'JhzdrEtime', title: '审核时间', align: 'center',
-                        formatter: function (value, row, index) {
-                            if (value != null)
-                            { return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d"); }
-                            else
-                            { return value }
-                        }
-                    },
-                    {
-                        field: 'Zt', title: '信息状态', align: 'center', formatter: function selz(value)
-                        {
-                            if (value == 0)
-                            {
-                                return "申请中";
-                            } else if (value == 1)
-                            {
-                              return "审核中";
-                            } else if (value == 2) {
-                                return "已完结";
-                            }
-                        }
-                    }, {
-                        field: 'Bak', title: '备注'
-                    }, {
-                        field: 'Operator', title: '操作',
-                        formatter: function (value, row, index) {
-                            var str = "<a href='javascript:void(0)' ids='" + row.ID +
-                                "' class=' deletes' >查看</a>";
-
-                            return str;
-                        }
-                    }
+                             return str;
+                         }
+                     }
 
                 ]],
+                toolbar: "#adddatasDiv",
                 onLoadSuccess: function () {
-                    $(".deletes").click(function () {
-                       ;
-                        var tid = $(this).attr("ids");
-                        $.post("/SczzAdmin/GetOne", { "id": tid }, function (data) {
-
-                            $("#TextTop").html("单号(" + data.temp[0].ID + ")&nbsp"+data.temp[0].TextName );
-                            $("#tabAddTime").html(ChangeDateFormat(data.temp[0].AddTopTime));
-                            $("#spanjhtcr").html(data.temp[0].Jhtcr == null ? "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" : data.temp[0].Jhtcr);
-                            $("#spanjhzdr").html(data.temp[0].Jhzdr == null ? "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" : data.temp[0].Jhzdr);
-                            $("#spanjhpzr").html(data.temp[0].Jhpzr == null ? "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" : data.temp[0].Jhpzr);
-                            $("#spanjgcj").html(data.temp[0].Jgcj == null ? "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" : data.temp[0].Jgcj);
-                            $("#tabless").html("");
-
-                            $.each(data.chanpin, function (i, item) {
-
-                                var str = "  <tr><td>" + (i+1) + "</td><td>" + item.Cpname +
-                                    "</td><td>" + item.ImageInt + "</td><td>" + item.SczzItem + "</td><td>" + item.CpShuliang +
-                                    "</td><td>" +(item.OverTime==null?"": ChangeDateFormat(item.OverTime))+ "</td><td>" + item.Bak + "</td></tr>";
-                                $("#tabless").append(str);
-                            })
-                            var widthdiv_ = $("#dgdiv").width();
-                            var heightdiv_ = $("#dgdiv").height();
-                            if (browser.versions.mobile == true || browser.versions.ios == true || browser.versions.android == true) {
-                            }
-                            else {
-                                widthdiv_ = $("#dgdiv").width()/2;
-                                heightdiv_ = $("#dgdiv").height()/2;
-                            }
-                            $("#editDiv").css("display", "block");
-                            $('#editDiv').dialog({
-                                title: "编辑用户信息",
-                                width: widthdiv_,
-                                height: heightdiv_,
-                                collapsible: true,
-                                resizable: true,
-                                modal: true,
-                                buttons: [{
-                                    text: '打印',
-                                    iconCls: 'icon-print',
-                                    handler: function () {
-                                        $("#print").jqprint();
-                                    }
-                                }, {
-                                    text: '关闭',
-                                    handler: function () {
-                                        $('#editDiv').dialog('close');
-                                    }
-                                }]
-                            });
-                        })
-                    });
+         
                 }
             });
         }
-
-        function Chazuo(obj,bol)
-        {
-            var Moneystr = bol ? "BaoJiaMoney" : "CpMoney";
-
-            $.post("/MasterBaoJia/GetWinHeTongData", { "id": obj }, function (serverData) {
-                if (serverData.ret == "ok") {
-                    $("#WinID").val(obj);
-                    $("#editDiv").css("display", "block");
-                    $("#XiangMuName").val(serverData.XiangMuName);
-                    $("#Selebody").html("");
-                    $("#Bak").val(serverData.bak);
-                    $.each(serverData.temp, function (key, val) {
-                        var $tdName = $("<tr><td  colspan='3'>产品名称:【" + val["CPname"] + "】&nbsp产品型号:【" + val["CpXingHao"] + "】&nbsp 产品数量：【" + val["CPShuLiang"] + "】&nbsp报价金额：【" + val[Moneystr] + "】</td>");
-                        var $td_input = $("<tr><td>成交金额</td><td><input type='text' onkeyup='num(this)' name='EidtMoney" + val["ID"] + "' value=\'" + val[Moneystr] + "\'/></td></tr>");
-                        $("#Selebody").append($tdName);
-                        $("#Selebody").append($td_input);
-                    })
-                    $('#editDiv').dialog({
-                        title: "信息处理",
-                        width: 450,
-                        height: 400,
-                        collapsible: true,
-                        resizable: true,
-                        modal: true,
-                        buttons: [{
-                            text: '确定',
-                            iconCls: 'icon-ok',
-                            handler: function () {
-                                if (bol)
-                                {
-                                    var ms = false;
-                                    $("#Selebody input[type='text']").each(function () {
-                                        if ($(this).val().trim().length<=0)
-                                        {
-                                            $.messager.alert("提示", "成交金额不可为空！");
-                                            ms=true
-                                        }
-                                    });
-                                    if(ms)
-                                    {
-                                        return;
-                                    }
-                                    $("#bollForm").submit();//提交表单
-                                }
-                                else
-                                {
-
-                                    $('#editDiv').dialog('close');
-                                }
-                            }
-                        }, {
-                            text: '取消',
-                            handler: function () {
-                                $('#editDiv').dialog('close');
-                            }
-                        }]
-                    });
-                }
-                else {
-                    alert(serverData.ret)
-                }
-            });
-
-        }
+       
         //将序列化成json格式后日期(毫秒数)转成日期格式
         function ChangeDateFormat(cellval) {
             var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
@@ -605,16 +504,13 @@
 </head>
 <body class="easyui-layout">
     <div data-options="region:'west',split:true,title:'选项'" id="CkHide" class="easyui-panel btnlink" style="width:120px; padding:8px">
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="DJselect">查询单据</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="sltdata">查询单据</a>
         <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="Ygedit">员工信息</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="">ViewData</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="">ViewData</a>
-        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="">ViewData</a>
     </div>
     <div data-options="region:'center',title:'数据报表'" id="dgdiv">
 
         <table id="tt" class="easyui-datagrid" style="width: 700px; " title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit"
-               data-options="toolbar:'#tb'">
+              >
             <thead data-options="frozen:true ">
                 <tr>
                     <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
@@ -623,57 +519,17 @@
             </thead>
         </table>
 
-    </div>
-    <div id="tb" style="padding:5px;height:auto">
-        <div style="margin-bottom:5px">
-            &nbsp;&nbsp; &nbsp;&nbsp;
-            提出时间: <input class="easyui-datebox" id="Stime" value="2017-01-01" style="width:120px">-TO-<input class="easyui-datebox" id="Otime" style="width:120px" value="2017-12-01">
-            &nbsp;&nbsp; &nbsp;&nbsp;
-            计划名称查询
-            <input class="easyui-combobox" id="Jhname"
-                   name="Jhname"
-                   url="/SczzAdmin/SczzTopName"
-                   valueField="ID"
-                   textField="MyTexts"
-                   panelHeight="auto" style="" />&nbsp;&nbsp; &nbsp;&nbsp;
-            创建人查询:
-            <input class="easyui-combobox" id="addUser"
-                   name="addUser"
-                   url="/SczzAdmin/AddUser"
-                   valueField="ID"
-                   textField="MyTexts"
-                   panelHeight="auto" style="width:100px" /> &nbsp;&nbsp; &nbsp;&nbsp;
-            审核人查询:
-            <input class="easyui-combobox" id="SHuser"
-                   name="SHuser"
-                   url="/SczzAdmin/ShenHePerson"
-                   valueField="ID"
-                   textField="MyTexts"
-                   panelHeight="auto" style="width:100px" /> &nbsp;&nbsp; &nbsp;&nbsp;
-            产品材质: <input class="easyui-combobox"
-                         id="CPtext"
-                         name="CPtext"
-                         url="/SczzAdmin/ChanPinCZ"
-                         valueField="ID"
-                         textField="MyTexts"
-                         panelHeight="auto" style="width:auto" /> &nbsp;&nbsp; &nbsp;&nbsp;
-            信息状态：<select class="easyui-combobox" id="shzt" name="shzt">
-                <option value="-1">状态</option>
-                <option value="0">申请中</option>
-                <option value="1">审核中</option>
-                <option value="2">已完成</option>
-            </select>
-
-            &nbsp;&nbsp; &nbsp;&nbsp;
-            <a href="#" class="easyui-linkbutton" id="Qingkong" iconCls="icon-search">清空</a>
-            &nbsp;&nbsp; &nbsp;&nbsp;
-            <a href="#" class="easyui-linkbutton" id="Sousuo" iconCls="icon-search">搜索</a>
-        </div>
-    </div>
+    </div> 
     <!-------添加员工信息按钮-------->
     <div id="AddPersonInfoBtnDiv" style="padding:5px;height:auto">
         <div style="margin-bottom:5px">
             <a href="#" class="easyui-linkbutton" id="AddPersonInfoBtn" iconCls="icon-add" plain="true">添加员工信息</a>
+        </div>
+    </div>
+    <!-------添加数据-------->
+    <div id="adddatasDiv" style="padding:5px;height:auto">
+        <div style="margin-bottom:5px">
+            <a href="#" class="easyui-linkbutton" id="adddatas" iconCls="icon-add" plain="true">新增</a>
         </div>
     </div>
     <!---------------添加/修改员工信息----------------->
@@ -695,7 +551,7 @@
             </tr>
             <tr><td>工种</td><td><input type="text" class="easyui-textbox" name="Job_Name" id="Job_Name" /></td></tr>
              <tr><td>时薪</td><td><input type="text" class="easyui-textbox" name="HoursWage" id="HoursWage" /></td></tr>
-             <tr><td>Wage_slt</td><td><input type="text" class="easyui-textbox" name="Wage_slt" id="Wage_slt" /></td></tr>
+             <tr><td>工资</td><td><input type="text" class="easyui-textbox" name="Wage_slt" id="Wage_slt" /></td></tr>
         </table>
             <table>
                 <tbody id="Selebody"></tbody>
@@ -703,42 +559,120 @@
         }
     </div>
     <!---------------修改用户信息--------------------->
-    <div id="editDiv" style="height:100%; width:100%;">
-        @using (Ajax.BeginForm("WinChuL1i", "MasterBaoJia1", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "bollForm" }))
+    <div id="adddiv" style="height:100%; width:100%;display:none">
+        @using (Ajax.BeginForm("Sltjxzz", "addDayBb", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "bollForm" }))
         {
-            <div id="print" style="width:100%">
-                <table class="tab" align="center">
-                    <tr style="font-size:25px;height:35px"><td colspan="7" id="TextTop">辽宁衍水集团水工机械制造有限责任公司生产计划单（厂内）</td></tr>
-                    <tr style="height:25px"><td></td></tr>
-                    <tr style="font-size:15px; height:35px"><td colspan="6"></td><td colspan="1" style="text-align:right">下发时间：<span id="tabAddTime">2017-10-31</span></td></tr>
-                    <tr style="height:15px"><td></td></tr>
-                </table>
-                <table style="BORDER-COLLAPSE: collapse; width:80%; text-align:center" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1">
-                    <thead><tr><td>序号</td><td>名称</td><td>图纸编号</td><td>材质</td><td>数量</td><td>完工时间</td><td style="width:35%">备注</td></tr></thead>
-                    <tbody id="tabless">
+            <table style="text-align:center">
+                <tr>
+                    <td>报表时间</td>
+                    <td>
+                        <input class="easyui-datebox" name="Wtime" />
+                    </td>
+                </tr>
+                <tr><td>零件名称</td><td colspan="5"><input type="text" name="ImgName_ID" class="easyui-textbox" style="width:100%" /></td></tr>
+                <tr>
+                    <td>操作者</td>
+                    <td>
 
-                        <tr><td>1</td><td>名称</td><td>图纸编号</td><td>材质</td><td>数量</td><td>完工时间</td><td>备注</td></tr>
-                        <tr><td>2</td><td>名称</td><td>图纸编号</td><td>材质</td><td>数量</td><td>完工时间</td><td>备注</td></tr>
-                        <tr><td>3</td><td>名称</td><td>图纸编号</td><td>材质</td><td>数量</td><td>完工时间</td><td>备注</td></tr>
-                        <tr><td>4</td><td>名称</td><td>图纸编号</td><td>材质</td><td>数量</td><td>完工时间</td><td>备注</td></tr>
-                    </tbody>
-
-                </table>
-                <table class="tab" align="center" style="width:80%">
-                    <tr style="height:55px"><td></td></tr>
-                    <tr>
-                        <td></td>
-                        <td style="text-align:right">计划提出人：<span id="spanjhtcr"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;计划制定人：<span id="spanjhzdr"></span></td>
-                    </tr>
-                    <tr style="height:10px"><td></td></tr>
-                    <tr>
-                        <td></td>
-                        <td style="text-align:right">计划批准人：<span id="spanjhpzr"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="width:35px"></span>加工车间：<span id="spanjgcj"></span></td>
-                    </tr>
-                </table>
-            </div>
+                        @{
 
 
+                            <select id="sltczz" class="easyui-combobox" name="UPslt_ID" style="width:80px;">
+                                @{foreach (User_Person_slt Item in ViewBag.sltUser)
+                                    {
+                                        <option value="@Item.ID">@Item.UserInfo.UName</option>
+                                    }
+                                }
+                            </select>
+
+                        }                      
+                        
+                    </td>
+                    <td>设备编号</td>
+                    <td>
+                        @{
+
+                            
+                                <select id="str_1" class="easyui-combobox" name="Seb_number_ID" style="width:80px;">
+                                    @{foreach (Seb_Number Item in ViewBag.ljname)
+                                        {
+                                                <option value="@Item.ID">@Item.Ttext</option>
+                                        }
+                                    }
+                                </select>
+                             
+                        }
+                    </td>
+                    <td>部门名称</td>
+                    <td>
+                        <input class="easyui-combobox " id="UpBumen_id"
+                               name="BuMenid"
+                               url="/BillPrint/GetBumen"
+                               valueField="ID"
+                               textField="MyTexts"
+                               panelHeight="auto" style="width:100px" />
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>计划开始时间</td>
+                    <td>
+                        <input id="" type="text" name="StupTime" class="easyui-datebox" />
+                    </td>
+                    <td>实际完成日期</td>
+                    <td><input id="" type="text" name="OverTime"   class="easyui-datebox" /> </td>
+                    <td>完工程度</td>
+                    <td><input id="" type="text" name="OverTime"   onkeyup="num(this)"/> </td>
+                </tr>
+                <tr>
+                    <td>工种</td>
+                    <td>
+                       <input id="itGongzhong" name="OverTime"  type="text" readonly /> 
+                    </td>
+                    <td>工资</td>
+                    <td><input id="itwage" type="text" name="OverTime"  readonly /> </td>
+                    <td>工时</td>
+                    <td><input id="ithours" type="text" name="OverTime"  readonly /> </td>
+
+                </tr>
+                <tr>
+                    <td>零件图号</td>
+                    <td>
+                        <input id="" type="text"  />
+                    </td>
+                    <td>数量</td>
+                    <td><input id="" type="text"  name="OverTime"  onkeyup="num(this)" /> </td>
+                    <td>总量</td>
+                    <td><input id="" type="text"  name="OverTime"   onkeyup="num(this)" /> </td>
+
+                </tr>
+                <tr>
+                    <td>合格数量</td>
+                    <td>
+                        <input id="" type="text" name="OverTime"  onkeyup="num(this)" />
+                    </td>
+                    <td>不合格数量</td>
+                    <td><input id="" type="text" name="OverTime"  onkeyup="num(this)"/> </td>
+                    <td>废品数量</td>
+                    <td><input id="" type="text" name="OverTime"   onkeyup="num(this)"/> </td>
+
+                </tr>
+                
+                <tr>
+                    <td>计划工时</td>
+                    <td>
+                        <input id="" type="text" name="OverTime"  onkeyup="num(this)"/>
+                    </td>
+                    <td>实际工时</td>
+                    <td><input id="" type="text" name="OverTime"  onkeyup="num(this)"/> </td>
+                    <td>是否休息</td>
+                    <td><select class="easyui-combobox"  name="OverTime" >
+                        <option value="0">是</option>                        
+                            <option value="1">否</option>                        
+                        </select> </td>
+                </tr>
+            </table>
+           
         }
     </div>
 </body>

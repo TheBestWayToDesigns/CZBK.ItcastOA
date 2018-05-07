@@ -35,63 +35,31 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public ActionResult Getdata() {
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
-            int win = Request["win"] == null ? 0 : int.Parse(Request["win"]);
-            UserInfoParam uim = new UserInfoParam();
+            int  toalcount=0;
+            
+            var Tdata = T_jxzztjbService.LoadPageEntities(pageIndex, pageSize, out toalcount, x => x.del ==0,x=>x.Addtime, true);
 
-            uim.Uptime = Convert.ToDateTime(Request["UpTime"]);
-            uim.Dwtime = Convert.ToDateTime(Request["DwTime"]);
-            uim.zt = Request["Zt"] == null ? 0 : int.Parse(Request["Zt"]);
-            uim.addess = Request["addess"];
-            uim.Person = Request["Person"] == null ? 0 : Request["Person"].Length <= 0 ? 0 : int.Parse(Request["Person"]);
-            uim.KHname = Request["KHname"] == null ? 0 : Request["KHname"].Length <= 0 ? 0 : int.Parse(Request["KHname"]);
-            uim.CPname = Request["CPname"] == null ? 0 : Request["CPname"].Length <= 0 ? 0 : int.Parse(Request["CPname"]);
-            uim.CPxh = Request["CPxh"] == null ? 0 : Request["CPxh"].Length <= 0 ? 0 : int.Parse(Request["CPxh"]);
-            uim.PageIndex = pageIndex;
-            uim.PageSize = pageSize;
-            uim.TotalCount = 0;
-            uim.BumenID = LoginUser.BuMenID;
-            //var temp1 = YXB_BaojiaService.LoadSearchEntities(uim);
-            //var temp = from a in temp1
-            //           select new SlcClass
-            //           {
-            //               ID = a.id,
-            //               CPname = a.T_ChanPinName1.MyTexts,
-            //               CPXingHao = a.T_ChanPinName2.MyTexts,
-            //               CPShuLiang = a.CPShuLiang,
-            //               AddTime = a.AddTime,
-            //               ZhuangTai = a.ZhuangTai,
-            //               BaoJiaMoney = a.BaoJiaMoney,
-            //               BaoJiaPerson = a.BaoJiaPerson,
-            //               BaoJiaTime = a.BaoJiaTime,
-            //               WIN = a.WIN,
-            //               GhTime = a.T_BaoJiaToP.GhTime,
-            //               JiShuYaoQiu = a.T_BaoJiaToP.JiShuYaoQiu,
-            //               Addess = a.T_BaoJiaToP.Addess,
-            //               DaiBanYunShu = a.T_BaoJiaToP.DaiBanYunShu,
-            //               JieShuanFanShi = a.T_BaoJiaToP.JieShuanFanShi,
-            //               HeTongQianDing = a.T_BaoJiaToP.HeTongQianDing,
-            //               TOPaddtime = a.T_BaoJiaToP.AddTime,
-            //               KHname = a.T_BaoJiaToP.YXB_Kh_list.KHname,
-            //               KHComname = a.T_BaoJiaToP.KHComname,
-            //               KHperson = a.T_BaoJiaToP.YXB_Kh_list.KHperson,
-            //               KHfaren = a.T_BaoJiaToP.YXB_Kh_list.KHfaren,
-            //               KHzhiwu = a.T_BaoJiaToP.YXB_Kh_list.KHzhiwu,
-            //               KHphoto = a.T_BaoJiaToP.YXB_Kh_list.KHphoto,
-            //               NewTime = a.T_BaoJiaToP.YXB_Kh_list.NewTime,
-            //               UName = a.T_BaoJiaToP.YXB_Kh_list.UserInfo.PerSonName,
-            //               WinMoney = a.WinMoney,
-            //               WinYunFei = a.WinYunFei,
-            //               WinStr = a.T_BaoJiaToP.T_WinBak.FirstOrDefault() == null ? null : a.T_BaoJiaToP.T_WinBak.FirstOrDefault().T_YSItems.MyText,
-            //               HanShui = a.T_BaoJiaToP.T_BoolItem.str,
-            //               BaoJiaYunFei = a.BaoJiaYunFei
 
-            //           };
+            var temp = from a in Tdata
+                       select new
+                       {
+                           ID = a.ID,
+                           a.Addtime,
+                           a.Wtime,
+                           LJname=a.Seb_Number.Ttext,
+                           a.User_Person_slt,
+                           sbname=a.Seb_Number1.Ttext,
+                           a.ImgNumber,
+                           a.Iint,a.Slt_kg,a.Slt_BFB,a.Slt_Feipin,a.Slt_hege,a.Slt_hegeNo,a.StupTime,a.OverTime,a.ThisHaveTime,a.HaveTime,
+                           bumne=a.BumenInfoSet.Name
+
+                       };
             //var templist = temp.ToList();
             //for (int i = 0; i < templist.Count; i++)
             //{
             //    templist[i].Addess = ArrF(templist[i].Addess);
             //}
-            return Json(new { rows = "", total = uim.TotalCount }, JsonRequestBehavior.AllowGet);
+            return Json(new { rows = temp, total = toalcount }, JsonRequestBehavior.AllowGet);
 
         }
 
@@ -117,9 +85,14 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             if (ups.ID > 0)
             {
                 var isthis = User_Person_sltService.LoadEntities(x => x.ID == ups.ID).FirstOrDefault();
-                ups.UserInfo = isthis.UserInfo;
-                ups.AddTime = DateTime.Now;
-                User_Person_sltService.EditEntity(ups);
+                isthis.HoursWage = ups.HoursWage;
+                isthis.Job_Name = ups.Job_Name;
+                isthis.UserID = ups.UserID;
+                isthis.Wage_slt = ups.Wage_slt;
+                isthis.AddTime = DateTime.Now;
+                //ups.UserInfo = isthis.UserInfo;
+                //ups.AddTime = DateTime.Now;
+                User_Person_sltService.EditEntity(isthis);
             }
             else {
                 ups.AddTime = DateTime.Now;
@@ -130,9 +103,17 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //修改信息前获取信息
         public ActionResult GetPersonInfo()
         {
-            int id = Convert.ToInt32(Request["id"]);
+            long id = Convert.ToInt64(Request["id"]);
             var temp = User_Person_sltService.LoadEntities(x => x.ID == id).FirstOrDefault();
-            return Json(temp, JsonRequestBehavior.AllowGet);
+            User_Person_slt ups = new User_Person_slt();
+            ups.ID = temp.ID;
+            ups.AddTime = temp.AddTime;
+            ups.Job_Name = temp.Job_Name;
+            ups.UserID = temp.UserID;
+            ups.Wage_slt = temp.Wage_slt;
+            ups.HoursWage = temp.HoursWage;
+            
+            return Json( new { ret = ups }, JsonRequestBehavior.AllowGet);
         }
         //获取机加车间人员名单
         public ActionResult GetYuanGongList()
@@ -145,6 +126,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                Name = a.PerSonName
                            };
             return Json(rtmp, JsonRequestBehavior.AllowGet);
+        }
+        //创建日报表信息
+        public ActionResult addDayBb(T_jxzztjb tjjb) {
+
+            return Json("", JsonRequestBehavior.AllowGet);
+
         }
     }
 }
