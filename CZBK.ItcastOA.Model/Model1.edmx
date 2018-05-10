@@ -351,7 +351,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Addtime" Type="datetime" Nullable="false" />
           <Property Name="Wtime" Type="datetime" Nullable="false" />
           <Property Name="ImgName_ID" Type="bigint" Nullable="false" />
@@ -369,7 +369,8 @@
           <Property Name="ThisHaveTime" Type="decimal" Precision="18" Scale="2" />
           <Property Name="HaveTime" Type="decimal" Precision="18" Scale="2" />
           <Property Name="UpBumen_id" Type="int" />
-          <Property Name="del" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RestYesOrNo" Type="smallint" />
+          <Property Name="del" Type="int" StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="T_SczzDanju">
           <Key>
@@ -4036,11 +4037,12 @@
           <Property Name="ThisHaveTime" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="HaveTime" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="UpBumen_id" Type="Int32" />
-          <Property Name="del" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="del" Type="Int32" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="BumenInfoSet" Relationship="OAModel.FK_T_jxzztjb_BumenInfoSet" FromRole="T_jxzztjb" ToRole="BumenInfoSet" />
           <NavigationProperty Name="Seb_Number" Relationship="OAModel.FK_T_jxzztjb_Seb_Number" FromRole="T_jxzztjb" ToRole="Seb_Number" />
           <NavigationProperty Name="Seb_Number1" Relationship="OAModel.FK_T_jxzztjb_Seb_Number_Imgname" FromRole="T_jxzztjb" ToRole="Seb_Number" />
           <NavigationProperty Name="User_Person_slt" Relationship="OAModel.FK_T_jxzztjb_User_Person_slt" FromRole="T_jxzztjb" ToRole="User_Person_slt" />
+          <Property Name="RestYesOrNo" Type="Int16" />
         </EntityType>
         <EntityType Name="T_YXbj_master">
           <Key>
@@ -4880,6 +4882,7 @@
           <EntitySetMapping Name="T_jxzztjb">
             <EntityTypeMapping TypeName="OAModel.T_jxzztjb">
               <MappingFragment StoreEntitySet="T_jxzztjb">
+                <ScalarProperty Name="RestYesOrNo" ColumnName="RestYesOrNo" />
                 <ScalarProperty Name="del" ColumnName="del" />
                 <ScalarProperty Name="UpBumen_id" ColumnName="UpBumen_id" />
                 <ScalarProperty Name="HaveTime" ColumnName="HaveTime" />
