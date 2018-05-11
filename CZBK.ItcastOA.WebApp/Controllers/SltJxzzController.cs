@@ -19,21 +19,22 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IBumenInfoSetService BumenInfoSetService { get; set; }
         IBLL.IUserInfoService UserInfoService { get; set; }
         IBLL.IT_BoolItemService T_BoolItemService { get; set; }
+        IBLL.IT_jgzztjbService T_jgzztjbService { get; set; }
 
         public ActionResult Index()
         {
-            var UserName = User_Person_sltService.LoadEntities(x => x.ID > 0).GroupBy(x => x.UserID).Select(x => x.FirstOrDefault());
+            var UserName = User_Person_sltService.LoadEntities(x => x.UserInfo.BuMenID==26).GroupBy(x => x.UserID).Select(x => x.FirstOrDefault());
             //人员名称表
             ViewBag.sltUser = UserName.ToList();
+            var UserNameJG = User_Person_sltService.LoadEntities(x => x.UserInfo.BuMenID == 43).GroupBy(x => x.UserID).Select(x => x.FirstOrDefault());
+            //人员名称表
+            ViewBag.sltUserJG = UserNameJG.ToList();
             //零件名称表
             var LingjianName = Seb_NumberService.LoadEntities(x => x.Items == 1).DefaultIfEmpty();
             ViewBag.ljname = LingjianName.ToList();
             //设备编号名称
             var NumberName = Seb_NumberService.LoadEntities(x => x.Items == 0).DefaultIfEmpty();
             ViewBag.ljname = NumberName.ToList();
-            //筛选项
-            var InfoExcelType = T_BoolItemService.LoadEntities(x => x.ItemsID == 3).DefaultIfEmpty();
-            ViewBag.excelType = InfoExcelType.ToList();
             return View();
         }
         //获取日报信息
@@ -49,9 +50,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 jc.ID = a.ID;
                 jc.Addtime = a.Addtime;
                 jc.Wtime = a.Wtime;
-                jc.ImgName_ID = a.Seb_Number.Ttext;
+                jc.ImgName_ID = a.Seb_Number1.Ttext;
                 jc.UPslt_ID = a.User_Person_slt.UserInfo.PerSonName;
-                jc.Seb_number_ID = a.Seb_Number1.Ttext;
+                jc.Seb_number_ID = a.Seb_Number.Ttext;
                 jc.ImgNumber = a.ImgNumber;
                 jc.Iint = a.Iint;
                 jc.Slt_kg = a.Slt_kg;
@@ -63,19 +64,44 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 jc.OverTime = a.OverTime;
                 jc.ThisHaveTime = a.ThisHaveTime;
                 jc.HaveTime = a.HaveTime;
+                jc.WorkHours = a.WorkHours;
                 jc.UpBumen_id = a.BumenInfoSet.Name;
                 jc.RestYesOrNo = a.RestYesOrNo;
                 jc.Wage_slt = a.User_Person_slt.Wage_slt;
                 jc.HoursWage = a.User_Person_slt.HoursWage;
                 jc.Job_Name = a.User_Person_slt.Job_Name;
-                jc.SumHoursWage = jc.HaveTime * jc.HoursWage;
+                jc.SumHoursWage = jc.WorkHours * jc.HoursWage;
                 tList.Add(jc);
             }
-            //var templist = temp.ToList();
-            //for (int i = 0; i < templist.Count; i++)
-            //{
-            //    templist[i].Addess = ArrF(templist[i].Addess);
-            //}
+            IQueryable<T_jgzztjb> Tdata2 = T_jgzztjbService.LoadPageEntities(pageIndex, pageSize, out toalcount, x => x.del == 0, x => x.Addtime, true).DefaultIfEmpty();
+            foreach (var a in Tdata2)
+            {
+                jsxtCls jc = new jsxtCls();
+                jc.ID = a.ID;
+                jc.Addtime = a.Addtime;
+                jc.Wtime = a.Wtime;
+                jc.ImgName_ID = a.Seb_Number.Ttext;
+                jc.UPslt_ID = a.User_Person_slt.UserInfo.PerSonName;
+                jc.ImgNumber = a.ImgNumber;
+                jc.Iint = a.Iint;
+                jc.Slt_kg = a.Slt_kg;
+                jc.Slt_BFB = a.Slt_BFB;
+                jc.Slt_Feipin = a.Slt_Feipin;
+                jc.Slt_hege = a.Slt_hege;
+                jc.Slt_hegeNo = a.Slt_hegeNo;
+                jc.StupTime = a.StupTime;
+                jc.OverTime = a.OverTime;
+                jc.ThisHaveTime = a.ThisHaveTime;
+                jc.HaveTime = a.HaveTime;
+                jc.WorkHours = a.WorkHours;
+                jc.UpBumen_id = a.BumenInfoSet.Name;
+                jc.RestYesOrNo = a.RestYesOrNo;
+                jc.Wage_slt = a.User_Person_slt.Wage_slt;
+                jc.HoursWage = a.User_Person_slt.HoursWage;
+                jc.Job_Name = a.User_Person_slt.Job_Name;
+                jc.SumHoursWage = jc.WorkHours * jc.HoursWage;
+                tList.Add(jc);
+            }
             return Json(new { rows = tList, total = toalcount }, JsonRequestBehavior.AllowGet);
         }
         //获取生产人员信息
@@ -128,7 +154,6 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             ups.UserID = temp.UserID;
             ups.Wage_slt = temp.Wage_slt;
             ups.HoursWage = temp.HoursWage;
-            
             return Json( new { ret = ups }, JsonRequestBehavior.AllowGet);
         }
         //获取机加车间人员名单
@@ -143,7 +168,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            };
             return Json(rtmp, JsonRequestBehavior.AllowGet);
         }
-        //创建日报表信息
+        public ActionResult GetInfoExcelType()
+        {
+            var temp = T_BoolItemService.LoadEntities(x => x.ItemsID == 3).DefaultIfEmpty();
+            return Json(temp, JsonRequestBehavior.AllowGet);
+        }
+        //创建机加车间日报表信息
         public ActionResult addDayBb(T_jxzztjb tjjb) {
             tjjb.Addtime = DateTime.Now;
             tjjb.del = 0;
@@ -165,6 +195,31 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             T_jxzztjbService.AddEntity(tjjb);
             return Json(new { ret = "ok"}, JsonRequestBehavior.AllowGet);
+        }
+        //创建结构车间日报表信息
+        public ActionResult addDayBbJG(T_jgzztjb tjjb)
+        {
+            tjjb.Addtime = DateTime.Now;
+            tjjb.del = 0;
+            if (tjjb.ImgName_ID == 0)
+            {
+                var Imgstr_name = Request["ImgName_ID"];
+                var temp = Seb_NumberService.LoadEntities(x => x.Ttext == Imgstr_name && x.Items == 1).FirstOrDefault();
+                if (temp != null)
+                {
+                    tjjb.ImgName_ID = temp.ID;
+                }
+                else
+                {
+                    Seb_Number sb = new Seb_Number();
+                    sb.Items = 1;
+                    sb.Ttext = Imgstr_name;
+                    var rtmp = Seb_NumberService.AddEntity(sb);
+                    tjjb.ImgName_ID = rtmp.ID;
+                }
+            }
+            T_jgzztjbService.AddEntity(tjjb);
+            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
         //获取部门id（机加或铆焊）
         public ActionResult GetInfoExcelMsg()
@@ -224,48 +279,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 if (bolID == 9)//个人日报表
                 {
                     DateTime excelDate = Convert.ToDateTime(Request["excelDate"]);
-                    var temp = T_jxzztjbService.LoadEntities(x => x.Wtime == excelDate && x.User_Person_slt.UserInfo.BuMenID == bumenID).DefaultIfEmpty().ToList();
-                    if (temp != null && temp[0] != null)
+                    if(bumenID == 26)
                     {
-                        List<jsxtCls> tList = new List<jsxtCls>();
-                        foreach (var a in temp)
-                        {
-                            jsxtCls jc = new jsxtCls();
-                            jc.ID = a.ID;
-                            jc.Addtime = a.Addtime;
-                            jc.Wtime = a.Wtime;
-                            jc.ImgName_ID = a.Seb_Number.Ttext;
-                            jc.UPslt_ID = a.User_Person_slt.UserInfo.PerSonName;
-                            jc.Seb_number_ID = a.Seb_Number1.Ttext;
-                            jc.ImgNumber = a.ImgNumber;
-                            jc.Iint = a.Iint;
-                            jc.Slt_kg = a.Slt_kg;
-                            jc.Slt_BFB = a.Slt_BFB;
-                            jc.Slt_Feipin = a.Slt_Feipin;
-                            jc.Slt_hege = a.Slt_hege;
-                            jc.Slt_hegeNo = a.Slt_hegeNo;
-                            jc.StupTime = a.StupTime;
-                            jc.OverTime = a.OverTime;
-                            jc.ThisHaveTime = a.ThisHaveTime;
-                            jc.HaveTime = a.HaveTime;
-                            jc.UpBumen_id = a.BumenInfoSet.Name;
-                            jc.RestYesOrNo = a.RestYesOrNo;
-                            jc.Wage_slt = a.User_Person_slt.Wage_slt;
-                            jc.HoursWage = a.User_Person_slt.HoursWage;
-                            jc.Job_Name = a.User_Person_slt.Job_Name;
-                            jc.SumHoursWage = jc.HaveTime * jc.HoursWage;
-                            tList.Add(jc);
-                        }
-                        return Json(tList, JsonRequestBehavior.AllowGet);
-                    }
-                    return Json(null, JsonRequestBehavior.AllowGet);
-                }
-                else {
-                    DateTime dtStart = Convert.ToDateTime(Request["monthExcel"]);
-                    DateTime dtEnd = dtStart.AddMonths(1).AddDays(-1 * (dtStart.Day));
-                    if (bolID == 10)//个人月报表
-                    {
-                        var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.User_Person_slt.UserInfo.BuMenID == bumenID).DefaultIfEmpty().ToList();
+                        var temp = T_jxzztjbService.LoadEntities(x => x.Wtime == excelDate).DefaultIfEmpty().ToList();
                         if (temp != null && temp[0] != null)
                         {
                             List<jsxtCls> tList = new List<jsxtCls>();
@@ -275,9 +291,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                 jc.ID = a.ID;
                                 jc.Addtime = a.Addtime;
                                 jc.Wtime = a.Wtime;
-                                jc.ImgName_ID = a.Seb_Number.Ttext;
+                                jc.ImgName_ID = a.Seb_Number1.Ttext;
                                 jc.UPslt_ID = a.User_Person_slt.UserInfo.PerSonName;
-                                jc.Seb_number_ID = a.Seb_Number1.Ttext;
+                                jc.Seb_number_ID = a.Seb_Number.Ttext;
                                 jc.ImgNumber = a.ImgNumber;
                                 jc.Iint = a.Iint;
                                 jc.Slt_kg = a.Slt_kg;
@@ -289,20 +305,143 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                 jc.OverTime = a.OverTime;
                                 jc.ThisHaveTime = a.ThisHaveTime;
                                 jc.HaveTime = a.HaveTime;
+                                jc.WorkHours = a.WorkHours;
                                 jc.UpBumen_id = a.BumenInfoSet.Name;
                                 jc.RestYesOrNo = a.RestYesOrNo;
                                 jc.Wage_slt = a.User_Person_slt.Wage_slt;
                                 jc.HoursWage = a.User_Person_slt.HoursWage;
                                 jc.Job_Name = a.User_Person_slt.Job_Name;
-                                jc.SumHoursWage = jc.HaveTime * jc.HoursWage;
+                                jc.SumHoursWage = jc.WorkHours * jc.HoursWage;
                                 tList.Add(jc);
                             }
                             return Json(tList, JsonRequestBehavior.AllowGet);
                         }
                         return Json(null, JsonRequestBehavior.AllowGet);
+                    }
+                    else{
+                        var temp = T_jgzztjbService.LoadEntities(x => x.Wtime == excelDate).DefaultIfEmpty().ToList();
+                        if (temp != null && temp[0] != null)
+                        {
+                            List<jsxtCls> tList = new List<jsxtCls>();
+                            foreach (var a in temp)
+                            {
+                                jsxtCls jc = new jsxtCls();
+                                jc.ID = a.ID;
+                                jc.Addtime = a.Addtime;
+                                jc.Wtime = a.Wtime;
+                                jc.ImgName_ID = a.Seb_Number.Ttext;
+                                jc.UPslt_ID = a.User_Person_slt.UserInfo.PerSonName;
+                                jc.ImgNumber = a.ImgNumber;
+                                jc.Iint = a.Iint;
+                                jc.Slt_kg = a.Slt_kg;
+                                jc.Slt_BFB = a.Slt_BFB;
+                                jc.Slt_Feipin = a.Slt_Feipin;
+                                jc.Slt_hege = a.Slt_hege;
+                                jc.Slt_hegeNo = a.Slt_hegeNo;
+                                jc.StupTime = a.StupTime;
+                                jc.OverTime = a.OverTime;
+                                jc.ThisHaveTime = a.ThisHaveTime;
+                                jc.HaveTime = a.HaveTime;
+                                jc.WorkHours = a.WorkHours;
+                                jc.UpBumen_id = a.BumenInfoSet.Name;
+                                jc.RestYesOrNo = a.RestYesOrNo;
+                                jc.Wage_slt = a.User_Person_slt.Wage_slt;
+                                jc.HoursWage = a.User_Person_slt.HoursWage;
+                                jc.Job_Name = a.User_Person_slt.Job_Name;
+                                jc.SumHoursWage = jc.WorkHours * jc.HoursWage;
+                                tList.Add(jc);
+                            }
+                            return Json(tList, JsonRequestBehavior.AllowGet);
+                        }
+                        return Json(null, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else {
+                    DateTime dtStart = Convert.ToDateTime(Request["monthExcel"]);
+                    DateTime dtEnd = dtStart.AddMonths(1).AddDays(-1 * (dtStart.Day));
+                    if (bolID == 10)//个人月报表
+                    {
+                        if (bumenID == 26)
+                        {
+                            var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd).DefaultIfEmpty().ToList();
+                            if (temp != null && temp[0] != null)
+                            {
+                                List<jsxtCls> tList = new List<jsxtCls>();
+                                foreach (var a in temp)
+                                {
+                                    jsxtCls jc = new jsxtCls();
+                                    jc.ID = a.ID;
+                                    jc.Addtime = a.Addtime;
+                                    jc.Wtime = a.Wtime;
+                                    jc.ImgName_ID = a.Seb_Number1.Ttext;
+                                    jc.UPslt_ID = a.User_Person_slt.UserInfo.PerSonName;
+                                    jc.Seb_number_ID = a.Seb_Number.Ttext;
+                                    jc.ImgNumber = a.ImgNumber;
+                                    jc.Iint = a.Iint;
+                                    jc.Slt_kg = a.Slt_kg;
+                                    jc.Slt_BFB = a.Slt_BFB;
+                                    jc.Slt_Feipin = a.Slt_Feipin;
+                                    jc.Slt_hege = a.Slt_hege;
+                                    jc.Slt_hegeNo = a.Slt_hegeNo;
+                                    jc.StupTime = a.StupTime;
+                                    jc.OverTime = a.OverTime;
+                                    jc.ThisHaveTime = a.ThisHaveTime;
+                                    jc.HaveTime = a.HaveTime;
+                                    jc.WorkHours = a.WorkHours;
+                                    jc.UpBumen_id = a.BumenInfoSet.Name;
+                                    jc.RestYesOrNo = a.RestYesOrNo;
+                                    jc.Wage_slt = a.User_Person_slt.Wage_slt;
+                                    jc.HoursWage = a.User_Person_slt.HoursWage;
+                                    jc.Job_Name = a.User_Person_slt.Job_Name;
+                                    jc.SumHoursWage = jc.WorkHours * jc.HoursWage;
+                                    tList.Add(jc);
+                                }
+                                return Json(tList, JsonRequestBehavior.AllowGet);
+                            }
+                            return Json(null, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            var temp = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd).DefaultIfEmpty().ToList();
+                            if (temp != null && temp[0] != null)
+                            {
+                                List<jsxtCls> tList = new List<jsxtCls>();
+                                foreach (var a in temp)
+                                {
+                                    jsxtCls jc = new jsxtCls();
+                                    jc.ID = a.ID;
+                                    jc.Addtime = a.Addtime;
+                                    jc.Wtime = a.Wtime;
+                                    jc.ImgName_ID = a.Seb_Number.Ttext;
+                                    jc.UPslt_ID = a.User_Person_slt.UserInfo.PerSonName;
+                                    jc.ImgNumber = a.ImgNumber;
+                                    jc.Iint = a.Iint;
+                                    jc.Slt_kg = a.Slt_kg;
+                                    jc.Slt_BFB = a.Slt_BFB;
+                                    jc.Slt_Feipin = a.Slt_Feipin;
+                                    jc.Slt_hege = a.Slt_hege;
+                                    jc.Slt_hegeNo = a.Slt_hegeNo;
+                                    jc.StupTime = a.StupTime;
+                                    jc.OverTime = a.OverTime;
+                                    jc.ThisHaveTime = a.ThisHaveTime;
+                                    jc.HaveTime = a.HaveTime;
+                                    jc.WorkHours = a.WorkHours;
+                                    jc.UpBumen_id = a.BumenInfoSet.Name;
+                                    jc.RestYesOrNo = a.RestYesOrNo;
+                                    jc.Wage_slt = a.User_Person_slt.Wage_slt;
+                                    jc.HoursWage = a.User_Person_slt.HoursWage;
+                                    jc.Job_Name = a.User_Person_slt.Job_Name;
+                                    jc.SumHoursWage = jc.WorkHours * jc.HoursWage;
+                                    tList.Add(jc);
+                                }
+                                return Json(tList, JsonRequestBehavior.AllowGet);
+                            }
+                            return Json(null, JsonRequestBehavior.AllowGet);
+                        }
                     } else if (bolID == 11)//车间月汇报表
                     {
                         var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.UpBumen_id == bumenID).DefaultIfEmpty().ToList();
+                        var temp2 = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.UpBumen_id == bumenID).DefaultIfEmpty().ToList();
                         if (temp != null && temp[0] != null)
                         {
                             List<CJExcel> tList = new List<CJExcel>();
@@ -314,7 +453,19 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                 cje.WorkType = a.User_Person_slt.Job_Name;
                                 cje.HoursWage = a.User_Person_slt.HoursWage;
                                 cje.UpBumen = a.BumenInfoSet.Name;
-                                cje.WorkHours = a.HaveTime;
+                                cje.WorkHours = a.WorkHours;
+                                cje.SumMoney = cje.WorkHours * cje.HoursWage;
+                                tList.Add(cje);
+                            }
+                            foreach (var a in temp2)
+                            {
+                                CJExcel cje = new CJExcel();
+                                cje.WorkTime = a.Wtime;
+                                cje.PersonName = a.User_Person_slt.UserInfo.PerSonName;
+                                cje.WorkType = a.User_Person_slt.Job_Name;
+                                cje.HoursWage = a.User_Person_slt.HoursWage;
+                                cje.UpBumen = a.BumenInfoSet.Name;
+                                cje.WorkHours = a.WorkHours;
                                 cje.SumMoney = cje.WorkHours * cje.HoursWage;
                                 tList.Add(cje);
                             }
@@ -324,9 +475,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     }else if(bolID == 12)//公司月总结表
                     {
                         var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd).DefaultIfEmpty().ToList();
+                        var temp2 = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd).DefaultIfEmpty().ToList();
                         if (temp != null && temp[0] != null)
                         {
-                            var temp1 = temp.GroupBy(x => x.BumenInfoSet.Name).Select(x => new GSExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.HaveTime), SumMoney=x.Sum(g=>g.User_Person_slt.HoursWage*g.HaveTime)});
+                            var temp1 = temp.GroupBy(x => x.BumenInfoSet.Name).Select(x => new GSExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney=x.Sum(g=>g.User_Person_slt.HoursWage*g.WorkHours) }).ToList();
+                            var temp3 = temp.GroupBy(x => x.BumenInfoSet.Name).Select(x => new GSExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.User_Person_slt.HoursWage * g.WorkHours) }).ToList();
+                            temp1.AddRange(temp3);
                             return Json(temp1, JsonRequestBehavior.AllowGet);
                         }
                         return Json(null, JsonRequestBehavior.AllowGet);
@@ -342,9 +496,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             id = 43;
                         }
                         var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd&& x.UpBumen_id == bumenID&&x.User_Person_slt.UserInfo.BuMenID==id).DefaultIfEmpty().ToList();
+                        var temp2 = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.UpBumen_id == bumenID && x.User_Person_slt.UserInfo.BuMenID == id).DefaultIfEmpty().ToList();
                         if (temp != null && temp[0] != null)
                         {
-                            var temp1 = temp.GroupBy(x => x.Seb_Number.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.HaveTime), SumMoney = x.Sum(g => g.HaveTime * g.User_Person_slt.HoursWage) });
+                            var temp1 = temp.GroupBy(x => x.Seb_Number.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
+                            var temp3 = temp.GroupBy(x => x.Seb_Number.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
+                            temp1.AddRange(temp3);
                             return Json(temp1, JsonRequestBehavior.AllowGet);
                         }
                         return Json(null, JsonRequestBehavior.AllowGet);
@@ -374,6 +531,64 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             Response.Write(excelHtml);
             Response.End();
         }
+        //获取要修改的数据
+        public ActionResult GetEditInfo()
+        {
+            long id = Convert.ToInt64(Request["id"]);
+            int sd = Convert.ToInt32(Request["state"]);
+            if(sd == 0)
+            {
+                var temp = T_jxzztjbService.LoadEntities(x => x.ID == id).FirstOrDefault();
+                jxInfo ji = new jxInfo();
+                ji.ID = temp.ID;
+                ji.Addtime = temp.Addtime;
+                ji.Wtime = temp.Wtime;
+                ji.ImgName_ID = temp.ImgName_ID;
+                ji.UPslt_ID = temp.UPslt_ID;
+                ji.Seb_number_ID = temp.Seb_number_ID;
+                ji.ImgNumber = temp.ImgNumber;
+                ji.Iint = temp.Iint;
+                ji.Slt_kg = temp.Slt_kg;
+                ji.Slt_hege = temp.Slt_hege;
+                ji.Slt_hegeNo = temp.Slt_hegeNo;
+                ji.Slt_Feipin = temp.Slt_Feipin;
+                ji.Slt_BFB = temp.Slt_BFB;
+                ji.StupTime = temp.StupTime;
+                ji.OverTime = temp.OverTime;
+                ji.ThisHaveTime = temp.ThisHaveTime;
+                ji.HaveTime = temp.HaveTime;
+                ji.UpBumen_id = temp.UpBumen_id;
+                ji.del = temp.del;
+                ji.RestYesOrNo = temp.RestYesOrNo;
+                ji.WorkHours = temp.WorkHours;
+                return Json(ji, JsonRequestBehavior.AllowGet);
+            }else
+            {
+                var temp = T_jgzztjbService.LoadEntities(x => x.ID == id).FirstOrDefault();
+                jgInfo ji = new jgInfo();
+                ji.ID = temp.ID;
+                ji.Addtime = temp.Addtime;
+                ji.Wtime = temp.Wtime;
+                ji.ImgName_ID = temp.ImgName_ID;
+                ji.UPslt_ID = temp.UPslt_ID;
+                ji.ImgNumber = temp.ImgNumber;
+                ji.Iint = temp.Iint;
+                ji.Slt_kg = temp.Slt_kg;
+                ji.Slt_hege = temp.Slt_hege;
+                ji.Slt_hegeNo = temp.Slt_hegeNo;
+                ji.Slt_Feipin = temp.Slt_Feipin;
+                ji.Slt_BFB = temp.Slt_BFB;
+                ji.StupTime = temp.StupTime;
+                ji.OverTime = temp.OverTime;
+                ji.ThisHaveTime = temp.ThisHaveTime;
+                ji.HaveTime = temp.HaveTime;
+                ji.UpBumen_id = temp.UpBumen_id;
+                ji.del = temp.del;
+                ji.RestYesOrNo = temp.RestYesOrNo;
+                ji.WorkHours = temp.WorkHours;
+                return Json(ji, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
     public class jsxtCls
     {
@@ -401,6 +616,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public string Job_Name { get; set; }
         public Nullable<decimal> HoursWage { get; set; }
         public Nullable<decimal> SumHoursWage { get; set; }
+        public Nullable<decimal> WorkHours { get; set; }
     }
     public class serchMsg
     {
@@ -431,5 +647,52 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public string UpBumen { get; set; }
         public decimal? SumHours { get; set; }
         public decimal? SumMoney { get; set; }
+    }
+    public class jxInfo
+    {
+        public long ID { get; set; }
+        public System.DateTime Addtime { get; set; }
+        public System.DateTime Wtime { get; set; }
+        public long ImgName_ID { get; set; }
+        public long UPslt_ID { get; set; }
+        public long Seb_number_ID { get; set; }
+        public string ImgNumber { get; set; }
+        public Nullable<decimal> Iint { get; set; }
+        public Nullable<decimal> Slt_kg { get; set; }
+        public Nullable<decimal> Slt_hege { get; set; }
+        public Nullable<decimal> Slt_hegeNo { get; set; }
+        public Nullable<decimal> Slt_Feipin { get; set; }
+        public Nullable<decimal> Slt_BFB { get; set; }
+        public Nullable<System.DateTime> StupTime { get; set; }
+        public Nullable<System.DateTime> OverTime { get; set; }
+        public Nullable<decimal> ThisHaveTime { get; set; }
+        public Nullable<decimal> HaveTime { get; set; }
+        public Nullable<int> UpBumen_id { get; set; }
+        public Nullable<int> del { get; set; }
+        public Nullable<short> RestYesOrNo { get; set; }
+        public Nullable<decimal> WorkHours { get; set; }
+    }
+    public class jgInfo
+    {
+        public long ID { get; set; }
+        public System.DateTime Addtime { get; set; }
+        public System.DateTime Wtime { get; set; }
+        public long ImgName_ID { get; set; }
+        public long UPslt_ID { get; set; }
+        public string ImgNumber { get; set; }
+        public Nullable<decimal> Iint { get; set; }
+        public Nullable<decimal> Slt_kg { get; set; }
+        public Nullable<decimal> Slt_hege { get; set; }
+        public Nullable<decimal> Slt_hegeNo { get; set; }
+        public Nullable<decimal> Slt_Feipin { get; set; }
+        public Nullable<decimal> Slt_BFB { get; set; }
+        public Nullable<System.DateTime> StupTime { get; set; }
+        public Nullable<System.DateTime> OverTime { get; set; }
+        public Nullable<decimal> ThisHaveTime { get; set; }
+        public Nullable<decimal> HaveTime { get; set; }
+        public Nullable<int> UpBumen_id { get; set; }
+        public Nullable<int> del { get; set; }
+        public Nullable<short> RestYesOrNo { get; set; }
+        public Nullable<decimal> WorkHours { get; set; }
     }
 }

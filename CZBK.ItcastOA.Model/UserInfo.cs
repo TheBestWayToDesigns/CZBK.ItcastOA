@@ -76,6 +76,7 @@ namespace CZBK.ItcastOA.Model
         public string PerSonName { get; set; }
         public Nullable<int> QuXian { get; set; }
         public Nullable<int> BuMenID { get; set; }
+
         [JsonIgnore]
         public virtual BumenInfoSet BumenInfoSet { get; set; }
         [JsonIgnore]
@@ -119,7 +120,6 @@ namespace CZBK.ItcastOA.Model
         [JsonIgnore]
         public virtual ICollection<Schedule> Schedules1 { get; set; }
         [JsonIgnore]
-
         public virtual ICollection<T_BaoXiaoBill> T_BaoXiaoBill { get; set; }
         [JsonIgnore]
         public virtual ICollection<T_JieKuanBill> T_JieKuanBill { get; set; }
@@ -130,44 +130,30 @@ namespace CZBK.ItcastOA.Model
         [JsonIgnore]
         public virtual ICollection<YXB_Baojia> YXB_Baojia { get; set; }
         [JsonIgnore]
-
         public virtual ICollection<ShareFileOrNotice> ShareFileOrNotices { get; set; }
         [JsonIgnore]
-
         public virtual ICollection<ScheduleUser> ScheduleUsers1 { get; set; }
         [JsonIgnore]
-
         public virtual ICollection<ExamineSchedule> ExamineSchedules { get; set; }
         [JsonIgnore]
-
         public virtual ICollection<YJ_ScheduleDay> YJ_ScheduleDay1 { get; set; }
         [JsonIgnore]
-
         public virtual ICollection<Userbak> Userbaks { get; set; }
         [JsonIgnore]
-
         public virtual ICollection<WXXUserInfo> WXXUserInfoes { get; set; }
         [JsonIgnore]
-
         public virtual ICollection<WXXBaoJiaQuanXian> WXXBaoJiaQuanXians { get; set; }
         [JsonIgnore]
-
         public virtual ICollection<WXXScoreInfo> WXXScoreInfoes { get; set; }
         [JsonIgnore]
-
         public virtual ICollection<WXXScoreInfo> WXXScoreInfoes1 { get; set; }
         [JsonIgnore]
-
         public virtual ICollection<WXXScoreUser> WXXScoreUsers { get; set; }
         [JsonIgnore]
-
         public virtual ICollection<WXXScoreUser> WXXScoreUsers1 { get; set; }
         [JsonIgnore]
-
         public virtual ICollection<T_YXbj_master> T_YXbj_master { get; set; }
         [JsonIgnore]
-
         public virtual ICollection<User_Person_slt> User_Person_slt { get; set; }
-
     }
 }

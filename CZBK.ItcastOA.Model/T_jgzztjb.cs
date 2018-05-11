@@ -12,14 +12,13 @@ namespace CZBK.ItcastOA.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class T_jxzztjb
+    public partial class T_jgzztjb
     {
         public long ID { get; set; }
         public System.DateTime Addtime { get; set; }
         public System.DateTime Wtime { get; set; }
         public long ImgName_ID { get; set; }
         public long UPslt_ID { get; set; }
-        public long Seb_number_ID { get; set; }
         public string ImgNumber { get; set; }
         public Nullable<decimal> Iint { get; set; }
         public Nullable<decimal> Slt_kg { get; set; }
@@ -32,13 +31,12 @@ namespace CZBK.ItcastOA.Model
         public Nullable<decimal> ThisHaveTime { get; set; }
         public Nullable<decimal> HaveTime { get; set; }
         public Nullable<int> UpBumen_id { get; set; }
-        public Nullable<int> del { get; set; }
         public Nullable<short> RestYesOrNo { get; set; }
+        public Nullable<int> del { get; set; }
         public Nullable<decimal> WorkHours { get; set; }
     
         public virtual BumenInfoSet BumenInfoSet { get; set; }
-        public virtual Seb_Number Seb_Number { get; set; }
-        public virtual Seb_Number Seb_Number1 { get; set; }
         public virtual User_Person_slt User_Person_slt { get; set; }
+        public virtual Seb_Number Seb_Number { get; set; }
     }
 }

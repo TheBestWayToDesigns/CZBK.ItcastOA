@@ -141,6 +141,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class T_jgzztjbDal :BaseDal<T_jgzztjb>,IT_jgzztjbDal
+    {
+
+    }
+		
 	public partial class T_JieKuanBillDal :BaseDal<T_JieKuanBill>,IT_JieKuanBillDal
     {
 
