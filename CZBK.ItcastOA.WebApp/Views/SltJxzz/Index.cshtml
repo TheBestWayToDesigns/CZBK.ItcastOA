@@ -133,9 +133,11 @@
                 Qingkong();
             })
             $("#adddatas").click(function () {
+                $("#AddOneid").val(0)
                 AdddataInfo()
             })
             $("#adddatas2").click(function () {
+                $("#AddTwoid").val(0)
                 AdddataInfoJG()
             })
             $("#sltdata").click(function () {
@@ -892,10 +894,12 @@
         }
         //修改日报表
         function editDayExcel() {
+           
             var rows = $("#tt").datagrid("getSelected");
             if (rows.Seb_number_ID != null) {
                 $.post("/SltJxzz/GetEditInfo", { "id": rows.ID, "state": 0 }, function (serverData) {
                     console.log(serverData)
+                    $("#AddOneid").val(serverData.ID)
                     $("#Wtime").datebox("setValue", ChangeDateFormat(serverData.Wtime))
                     $("#ImgName_ID").val( serverData.ImgName_ID)
                     $("#ImgNumber").val(serverData.ImgNumber)
@@ -919,6 +923,7 @@
             } else {
                 $.post("/SltJxzz/GetEditInfo", { "id": rows.ID, "state": 1 }, function (serverData) {
                     console.log(serverData)
+                    $("#AddTwoid").val(serverData.ID)
                     $("#WtimeJG").datebox("setValue", ChangeDateFormat(serverData.Wtime))
                     $("#ImgName_IDJG").val( serverData.ImgName_ID)
                     $("#ImgNumberJG").val(serverData.ImgNumber)
@@ -1127,6 +1132,7 @@
     <div id="adddiv" style="height:100%; width:100%;display:none">
         @using (Ajax.BeginForm("addDayBb", "Sltjxzz", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "bollForm" }))
         {
+            <input name="ID" id="AddOneid" type="hidden" value="0" />
             <table style="text-align:center">
                 <tr>
                     <td>报表时间</td>
@@ -1238,6 +1244,7 @@
     <div id="adddivJG" style="height:100%; width:100%;display:none">
         @using (Ajax.BeginForm("addDayBbJG", "Sltjxzz", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEditAddJG" }, new { id = "bollFormJG" }))
         {
+            <input name="ID" id="AddTwoid" type="hidden" value="0" />
             <table style="text-align:center">
                 <tr>
                     <td>报表时间</td>

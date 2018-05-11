@@ -561,6 +561,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 ji.del = temp.del;
                 ji.RestYesOrNo = temp.RestYesOrNo;
                 ji.WorkHours = temp.WorkHours;
+                ji.LjName = temp.Seb_Number.Ttext;
                 return Json(ji, JsonRequestBehavior.AllowGet);
             }else
             {
@@ -671,6 +672,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public Nullable<int> del { get; set; }
         public Nullable<short> RestYesOrNo { get; set; }
         public Nullable<decimal> WorkHours { get; set; }
+        public string LjName { get; set; }
     }
     public class jgInfo
     {
