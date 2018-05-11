@@ -520,12 +520,17 @@
                             $.messager.alert("提示", "请填写报表时间！");
                             return;
                         }
-                        var ImgName_ID = $("#ImgName_IDSel").combobox("getText");
-                        if (ImgName_ID.trim().length <= 0) {
-                            $.messager.alert("提示", "请填写零件名称！");
-                            return;
+                        var ImgName_IDV = $("#ImgName_IDSel").combobox("getValue");
+                        if (ImgName_IDV == undefined) {
+                            var ImgName_ID = $("#ImgName_IDSel").combobox("getText");
+                            if (ImgName_ID.trim().length <= 0) {
+                                $.messager.alert("提示", "请填写零件名称！");
+                                return;
+                            }
+                            $("#ImgName_ID").val(ImgName_ID);
+                        } else {
+                            $("#ImgName_ID").val(ImgName_IDV);
                         }
-                        $("#ImgName_ID").val(ImgName_ID);
                         var UpBuemid = $("#UpBumen_id").combobox("getValue");
                         if (UpBuemid.trim().length <= 0) {
                             $.messager.alert("提示", "请选择部门名称！");
@@ -575,12 +580,17 @@
                             $.messager.alert("提示", "请填写报表时间！");
                             return;
                         }
-                        var ImgName_ID = $("#ImgName_IDJGSel").combobox("getText");
-                        if (ImgName_ID.trim().length <= 0) {
-                            $.messager.alert("提示", "请填写零件名称！");
-                            return;
+                        var ImgName_IDV = $("#ImgName_IDJGSel").combobox("getValue");
+                        if (ImgName_IDV == undefined) {
+                            var ImgName_ID = $("#ImgName_IDJGSel").combobox("getText");
+                            if (ImgName_ID.trim().length <= 0) {
+                                $.messager.alert("提示", "请填写零件名称！");
+                                return;
+                            }
+                            $("#ImgName_IDJG").val(ImgName_ID);
+                        } else {
+                            $("#ImgName_IDJG").val(ImgName_IDV);
                         }
-                        $("#ImgName_IDJG").val(ImgName_ID);
                         var UpBuemid = $("#UpBumen_idJG").combobox("getValue");
                         if (UpBuemid.trim().length <= 0) {
                             $.messager.alert("提示", "请选择部门名称！");
