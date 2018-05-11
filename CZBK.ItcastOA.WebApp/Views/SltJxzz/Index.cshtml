@@ -152,6 +152,9 @@
             })
             $('#sltczz').combobox({
                 onChange: function (newValue, oldValue) {
+                    if (newValue == "") {
+                        return;
+                    }
                     $.post("/Sltjxzz/GetPersonInfo", { "id": newValue }, function (rt) {
                         $("#itGongzhong").val(rt.ret.Job_Name)
                         $("#itwage").val(rt.ret.Wage_slt)
@@ -161,6 +164,9 @@
             });
             $('#sltczzJG').combobox({
                 onChange: function (newValue, oldValue) {
+                    if (newValue == "") {
+                        return;
+                    }
                     $.post("/Sltjxzz/GetPersonInfo", { "id": newValue }, function (rt) {
                         $("#itGongzhongJG").val(rt.ret.Job_Name)
                         $("#itwageJG").val(rt.ret.Wage_slt)
@@ -529,6 +535,16 @@
                             $.messager.alert("提示", "请填写工作时间！");
                             return;
                         }
+                        var str_1 = $("#str_1").combobox("getValue");
+                        if (str_1.trim().length <= 0) {
+                            $.messager.alert("提示", "请选择设备编号！");
+                            return;
+                        }
+                        var sltczz = $("#sltczz").combobox("getValue");
+                        if (sltczz.trim().length <= 0) {
+                            $.messager.alert("提示", "请选择操作者！");
+                            return;
+                        }
                         $("#bollForm").submit();//提交表单
                     }
                 }, {
@@ -572,6 +588,11 @@
                         }
                         if ($("#WorkHoursJG").val().trim().length <= 0) {
                             $.messager.alert("提示", "请填写工作时间！");
+                            return;
+                        }
+                        var sltczz = $("#sltczzJG").combobox("getValue");
+                        if (sltczz.trim().length <= 0) {
+                            $.messager.alert("提示", "请选择操作者！");
                             return;
                         }
                         $("#bollFormJG").submit();//提交表单
