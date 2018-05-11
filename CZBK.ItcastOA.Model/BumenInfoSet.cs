@@ -20,6 +20,7 @@ namespace CZBK.ItcastOA.Model
             this.T_JieKuanBill = new HashSet<T_JieKuanBill>();
             this.ScheduleTypes = new HashSet<ScheduleType>();
             this.T_jxzztjb = new HashSet<T_jxzztjb>();
+            this.T_jgzztjb = new HashSet<T_jgzztjb>();
         }
     
         public int ID { get; set; }
@@ -33,5 +34,6 @@ namespace CZBK.ItcastOA.Model
         public virtual ICollection<T_JieKuanBill> T_JieKuanBill { get; set; }
         public virtual ICollection<ScheduleType> ScheduleTypes { get; set; }
         public virtual ICollection<T_jxzztjb> T_jxzztjb { get; set; }
+        public virtual ICollection<T_jgzztjb> T_jgzztjb { get; set; }
     }
 }

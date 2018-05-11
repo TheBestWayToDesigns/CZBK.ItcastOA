@@ -405,6 +405,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _T_ChanPinNameDal = value; }
         }
 	
+		private IT_jgzztjbDal _T_jgzztjbDal;
+        public IT_jgzztjbDal T_jgzztjbDal
+        {
+            get
+            {
+                if(_T_jgzztjbDal == null)
+                {
+                   // _T_jgzztjbDal = new T_jgzztjbDal();
+				    _T_jgzztjbDal =AbstractFactory.CreateT_jgzztjbDal();
+                }
+                return _T_jgzztjbDal;
+            }
+            set { _T_jgzztjbDal = value; }
+        }
+	
 		private IT_JieKuanBillDal _T_JieKuanBillDal;
         public IT_JieKuanBillDal T_JieKuanBillDal
         {

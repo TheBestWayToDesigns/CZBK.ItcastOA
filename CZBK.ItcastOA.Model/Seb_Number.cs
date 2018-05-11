@@ -18,6 +18,7 @@ namespace CZBK.ItcastOA.Model
         {
             this.T_jxzztjb = new HashSet<T_jxzztjb>();
             this.T_jxzztjb1 = new HashSet<T_jxzztjb>();
+            this.T_jgzztjb = new HashSet<T_jgzztjb>();
         }
     
         public long ID { get; set; }
@@ -28,5 +29,6 @@ namespace CZBK.ItcastOA.Model
     
         public virtual ICollection<T_jxzztjb> T_jxzztjb { get; set; }
         public virtual ICollection<T_jxzztjb> T_jxzztjb1 { get; set; }
+        public virtual ICollection<T_jgzztjb> T_jgzztjb { get; set; }
     }
 }

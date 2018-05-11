@@ -112,7 +112,6 @@
             $(window).resize(function () {
                 $('#' + datagridId).resizeDataGrid(0,0, 200, 500);
             });
-            $("#editDiv").css("display", "none");
             loadData();
             $("#InfoExcelBtnDiv").hide();
             $("#AddPersonInfoBtnDiv").hide();
@@ -135,6 +134,9 @@
             })
             $("#adddatas").click(function () {
                 AdddataInfo()
+            })
+            $("#adddatas2").click(function () {
+                AdddataInfoJG()
             })
             $("#sltdata").click(function () {
                 cleanDatagrid();
@@ -189,11 +191,12 @@
             //})
         });
         function toDownloadExcel() {
+            var colCount = ($("#tt").datagrid("options").columns)[0].length;
             var htmlData = $(".datagrid-view2").html();
             var tableHead = "<html><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />" +
         "<style type='text/css'>tbody tr td{text-align:center;border:solid .5pt Black;} </style>" +
         "<body><table >";
-            var Theard = "<thead><tr><td colspan='20' style=' font-family:黑体; font-size:25px;text-align:center '>" + $("#InfoExcelMsg").combobox("getText") + $("#InfoExcelType").combobox("getText") + "</td></tr></thead>";
+            var Theard = "<thead><tr><td colspan='"+colCount+"' style=' font-family:黑体; font-size:25px;text-align:center '>" + $("#InfoExcelMsg").combobox("getText") + $("#InfoExcelType").combobox("getText") + "</td></tr></thead>";
             $("#OFtable").val(tableHead + Theard + htmlData + "</table></body></html>"); //获取并拼接代码
             $("#ExcelForm").submit();
         }
@@ -292,8 +295,27 @@
                       { field: 'Seb_number_ID', title: '设备编号', align: 'center' },
                       { field: 'Wage_slt', title: '工资', align: 'center' },
                       { field: 'HoursWage', title: '定额', align: 'center' },
+                      { field: 'WorkHours', title: '工作时间', align: 'center' },
                       { field: 'SumHoursWage', title: '合计金额', align: 'center' },
-                      { field: 'RestYesOrNo', title: '是否休息', align: 'center' },
+                      {
+                          field: 'RestYesOrNo', title: '是否休息', align: 'center',
+                          formatter: function (value, row, index) {
+                              if (value != null) {
+                                  switch (parseInt(value)) {
+                                      case -1:
+                                          return "未休息";
+                                          break;
+                                      case 0:
+                                          return "半天休";
+                                          break;
+                                      case 1:
+                                          return "全天休";
+                                          break;
+                                  }
+                              }
+                              else { return value }
+                          }
+                      },
                       { field: 'AllPinJia', title: '综合评价', align: 'center' },
                       { field: 'BAK', title: '备注', align: 'center' }]]});
         }
@@ -347,8 +369,29 @@
                      { field: 'Seb_number_ID', title: '设备编号', align: 'center' },
                      { field: 'Wage_slt', title: '工资', align: 'center' },
                      { field: 'HoursWage', title: '定额', align: 'center' },
+                     { field: 'WorkHours', title: '工作时间', align: 'center' },
                      { field: 'SumHoursWage', title: '合计金额', align: 'center' },
-                     { field: 'RestYesOrNo', title: '是否休息', align: 'center' },
+                     {
+                         field: 'RestYesOrNo', title: '是否休息', align: 'center',
+                         formatter: function (value, row, index) {
+                             if (value != null)
+                             {
+                                 switch (parseInt(value)) {
+                                     case -1:
+                                         return "未休息";
+                                         break;
+                                     case 0:
+                                         return "半天休";
+                                         break;
+                                     case 1:
+                                         return "全天休";
+                                         break;
+                                 }
+                             }
+                             else
+                             { return value }
+                         }
+                     },
                      { field: 'AllPinJia', title: '综合评价', align: 'center' },
                      { field: 'BAK', title: '备注', align: 'center' }]]});
         }
@@ -440,6 +483,7 @@
                 }]
             });
         }
+        //添加机加车间日报表
         function AdddataInfo() {
             $("#adddiv").css("display", "block");
             $.post("/Sltjxzz/GetPersonInfo", { "id": $("#sltczz").val() }, function (rt) {
@@ -472,38 +516,8 @@
                             $.messager.alert("提示", "请选择部门名称！");
                             return;
                         }
-                        var JiHuanStartTime = $("#JiHuanStartTime").datebox("getValue");
-                        if (JiHuanStartTime.trim().length <= 0) {
-                            $.messager.alert("提示", "请选择计划开始时间！");
-                            return;
-                        }
-                        var ShiJiFinishTime = $("#ShiJiFinishTime").datebox("getValue");
-                        if (ShiJiFinishTime.trim().length <= 0) {
-                            $.messager.alert("提示", "请选择实际完成日期！");
-                            return;
-                        }
-                        if ($("#FinishBFB").val().trim().length <= 0) {
-                            $.messager.alert("提示", "请填写完工程度！");
-                            return;
-                        }
-                        if ($("#ImgNumber").val().trim().length <= 0) {
-                            $.messager.alert("提示", "请填写零件图号！");
-                            return;
-                        }
-                        if ($("#Iint").val().trim().length <= 0) {
-                            $.messager.alert("提示", "请填写数量！");
-                            return;
-                        }
-                        if ($("#Slt_kg").val().trim().length <= 0) {
-                            $.messager.alert("提示", "请填写重量！");
-                            return;
-                        }
-                        if ($("#ThisHaveTime").val().trim().length <= 0) {
-                            $.messager.alert("提示", "请填写计划工时！");
-                            return;
-                        }
-                        if ($("#HaveTime").val().trim().length <= 0) {
-                            $.messager.alert("提示", "请填写实际工时！");
+                        if ($("#WorkHours").val().trim().length <= 0) {
+                            $.messager.alert("提示", "请填写工作时间！");
                             return;
                         }
                         $("#bollForm").submit();//提交表单
@@ -512,6 +526,53 @@
                     text: '取消',
                     handler: function () {
                         $('#adddiv').dialog('close');
+                    }
+                }]
+            });
+        }
+        //添加结构车间日报表
+        function AdddataInfoJG() {
+            $("#adddivJG").css("display", "block");
+            $.post("/Sltjxzz/GetPersonInfo", { "id": $("#sltczzJG").val() }, function (rt) {
+                $("#itGongzhongJG").val(rt.ret.Job_Name)
+                $("#itwageJG").val(rt.ret.Wage_slt)
+                $("#ithoursJG").val(rt.ret.HoursWage)
+            })
+            $('#adddivJG').dialog({
+                title: "添加信息",
+                width: $(this).width() * 0.8,
+                height: 400,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '确定',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+                        var Wtime = $("#WtimeJG").datebox("getValue");
+                        if (Wtime.trim().length <= 0) {
+                            $.messager.alert("提示", "请填写报表时间！");
+                            return;
+                        }
+                        if ($("#ImgName_IDJG").val().trim().length <= 0) {
+                            $.messager.alert("提示", "请填写零件名称！");
+                            return;
+                        }
+                        var UpBuemid = $("#UpBumen_idJG").combobox("getValue");
+                        if (UpBuemid.trim().length <= 0) {
+                            $.messager.alert("提示", "请选择部门名称！");
+                            return;
+                        }
+                        if ($("#WorkHoursJG").val().trim().length <= 0) {
+                            $.messager.alert("提示", "请填写工作时间！");
+                            return;
+                        }
+                        $("#bollFormJG").submit();//提交表单
+                    }
+                }, {
+                    text: '取消',
+                    handler: function () {
+                        $('#adddivJG').dialog('close');
                     }
                 }]
             });
@@ -685,8 +746,27 @@
                       { field: 'Seb_number_ID', title: '设备编号', align: 'center' },
                       { field: 'Wage_slt', title: '工资', align: 'center' },
                       { field: 'HoursWage', title: '定额', align: 'center' },
+                      { field: 'WorkHours', title: '工作时间', align: 'center' },
                       { field: 'SumHoursWage', title: '合计金额', align: 'center' },
-                      { field: 'RestYesOrNo', title: '是否休息', align: 'center' },
+                      {
+                          field: 'RestYesOrNo', title: '是否休息', align: 'center',
+                          formatter: function (value, row, index) {
+                              if (value != null) {
+                                  switch (parseInt(value)) {
+                                      case -1:
+                                          return "未休息";
+                                          break;
+                                      case 0:
+                                          return "半天休";
+                                          break;
+                                      case 1:
+                                          return "全天休";
+                                          break;
+                                  }
+                              }
+                              else { return value }
+                          }
+                      },
                       { field: 'AllPinJia', title: '综合评价', align: 'center' },
                       { field: 'BAK', title: '备注', align: 'center' },
                       {
@@ -701,8 +781,7 @@
                      {
                          field: 'Operator', title: '操作',
                          formatter: function (value, row, index) {
-                             var str = "<a href='javascript:void(0)' ids='" + row.ID +
-                                 "' class=' deletes' >查看</a>";
+                             var str = "<a href='javascript:editDayExcel()' class=' editDayExcel' >修改</a>";
                              return str;
                          }
                      }
@@ -774,8 +853,27 @@
                       { field: 'Seb_number_ID', title: '设备编号', align: 'center' },
                       { field: 'Wage_slt', title: '工资', align: 'center' },
                       { field: 'HoursWage', title: '定额', align: 'center' },
+                      { field: 'WorkHours', title: '工作时间', align: 'center' },
                       { field: 'SumHoursWage', title: '合计金额', align: 'center' },
-                      { field: 'RestYesOrNo', title: '是否休息', align: 'center' },
+                      {
+                          field: 'RestYesOrNo', title: '是否休息', align: 'center',
+                          formatter: function (value, row, index) {
+                              if (value != null) {
+                                  switch (parseInt(value)) {
+                                      case -1:
+                                          return "未休息";
+                                          break;
+                                      case 0:
+                                          return "半天休";
+                                          break;
+                                      case 1:
+                                          return "全天休";
+                                          break;
+                                  }
+                              }
+                              else { return value }
+                          }
+                      },
                       { field: 'AllPinJia', title: '综合评价', align: 'center' },
                       { field: 'BAK', title: '备注', align: 'center' },
                       {
@@ -792,6 +890,56 @@
                 }
             });
         }
+        //修改日报表
+        function editDayExcel() {
+            var rows = $("#tt").datagrid("getSelected");
+            if (rows.Seb_number_ID != null) {
+                $.post("/SltJxzz/GetEditInfo", { "id": rows.ID, "state": 0 }, function (serverData) {
+                    console.log(serverData)
+                    $("#Wtime").datebox("setValue", ChangeDateFormat(serverData.Wtime))
+                    $("#ImgName_ID").val( serverData.ImgName_ID)
+                    $("#ImgNumber").val(serverData.ImgNumber)
+                    $("#Iint").val(serverData.Iint)
+                    $("#Slt_kg").val(serverData.Slt_kg)
+                    $("#Slt_hege").val(serverData.Slt_hege)
+                    $("#Slt_hegeno").val(serverData.Slt_hegeno)
+                    $("#Slt_Feipin").val(serverData.Slt_Feipin)
+                    $("#UpBumen_id").combobox("setValue", serverData.UpBumen_id)
+                    $("#FinishBFB").val(serverData.FinishBFB)
+                    $("#JiHuanStartTime").datebox("setValue", ChangeDateFormat(serverData.StupTime))
+                    $("#ShiJiFinishTime").datebox("setValue", ChangeDateFormat(serverData.OverTime))
+                    $("#ThisHaveTime").val(serverData.ImgNumber)
+                    $("#HaveTime").val(serverData.HaveTime)
+                    $("#WorkHours").val(serverData.WorkHours)
+                   $("#str_1").combobox("setValue", serverData.str_1)
+                   $("#sltczz").combobox("setValue", serverData.UPslt_ID)
+                   $("#RestYesOrNo").combobox("setValue", serverData.RestYesOrNo)
+                })
+                AdddataInfo();
+            } else {
+                $.post("/SltJxzz/GetEditInfo", { "id": rows.ID, "state": 1 }, function (serverData) {
+                    console.log(serverData)
+                    $("#WtimeJG").datebox("setValue", ChangeDateFormat(serverData.Wtime))
+                    $("#ImgName_IDJG").val( serverData.ImgName_ID)
+                    $("#ImgNumberJG").val(serverData.ImgNumber)
+                    $("#IintJG").val(serverData.Iint)
+                    $("#Slt_kgJG").val(serverData.Slt_kg)
+                    $("#Slt_hegeJG").val(serverData.Slt_hege)
+                    $("#Slt_hegenoJG").val(serverData.Slt_hegeno)
+                    $("#Slt_FeipinJG").val(serverData.Slt_Feipin)
+                    $("#UpBumen_idJG").combobox("setValue", serverData.UpBumen_id)
+                    $("#FinishBFBJG").val(serverData.FinishBFB)
+                    $("#JiHuanStartTimeJG").datebox("setValue", ChangeDateFormat(serverData.StupTime))
+                    $("#ShiJiFinishTimeJG").datebox("setValue", ChangeDateFormat(serverData.OverTime))
+                    $("#ThisHaveTimeJG").val(serverData.ThisHaveTime)
+                    $("#HaveTimeJG").val(serverData.HaveTime)
+                    $("#WorkHoursJG").val(serverData.WorkHours)
+                    $("#sltczzJG").combobox("setValue", serverData.UPslt_ID)
+                    $("#RestYesOrNoJG").combobox("setValue", serverData.RestYesOrNo)
+                })
+                AdddataInfoJG();
+            }
+        }
        
         //将序列化成json格式后日期(毫秒数)转成日期格式
         function ChangeDateFormat(cellval) {
@@ -800,24 +948,18 @@
             var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
             return date.getFullYear() + "-" + month + "-" + currentDate;
         }
-        function bool_click()
-        {
-            $.post("/ActionInfo/btnbool", { "id": "" }, function (serverData) {
-                if (serverData == "True") {
-                    $("#ZTtext").val("开启");
-                    $("#btnbool").val("关闭");
-                }
-                else {
-                    $("#ZTtext").val("关闭");
-                    $("#btnbool").val("开启");
-                }
-            });
-        }
         //修改完成以后调用该方法
         function afterEdit(data) {
             if (data.ret == "ok") {
-                $('#editDiv').dialog('close');
                 $('#adddiv').dialog('close');
+                $('#tt').datagrid('reload');
+            } else {
+                $.messager.alert("提醒", "修改数据错误!!", "error");
+            }
+        }
+        function afterEditAddJG(data) {
+            if (data.ret == "ok") {
+                $('#adddivJG').dialog('close');
                 $('#tt').datagrid('reload');
             } else {
                 $.messager.alert("提醒", "修改数据错误!!", "error");
@@ -927,21 +1069,19 @@
     <!-------添加数据-------->
     <div id="adddatasDiv" style="padding:5px;height:auto">
         <div style="margin-bottom:5px">
-            <a href="#" class="easyui-linkbutton" id="adddatas" iconCls="icon-add" plain="true">新增</a>
+            <a href="#" class="easyui-linkbutton" id="adddatas" iconCls="icon-add" plain="true">新增机加车间日报表</a>
+            <a href="#" class="easyui-linkbutton" id="adddatas2" iconCls="icon-add" plain="true">新增结构车间日报表</a>
         </div>
     </div>
     <!-------信息汇总区域按钮-------->
     <div id="InfoExcelBtnDiv" style="padding:5px;height:auto">
         <div style="margin-bottom:5px">
-            统计表类别：@{
-                <select id="InfoExcelType" class="easyui-combobox"  style="width:80px;">
-                    @{foreach (T_BoolItem Item in ViewBag.excelType)
-                        {
-                            <option value="@Item.ID">@Item.str</option>
-                        }
-                    }
-                </select>
-            } 
+            统计表类别：<input class="easyui-combobox" id="InfoExcelType"
+                   url="/SltJxzz/GetInfoExcelType"
+                   valueField="ID"
+                   textField="str"
+                   panelHeight="auto"
+                   style="width:100px" />
             部门列表：<input class="easyui-combobox" id="InfoExcelMsg"
                    valueField="ID"
                    textField="Name"
@@ -983,11 +1123,10 @@
             </table>
         }
     </div>
-    <!---------------修改用户信息--------------------->
+    <!---------------机加车间日报表界面信息--------------------->
     <div id="adddiv" style="height:100%; width:100%;display:none">
         @using (Ajax.BeginForm("addDayBb", "Sltjxzz", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "bollForm" }))
         {
-            <input type="hidden"  name="del" value="0" style="width:100%" />
             <table style="text-align:center">
                 <tr>
                     <td>报表时间</td>
@@ -997,8 +1136,70 @@
                 </tr>
                 <tr><td>零件名称</td><td colspan="5">
                     <input type="text" id="ImgName_ID" name="ImgName_ID" class="easyui-textbox" style="width:100%" />
-                    </td></tr>
+                    </td>
+                </tr>
                 <tr>
+                    <td>零件图号</td>
+                    <td>
+                        <input id="ImgNumber" type="text" name="ImgNumber" />
+                    </td>
+                    <td>数量</td>
+                    <td><input id="Iint" type="text" name="Iint" onkeyup="num(this)" /> </td>
+                    <td>重量</td>
+                    <td><input id="Slt_kg" type="text" name="Slt_kg" onkeyup="num(this)" /> </td>
+                </tr>
+                <tr>
+                    <td>合格数量</td>
+                    <td>
+                        <input id="Slt_hege" type="text" name="Slt_hege" onkeyup="num(this)" />
+                    </td>
+                    <td>不合格数量</td>
+                    <td><input id="Slt_hegeno" type="text" name="Slt_hegeno" onkeyup="num(this)" /> </td>
+                    <td>废品数量</td>
+                    <td><input id="Slt_Feipin" type="text" name="Slt_Feipin" onkeyup="num(this)" /> </td>
+                    <td>用工部门</td>
+                    <td>
+                        <input class="easyui-combobox " id="UpBumen_id"
+                               name="UpBumen_id"
+                               url="/BillPrint/GetBumen"
+                               valueField="ID"
+                               textField="MyTexts"
+                               panelHeight="200px" style="width:100px" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>完工程度</td>
+                    <td><input id="FinishBFB" type="text" name="Slt_BFB" onkeyup="num(this)" /> </td>
+                    <td>计划开始时间</td>
+                    <td>
+                        <input id="JiHuanStartTime" type="text" name="StupTime" class="easyui-datebox" />
+                    </td>
+                    <td>实际完成日期</td>
+                    <td><input id="ShiJiFinishTime" type="text" name="OverTime" class="easyui-datebox" /></td>
+                </tr>
+                <tr>
+                    <td>计划工时</td>
+                    <td>
+                        <input id="ThisHaveTime" type="text" name="ThisHaveTime" onkeyup="num(this)" />
+                    </td>
+                    <td>实际工时</td>
+                    <td><input id="HaveTime" type="text" name="HaveTime" onkeyup="num(this)" /> </td>
+                    <td>工作时间</td>
+                    <td><input id="WorkHours" type="text" name="WorkHours" onkeyup="num(this)" /> </td>
+                </tr>
+                <tr>
+                    <td>设备编号</td>
+                    <td>
+                        @{
+                            <select id="str_1" class="easyui-combobox" name="Seb_number_ID" style="width:80px;">
+                                @{foreach (Seb_Number Item in ViewBag.ljname)
+                                    {
+                                        <option value="@Item.ID">@Item.Ttext</option>
+                                    }
+                                }
+                            </select>
+                        }
+                    </td>
                     <td>操作者</td>
                     <td>
                         @{
@@ -1011,38 +1212,6 @@
                             </select>
                         } 
                     </td>
-                    <td>设备编号</td>
-                    <td>
-                        @{
-                                <select id="str_1" class="easyui-combobox" name="Seb_number_ID" style="width:80px;">
-                                    @{foreach (Seb_Number Item in ViewBag.ljname)
-                                        {
-                                                <option value="@Item.ID">@Item.Ttext</option>
-                                        }
-                                    }
-                                </select> 
-                        }
-                    </td>
-                    <td>部门名称</td>
-                    <td>
-                        <input class="easyui-combobox " id="UpBumen_id"
-                               name="UpBumen_id"
-                               url="/BillPrint/GetBumen"
-                               valueField="ID"
-                               textField="MyTexts"
-                               panelHeight="auto" style="width:100px" />
-                    </td>
-
-                </tr>
-                <tr>
-                    <td>计划开始时间</td>
-                    <td>
-                        <input id="JiHuanStartTime" type="text" name="StupTime" class="easyui-datebox" />
-                    </td>
-                    <td>实际完成日期</td>
-                    <td><input id="ShiJiFinishTime" type="text" name="OverTime"   class="easyui-datebox" /></td>
-                    <td>完工程度</td>
-                    <td><input id="FinishBFB" type="text" name="Slt_BFB"   onkeyup="num(this)"/> </td>
                 </tr>
                 <tr>
                     <td>工种</td>
@@ -1051,44 +1220,117 @@
                     </td>
                     <td>工资</td>
                     <td><input id="itwage" type="text" name="itwage"  readonly /> </td>
-                    <td>工时</td>
+                    <td>定额(元/小时)</td>
                     <td><input id="ithours" type="text" name="ithours"  readonly /> </td>
+                </tr>
+                <tr>
+                    <td>是否休息</td>
+                    <td><select class="easyui-combobox"  name="RestYesOrNo" id="RestYesOrNo" >
+                            <option value="-1">未休息</option>
+                            <option value="0">半天休</option>
+                            <option value="1">全天休</option>                        
+                        </select> </td>
+                </tr>
+            </table> 
+        }
+    </div>
+    <!---------------结构车间日报表界面信息--------------------->
+    <div id="adddivJG" style="height:100%; width:100%;display:none">
+        @using (Ajax.BeginForm("addDayBbJG", "Sltjxzz", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEditAddJG" }, new { id = "bollFormJG" }))
+        {
+            <table style="text-align:center">
+                <tr>
+                    <td>报表时间</td>
+                    <td>
+                        <input class="easyui-datebox" name="Wtime" id="WtimeJG"/>
+                    </td>
+                </tr>
+                <tr><td>零件名称</td><td colspan="5">
+                    <input type="text" id="ImgName_IDJG" name="ImgName_ID" class="easyui-textbox" style="width:100%" />
+                    </td>
                 </tr>
                 <tr>
                     <td>零件图号</td>
                     <td>
-                        <input id="ImgNumber" type="text" name="ImgNumber"  />
+                        <input id="ImgNumberJG" type="text" name="ImgNumber" />
                     </td>
                     <td>数量</td>
-                    <td><input id="Iint" type="text"  name="Iint"  onkeyup="num(this)" /> </td>
+                    <td><input id="IintJG" type="text" name="Iint" onkeyup="num(this)" /> </td>
                     <td>重量</td>
-                    <td><input id="Slt_kg" type="text"  name="Slt_kg"   onkeyup="num(this)" /> </td>
+                    <td><input id="Slt_kgJG" type="text" name="Slt_kg" onkeyup="num(this)" /> </td>
                 </tr>
                 <tr>
                     <td>合格数量</td>
                     <td>
-                        <input id="Slt_hege" type="text" name="Slt_hege"  onkeyup="num(this)" />
+                        <input id="Slt_hegeJG" type="text" name="Slt_hege" onkeyup="num(this)" />
                     </td>
                     <td>不合格数量</td>
-                    <td><input id="Slt_hegeno" type="text" name="Slt_hegeno"  onkeyup="num(this)"/> </td>
+                    <td><input id="Slt_hegenoJG" type="text" name="Slt_hegeno" onkeyup="num(this)" /> </td>
                     <td>废品数量</td>
-                    <td><input id="Slt_Feipin" type="text" name="Slt_Feipin"   onkeyup="num(this)"/> </td>
+                    <td><input id="Slt_FeipinJG" type="text" name="Slt_Feipin" onkeyup="num(this)" /> </td>
+                    <td>用工部门</td>
+                    <td>
+                        <input class="easyui-combobox " id="UpBumen_idJG"
+                               name="UpBumen_id"
+                               url="/BillPrint/GetBumen"
+                               valueField="ID"
+                               textField="MyTexts"
+                               panelHeight="200px" style="width:100px" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>完工程度</td>
+                    <td><input id="FinishBFBJG" type="text" name="Slt_BFB" onkeyup="num(this)" /> </td>
+                    <td>计划开始时间</td>
+                    <td>
+                        <input id="JiHuanStartTimeJG" type="text" name="StupTime" class="easyui-datebox" />
+                    </td>
+                    <td>实际完成日期</td>
+                    <td><input id="ShiJiFinishTimeJG" type="text" name="OverTime" class="easyui-datebox" /></td>
                 </tr>
                 <tr>
                     <td>计划工时</td>
                     <td>
-                        <input id="ThisHaveTime" type="text" name="ThisHaveTime"  onkeyup="num(this)"/>
+                        <input id="ThisHaveTimeJG" type="text" name="ThisHaveTime" onkeyup="num(this)" />
                     </td>
                     <td>实际工时</td>
-                    <td><input id="HaveTime" type="text" name="HaveTime"  onkeyup="num(this)"/> </td>
+                    <td><input id="HaveTimeJG" type="text" name="HaveTime" onkeyup="num(this)" /> </td>
+                    <td>工作时间</td>
+                    <td><input id="WorkHoursJG" type="text" name="WorkHours" onkeyup="num(this)" /> </td>
+                </tr>
+                <tr>
+                    <td>操作者</td>
+                    <td>
+                        @{
+                            <select id="sltczzJG" class="easyui-combobox" panelHeight="200px" name="UPslt_ID" style="width:80px;">
+                                @{foreach (User_Person_slt Item in ViewBag.sltUserJG)
+                                    {
+                                        <option value="@Item.ID">@Item.UserInfo.UName</option>
+                                    }
+                                }
+                            </select>
+                        } 
+                    </td>
+                </tr>
+                <tr>
+                    <td>工种</td>
+                    <td>
+                       <input id="itGongzhongJG" name="itGongzhong"  type="text" readonly /> 
+                    </td>
+                    <td>工资</td>
+                    <td><input id="itwageJG" type="text" name="itwage"  readonly /> </td>
+                    <td>工时</td>
+                    <td><input id="ithoursJG" type="text" name="ithours"  readonly /> </td>
+                </tr>
+                <tr>
                     <td>是否休息</td>
-                    <td><select class="easyui-combobox"  name="RestYesOrNo" id="RestYesOrNo" >
-                        <option value="0">是</option>                        
-                            <option value="1">否</option>                        
+                    <td><select class="easyui-combobox"  name="RestYesOrNo" id="RestYesOrNoJG" >
+                        <option value="-1">未休息</option>                        
+                        <option value="0">半天休</option>
+                        <option value="1">全天休</option>                      
                         </select> </td>
                 </tr>
-            </table>
-           
+            </table> 
         }
     </div>
 </body>

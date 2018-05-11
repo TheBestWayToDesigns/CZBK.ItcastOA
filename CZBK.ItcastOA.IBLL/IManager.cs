@@ -140,6 +140,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IT_jgzztjbService : IBaseService<T_jgzztjb>
+    {
+       
+    }   
+	
 	public partial interface IT_JieKuanBillService : IBaseService<T_JieKuanBill>
     {
        
