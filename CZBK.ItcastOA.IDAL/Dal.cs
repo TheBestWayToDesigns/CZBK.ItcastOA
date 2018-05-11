@@ -140,6 +140,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IT_CSC_CardDal :IBaseDal<T_CSC_Card>
+    {
+      
+    }
+	
 	public partial interface IT_jgzztjbDal :IBaseDal<T_jgzztjb>
     {
       

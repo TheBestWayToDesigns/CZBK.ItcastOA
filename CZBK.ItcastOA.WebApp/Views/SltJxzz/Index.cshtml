@@ -821,7 +821,7 @@
                      {
                          field: 'Operator', title: '操作',
                          formatter: function (value, row, index) {
-                             var str = "<a href='javascript:editDayExcel()' class=' editDayExcel' >修改</a>";
+                             var str = "<a class='l-btn' href='javascript:editDayExcel()' class=' editDayExcel'  style='margin:0px 5px;padding:2px 8px'>修改</a><a class='l-btn' href='javascript:delDayExcel()' class=' delDayExcel'  style='margin:0px 5px;padding:2px 8px'>删除</a>";
                              return str;
                          }
                      }
@@ -982,7 +982,28 @@
                 AdddataInfoJG();
             }
         }
-       
+        //删除日报表
+        function delDayExcel() {
+            var rows = $('#tt').datagrid('getSelected');
+            $.messager.confirm('提示', '确定要执行删除操作吗?', function (r) {
+                if (r) {
+                    var state = 0;
+                    if (rows.Seb_number_ID != null) {
+                        state=1
+                    }
+                    $.post("/SltJxzz/delDayExcel", { "id": rows.ID,"state":state }, function (data) {
+                        if (data.ret == "ok") {
+                            $('#tt').datagrid("reload");
+                        }
+                        else {
+                            $.messager.alert("提示", data.msg);
+                        }
+                    })
+                } else {
+                    return;
+                }
+            });
+        }
         //将序列化成json格式后日期(毫秒数)转成日期格式
         function ChangeDateFormat(cellval) {
             var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));

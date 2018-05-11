@@ -329,6 +329,18 @@
           <Property Name="MyColums" Type="nvarchar" MaxLength="150" />
           <Property Name="T_ID" Type="bigint" />
         </EntityType>
+        <EntityType Name="T_CSC_Card">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AddTime" Type="datetime" Nullable="false" />
+          <Property Name="CardName" Type="nvarchar" MaxLength="250" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="250" />
+          <Property Name="CdTime" Type="datetime" Nullable="false" />
+          <Property Name="sunint" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="del" Type="int" />
+        </EntityType>
         <EntityType Name="T_jgzztjb">
           <Key>
             <PropertyRef Name="ID" />
@@ -351,8 +363,8 @@
           <Property Name="HaveTime" Type="decimal" Precision="18" Scale="2" />
           <Property Name="UpBumen_id" Type="int" />
           <Property Name="RestYesOrNo" Type="smallint" />
-          <Property Name="del" Type="int" />
           <Property Name="WorkHours" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="del_f" Type="bit" />
         </EntityType>
         <EntityType Name="T_JieKuanBill">
           <Key>
@@ -395,8 +407,8 @@
           <Property Name="HaveTime" Type="decimal" Precision="18" Scale="2" />
           <Property Name="UpBumen_id" Type="int" />
           <Property Name="RestYesOrNo" Type="smallint" />
-          <Property Name="del" Type="int" StoreGeneratedPattern="Identity" />
           <Property Name="WorkHours" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="del_f" Type="bit" />
         </EntityType>
         <EntityType Name="T_SczzDanju">
           <Key>
@@ -1784,6 +1796,7 @@
           <EntitySet Name="T_BoolItem" EntityType="Self.T_BoolItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_CanPan" EntityType="Self.T_CanPan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_ChanPinName" EntityType="Self.T_ChanPinName" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_CSC_Card" EntityType="Self.T_CSC_Card" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_jgzztjb" EntityType="Self.T_jgzztjb" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_JieKuanBill" EntityType="Self.T_JieKuanBill" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_jxzztjb" EntityType="Self.T_jxzztjb" Schema="dbo" store:Type="Tables" />
@@ -2542,6 +2555,7 @@
             <End Role="Seb_Number" EntitySet="Seb_Number" />
             <End Role="T_jgzztjb" EntitySet="T_jgzztjb" />
           </AssociationSet>
+          <EntitySet Name="T_CSC_Card" EntityType="OAModel.T_CSC_Card" />
           </EntityContainer>
         <EntityType Name="ActionInfo">
           <Key>
@@ -4127,13 +4141,13 @@
           <Property Name="ThisHaveTime" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="HaveTime" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="UpBumen_id" Type="Int32" />
-          <Property Name="del" Type="Int32" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="BumenInfoSet" Relationship="OAModel.FK_T_jxzztjb_BumenInfoSet" FromRole="T_jxzztjb" ToRole="BumenInfoSet" />
           <NavigationProperty Name="Seb_Number" Relationship="OAModel.FK_T_jxzztjb_Seb_Number" FromRole="T_jxzztjb" ToRole="Seb_Number" />
           <NavigationProperty Name="Seb_Number1" Relationship="OAModel.FK_T_jxzztjb_Seb_Number_Imgname" FromRole="T_jxzztjb" ToRole="Seb_Number" />
           <NavigationProperty Name="User_Person_slt" Relationship="OAModel.FK_T_jxzztjb_User_Person_slt" FromRole="T_jxzztjb" ToRole="User_Person_slt" />
           <Property Name="RestYesOrNo" Type="Int16" />
           <Property Name="WorkHours" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="del_f" Type="Boolean" />
         </EntityType>
         <EntityType Name="T_YXbj_master">
           <Key>
@@ -4265,11 +4279,11 @@
           <Property Name="HaveTime" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="UpBumen_id" Type="Int32" />
           <Property Name="RestYesOrNo" Type="Int16" />
-          <Property Name="del" Type="Int32" />
           <Property Name="WorkHours" Type="Decimal" Precision="18" Scale="2" />
           <NavigationProperty Name="BumenInfoSet" Relationship="OAModel.FK_T_jgzztjb_BumenInfoSet" FromRole="T_jgzztjb" ToRole="BumenInfoSet" />
           <NavigationProperty Name="User_Person_slt" Relationship="OAModel.FK_T_jgzztjb_User_Person_slt" FromRole="T_jgzztjb" ToRole="User_Person_slt" />
           <NavigationProperty Name="Seb_Number" Relationship="OAModel.FK_T_jgzztjb_Seb_Number" FromRole="T_jgzztjb" ToRole="Seb_Number" />
+          <Property Name="del_f" Type="Boolean" />
         </EntityType>
         <Association Name="FK_T_jgzztjb_BumenInfoSet">
           <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
@@ -4307,6 +4321,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="T_CSC_Card">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CardName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CardNumber" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CdTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="sunint" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="del" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5038,9 +5064,9 @@
           <EntitySetMapping Name="T_jxzztjb">
             <EntityTypeMapping TypeName="OAModel.T_jxzztjb">
               <MappingFragment StoreEntitySet="T_jxzztjb">
+                <ScalarProperty Name="del_f" ColumnName="del_f" />
                 <ScalarProperty Name="WorkHours" ColumnName="WorkHours" />
                 <ScalarProperty Name="RestYesOrNo" ColumnName="RestYesOrNo" />
-                <ScalarProperty Name="del" ColumnName="del" />
                 <ScalarProperty Name="UpBumen_id" ColumnName="UpBumen_id" />
                 <ScalarProperty Name="HaveTime" ColumnName="HaveTime" />
                 <ScalarProperty Name="ThisHaveTime" ColumnName="ThisHaveTime" />
@@ -5086,8 +5112,8 @@
           <EntitySetMapping Name="T_jgzztjb">
             <EntityTypeMapping TypeName="OAModel.T_jgzztjb">
               <MappingFragment StoreEntitySet="T_jgzztjb">
+                <ScalarProperty Name="del_f" ColumnName="del_f" />
                 <ScalarProperty Name="WorkHours" ColumnName="WorkHours" />
-                <ScalarProperty Name="del" ColumnName="del" />
                 <ScalarProperty Name="RestYesOrNo" ColumnName="RestYesOrNo" />
                 <ScalarProperty Name="UpBumen_id" ColumnName="UpBumen_id" />
                 <ScalarProperty Name="HaveTime" ColumnName="HaveTime" />
@@ -5105,6 +5131,19 @@
                 <ScalarProperty Name="ImgName_ID" ColumnName="ImgName_ID" />
                 <ScalarProperty Name="Wtime" ColumnName="Wtime" />
                 <ScalarProperty Name="Addtime" ColumnName="Addtime" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_CSC_Card">
+            <EntityTypeMapping TypeName="OAModel.T_CSC_Card">
+              <MappingFragment StoreEntitySet="T_CSC_Card">
+                <ScalarProperty Name="del" ColumnName="del" />
+                <ScalarProperty Name="sunint" ColumnName="sunint" />
+                <ScalarProperty Name="CdTime" ColumnName="CdTime" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="CardName" ColumnName="CardName" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

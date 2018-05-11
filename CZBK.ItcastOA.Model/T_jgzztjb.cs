@@ -32,8 +32,8 @@ namespace CZBK.ItcastOA.Model
         public Nullable<decimal> HaveTime { get; set; }
         public Nullable<int> UpBumen_id { get; set; }
         public Nullable<short> RestYesOrNo { get; set; }
-        public Nullable<int> del { get; set; }
         public Nullable<decimal> WorkHours { get; set; }
+        public Nullable<bool> del_f { get; set; }
     
         public virtual BumenInfoSet BumenInfoSet { get; set; }
         public virtual User_Person_slt User_Person_slt { get; set; }

@@ -354,6 +354,19 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IT_ChanPinNameDal;
         }
 		
+	    public static IT_CSC_CardDal CreateT_CSC_CardDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".T_CSC_CardDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IT_CSC_CardDal;
+        }
+		
 	    public static IT_jgzztjbDal CreateT_jgzztjbDal()
         {
 

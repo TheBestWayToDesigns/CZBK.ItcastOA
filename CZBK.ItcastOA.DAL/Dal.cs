@@ -141,6 +141,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class T_CSC_CardDal :BaseDal<T_CSC_Card>,IT_CSC_CardDal
+    {
+
+    }
+		
 	public partial class T_jgzztjbDal :BaseDal<T_jgzztjb>,IT_jgzztjbDal
     {
 

@@ -64,6 +64,8 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IT_ChanPinNameDal T_ChanPinNameDal{get;set;}
 	
+		IT_CSC_CardDal T_CSC_CardDal{get;set;}
+	
 		IT_jgzztjbDal T_jgzztjbDal{get;set;}
 	
 		IT_JieKuanBillDal T_JieKuanBillDal{get;set;}

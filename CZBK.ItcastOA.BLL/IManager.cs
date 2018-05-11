@@ -219,6 +219,14 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class T_CSC_CardService :BaseService<T_CSC_Card>,IT_CSC_CardService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.T_CSC_CardDal;
+        }
+    }   
+	
 	public partial class T_jgzztjbService :BaseService<T_jgzztjb>,IT_jgzztjbService
     {
         public override void SetCurretnDal()

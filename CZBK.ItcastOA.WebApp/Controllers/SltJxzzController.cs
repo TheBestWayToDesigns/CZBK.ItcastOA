@@ -42,7 +42,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
             int  toalcount=0;
-            IQueryable<T_jxzztjb> Tdata = T_jxzztjbService.LoadPageEntities(pageIndex, pageSize, out toalcount, x => x.del ==null,x=>x.Addtime, true).DefaultIfEmpty();
+            IQueryable<T_jxzztjb> Tdata = T_jxzztjbService.LoadPageEntities(pageIndex, pageSize, out toalcount, x => x.del_f ==true,x=>x.Addtime, true).DefaultIfEmpty();
             List<jsxtCls> tList = new List<jsxtCls>();
             if(Tdata.ToList()!=null&& Tdata.ToList()[0] != null)
             {
@@ -77,7 +77,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     tList.Add(jc);
                 }
             }
-            IQueryable<T_jgzztjb> Tdata2 = T_jgzztjbService.LoadPageEntities(pageIndex, pageSize, out toalcount, x => x.del == 0, x => x.Addtime, true).DefaultIfEmpty();
+            IQueryable<T_jgzztjb> Tdata2 = T_jgzztjbService.LoadPageEntities(pageIndex, pageSize, out toalcount, x => x.del_f == true, x => x.Addtime, true).DefaultIfEmpty();
             if (Tdata2.ToList() != null && Tdata2.ToList()[0] != null)
             {
                 foreach (var a in Tdata2)
@@ -185,7 +185,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //创建机加车间日报表信息
         public ActionResult addDayBb(T_jxzztjb tjjb) {
             tjjb.Addtime = DateTime.Now;
-            tjjb.del = 0;
+            tjjb.del_f = true;
             bool state = false;
             if(tjjb.ImgName_ID == 0)
             {
@@ -218,7 +218,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public ActionResult addDayBbJG(T_jgzztjb tjjb)
         {
             tjjb.Addtime = DateTime.Now;
-            tjjb.del = 0;
+            tjjb.del_f = true;
             bool state = false;
             if (tjjb.ImgName_ID == 0)
             {
@@ -308,7 +308,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     DateTime excelDate = Convert.ToDateTime(Request["excelDate"]);
                     if(bumenID == 26)
                     {
-                        var temp = T_jxzztjbService.LoadEntities(x => x.Wtime == excelDate).DefaultIfEmpty().ToList();
+                        var temp = T_jxzztjbService.LoadEntities(x => x.Wtime == excelDate&& x.del_f == true).DefaultIfEmpty().ToList();
                         if (temp != null && temp[0] != null)
                         {
                             List<jsxtCls> tList = new List<jsxtCls>();
@@ -346,7 +346,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                         return Json(null, JsonRequestBehavior.AllowGet);
                     }
                     else{
-                        var temp = T_jgzztjbService.LoadEntities(x => x.Wtime == excelDate).DefaultIfEmpty().ToList();
+                        var temp = T_jgzztjbService.LoadEntities(x => x.Wtime == excelDate && x.del_f == true).DefaultIfEmpty().ToList();
                         if (temp != null && temp[0] != null)
                         {
                             List<jsxtCls> tList = new List<jsxtCls>();
@@ -390,7 +390,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     {
                         if (bumenID == 26)
                         {
-                            var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd).DefaultIfEmpty().ToList();
+                            var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.del_f == true).DefaultIfEmpty().ToList();
                             if (temp != null && temp[0] != null)
                             {
                                 List<jsxtCls> tList = new List<jsxtCls>();
@@ -429,7 +429,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                         }
                         else
                         {
-                            var temp = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd).DefaultIfEmpty().ToList();
+                            var temp = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.del_f == true).DefaultIfEmpty().ToList();
                             if (temp != null && temp[0] != null)
                             {
                                 List<jsxtCls> tList = new List<jsxtCls>();
@@ -467,8 +467,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                         }
                     } else if (bolID == 11)//车间月汇报表
                     {
-                        var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.UpBumen_id == bumenID).DefaultIfEmpty().ToList();
-                        var temp2 = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.UpBumen_id == bumenID).DefaultIfEmpty().ToList();
+                        var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.UpBumen_id == bumenID && x.del_f == true).DefaultIfEmpty().ToList();
+                        var temp2 = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.UpBumen_id == bumenID && x.del_f == true).DefaultIfEmpty().ToList();
                         if (temp != null && temp[0] != null)
                         {
                             List<CJExcel> tList = new List<CJExcel>();
@@ -501,12 +501,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                         return Json(null, JsonRequestBehavior.AllowGet);
                     }else if(bolID == 12)//公司月总结表
                     {
-                        var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd).DefaultIfEmpty().ToList();
-                        var temp2 = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd).DefaultIfEmpty().ToList();
+                        var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.del_f == true).DefaultIfEmpty().ToList();
+                        var temp2 = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.del_f == true).DefaultIfEmpty().ToList();
                         if (temp != null && temp[0] != null)
                         {
                             var temp1 = temp.GroupBy(x => x.BumenInfoSet.Name).Select(x => new GSExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney=x.Sum(g=>g.User_Person_slt.HoursWage*g.WorkHours) }).ToList();
-                            var temp3 = temp.GroupBy(x => x.BumenInfoSet.Name).Select(x => new GSExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.User_Person_slt.HoursWage * g.WorkHours) }).ToList();
+                            var temp3 = temp2.GroupBy(x => x.BumenInfoSet.Name).Select(x => new GSExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.User_Person_slt.HoursWage * g.WorkHours) }).ToList();
                             temp1.AddRange(temp3);
                             return Json(temp1, JsonRequestBehavior.AllowGet);
                         }
@@ -522,12 +522,12 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                         {
                             id = 43;
                         }
-                        var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd&& x.UpBumen_id == bumenID&&x.User_Person_slt.UserInfo.BuMenID==id).DefaultIfEmpty().ToList();
-                        var temp2 = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.UpBumen_id == bumenID && x.User_Person_slt.UserInfo.BuMenID == id).DefaultIfEmpty().ToList();
+                        var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd&& x.UpBumen_id == bumenID&&x.User_Person_slt.UserInfo.BuMenID==id && x.del_f == true).DefaultIfEmpty().ToList();
+                        var temp2 = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.UpBumen_id == bumenID && x.User_Person_slt.UserInfo.BuMenID == id && x.del_f == true).DefaultIfEmpty().ToList();
                         if (temp != null && temp[0] != null)
                         {
                             var temp1 = temp.GroupBy(x => x.ImgNumber+x.Seb_Number1.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
-                            var temp3 = temp.GroupBy(x => x.ImgNumber + x.Seb_Number1.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
+                            var temp3 = temp2.GroupBy(x => x.ImgNumber + x.Seb_Number.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
                             temp1.AddRange(temp3);
                             return Json(temp1, JsonRequestBehavior.AllowGet);
                         }
@@ -585,7 +585,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 ji.ThisHaveTime = temp.ThisHaveTime;
                 ji.HaveTime = temp.HaveTime;
                 ji.UpBumen_id = temp.UpBumen_id;
-                ji.del = temp.del;
+                ji.del = temp.del_f;
                 ji.RestYesOrNo = temp.RestYesOrNo;
                 ji.WorkHours = temp.WorkHours;
                 ji.LjName = temp.Seb_Number.Ttext;
@@ -611,7 +611,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 ji.ThisHaveTime = temp.ThisHaveTime;
                 ji.HaveTime = temp.HaveTime;
                 ji.UpBumen_id = temp.UpBumen_id;
-                ji.del = temp.del;
+                ji.del = temp.del_f;
                 ji.RestYesOrNo = temp.RestYesOrNo;
                 ji.WorkHours = temp.WorkHours;
                 return Json(ji, JsonRequestBehavior.AllowGet);
@@ -631,7 +631,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             return Json(lsm, JsonRequestBehavior.AllowGet);
         }
-        //获取员工人员
+        //获取机加员工人员
         public ActionResult GetPersonListJJ()
         {
             var temp = User_Person_sltService.LoadEntities(x => x.UserInfo.BuMenID == 26).GroupBy(x => x.UserID).Select(x => x.FirstOrDefault());
@@ -645,6 +645,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             return Json(lsm, JsonRequestBehavior.AllowGet);
         }
+        //获取结构员工人员
         public ActionResult GetPersonListJG()
         {
             var temp = User_Person_sltService.LoadEntities(x => x.UserInfo.BuMenID == 43).GroupBy(x => x.UserID).Select(x => x.FirstOrDefault());
@@ -657,6 +658,39 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 lsm.Add(sm);
             }
             return Json(lsm, JsonRequestBehavior.AllowGet);
+        }
+        //删除日报基础信息
+        public ActionResult delDayExcel()
+        {
+            long id = Convert.ToInt64(Request["id"]);
+            int state = Convert.ToInt32(Request["state"]);
+            if(state == 0)
+            {
+                var temp = T_jgzztjbService.LoadEntities(x => x.ID == id).FirstOrDefault();
+                if (temp != null)
+                {
+                    temp.del_f = false;
+                    T_jgzztjbService.EditEntity(temp);
+                    return Json(new { ret="ok"}, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { ret = "no",msg="数据库中无此条数据" }, JsonRequestBehavior.AllowGet);
+                }
+            }else
+            {
+                var temp = T_jxzztjbService.LoadEntities(x => x.ID == id).FirstOrDefault();
+                if (temp != null)
+                {
+                    temp.del_f = false;
+                    T_jxzztjbService.EditEntity(temp);
+                    return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { ret = "no", msg = "数据库中无此条数据" }, JsonRequestBehavior.AllowGet);
+                }
+            }
         }
     }
     public class jsxtCls
@@ -743,7 +777,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public Nullable<decimal> ThisHaveTime { get; set; }
         public Nullable<decimal> HaveTime { get; set; }
         public Nullable<int> UpBumen_id { get; set; }
-        public Nullable<int> del { get; set; }
+        public Nullable<bool> del { get; set; }
         public Nullable<short> RestYesOrNo { get; set; }
         public Nullable<decimal> WorkHours { get; set; }
         public string LjName { get; set; }
@@ -767,7 +801,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public Nullable<decimal> ThisHaveTime { get; set; }
         public Nullable<decimal> HaveTime { get; set; }
         public Nullable<int> UpBumen_id { get; set; }
-        public Nullable<int> del { get; set; }
+        public Nullable<bool> del { get; set; }
         public Nullable<short> RestYesOrNo { get; set; }
         public Nullable<decimal> WorkHours { get; set; }
     }

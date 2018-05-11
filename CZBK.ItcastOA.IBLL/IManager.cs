@@ -140,6 +140,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IT_CSC_CardService : IBaseService<T_CSC_Card>
+    {
+       
+    }   
+	
 	public partial interface IT_jgzztjbService : IBaseService<T_jgzztjb>
     {
        
