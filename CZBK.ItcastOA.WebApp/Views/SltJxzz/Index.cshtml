@@ -159,6 +159,15 @@
                         })
                 }
             });
+            $('#sltczzJG').combobox({
+                onChange: function (newValue, oldValue) {
+                    $.post("/Sltjxzz/GetPersonInfo", { "id": newValue }, function (rt) {
+                        $("#itGongzhongJG").val(rt.ret.Job_Name)
+                        $("#itwageJG").val(rt.ret.Wage_slt)
+                        $("#ithoursJG").val(rt.ret.HoursWage)
+                    })
+                }
+            });
             $('#InfoExcelType').combobox({
                 onChange: function (newValue, oldValue) {
                     if (newValue != 9) {
@@ -292,7 +301,7 @@
                           }
                       },
                       { field: 'Slt_hege', title: '合格数量', align: 'center' },
-                      { field: 'Slt_hegeno', title: '不合格数量', align: 'center' },
+                      { field: 'Slt_hegeNo', title: '不合格数量', align: 'center' },
                       { field: 'Slt_Feipin', title: '废品数量', align: 'center' },
                       { field: 'Seb_number_ID', title: '设备编号', align: 'center' },
                       { field: 'Wage_slt', title: '工资', align: 'center' },
@@ -366,7 +375,7 @@
                          }
                      },
                      { field: 'Slt_hege', title: '合格数量', align: 'center' },
-                     { field: 'Slt_hegeno', title: '不合格数量', align: 'center' },
+                     { field: 'Slt_hegeNo', title: '不合格数量', align: 'center' },
                      { field: 'Slt_Feipin', title: '废品数量', align: 'center' },
                      { field: 'Seb_number_ID', title: '设备编号', align: 'center' },
                      { field: 'Wage_slt', title: '工资', align: 'center' },
@@ -487,12 +496,8 @@
         }
         //添加机加车间日报表
         function AdddataInfo() {
+            ResetJJForm();
             $("#adddiv").css("display", "block");
-            $.post("/Sltjxzz/GetPersonInfo", { "id": $("#sltczz").val() }, function (rt) {
-                $("#itGongzhong").val(rt.ret.Job_Name)
-                $("#itwage").val(rt.ret.Wage_slt)
-                $("#ithours").val(rt.ret.HoursWage)
-            })
             $('#adddiv').dialog({
                 title: "添加信息",
                 width:$(this).width()*0.8,
@@ -509,10 +514,12 @@
                             $.messager.alert("提示", "请填写报表时间！");
                             return;
                         }
-                        if ($("#ImgName_ID").val().trim().length <= 0) {
+                        var ImgName_ID = $("#ImgName_IDSel").combobox("getText");
+                        if (ImgName_ID.trim().length <= 0) {
                             $.messager.alert("提示", "请填写零件名称！");
                             return;
                         }
+                        $("#ImgName_ID").val(ImgName_ID);
                         var UpBuemid = $("#UpBumen_id").combobox("getValue");
                         if (UpBuemid.trim().length <= 0) {
                             $.messager.alert("提示", "请选择部门名称！");
@@ -534,12 +541,8 @@
         }
         //添加结构车间日报表
         function AdddataInfoJG() {
+            ResetJGForm();
             $("#adddivJG").css("display", "block");
-            $.post("/Sltjxzz/GetPersonInfo", { "id": $("#sltczzJG").val() }, function (rt) {
-                $("#itGongzhongJG").val(rt.ret.Job_Name)
-                $("#itwageJG").val(rt.ret.Wage_slt)
-                $("#ithoursJG").val(rt.ret.HoursWage)
-            })
             $('#adddivJG').dialog({
                 title: "添加信息",
                 width: $(this).width() * 0.8,
@@ -556,10 +559,12 @@
                             $.messager.alert("提示", "请填写报表时间！");
                             return;
                         }
-                        if ($("#ImgName_IDJG").val().trim().length <= 0) {
+                        var ImgName_ID = $("#ImgName_IDJGSel").combobox("getText");
+                        if (ImgName_ID.trim().length <= 0) {
                             $.messager.alert("提示", "请填写零件名称！");
                             return;
                         }
+                        $("#ImgName_IDJG").val(ImgName_ID);
                         var UpBuemid = $("#UpBumen_idJG").combobox("getValue");
                         if (UpBuemid.trim().length <= 0) {
                             $.messager.alert("提示", "请选择部门名称！");
@@ -584,6 +589,7 @@
                 try {
                     $('#tt').datagrid('reload');
                     $('#AddPersonInfoDIV').dialog('close');
+                    $("#PersonInfoID").val("");
                 }
                 catch (e) {
                 }
@@ -658,6 +664,7 @@
                 pageList: [15, 25, 35],
                 queryParams: pars,//往后台传递参数
                 columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                    { field: 'BuMen', title: '所属部门', align: 'center' },
                     { field: 'Name', title: '姓名', align: 'center' },
                     { field: 'Job_Name', title: '工种', align: 'center'},
                     { field: 'HoursWage', title: '时薪', align: 'center' },
@@ -705,6 +712,7 @@
                 pageList: [15, 25, 35],
                 queryParams: pars,//往后台传递参数
                 columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                     { field: 'SuoShuCJ', title: '所属部门', align: 'center' },
                     {
                         field: 'Wtime', title: '单据时间',
                         formatter: function (value, row, index) {
@@ -724,7 +732,6 @@
                     },
                     { field: 'UPslt_ID', title: '操作者', align: 'center' },
                       { field: 'Job_Name', title: '工种', align: 'center' },
-
                       { field: 'UpBumen_id', title: '用工部门', align: 'center' },
                       { field: 'ImgNumber', title: '零件图号', align: 'center' },
                       { field: 'ImgName_ID', title: '零件名称', align: 'center' },
@@ -743,7 +750,7 @@
                           }
                       },
                       { field: 'Slt_hege', title: '合格数量', align: 'center' },
-                      { field: 'Slt_hegeno', title: '不合格数量', align: 'center' },
+                      { field: 'Slt_hegeNo', title: '不合格数量', align: 'center' },
                       { field: 'Slt_Feipin', title: '废品数量', align: 'center' },
                       { field: 'Seb_number_ID', title: '设备编号', align: 'center' },
                       { field: 'Wage_slt', title: '工资', align: 'center' },
@@ -894,48 +901,47 @@
         }
         //修改日报表
         function editDayExcel() {
-           
             var rows = $("#tt").datagrid("getSelected");
             if (rows.Seb_number_ID != null) {
+                ResetJJForm();
                 $.post("/SltJxzz/GetEditInfo", { "id": rows.ID, "state": 0 }, function (serverData) {
-                    console.log(serverData)
                     $("#AddOneid").val(serverData.ID)
                     $("#Wtime").datebox("setValue", ChangeDateFormat(serverData.Wtime))
-                    $("#ImgName_ID").val( serverData.ImgName_ID)
+                    $("#ImgName_IDSel").combobox("setValue", serverData.ImgName_ID)
                     $("#ImgNumber").val(serverData.ImgNumber)
                     $("#Iint").val(serverData.Iint)
                     $("#Slt_kg").val(serverData.Slt_kg)
                     $("#Slt_hege").val(serverData.Slt_hege)
-                    $("#Slt_hegeno").val(serverData.Slt_hegeno)
+                    $("#Slt_hegeno").val(serverData.Slt_hegeNo)
                     $("#Slt_Feipin").val(serverData.Slt_Feipin)
                     $("#UpBumen_id").combobox("setValue", serverData.UpBumen_id)
-                    $("#FinishBFB").val(serverData.FinishBFB)
-                    $("#JiHuanStartTime").datebox("setValue", ChangeDateFormat(serverData.StupTime))
-                    $("#ShiJiFinishTime").datebox("setValue", ChangeDateFormat(serverData.OverTime))
-                    $("#ThisHaveTime").val(serverData.ImgNumber)
+                    $("#FinishBFB").val(serverData.Slt_BFB)
+                    $("#JiHuanStartTime").datebox("setValue", serverData.StupTime == null ? serverData.StupTime : ChangeDateFormat(serverData.StupTime))
+                    $("#ShiJiFinishTime").datebox("setValue",serverData.OverTime==null?serverData.OverTime:ChangeDateFormat(serverData.OverTime))
+                    $("#ThisHaveTime").val(serverData.ThisHaveTime)
                     $("#HaveTime").val(serverData.HaveTime)
                     $("#WorkHours").val(serverData.WorkHours)
-                   $("#str_1").combobox("setValue", serverData.str_1)
+                    $("#str_1").combobox("setValue", serverData.Seb_number_ID)
                    $("#sltczz").combobox("setValue", serverData.UPslt_ID)
                    $("#RestYesOrNo").combobox("setValue", serverData.RestYesOrNo)
                 })
                 AdddataInfo();
             } else {
+                ResetJGForm();
                 $.post("/SltJxzz/GetEditInfo", { "id": rows.ID, "state": 1 }, function (serverData) {
-                    console.log(serverData)
                     $("#AddTwoid").val(serverData.ID)
                     $("#WtimeJG").datebox("setValue", ChangeDateFormat(serverData.Wtime))
-                    $("#ImgName_IDJG").val( serverData.ImgName_ID)
+                    $("#ImgName_IDJGSel").combobox("setValue", serverData.ImgName_ID)
                     $("#ImgNumberJG").val(serverData.ImgNumber)
                     $("#IintJG").val(serverData.Iint)
                     $("#Slt_kgJG").val(serverData.Slt_kg)
                     $("#Slt_hegeJG").val(serverData.Slt_hege)
-                    $("#Slt_hegenoJG").val(serverData.Slt_hegeno)
+                    $("#Slt_hegenoJG").val(serverData.Slt_hegeNo)
+                    $("#FinishBFBJG").val(serverData.Slt_BFB)
                     $("#Slt_FeipinJG").val(serverData.Slt_Feipin)
                     $("#UpBumen_idJG").combobox("setValue", serverData.UpBumen_id)
-                    $("#FinishBFBJG").val(serverData.FinishBFB)
-                    $("#JiHuanStartTimeJG").datebox("setValue", ChangeDateFormat(serverData.StupTime))
-                    $("#ShiJiFinishTimeJG").datebox("setValue", ChangeDateFormat(serverData.OverTime))
+                    $("#JiHuanStartTimeJG").datebox("setValue", serverData.StupTime == null ? serverData.StupTime : ChangeDateFormat(serverData.StupTime))
+                    $("#ShiJiFinishTimeJG").datebox("setValue", serverData.OverTime == null ? serverData.OverTime : ChangeDateFormat(serverData.OverTime))
                     $("#ThisHaveTimeJG").val(serverData.ThisHaveTime)
                     $("#HaveTimeJG").val(serverData.HaveTime)
                     $("#WorkHoursJG").val(serverData.WorkHours)
@@ -1026,6 +1032,55 @@
             //var SHuser = $('#SHuser').combobox('getValue');
             //var CPtext = $('#CPtext').combobox('getValue');
         }
+        //清空机加日报表单
+        function ResetJJForm() {
+            $("#AddOneid").val("")
+            $("#Wtime").datebox("setValue", "")
+            $("#ImgName_IDSel").combobox("setValue", "")
+            $("#ImgNumber").val("")
+            $("#Iint").val("")
+            $("#Slt_kg").val("")
+            $("#Slt_hege").val("")
+            $("#Slt_hegeno").val("")
+            $("#Slt_Feipin").val("")
+            $("#UpBumen_id").combobox("setValue", "")
+            $("#FinishBFB").val("")
+            $("#JiHuanStartTime").datebox("setValue", "")
+            $("#ShiJiFinishTime").datebox("setValue", "")
+            $("#ThisHaveTime").val("")
+            $("#HaveTime").val("")
+            $("#WorkHours").val("")
+            $("#str_1").combobox("setValue", "")
+            $("#sltczz").combobox("setValue", "")
+            $("#RestYesOrNo").combobox("setValue", "")
+            $("#itGongzhong").val("")
+            $("#itwage").val("")
+            $("#ithours").val("")
+        }
+        //清空结构日报表单
+        function ResetJGForm() {
+            $("#AddTwoid").val("")
+            $("#WtimeJG").datebox("setValue", "")
+            $("#ImgName_IDJGSel").combobox("setValue", "")
+            $("#ImgNumberJG").val("")
+            $("#IintJG").val("")
+            $("#Slt_kgJG").val("")
+            $("#Slt_hegeJG").val("")
+            $("#Slt_hegenoJG").val("")
+            $("#Slt_FeipinJG").val("")
+            $("#UpBumen_idJG").combobox("setValue", "")
+            $("#FinishBFBJG").val("")
+            $("#JiHuanStartTimeJG").datebox("setValue", "")
+            $("#ShiJiFinishTimeJG").datebox("setValue", "")
+            $("#ThisHaveTimeJG").val("")
+            $("#HaveTimeJG").val("")
+            $("#WorkHoursJG").val("")
+            $("#sltczzJG").combobox("setValue", "")
+            $("#RestYesOrNoJG").combobox("setValue", "")
+            $("#itGongzhongJG").val("")
+            $("#itwageJG").val("")
+            $("#ithoursJG").val("")
+        }
     </script>
     <style>
         html, body {
@@ -1115,7 +1170,7 @@
                                url="/SltJxzz/GetYuanGongList"
                                valueField="ID"
                                textField="Name"
-                               panelHeight="auto"
+                               panelHeight="200px"
                                style="width:100px" />
                     </td>
             </tr>
@@ -1140,9 +1195,15 @@
                         <input class="easyui-datebox" name="Wtime" id="Wtime"/>
                     </td>
                 </tr>
-                <tr><td>零件名称</td><td colspan="5">
-                    <input type="text" id="ImgName_ID" name="ImgName_ID" class="easyui-textbox" style="width:100%" />
-                    </td>
+                <tr><td>零件名称</td><td>
+                                     <input class="easyui-combobox" id="ImgName_IDSel"
+                                            name="ImgName_IDSel"
+                                            url="/SltJxzz/GetImgName_ID"
+                                            valueField="ID"
+                                            textField="Name"
+                                            panelHeight="200px"
+                                            style="width:100px" />
+                    </td><td><input name="ImgName_ID" id="ImgName_ID" type="hidden" /></td>
                 </tr>
                 <tr>
                     <td>零件图号</td>
@@ -1160,7 +1221,7 @@
                         <input id="Slt_hege" type="text" name="Slt_hege" onkeyup="num(this)" />
                     </td>
                     <td>不合格数量</td>
-                    <td><input id="Slt_hegeno" type="text" name="Slt_hegeno" onkeyup="num(this)" /> </td>
+                    <td><input id="Slt_hegeno" type="text" name="Slt_hegeNo" onkeyup="num(this)" /> </td>
                     <td>废品数量</td>
                     <td><input id="Slt_Feipin" type="text" name="Slt_Feipin" onkeyup="num(this)" /> </td>
                     <td>用工部门</td>
@@ -1208,15 +1269,12 @@
                     </td>
                     <td>操作者</td>
                     <td>
-                        @{
-                            <select id="sltczz" class="easyui-combobox" name="UPslt_ID" style="width:80px;">
-                                @{foreach (User_Person_slt Item in ViewBag.sltUser)
-                                    {
-                                        <option value="@Item.ID">@Item.UserInfo.UName</option>
-                                    }
-                                }
-                            </select>
-                        } 
+                        <input class="easyui-combobox " id="sltczz"
+                               name="UPslt_ID"
+                               url="/SltJxzz/GetPersonListJJ"
+                               valueField="ID"
+                               textField="Name"
+                               panelHeight="200px" style="width:100px" />
                     </td>
                 </tr>
                 <tr>
@@ -1252,9 +1310,15 @@
                         <input class="easyui-datebox" name="Wtime" id="WtimeJG"/>
                     </td>
                 </tr>
-                <tr><td>零件名称</td><td colspan="5">
-                    <input type="text" id="ImgName_IDJG" name="ImgName_ID" class="easyui-textbox" style="width:100%" />
-                    </td>
+                <tr><td>零件名称</td><td>
+                                     <input class="easyui-combobox" id="ImgName_IDJGSel"
+                                            name="ImgName_IDJGSel"
+                                            url="/SltJxzz/GetImgName_ID"
+                                            valueField="ID"
+                                            textField="Name"
+                                            panelHeight="200px"
+                                            style="width:100px" />
+                    </td><td><input name="ImgName_ID" id="ImgName_IDJG" type="hidden" /></td>
                 </tr>
                 <tr>
                     <td>零件图号</td>
@@ -1272,7 +1336,7 @@
                         <input id="Slt_hegeJG" type="text" name="Slt_hege" onkeyup="num(this)" />
                     </td>
                     <td>不合格数量</td>
-                    <td><input id="Slt_hegenoJG" type="text" name="Slt_hegeno" onkeyup="num(this)" /> </td>
+                    <td><input id="Slt_hegenoJG" type="text" name="Slt_hegeNo" onkeyup="num(this)" /> </td>
                     <td>废品数量</td>
                     <td><input id="Slt_FeipinJG" type="text" name="Slt_Feipin" onkeyup="num(this)" /> </td>
                     <td>用工部门</td>
@@ -1308,15 +1372,12 @@
                 <tr>
                     <td>操作者</td>
                     <td>
-                        @{
-                            <select id="sltczzJG" class="easyui-combobox" panelHeight="200px" name="UPslt_ID" style="width:80px;">
-                                @{foreach (User_Person_slt Item in ViewBag.sltUserJG)
-                                    {
-                                        <option value="@Item.ID">@Item.UserInfo.UName</option>
-                                    }
-                                }
-                            </select>
-                        } 
+                        <input class="easyui-combobox " id="sltczzJG"
+                               name="UPslt_ID"
+                               url="/SltJxzz/GetPersonListJG"
+                               valueField="ID"
+                               textField="Name"
+                               panelHeight="200px" style="width:100px" />
                     </td>
                 </tr>
                 <tr>

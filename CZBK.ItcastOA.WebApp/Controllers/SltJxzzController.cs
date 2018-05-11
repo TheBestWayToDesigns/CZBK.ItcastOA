@@ -71,6 +71,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 jc.HoursWage = a.User_Person_slt.HoursWage;
                 jc.Job_Name = a.User_Person_slt.Job_Name;
                 jc.SumHoursWage = jc.WorkHours * jc.HoursWage;
+                jc.SuoShuCJ = "机加车间";
                 tList.Add(jc);
             }
             IQueryable<T_jgzztjb> Tdata2 = T_jgzztjbService.LoadPageEntities(pageIndex, pageSize, out toalcount, x => x.del == 0, x => x.Addtime, true).DefaultIfEmpty();
@@ -100,6 +101,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 jc.HoursWage = a.User_Person_slt.HoursWage;
                 jc.Job_Name = a.User_Person_slt.Job_Name;
                 jc.SumHoursWage = jc.WorkHours * jc.HoursWage;
+                jc.SuoShuCJ = "结构车间";
                 tList.Add(jc);
             }
             return Json(new { rows = tList, total = toalcount }, JsonRequestBehavior.AllowGet);
@@ -113,7 +115,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var temp = from a in ups
                        select new
                        {
-                           ID=a.ID,
+                           ID = a.ID,
+                           BuMen = a.UserInfo.BumenInfoSet.Name,
                            Name = a.UserInfo.PerSonName,
                            Job_Name = a.Job_Name,
                            HoursWage= a.HoursWage,
@@ -193,7 +196,14 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     tjjb.ImgName_ID = rtmp.ID;
                 }
             }
-            T_jxzztjbService.AddEntity(tjjb);
+            if (tjjb.ID > 0)
+            {
+                T_jxzztjbService.EditEntity(tjjb);
+            }
+            else
+            {
+                T_jxzztjbService.AddEntity(tjjb);
+            }
             return Json(new { ret = "ok"}, JsonRequestBehavior.AllowGet);
         }
         //创建结构车间日报表信息
@@ -218,7 +228,14 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     tjjb.ImgName_ID = rtmp.ID;
                 }
             }
-            T_jgzztjbService.AddEntity(tjjb);
+            if (tjjb.ID > 0)
+            {
+                T_jgzztjbService.EditEntity(tjjb);
+            }
+            else
+            {
+                T_jgzztjbService.AddEntity(tjjb);
+            }
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
         //获取部门id（机加或铆焊）
@@ -499,8 +516,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                         var temp2 = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.UpBumen_id == bumenID && x.User_Person_slt.UserInfo.BuMenID == id).DefaultIfEmpty().ToList();
                         if (temp != null && temp[0] != null)
                         {
-                            var temp1 = temp.GroupBy(x => x.Seb_Number.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
-                            var temp3 = temp.GroupBy(x => x.Seb_Number.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
+                            var temp1 = temp.GroupBy(x => x.ImgNumber+x.Seb_Number1.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
+                            var temp3 = temp.GroupBy(x => x.ImgNumber + x.Seb_Number1.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
                             temp1.AddRange(temp3);
                             return Json(temp1, JsonRequestBehavior.AllowGet);
                         }
@@ -590,6 +607,47 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 return Json(ji, JsonRequestBehavior.AllowGet);
             }
         }
+        //获取零件名称列表
+        public ActionResult GetImgName_ID()
+        {
+            var temp = Seb_NumberService.LoadEntities(x => x.Items == 1).DefaultIfEmpty().ToList();
+            List<serchMsgLong> lsm = new List<serchMsgLong>();
+            foreach(var a in temp)
+            {
+                serchMsgLong sm = new serchMsgLong();
+                sm.ID = a.ID;
+                sm.Name = a.Ttext;
+                lsm.Add(sm);
+            }
+            return Json(lsm, JsonRequestBehavior.AllowGet);
+        }
+        //获取员工人员
+        public ActionResult GetPersonListJJ()
+        {
+            var temp = User_Person_sltService.LoadEntities(x => x.UserInfo.BuMenID == 26).GroupBy(x => x.UserID).Select(x => x.FirstOrDefault());
+            List<serchMsgLong> lsm = new List<serchMsgLong>();
+            foreach (var a in temp)
+            {
+                serchMsgLong sm = new serchMsgLong();
+                sm.ID = a.ID;
+                sm.Name = a.UserInfo.PerSonName;
+                lsm.Add(sm);
+            }
+            return Json(lsm, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetPersonListJG()
+        {
+            var temp = User_Person_sltService.LoadEntities(x => x.UserInfo.BuMenID == 43).GroupBy(x => x.UserID).Select(x => x.FirstOrDefault());
+            List<serchMsgLong> lsm = new List<serchMsgLong>();
+            foreach (var a in temp)
+            {
+                serchMsgLong sm = new serchMsgLong();
+                sm.ID = a.ID;
+                sm.Name = a.UserInfo.PerSonName;
+                lsm.Add(sm);
+            }
+            return Json(lsm, JsonRequestBehavior.AllowGet);
+        }
     }
     public class jsxtCls
     {
@@ -618,10 +676,16 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public Nullable<decimal> HoursWage { get; set; }
         public Nullable<decimal> SumHoursWage { get; set; }
         public Nullable<decimal> WorkHours { get; set; }
+        public string SuoShuCJ { get; set; }
     }
     public class serchMsg
     {
         public int ID { get; set; }
+        public string Name { get; set; }
+    }
+    public class serchMsgLong
+    {
+        public long ID { get; set; }
         public string Name { get; set; }
     }
     public class CJExcel
