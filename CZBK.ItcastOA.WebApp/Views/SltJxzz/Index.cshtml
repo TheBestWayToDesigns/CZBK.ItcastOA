@@ -311,7 +311,7 @@
                       { field: 'Slt_Feipin', title: '废品数量', align: 'center' },
                       { field: 'Seb_number_ID', title: '设备编号', align: 'center' },
                       { field: 'Wage_slt', title: '工资', align: 'center' },
-                      { field: 'HoursWage', title: '定额', align: 'center' },
+                      { field: 'HoursWage', title: '加工单价', align: 'center' },
                       { field: 'WorkHours', title: '工作时间', align: 'center' },
                       { field: 'SumHoursWage', title: '合计金额', align: 'center' },
                       {
@@ -385,7 +385,7 @@
                      { field: 'Slt_Feipin', title: '废品数量', align: 'center' },
                      { field: 'Seb_number_ID', title: '设备编号', align: 'center' },
                      { field: 'Wage_slt', title: '工资', align: 'center' },
-                     { field: 'HoursWage', title: '定额', align: 'center' },
+                     { field: 'HoursWage', title: '加工单价', align: 'center' },
                      { field: 'WorkHours', title: '工作时间', align: 'center' },
                      { field: 'SumHoursWage', title: '合计金额', align: 'center' },
                      {
@@ -995,6 +995,9 @@
             if (data.ret == "ok") {
                 $('#adddiv').dialog('close');
                 $('#tt').datagrid('reload');
+                if (data.state == true) {
+                    $("#ImgName_IDSel").combobox("reload");
+                }
             } else {
                 $.messager.alert("提醒", "修改数据错误!!", "error");
             }
@@ -1003,6 +1006,9 @@
             if (data.ret == "ok") {
                 $('#adddivJG').dialog('close');
                 $('#tt').datagrid('reload');
+                if (data.state == true) {
+                    $("#ImgName_IDJGSel").combobox("reload");
+                }
             } else {
                 $.messager.alert("提醒", "修改数据错误!!", "error");
             }
@@ -1315,7 +1321,7 @@
                     </td>
                     <td>工资</td>
                     <td><input id="itwage" type="text" name="itwage"  readonly /> </td>
-                    <td>定额(元/小时)</td>
+                    <td>加工单价</td>
                     <td><input id="ithours" type="text" name="ithours"  readonly /> </td>
                 </tr>
                 <tr>
@@ -1418,7 +1424,7 @@
                     </td>
                     <td>工资</td>
                     <td><input id="itwageJG" type="text" name="itwage"  readonly /> </td>
-                    <td>工时</td>
+                    <td>加工单价</td>
                     <td><input id="ithoursJG" type="text" name="ithours"  readonly /> </td>
                 </tr>
                 <tr>
