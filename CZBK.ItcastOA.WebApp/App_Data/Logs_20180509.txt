@@ -1,34 +1,5 @@
 
 ----------------------header--------------------------
-2018-05-09 08:17:32,967 [150] ERROR Memcached.ClientLibrary.MemcachedClient - Exception thrown while trying to get object from cache for key: de195571-799c-4762-ab1f-546d9e608fb4
-System.IO.IOException: ÎÞ·¨´Ó´«ÊäÁ¬½ÓÖÐ¶ÁÈ¡Êý¾Ý: Ô¶³ÌÖ÷»úÇ¿ÆÈ¹Ø±ÕÁËÒ»¸öÏÖÓÐµÄÁ¬½Ó¡£¡£ ---> System.Net.Sockets.SocketException: Ô¶³ÌÖ÷»úÇ¿ÆÈ¹Ø±ÕÁËÒ»¸öÏÖÓÐµÄÁ¬½Ó¡£
-   ÔÚ System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
-   ÔÚ System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 size)
-   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
-   ÔÚ System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 size)
-   ÔÚ System.IO.BufferedStream.Read(Byte[] array, Int32 offset, Int32 count)
-   ÔÚ Memcached.ClientLibrary.SockIO.ReadLine()
-   ÔÚ Memcached.ClientLibrary.MemcachedClient.LoadItems(SockIO sock, Hashtable hm, Boolean asString)
-   ÔÚ Memcached.ClientLibrary.MemcachedClient.Get(String key, Object hashCode, Boolean asString)
-2018-05-09 08:17:34,091 [162] ERROR Memcached.ClientLibrary.MemcachedClient - exception thrown while writing bytes to server on set()
-System.IO.IOException: ÎÞ·¨´Ó´«ÊäÁ¬½ÓÖÐ¶ÁÈ¡Êý¾Ý: Ô¶³ÌÖ÷»úÇ¿ÆÈ¹Ø±ÕÁËÒ»¸öÏÖÓÐµÄÁ¬½Ó¡£¡£ ---> System.Net.Sockets.SocketException: Ô¶³ÌÖ÷»úÇ¿ÆÈ¹Ø±ÕÁËÒ»¸öÏÖÓÐµÄÁ¬½Ó¡£
-   ÔÚ System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
-   ÔÚ System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 size)
-   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
-   ÔÚ System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 size)
-   ÔÚ System.IO.BufferedStream.Read(Byte[] array, Int32 offset, Int32 count)
-   ÔÚ Memcached.ClientLibrary.SockIO.ReadLine()
-   ÔÚ Memcached.ClientLibrary.MemcachedClient.Set(String cmdname, String key, Object obj, DateTime expiry, Object hashCode, Boolean asString)
-2018-05-09 08:17:36,146 [150] ERROR Memcached.ClientLibrary.MemcachedClient - Exception thrown while trying to get object from cache for key: b70987b6-bae7-4a8c-a48b-fab20f265ef3
-System.IO.IOException: ÎÞ·¨´Ó´«ÊäÁ¬½ÓÖÐ¶ÁÈ¡Êý¾Ý: Ô¶³ÌÖ÷»úÇ¿ÆÈ¹Ø±ÕÁËÒ»¸öÏÖÓÐµÄÁ¬½Ó¡£¡£ ---> System.Net.Sockets.SocketException: Ô¶³ÌÖ÷»úÇ¿ÆÈ¹Ø±ÕÁËÒ»¸öÏÖÓÐµÄÁ¬½Ó¡£
-   ÔÚ System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
-   ÔÚ System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 size)
-   --- ÄÚ²¿Òì³£¶ÑÕ»¸ú×ÙµÄ½áÎ² ---
-   ÔÚ System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 size)
-   ÔÚ System.IO.BufferedStream.Read(Byte[] array, Int32 offset, Int32 count)
-   ÔÚ Memcached.ClientLibrary.SockIO.ReadLine()
-   ÔÚ Memcached.ClientLibrary.MemcachedClient.LoadItems(SockIO sock, Hashtable hm, Boolean asString)
-   ÔÚ Memcached.ClientLibrary.MemcachedClient.Get(String key, Object hashCode, Boolean asString)
 
 ----------------------footer--------------------------
 
@@ -53,101 +24,101 @@ System.IO.IOException: ÎÞ·¨´Ó´«ÊäÁ¬½ÓÖÐ¶ÁÈ¡Êý¾Ý: Ô¶³ÌÖ÷»úÇ¿ÆÈ¹Ø±ÕÁËÒ»¸öÏÖÓÐµÄÁ¬½
 ----------------------footer--------------------------
 
 ----------------------header--------------------------
-
-----------------------footer--------------------------
-
-----------------------header--------------------------
-
-----------------------footer--------------------------
-
-----------------------header--------------------------
-
-----------------------footer--------------------------
-
-----------------------header--------------------------
-2018-05-09 18:25:25,221 [19] ERROR errorMsg - System.Web.HttpException (0x80004005): ·þÎñÆ÷ÎÞ·¨ÔÚ·¢ËÍ HTTP ±êÍ·Ö®ºóÉèÖÃÄÚÈÝÀàÐÍ¡£
-   ÔÚ System.Web.HttpResponse.set_ContentType(String value)
-   ÔÚ System.Web.HttpResponseWrapper.set_ContentType(String value)
-   ÔÚ System.Web.Mvc.JsonResult.ExecuteResult(ControllerContext context)
-   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
-   ÔÚ System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1a.<InvokeActionResultWithFilters>b__17()
-   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)
-   ÔÚ System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1a.<>c__DisplayClass1c.<InvokeActionResultWithFilters>b__19()
-   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+2018-05-09 08:30:08,593 [7] ERROR errorMsg - System.ArgumentOutOfRangeException: Ë÷Òý³¬³ö·¶Î§¡£±ØÐëÎª·Ç¸ºÖµ²¢Ð¡ÓÚ¼¯ºÏ´óÐ¡¡£
+²ÎÊýÃû: index
+   ÔÚ System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   ÔÚ System.Collections.Generic.List`1.get_Item(Int32 index)
+   ÔÚ CZBK.ItcastOA.WebApp.Controllers.EverDayWorkController.GetUpDownUserID(List`1 list, List`1 leader, List`1 BottomUser, IQueryable`1 Loads_) Î»ÖÃ K:\github\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\EverDayWorkController.cs:ÐÐºÅ 1625
+   ÔÚ CZBK.ItcastOA.WebApp.Controllers.EverDayWorkController.GetAllDownLeader() Î»ÖÃ K:\github\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\EverDayWorkController.cs:ÐÐºÅ 1567
+   ÔÚ lambda_method(Closure , ControllerBase , Object[] )
+   ÔÚ System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
    ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
    ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   ÔÚ System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   ÔÚ System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   ÔÚ System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
-   ÔÚ System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
-   ÔÚ System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
-2018-05-09 20:25:31,665 [19] ERROR errorMsg - System.Web.HttpException (0x80004005): ·þÎñÆ÷ÎÞ·¨ÔÚ·¢ËÍ HTTP ±êÍ·Ö®ºóÉèÖÃÄÚÈÝÀàÐÍ¡£
-   ÔÚ System.Web.HttpResponse.set_ContentType(String value)
-   ÔÚ System.Web.HttpResponseWrapper.set_ContentType(String value)
-   ÔÚ System.Web.Mvc.JsonResult.ExecuteResult(ControllerContext context)
-   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
-   ÔÚ System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1a.<InvokeActionResultWithFilters>b__17()
-   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)
-   ÔÚ System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1a.<>c__DisplayClass1c.<InvokeActionResultWithFilters>b__19()
-   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+2018-05-09 08:30:23,705 [7] ERROR errorMsg - System.ArgumentOutOfRangeException: Ë÷Òý³¬³ö·¶Î§¡£±ØÐëÎª·Ç¸ºÖµ²¢Ð¡ÓÚ¼¯ºÏ´óÐ¡¡£
+²ÎÊýÃû: index
+   ÔÚ System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   ÔÚ System.Collections.Generic.List`1.get_Item(Int32 index)
+   ÔÚ CZBK.ItcastOA.WebApp.Controllers.EverDayWorkController.GetUpDownUserID(List`1 list, List`1 leader, List`1 BottomUser, IQueryable`1 Loads_) Î»ÖÃ K:\github\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\EverDayWorkController.cs:ÐÐºÅ 1625
+   ÔÚ CZBK.ItcastOA.WebApp.Controllers.EverDayWorkController.GetAllDownLeader() Î»ÖÃ K:\github\CZBK.ItcastOA\CZBK.ItcastOA.WebApp\Controllers\EverDayWorkController.cs:ÐÐºÅ 1567
+   ÔÚ lambda_method(Closure , ControllerBase , Object[] )
+   ÔÚ System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
    ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
    ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   ÔÚ System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   ÔÚ System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   ÔÚ System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
-   ÔÚ System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
-   ÔÚ System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
-2018-05-09 22:25:32,119 [19] ERROR errorMsg - System.Web.HttpException (0x80004005): ·þÎñÆ÷ÎÞ·¨ÔÚ·¢ËÍ HTTP ±êÍ·Ö®ºóÉèÖÃÄÚÈÝÀàÐÍ¡£
-   ÔÚ System.Web.HttpResponse.set_ContentType(String value)
-   ÔÚ System.Web.HttpResponseWrapper.set_ContentType(String value)
-   ÔÚ System.Web.Mvc.JsonResult.ExecuteResult(ControllerContext context)
-   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
-   ÔÚ System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1a.<InvokeActionResultWithFilters>b__17()
-   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)
-   ÔÚ System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1a.<>c__DisplayClass1c.<InvokeActionResultWithFilters>b__19()
-   ÔÚ System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
-   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
-   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   ÔÚ System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   ÔÚ System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   ÔÚ System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
-   ÔÚ System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   ÔÚ System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
-   ÔÚ System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
-   ÔÚ System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
-   ÔÚ System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
 
 ----------------------footer--------------------------
