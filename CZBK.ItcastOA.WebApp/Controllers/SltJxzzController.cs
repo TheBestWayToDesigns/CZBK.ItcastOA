@@ -278,7 +278,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                         lsm.Add(sm);
                     }
                 } else if (sdata.@int == 3) {
-                    var temp = BumenInfoSetService.LoadEntities(x => x.ID ==41&&x.ID==42).DefaultIfEmpty();
+                    var temp = BumenInfoSetService.LoadEntities(x => x.ID ==41||x.ID==42).DefaultIfEmpty();
                     foreach (var a in temp)
                     {
                         serchMsg sm = new serchMsg();
@@ -303,7 +303,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             if(bolID != 0)
             {
                 int bumenID = Request["bmID"] == null ? 0 : Convert.ToInt32(Request["bmID"]);
-                if (bolID == 9)//个人日报表
+                #region 个人日统计表
+                if (bolID == 9)
                 {
                     DateTime excelDate = Convert.ToDateTime(Request["excelDate"]);
                     if(bumenID == 26)
@@ -383,47 +384,37 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                         return Json(null, JsonRequestBehavior.AllowGet);
                     }
                 }
-                else {
+                #endregion
+                else
+                {
                     DateTime dtStart = Convert.ToDateTime(Request["monthExcel"]);
                     DateTime dtEnd = dtStart.AddMonths(1).AddDays(-1 * (dtStart.Day));
-                    if (bolID == 10)//个人月报表
+                    #region 个人月报表
+                    if (bolID == 10)
                     {
                         if (bumenID == 26)
                         {
                             var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.del_f == true).DefaultIfEmpty().ToList();
                             if (temp != null && temp[0] != null)
                             {
-                                List<jsxtCls> tList = new List<jsxtCls>();
-                                foreach (var a in temp)
+                                var tdata = temp.GroupBy(x => x.UPslt_ID).Select(x => new GRmouth
                                 {
-                                    jsxtCls jc = new jsxtCls();
-                                    jc.ID = a.ID;
-                                    jc.Addtime = a.Addtime;
-                                    jc.Wtime = a.Wtime;
-                                    jc.ImgName_ID = a.Seb_Number1.Ttext;
-                                    jc.UPslt_ID = a.User_Person_slt.UserInfo.PerSonName;
-                                    jc.Seb_number_ID = a.Seb_Number.Ttext;
-                                    jc.ImgNumber = a.ImgNumber;
-                                    jc.Iint = a.Iint;
-                                    jc.Slt_kg = a.Slt_kg;
-                                    jc.Slt_BFB = a.Slt_BFB;
-                                    jc.Slt_Feipin = a.Slt_Feipin;
-                                    jc.Slt_hege = a.Slt_hege;
-                                    jc.Slt_hegeNo = a.Slt_hegeNo;
-                                    jc.StupTime = a.StupTime;
-                                    jc.OverTime = a.OverTime;
-                                    jc.ThisHaveTime = a.ThisHaveTime;
-                                    jc.HaveTime = a.HaveTime;
-                                    jc.WorkHours = a.WorkHours;
-                                    jc.UpBumen_id = a.BumenInfoSet.Name;
-                                    jc.RestYesOrNo = a.RestYesOrNo;
-                                    jc.Wage_slt = a.User_Person_slt.Wage_slt;
-                                    jc.HoursWage = a.User_Person_slt.HoursWage;
-                                    jc.Job_Name = a.User_Person_slt.Job_Name;
-                                    jc.SumHoursWage = jc.WorkHours * jc.HoursWage;
-                                    tList.Add(jc);
-                                }
-                                return Json(tList, JsonRequestBehavior.AllowGet);
+                                    UPslt_ID = x.First().User_Person_slt.UserInfo.PerSonName,
+                                    Iint = x.Sum(g => g.Iint),
+                                    Slt_kg = x.Sum(g => g.Slt_kg),
+                                    Slt_Feipin = x.Sum(g => g.Slt_Feipin),
+                                    Slt_hege = x.Sum(g => g.Slt_hege),
+                                    Slt_hegeNo = x.Sum(g => g.Slt_hegeNo),
+                                    ThisHaveTime = x.Sum(g => g.ThisHaveTime),
+                                    HaveTime = x.Sum(g => g.HaveTime),
+                                    Wage_slt = x.First().User_Person_slt.Wage_slt,
+                                    RestYesOrNo = x.Sum(g => g.RestYesOrNo==-1?0:g.RestYesOrNo==0?0.5:1),
+                                    Job_Name = x.First().User_Person_slt.Job_Name,
+                                    HoursWage = x.First().User_Person_slt.HoursWage,
+                                    SumHoursWage = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage),
+                                    WorkHours = x.Sum(g => g.WorkHours)
+                                });
+                                return Json(tdata, JsonRequestBehavior.AllowGet);
                             }
                             return Json(null, JsonRequestBehavior.AllowGet);
                         }
@@ -432,47 +423,38 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             var temp = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.del_f == true).DefaultIfEmpty().ToList();
                             if (temp != null && temp[0] != null)
                             {
-                                List<jsxtCls> tList = new List<jsxtCls>();
-                                foreach (var a in temp)
+                                var tdata = temp.GroupBy(x => x.UPslt_ID).Select(x => new GRmouth
                                 {
-                                    jsxtCls jc = new jsxtCls();
-                                    jc.ID = a.ID;
-                                    jc.Addtime = a.Addtime;
-                                    jc.Wtime = a.Wtime;
-                                    jc.ImgName_ID = a.Seb_Number.Ttext;
-                                    jc.UPslt_ID = a.User_Person_slt.UserInfo.PerSonName;
-                                    jc.ImgNumber = a.ImgNumber;
-                                    jc.Iint = a.Iint;
-                                    jc.Slt_kg = a.Slt_kg;
-                                    jc.Slt_BFB = a.Slt_BFB;
-                                    jc.Slt_Feipin = a.Slt_Feipin;
-                                    jc.Slt_hege = a.Slt_hege;
-                                    jc.Slt_hegeNo = a.Slt_hegeNo;
-                                    jc.StupTime = a.StupTime;
-                                    jc.OverTime = a.OverTime;
-                                    jc.ThisHaveTime = a.ThisHaveTime;
-                                    jc.HaveTime = a.HaveTime;
-                                    jc.WorkHours = a.WorkHours;
-                                    jc.UpBumen_id = a.BumenInfoSet.Name;
-                                    jc.RestYesOrNo = a.RestYesOrNo;
-                                    jc.Wage_slt = a.User_Person_slt.Wage_slt;
-                                    jc.HoursWage = a.User_Person_slt.HoursWage;
-                                    jc.Job_Name = a.User_Person_slt.Job_Name;
-                                    jc.SumHoursWage = jc.WorkHours * jc.HoursWage;
-                                    tList.Add(jc);
-                                }
-                                return Json(tList, JsonRequestBehavior.AllowGet);
+                                    UPslt_ID = x.First().User_Person_slt.UserInfo.PerSonName,
+                                    Iint = x.Sum(g => g.Iint),
+                                    Slt_kg = x.Sum(g => g.Slt_kg),
+                                    Slt_Feipin = x.Sum(g => g.Slt_Feipin),
+                                    Slt_hege = x.Sum(g => g.Slt_hege),
+                                    Slt_hegeNo = x.Sum(g => g.Slt_hegeNo),
+                                    ThisHaveTime = x.Sum(g => g.ThisHaveTime),
+                                    HaveTime = x.Sum(g => g.HaveTime),
+                                    Wage_slt = x.First().User_Person_slt.Wage_slt,
+                                    RestYesOrNo = x.Sum(g => g.RestYesOrNo == -1 ? 0 : g.RestYesOrNo == 0 ? 0.5 : 1),
+                                    Job_Name = x.First().User_Person_slt.Job_Name,
+                                    HoursWage = x.First().User_Person_slt.HoursWage,
+                                    SumHoursWage = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage),
+                                    WorkHours = x.Sum(g => g.WorkHours)
+                                });
+                                return Json(tdata, JsonRequestBehavior.AllowGet);
                             }
                             return Json(null, JsonRequestBehavior.AllowGet);
                         }
-                    } else if (bolID == 11)//车间月汇报表
+                    }
+                    #endregion
+                    #region 车间月统计表
+                    else if (bolID == 11)//车间月汇报表
                     {
                         var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.UpBumen_id == bumenID && x.del_f == true).DefaultIfEmpty().ToList();
                         var temp2 = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.UpBumen_id == bumenID && x.del_f == true).DefaultIfEmpty().ToList();
+                            List<CJExcel> tList = new List<CJExcel>();
                         if (temp != null && temp[0] != null)
                         {
-                            List<CJExcel> tList = new List<CJExcel>();
-                            foreach(var a in temp)
+                            foreach (var a in temp)
                             {
                                 CJExcel cje = new CJExcel();
                                 cje.WorkTime = a.Wtime;
@@ -484,6 +466,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                 cje.SumMoney = cje.WorkHours * cje.HoursWage;
                                 tList.Add(cje);
                             }
+                        }
+                        if (temp2 != null && temp2[0] != null)
+                        {
                             foreach (var a in temp2)
                             {
                                 CJExcel cje = new CJExcel();
@@ -496,44 +481,63 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                 cje.SumMoney = cje.WorkHours * cje.HoursWage;
                                 tList.Add(cje);
                             }
-                            return Json(tList, JsonRequestBehavior.AllowGet);
                         }
-                        return Json(null, JsonRequestBehavior.AllowGet);
-                    }else if(bolID == 12)//公司月总结表
+                        return Json(tList, JsonRequestBehavior.AllowGet);
+                    }
+                    #endregion
+                    #region 公司月统计表
+                    else if (bolID == 12)//公司月总结表
                     {
                         var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.del_f == true).DefaultIfEmpty().ToList();
                         var temp2 = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.del_f == true).DefaultIfEmpty().ToList();
+                        List<GSExcel> temp1 = new List<GSExcel>();
                         if (temp != null && temp[0] != null)
                         {
-                            var temp1 = temp.GroupBy(x => x.BumenInfoSet.Name).Select(x => new GSExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney=x.Sum(g=>g.User_Person_slt.HoursWage*g.WorkHours) }).ToList();
-                            var temp3 = temp2.GroupBy(x => x.BumenInfoSet.Name).Select(x => new GSExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.User_Person_slt.HoursWage * g.WorkHours) }).ToList();
-                            temp1.AddRange(temp3);
-                            return Json(temp1, JsonRequestBehavior.AllowGet);
+                            temp1 = temp.GroupBy(x => x.UpBumen_id).Select(x => new GSExcel { UpBumen = x.First().BumenInfoSet.Name, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.User_Person_slt.HoursWage * g.WorkHours) }).ToList();
                         }
-                        return Json(null, JsonRequestBehavior.AllowGet);
+                        List<GSExcel> temp3 = new List<GSExcel>();
+                        if (temp2 != null && temp2[0] != null)
+                        {
+                            temp3 = temp2.GroupBy(x => x.UpBumen_id).Select(x => new GSExcel { UpBumen = x.First().BumenInfoSet.Name, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.User_Person_slt.HoursWage * g.WorkHours) }).ToList();
+                        }
+                        temp1.AddRange(temp3);
+                        return Json(temp1, JsonRequestBehavior.AllowGet);
                     }
+                    #endregion
+                    #region 轨枕月统计表
                     else if (bolID == 13)//轨枕月总结表
                     {
                         int id = 0;
                         if (bumenID == 41)
                         {
                             id = 26;
-                        }else
+                            var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.UpBumen_id == bumenID && x.User_Person_slt.UserInfo.BuMenID == id && x.del_f == true).DefaultIfEmpty().ToList();
+                            List<GZXExcel> temp1 = new List<GZXExcel>();
+                            if (temp != null && temp[0] != null)
+                            {
+                                temp1 = temp.GroupBy(x => x.ImgNumber + x.Seb_Number1.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
+                                return Json(temp1, JsonRequestBehavior.AllowGet);
+                            }
+                            return Json(null, JsonRequestBehavior.AllowGet);
+                        }
+                        else
                         {
                             id = 43;
+                            var temp2 = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.UpBumen_id == bumenID && x.User_Person_slt.UserInfo.BuMenID == id && x.del_f == true).DefaultIfEmpty().ToList();
+                            List<GZXExcel> temp3 = new List<GZXExcel>();
+                            if (temp2 != null && temp2[0] != null)
+                            {
+                                temp3 = temp2.GroupBy(x => x.ImgNumber + x.Seb_Number.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
+                                return Json(temp3, JsonRequestBehavior.AllowGet);
+                            }
+                            return Json(null, JsonRequestBehavior.AllowGet);
                         }
-                        var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd&& x.UpBumen_id == bumenID&&x.User_Person_slt.UserInfo.BuMenID==id && x.del_f == true).DefaultIfEmpty().ToList();
-                        var temp2 = T_jgzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.UpBumen_id == bumenID && x.User_Person_slt.UserInfo.BuMenID == id && x.del_f == true).DefaultIfEmpty().ToList();
-                        if (temp != null && temp[0] != null)
-                        {
-                            var temp1 = temp.GroupBy(x => x.ImgNumber+x.Seb_Number1.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
-                            var temp3 = temp2.GroupBy(x => x.ImgNumber + x.Seb_Number.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
-                            temp1.AddRange(temp3);
-                            return Json(temp1, JsonRequestBehavior.AllowGet);
-                        }
+                    }
+                    #endregion
+                    else
+                    {
                         return Json(null, JsonRequestBehavior.AllowGet);
                     }
-                    return Json(null, JsonRequestBehavior.AllowGet);
                 }
             }else {
                 ActionResult ar =  Getdata();
@@ -721,6 +725,23 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public Nullable<decimal> SumHoursWage { get; set; }
         public Nullable<decimal> WorkHours { get; set; }
         public string SuoShuCJ { get; set; }
+    }
+    public class GRmouth
+    {
+        public string UPslt_ID { get; set; }
+        public Nullable<decimal> Iint { get; set; }
+        public Nullable<decimal> Slt_kg { get; set; }
+        public Nullable<decimal> Slt_hege { get; set; }
+        public Nullable<decimal> Slt_hegeNo { get; set; }
+        public Nullable<decimal> Slt_Feipin { get; set; }
+        public Nullable<decimal> ThisHaveTime { get; set; }
+        public Nullable<decimal> HaveTime { get; set; }
+        public Nullable<double> RestYesOrNo { get; set; }
+        public Nullable<decimal> Wage_slt { get; set; }
+        public string Job_Name { get; set; }
+        public Nullable<decimal> HoursWage { get; set; }
+        public Nullable<decimal> SumHoursWage { get; set; }
+        public Nullable<decimal> WorkHours { get; set; }
     }
     public class serchMsg
     {

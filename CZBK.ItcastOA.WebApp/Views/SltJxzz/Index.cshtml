@@ -125,6 +125,10 @@
             $("#InfoExcel").click(function () {
                 cleanDatagrid();
                 loadInfoExcel();
+                $("#InfoExcelType").combobox("setValue", "");
+                $("#InfoExcelMsg").combobox("setValue", "");
+                $("#excelYMD").datebox("setValue", "");
+                $("#excelYM").val( "");
                 $("#adddatasDiv").hide()
                 $("#AddPersonInfoBtnDiv").hide()
                 $("#InfoExcelBtnDiv").show()
@@ -188,7 +192,7 @@
                         $("#yearMonthDay").show();
                         $("#excelYM").val( "");
                     }
-                    $("#InfoExcelMsg").combobox("reload", "/SltJxzz/GetInfoExcelMsg?bloID=" + newValue);
+                   $("#InfoExcelMsg").combobox("reload", "/SltJxzz/GetInfoExcelMsg?bloID=" + newValue);
                 }
             });
             $("#InfoExcelBtnDiv").hide();
@@ -343,72 +347,20 @@
             $("#tt").datagrid("options").queryParams = { bolID: 10, monthExcel: serchTime, bmID: bmID };
             $("#tt").datagrid("options").title = "个人月统计表";
             $("#tt").datagrid({columns : [[
-                           {
-                               field: 'Wtime', title: '单据时间',
-                               formatter: function (value, row, index) {
-                                   if (value != null)
-                                   { return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d"); }
-                                   else
-                                   { return value }
-                               }
-                           }, {
-                               field: 'StupTime', title: '计划开始日期', align: 'center',
-                               formatter: function (value, row, index) {
-                                   if (value != null)
-                                   { return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d"); }
-                                   else
-                                   { return value }
-                               }
-                           },
                    { field: 'UPslt_ID', title: '操作者', align: 'center' },
                      { field: 'Job_Name', title: '工种', align: 'center' },
-
-                     { field: 'UpBumen_id', title: '用工部门', align: 'center' },
-                     { field: 'ImgNumber', title: '零件图号', align: 'center' },
-                     { field: 'ImgName_ID', title: '零件名称', align: 'center' },
                      { field: 'Iint', title: '数量', align: 'center' },
                      { field: 'Slt_kg', title: '重量', align: 'center' },
-                     { field: 'ThisHaveTime', title: '计划工时', align: 'center' },
-                     { field: 'HaveTime', title: '实际工时', align: 'center' },
-                     { field: 'Slt_BFB', title: '完工程度', align: 'center' },
-                     {
-                         field: 'OverTime', title: '实际完成日期', align: 'center',
-                         formatter: function (value, row, index) {
-                             if (value != null)
-                             { return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d"); }
-                             else
-                             { return value }
-                         }
-                     },
                      { field: 'Slt_hege', title: '合格数量', align: 'center' },
                      { field: 'Slt_hegeNo', title: '不合格数量', align: 'center' },
                      { field: 'Slt_Feipin', title: '废品数量', align: 'center' },
-                     { field: 'Seb_number_ID', title: '设备编号', align: 'center' },
+                     { field: 'ThisHaveTime', title: '计划工时', align: 'center' },
+                     { field: 'HaveTime', title: '实际工时', align: 'center' },
                      { field: 'Wage_slt', title: '工资', align: 'center' },
                      { field: 'HoursWage', title: '加工单价', align: 'center' },
                      { field: 'WorkHours', title: '工作时间', align: 'center' },
                      { field: 'SumHoursWage', title: '合计金额', align: 'center' },
-                     {
-                         field: 'RestYesOrNo', title: '是否休息', align: 'center',
-                         formatter: function (value, row, index) {
-                             if (value != null)
-                             {
-                                 switch (parseInt(value)) {
-                                     case -1:
-                                         return "未休息";
-                                         break;
-                                     case 0:
-                                         return "半天休";
-                                         break;
-                                     case 1:
-                                         return "全天休";
-                                         break;
-                                 }
-                             }
-                             else
-                             { return value }
-                         }
-                     },
+                     { field: 'RestYesOrNo', title: '休息几天', align: 'center'},
                      { field: 'AllPinJia', title: '综合评价', align: 'center' },
                      { field: 'BAK', title: '备注', align: 'center' }]]});
         }
@@ -832,7 +784,6 @@
             });
         }
         function loadInfoExcel(pars) {
-            $("#InfoExcelMsg").combobox("reload", "/SltJxzz/GetInfoExcelMsg?bloID=" + $("#InfoExcelType").val());
             $("#yearMonth").hide();
             $('#tt').datagrid({
                 url: '/Sltjxzz/GetStatisticsInfo',
@@ -1013,26 +964,18 @@
         }
         //修改完成以后调用该方法
         function afterEdit(data) {
-            if (data.ret == "ok") {
                 $('#adddiv').dialog('close');
                 $('#tt').datagrid('reload');
                 if (data.state == true) {
                     $("#ImgName_IDSel").combobox("reload");
                 }
-            } else {
-                $.messager.alert("提醒", "修改数据错误!!", "error");
-            }
         }
         function afterEditAddJG(data) {
-            if (data.ret == "ok") {
                 $('#adddivJG').dialog('close');
                 $('#tt').datagrid('reload');
                 if (data.state == true) {
                     $("#ImgName_IDJGSel").combobox("reload");
                 }
-            } else {
-                $.messager.alert("提醒", "修改数据错误!!", "error");
-            }
         }
         //数字验证
         function num(obj) {
