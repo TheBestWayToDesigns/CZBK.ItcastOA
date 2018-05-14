@@ -138,7 +138,6 @@
             })
             $("#adddatas").click(function () {
                 $("#AddOneid").val(0)
-             
                 AdddataInfo()
             })
             $("#adddatas2").click(function () {
@@ -512,7 +511,6 @@
                     }
                 }]
             });
-            $("#RestYesOrNo").combobox("select", "-1")
         }
         //添加结构车间日报表
         function AdddataInfoJG() {
@@ -1055,7 +1053,7 @@
             $("#WorkHours").val("")
             $("#str_1").combobox("setValue", "")
             $("#sltczz").combobox("setValue", "")
-            $("#RestYesOrNo").combobox("setValue", "")
+            $("#RestYesOrNo").combobox("setValue", -1)
             $("#itGongzhong").val("")
             $("#itwage").val("")
             $("#ithours").val("")
@@ -1079,7 +1077,7 @@
             $("#HaveTimeJG").val("")
             $("#WorkHoursJG").val("")
             $("#sltczzJG").combobox("setValue", "")
-            $("#RestYesOrNoJG").combobox("setValue", "")
+            $("#RestYesOrNoJG").combobox("setValue", -1)
             $("#itGongzhongJG").val("")
             $("#itwageJG").val("")
             $("#ithoursJG").val("")
@@ -1201,6 +1199,8 @@
                     <td>
                         <input id="JiHuanStartTime" type="text" name="StupTime" class="easyui-datebox" />
                     </td>
+                </tr>
+                <tr>
                     <td>操作者</td>
                     <td>
                         <input class="easyui-combobox " id="sltczz"
@@ -1220,29 +1220,28 @@
                                panelHeight="200px" style="width:100px" />
                     </td>
                 </tr>
-
                 <tr>
                     <td>零件图号</td>
                     <td>
                         <input id="ImgNumber" type="text" name="ImgNumber" />
                     </td>
-                    <td>零件名称</td><td>
-                                     <input class="easyui-combobox" id="ImgName_IDSel"
-                                            name="ImgName_IDSel"
-                                            url="/SltJxzz/GetImgName_ID"
-                                            valueField="ID"
-                                            textField="Name"
-                                            panelHeight="200px"
-                                            style="width:100px" />
-                                     <input name="ImgName_ID" id="ImgName_ID" type="hidden" />
+                    <td>零件名称</td>
+                    <td>
+                        <input class="easyui-combobox" id="ImgName_IDSel"
+                               name="ImgName_IDSel"
+                               url="/SltJxzz/GetImgName_ID"
+                               valueField="ID"
+                               textField="Name"
+                               panelHeight="200px"
+                               style="width:100px" />
                     </td>
+                    <td><input name="ImgName_ID" id="ImgName_ID" type="hidden" /></td>
+                </tr>
+                <tr>
                     <td>数量</td>
                     <td><input id="Iint" type="text" name="Iint" onkeyup="num(this)" /> </td>
                     <td>重量</td>
                     <td><input id="Slt_kg" type="text" name="Slt_kg" onkeyup="num(this)" /> </td>
-                </tr>
-                <tr>
-                    
                     <td>计划工时</td>
                     <td>
                         <input id="ThisHaveTime" type="text" name="ThisHaveTime" onkeyup="num(this)" />
@@ -1251,9 +1250,6 @@
                     <td><input id="HaveTime" type="text" name="HaveTime" onkeyup="num(this)" /> </td>
                     <td>完工程度</td>
                     <td><input id="FinishBFB" type="text" name="Slt_BFB" onkeyup="num(this)" /> </td>
-                    <td>实际完成日期</td>
-                    <td><input id="ShiJiFinishTime" type="text" name="OverTime" class="easyui-datebox" /></td>
-
                 </tr>
                 <tr>
                     <td>合格数量</td>
@@ -1264,6 +1260,10 @@
                     <td><input id="Slt_hegeno" type="text" name="Slt_hegeNo" onkeyup="num(this)" /> </td>
                     <td>废品数量</td>
                     <td><input id="Slt_Feipin" type="text" name="Slt_Feipin" onkeyup="num(this)" /> </td>
+                    <td>实际完成日期</td>
+                    <td><input id="ShiJiFinishTime" type="text" name="OverTime" class="easyui-datebox" /></td>
+                </tr>
+                <tr>
                     <td>设备编号</td>
                     <td>
                         @{
@@ -1278,38 +1278,25 @@
                     </td>
                 </tr>
                 <tr>
-                   
-                    <td>工作时间</td>
-                    <td><input id="WorkHours" type="text" name="WorkHours" onkeyup="num(this)" /> </td>
-
-                    <td>是否休息</td>
-                    <td>
-
-                      
-
-                        <select class="easyui-combobox" name="RestYesOrNo" id="RestYesOrNo">
-                            <option value="-1" >未休息</option>
-                            <option value="0">半天休</option>
-                            <option value="1">全天休</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                   
-                   
-                </tr>
-                <tr>
                     <td>工种</td>
                     <td>
-                       <input id="itGongzhong" name="itGongzhong"  type="text" readonly /> 
+                        <input id="itGongzhong" name="itGongzhong" type="text" readonly />
                     </td>
                     <td>工资</td>
-                    <td><input id="itwage" type="text" name="itwage"  readonly /> </td>
+                    <td><input id="itwage" type="text" name="itwage" readonly /> </td>
                     <td>加工单价</td>
-                    <td><input id="ithours" type="text" name="ithours"  readonly /> </td>
+                    <td><input id="ithours" type="text" name="ithours" readonly /> </td>
+                    <td>工作时间</td>
+                    <td><input id="WorkHours" type="text" name="WorkHours" onkeyup="num(this)" /> </td>
                 </tr>
-              
-               
+                <tr>
+                    <td>是否休息</td>
+                    <td><select class="easyui-combobox"  name="RestYesOrNo" id="RestYesOrNo" >
+                            <option value="-1"  selected>未休息</option>
+                            <option value="0">半天休</option>
+                            <option value="1">全天休</option>                        
+                        </select> </td>
+                </tr>
             </table> 
         }
     </div>

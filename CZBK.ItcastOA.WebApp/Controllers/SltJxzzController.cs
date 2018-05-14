@@ -42,7 +42,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
             int  toalcount=0;
-            IQueryable<T_jxzztjb> Tdata = T_jxzztjbService.LoadPageEntities(pageIndex, pageSize, out toalcount, x => x.del_f ==true,x=>x.Addtime, true).DefaultIfEmpty();
+            int totalcount2 = 0;
+            IQueryable<T_jxzztjb> Tdata = T_jxzztjbService.LoadPageEntities(pageIndex, pageSize, out toalcount, x => x.del_f ==true,x=>x.Addtime,false).DefaultIfEmpty();
             List<jsxtCls> tList = new List<jsxtCls>();
             if(Tdata.ToList()!=null&& Tdata.ToList()[0] != null)
             {
@@ -77,7 +78,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     tList.Add(jc);
                 }
             }
-            IQueryable<T_jgzztjb> Tdata2 = T_jgzztjbService.LoadPageEntities(pageIndex, pageSize, out toalcount, x => x.del_f == true, x => x.Addtime, true).DefaultIfEmpty();
+            IQueryable<T_jgzztjb> Tdata2 = T_jgzztjbService.LoadPageEntities(pageIndex, pageSize, out totalcount2, x => x.del_f == true, x => x.Addtime, false).DefaultIfEmpty();
             if (Tdata2.ToList() != null && Tdata2.ToList()[0] != null)
             {
                 foreach (var a in Tdata2)
@@ -110,7 +111,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     tList.Add(jc);
                 }
             }
-            return Json(new { rows = tList, total = toalcount }, JsonRequestBehavior.AllowGet);
+            return Json(new { rows = tList, total = toalcount+totalcount2 }, JsonRequestBehavior.AllowGet);
         }
         //获取生产人员信息
         public ActionResult sltperson() {
