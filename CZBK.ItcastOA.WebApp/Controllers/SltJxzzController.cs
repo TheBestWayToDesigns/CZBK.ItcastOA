@@ -111,6 +111,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     tList.Add(jc);
                 }
             }
+            tList = tList.OrderByDescending(x => x.Wtime).ToList();
             return Json(new { rows = tList, total = toalcount+totalcount2 }, JsonRequestBehavior.AllowGet);
         }
         //获取生产人员信息
@@ -393,6 +394,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     #region 个人月报表
                     if (bolID == 10)
                     {
+                        var monthCount = DateTime.DaysInMonth(dtStart.Year, dtStart.Month);
                         if (bumenID == 26)
                         {
                             var temp = T_jxzztjbService.LoadEntities(x => x.Wtime >= dtStart && x.Wtime <= dtEnd && x.del_f == true).DefaultIfEmpty().ToList();
@@ -400,6 +402,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             {
                                 var tdata = temp.GroupBy(x => x.UPslt_ID).Select(x => new GRmouth
                                 {
+                                    ID = x.First().UPslt_ID,
                                     UPslt_ID = x.First().User_Person_slt.UserInfo.PerSonName,
                                     Iint = x.Sum(g => g.Iint),
                                     Slt_kg = x.Sum(g => g.Slt_kg),
@@ -409,8 +412,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                     ThisHaveTime = x.Sum(g => g.ThisHaveTime),
                                     HaveTime = x.Sum(g => g.HaveTime),
                                     Wage_slt = x.First().User_Person_slt.Wage_slt,
-                                    RestYesOrNo = x.Sum(g => g.RestYesOrNo==-1?0:g.RestYesOrNo==0?0.5:1),
                                     Job_Name = x.First().User_Person_slt.Job_Name,
+                                    RestYesOrNo = monthCount - temp.Where(g=>g.UPslt_ID==x.First().UPslt_ID).GroupBy(z=> new { z.UPslt_ID, z.Wtime }).Count() + x.Sum(k => k.RestYesOrNo == 0 ? 0.5 : 0),
                                     HoursWage = x.First().User_Person_slt.HoursWage,
                                     SumHoursWage = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage),
                                     WorkHours = x.Sum(g => g.WorkHours)
@@ -426,6 +429,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             {
                                 var tdata = temp.GroupBy(x => x.UPslt_ID).Select(x => new GRmouth
                                 {
+                                    ID = x.First().UPslt_ID, 
                                     UPslt_ID = x.First().User_Person_slt.UserInfo.PerSonName,
                                     Iint = x.Sum(g => g.Iint),
                                     Slt_kg = x.Sum(g => g.Slt_kg),
@@ -435,8 +439,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                     ThisHaveTime = x.Sum(g => g.ThisHaveTime),
                                     HaveTime = x.Sum(g => g.HaveTime),
                                     Wage_slt = x.First().User_Person_slt.Wage_slt,
-                                    RestYesOrNo = x.Sum(g => g.RestYesOrNo == -1 ? 0 : g.RestYesOrNo == 0 ? 0.5 : 1),
                                     Job_Name = x.First().User_Person_slt.Job_Name,
+                                    RestYesOrNo = monthCount - temp.Where(g => g.UPslt_ID == x.First().UPslt_ID).GroupBy(z => new { z.UPslt_ID, z.Wtime }).Count()+x.Sum(k=>k.RestYesOrNo==0?0.5:0),
                                     HoursWage = x.First().User_Person_slt.HoursWage,
                                     SumHoursWage = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage),
                                     WorkHours = x.Sum(g => g.WorkHours)
@@ -729,6 +733,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
     }
     public class GRmouth
     {
+        public long ID { get; set; }
         public string UPslt_ID { get; set; }
         public Nullable<decimal> Iint { get; set; }
         public Nullable<decimal> Slt_kg { get; set; }
