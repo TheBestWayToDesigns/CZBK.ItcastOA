@@ -467,6 +467,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                 cje.WorkType = a.User_Person_slt.Job_Name;
                                 cje.HoursWage = a.User_Person_slt.HoursWage;
                                 cje.UpBumen = a.BumenInfoSet.Name;
+                                cje.WorkInfo = a.Seb_Number1.Ttext;
                                 cje.WorkHours = a.WorkHours;
                                 cje.SumMoney = cje.WorkHours * cje.HoursWage;
                                 tList.Add(cje);
@@ -482,6 +483,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                 cje.WorkType = a.User_Person_slt.Job_Name;
                                 cje.HoursWage = a.User_Person_slt.HoursWage;
                                 cje.UpBumen = a.BumenInfoSet.Name;
+                                cje.WorkInfo = a.Seb_Number.Ttext;
                                 cje.WorkHours = a.WorkHours;
                                 cje.SumMoney = cje.WorkHours * cje.HoursWage;
                                 tList.Add(cje);
@@ -520,7 +522,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             List<GZXExcel> temp1 = new List<GZXExcel>();
                             if (temp != null && temp[0] != null)
                             {
-                                temp1 = temp.GroupBy(x => x.ImgNumber + x.Seb_Number1.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
+                                temp1 = temp.GroupBy(x => x.Seb_Number1.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
                                 return Json(temp1, JsonRequestBehavior.AllowGet);
                             }
                             return Json(null, JsonRequestBehavior.AllowGet);
@@ -532,7 +534,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             List<GZXExcel> temp3 = new List<GZXExcel>();
                             if (temp2 != null && temp2[0] != null)
                             {
-                                temp3 = temp2.GroupBy(x => x.ImgNumber + x.Seb_Number.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
+                                temp3 = temp2.GroupBy(x => x.Seb_Number.Ttext).Select(x => new GZXExcel { UpBumen = x.Key, SumHours = x.Sum(g => g.WorkHours), SumMoney = x.Sum(g => g.WorkHours * g.User_Person_slt.HoursWage) }).ToList();
                                 return Json(temp3, JsonRequestBehavior.AllowGet);
                             }
                             return Json(null, JsonRequestBehavior.AllowGet);
