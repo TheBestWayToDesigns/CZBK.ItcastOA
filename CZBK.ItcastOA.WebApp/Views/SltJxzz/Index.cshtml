@@ -213,12 +213,87 @@
         });
         function toDownloadExcel() {
             var colCount = ($("#tt").datagrid("options").columns)[0].length;
+            var addTotal = "";
+            if ($("#tt").datagrid("options").title == "个人日统计表") {
+                addTotal = "<table><tr><td colspan='4'>监察部签字:</td><td colspan='4'>车间主任签字:</td><td colspan='4'>检查员:</td><td colspan='4'>统计员:</td><td colspan='4'>制表人:</td></tr></table>";
+            }
+            else if ($("#tt").datagrid("options").title == "个人月统计表") {
+                var rows = $('#tt').datagrid('getRows')//获取当前的数据行
+                var totalIint = 0;
+                var totalSlt_kg = 0;
+                var totalSlt_hege = 0;
+                var totalSlt_hegeNo = 0;
+                var totalSlt_Feipin = 0;
+                var totalThisHaveTime = 0;
+                var totalHaveTime = 0;
+                var totalWage_slt = 0;
+                var totalHoursWage = 0;
+                var totalWorkHours = 0;
+                var totalSumHoursWage = 0;
+                var totalRestYesOrNo = 0;
+                for (var i = 0; i < rows.length; i++) {
+                    totalIint += rows[i]['Iint'];
+                    totalSlt_kg += rows[i]['Slt_kg'];
+                    totalSlt_hege += rows[i]['Slt_hege'];
+                    totalSlt_hegeNo += rows[i]['Slt_hegeNo'];
+                    totalSlt_Feipin += rows[i]['Slt_Feipin'];
+                    totalThisHaveTime += rows[i]['ThisHaveTime'];
+                    totalHaveTime += rows[i]['HaveTime'];
+                    totalWage_slt += rows[i]['Wage_slt'];
+                    totalHoursWage += rows[i]['HoursWage'];
+                    totalWorkHours += rows[i]['WorkHours'];
+                    totalSumHoursWage += rows[i]['SumHoursWage'];
+                    totalRestYesOrNo += rows[i]['RestYesOrNo'];
+                }
+                addTotal = "<table><tr style='border:1px solid black'><td colspan='2' style='text-align:center;'>合计</td>"
+                    + "<td style='text-align:center '>" + totalIint + "</td><td style='text-align:center '>" + totalSlt_kg + "</td>"
+                    + "<td style='text-align:center '>" + totalSlt_hege + "</td><td style='text-align:center '>" + totalSlt_hegeNo + "</td>"
+                    + "<td style='text-align:center '>" + totalSlt_Feipin + "</td><td style='text-align:center '>" + totalThisHaveTime + "</td>"
+                    + "<td style='text-align:center '>" + totalHaveTime + "</td><td style='text-align:center '>" + totalWage_slt + "</td>"
+                    + "<td style='text-align:center '>" + totalHoursWage + "</td><td style='text-align:center '>" + totalWorkHours + "</td>"
+                    + "<td style='text-align:center '>" + totalSumHoursWage + "</td><td style='text-align:center '>" + totalRestYesOrNo + "</td><td></td><td></td></tr>"
+                    + "<tr><td colspan='3'>监察部签字:</td><td colspan='3'>车间主任签字:</td><td colspan='3'>检查员:</td><td colspan='3'>统计员:</td><td colspan='3'>制表人:</td></tr>"
+                + "<tr><td colspan='15' style='font-weight:bold'>注：次月5日前监察部召集相关人员对上个月工作进行综合评价，评分分五个等级：优、良、合格、较差、差。</td></tr></table>";
+            }
+            else if ($("#tt").datagrid("options").title == "车间月统计表") {
+                var rows = $('#tt').datagrid('getRows')//获取当前的数据行
+                var totalWorkHours = 0;
+                var totalSumMoney = 0;
+                for (var i = 0; i < rows.length; i++) {
+                    totalWorkHours += rows[i]['WorkHours'];
+                    totalSumMoney += rows[i]['SumMoney'];
+                }
+                addTotal = "<table><tr style='border:1px solid black'><td colspan='6' style='text-align:center;'>合计</td><td style='text-align:center '>" + totalWorkHours + "</td><td style='text-align:center '>" + totalSumMoney + "</td></tr>"
+                    + "<tr><td colspan='2'>监察部签字:</td><td colspan='2'>车间主任签字:</td><td colspan='2'>检查员:</td><td colspan='2'>统计员:</td><td colspan='2'>制表人:</td></tr></table>";
+            }
+            else if ($("#tt").datagrid("options").title == "公司月统计表") {
+                var rows = $('#tt').datagrid('getRows')//获取当前的数据行
+                var totalSumHours = 0;
+                var totalSumMoney = 0;
+                for (var i = 0; i < rows.length; i++) {
+                    totalSumHours += rows[i]['SumHours'];
+                    totalSumMoney += rows[i]['SumMoney'];
+                }
+                addTotal = "<table><tr style='border:1px solid black'><td style='text-align:center;'>合计</td><td style='text-align:center '>" + totalSumHours + "</td><td style='text-align:center '>" + totalSumMoney + "</td><td></td></tr>"
+                    + "<tr><td>主管副总签字:</td><td>加工部门领导签字:</td><td>制表:王莉雁</td></tr></table>";
+            }
+            else if ($("#tt").datagrid("options").title == "轨枕设备月统计表") {
+                var rows = $('#tt').datagrid('getRows')//获取当前的数据行
+                var totalSumHours = 0;
+                var totalSumMoney = 0;
+                for (var i = 0; i < rows.length; i++) {
+                    totalSumHours += rows[i]['SumHours'];
+                    totalSumMoney += rows[i]['SumMoney'];
+                }
+                addTotal = "<table><tr style='border:1px solid black'><td style='text-align:center;'>合计</td><td style='text-align:center '>" + totalSumHours + "</td><td style='text-align:center '>" + totalSumMoney + "</td></tr>"
+                    + "<tr><td>主管副总签字:</td><td>机械制造领导签字:</td><td>用工部门领导签字:</td><td>制表:王莉雁</td></tr></table>";
+            }
             var htmlData = $(".datagrid-view2").html();
             var tableHead = "<html><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />" +
         "<style type='text/css'>tbody tr td{text-align:center;border:solid .5pt Black;} </style>" +
         "<body><table >";
             var Theard = "<thead><tr><td colspan='"+colCount+"' style=' font-family:黑体; font-size:25px;text-align:center '>" + $("#InfoExcelMsg").combobox("getText") + $("#InfoExcelType").combobox("getText") + "</td></tr></thead>";
-            $("#OFtable").val(tableHead + Theard + htmlData + "</table></body></html>"); //获取并拼接代码
+            $("#OFtable").val(tableHead + Theard + htmlData + addTotal+"</table></body></html>"); //获取并拼接代码
             $("#ExcelForm").submit();
         }
         function fixGetValue(obj) {
@@ -385,7 +460,6 @@
                       { field: 'HoursWage', title: '加工单价', align: 'center' },
                       { field: 'UpBumen', title: '用工部门', align: 'center' },
                       { field: 'WorkInfo', title: '工作内容', align: 'center' },
-                      { field: 'WorkDay', title: '工作时间/天数', align: 'center' },
                       { field: 'WorkHours', title: '工作时间/小时', align: 'center' },
                       { field: 'SumMoney', title: '金额(元)', align: 'center' }, ]]});
         }
@@ -396,9 +470,9 @@
             $("#tt").datagrid("options").title = "公司月统计表";
             $("#tt").datagrid({columns : [[
                       { field: 'UpBumen', title: '用工部门', align: 'center' },
-                      { field: 'SumHours', title: '工时合计', align: 'center' },
+                      { field: 'SumHours', title: '工作时间/小时', align: 'center' },
                       { field: 'SumMoney', title: '金额合计', align: 'center' },
-                      { field: 'BmLeaderQZ', title: '用工部门领导签字', align: 'center' }]]});
+                      { field: 'BmLeaderQZ', title: '备注', align: 'center' }]]});
         }
         //显示轨枕设备月统计表
         function showGZCJMonthExcel() {
@@ -1195,10 +1269,6 @@
                     <td>
                         <input class="easyui-datebox" name="Wtime" id="Wtime"/>
                     </td>
-                    <td>计划开始时间</td>
-                    <td>
-                        <input id="JiHuanStartTime" type="text" name="StupTime" class="easyui-datebox" />
-                    </td>
                 </tr>
                 <tr>
                     <td>操作者</td>
@@ -1209,6 +1279,22 @@
                                valueField="ID"
                                textField="Name"
                                panelHeight="200px" style="width:100px" />
+                    </td>
+                    <td>工种</td>
+                    <td>
+                        <input id="itGongzhong" name="itGongzhong" type="text" readonly />
+                    </td>
+                    <td>设备编号</td>
+                    <td>
+                        @{
+                            <select id="str_1" class="easyui-combobox" name="Seb_number_ID" style="width:80px;">
+                                @{foreach (Seb_Number Item in ViewBag.ljname)
+                                    {
+                                        <option value="@Item.ID">@Item.Ttext</option>
+                                    }
+                                }
+                            </select>
+                        }
                     </td>
                     <td>用工部门</td>
                     <td>
@@ -1233,7 +1319,7 @@
                                valueField="ID"
                                textField="Name"
                                panelHeight="200px"
-                               style="width:100px" />
+                               style="width:300px" />
                     </td>
                     <td><input name="ImgName_ID" id="ImgName_ID" type="hidden" /></td>
                 </tr>
@@ -1242,6 +1328,12 @@
                     <td><input id="Iint" type="text" name="Iint" onkeyup="num(this)" /> </td>
                     <td>重量</td>
                     <td><input id="Slt_kg" type="text" name="Slt_kg" onkeyup="num(this)" /> </td>
+                    <td>计划开始时间</td>
+                    <td>
+                        <input id="JiHuanStartTime" type="text" name="StupTime" class="easyui-datebox" />
+                    </td>
+                </tr>
+                <tr>
                     <td>计划工时</td>
                     <td>
                         <input id="ThisHaveTime" type="text" name="ThisHaveTime" onkeyup="num(this)" />
@@ -1250,38 +1342,10 @@
                     <td><input id="HaveTime" type="text" name="HaveTime" onkeyup="num(this)" /> </td>
                     <td>完工程度</td>
                     <td><input id="FinishBFB" type="text" name="Slt_BFB" onkeyup="num(this)" /> </td>
-                </tr>
-                <tr>
-                    <td>合格数量</td>
-                    <td>
-                        <input id="Slt_hege" type="text" name="Slt_hege" onkeyup="num(this)" />
-                    </td>
-                    <td>不合格数量</td>
-                    <td><input id="Slt_hegeno" type="text" name="Slt_hegeNo" onkeyup="num(this)" /> </td>
-                    <td>废品数量</td>
-                    <td><input id="Slt_Feipin" type="text" name="Slt_Feipin" onkeyup="num(this)" /> </td>
                     <td>实际完成日期</td>
                     <td><input id="ShiJiFinishTime" type="text" name="OverTime" class="easyui-datebox" /></td>
                 </tr>
                 <tr>
-                    <td>设备编号</td>
-                    <td>
-                        @{
-                            <select id="str_1" class="easyui-combobox" name="Seb_number_ID" style="width:80px;">
-                                @{foreach (Seb_Number Item in ViewBag.ljname)
-                                    {
-                                        <option value="@Item.ID">@Item.Ttext</option>
-                                    }
-                                }
-                            </select>
-                        }
-                    </td>
-                </tr>
-                <tr>
-                    <td>工种</td>
-                    <td>
-                        <input id="itGongzhong" name="itGongzhong" type="text" readonly />
-                    </td>
                     <td>工资</td>
                     <td><input id="itwage" type="text" name="itwage" readonly /> </td>
                     <td>加工单价</td>
@@ -1296,6 +1360,16 @@
                             <option value="0">半天休</option>
                             <option value="1">全天休</option>                        
                         </select> </td>
+                </tr>
+                <tr>
+                    <td>合格数量</td>
+                    <td>
+                        <input id="Slt_hege" type="text" name="Slt_hege" onkeyup="num(this)" />
+                    </td>
+                    <td>不合格数量</td>
+                    <td><input id="Slt_hegeno" type="text" name="Slt_hegeNo" onkeyup="num(this)" /> </td>
+                    <td>废品数量</td>
+                    <td><input id="Slt_Feipin" type="text" name="Slt_Feipin" onkeyup="num(this)" /> </td>
                 </tr>
             </table> 
         }
@@ -1312,35 +1386,20 @@
                         <input class="easyui-datebox" name="Wtime" id="WtimeJG"/>
                     </td>
                 </tr>
-                <tr><td>零件名称</td><td>
-                                     <input class="easyui-combobox" id="ImgName_IDJGSel"
-                                            name="ImgName_IDJGSel"
-                                            url="/SltJxzz/GetImgName_ID"
-                                            valueField="ID"
-                                            textField="Name"
-                                            panelHeight="200px"
-                                            style="width:100px" />
-                    </td><td><input name="ImgName_ID" id="ImgName_IDJG" type="hidden" /></td>
-                </tr>
                 <tr>
-                    <td>零件图号</td>
+                    <td>操作者</td>
                     <td>
-                        <input id="ImgNumberJG" type="text" name="ImgNumber" />
+                        <input class="easyui-combobox " id="sltczzJG"
+                               name="UPslt_ID"
+                               url="/SltJxzz/GetPersonListJG"
+                               valueField="ID"
+                               textField="Name"
+                               panelHeight="200px" style="width:100px" />
                     </td>
-                    <td>数量</td>
-                    <td><input id="IintJG" type="text" name="Iint" onkeyup="num(this)" /> </td>
-                    <td>重量</td>
-                    <td><input id="Slt_kgJG" type="text" name="Slt_kg" onkeyup="num(this)" /> </td>
-                </tr>
-                <tr>
-                    <td>合格数量</td>
+                    <td>工种</td>
                     <td>
-                        <input id="Slt_hegeJG" type="text" name="Slt_hege" onkeyup="num(this)" />
+                        <input id="itGongzhongJG" name="itGongzhong" type="text" readonly />
                     </td>
-                    <td>不合格数量</td>
-                    <td><input id="Slt_hegenoJG" type="text" name="Slt_hegeNo" onkeyup="num(this)" /> </td>
-                    <td>废品数量</td>
-                    <td><input id="Slt_FeipinJG" type="text" name="Slt_Feipin" onkeyup="num(this)" /> </td>
                     <td>用工部门</td>
                     <td>
                         <input class="easyui-combobox " id="UpBumen_idJG"
@@ -1352,14 +1411,29 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>完工程度</td>
-                    <td><input id="FinishBFBJG" type="text" name="Slt_BFB" onkeyup="num(this)" /> </td>
+                    <td>零件图号</td>
+                    <td>
+                        <input id="ImgNumberJG" type="text" name="ImgNumber" />
+                    </td>
+                    <td>零件名称</td><td>
+                                     <input class="easyui-combobox" id="ImgName_IDJGSel"
+                                            name="ImgName_IDJGSel"
+                                            url="/SltJxzz/GetImgName_ID"
+                                            valueField="ID"
+                                            textField="Name"
+                                            panelHeight="200px"
+                                            style="width:300px" />
+                    </td><td><input name="ImgName_ID" id="ImgName_IDJG" type="hidden" /></td>
+                </tr>
+                <tr>
+                    <td>数量</td>
+                    <td><input id="IintJG" type="text" name="Iint" onkeyup="num(this)" /> </td>
+                    <td>重量</td>
+                    <td><input id="Slt_kgJG" type="text" name="Slt_kg" onkeyup="num(this)" /> </td>
                     <td>计划开始时间</td>
                     <td>
                         <input id="JiHuanStartTimeJG" type="text" name="StupTime" class="easyui-datebox" />
                     </td>
-                    <td>实际完成日期</td>
-                    <td><input id="ShiJiFinishTimeJG" type="text" name="OverTime" class="easyui-datebox" /></td>
                 </tr>
                 <tr>
                     <td>计划工时</td>
@@ -1368,29 +1442,18 @@
                     </td>
                     <td>实际工时</td>
                     <td><input id="HaveTimeJG" type="text" name="HaveTime" onkeyup="num(this)" /> </td>
-                    <td>工作时间</td>
-                    <td><input id="WorkHoursJG" type="text" name="WorkHours" onkeyup="num(this)" /> </td>
+                    <td>完工程度</td>
+                    <td><input id="FinishBFBJG" type="text" name="Slt_BFB" onkeyup="num(this)" /> </td>
+                    <td>实际完成日期</td>
+                    <td><input id="ShiJiFinishTimeJG" type="text" name="OverTime" class="easyui-datebox" /></td>    
                 </tr>
                 <tr>
-                    <td>操作者</td>
-                    <td>
-                        <input class="easyui-combobox " id="sltczzJG"
-                               name="UPslt_ID"
-                               url="/SltJxzz/GetPersonListJG"
-                               valueField="ID"
-                               textField="Name"
-                               panelHeight="200px" style="width:100px" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>工种</td>
-                    <td>
-                       <input id="itGongzhongJG" name="itGongzhong"  type="text" readonly /> 
-                    </td>
                     <td>工资</td>
                     <td><input id="itwageJG" type="text" name="itwage"  readonly /> </td>
                     <td>加工单价</td>
                     <td><input id="ithoursJG" type="text" name="ithours"  readonly /> </td>
+                    <td>工作时间</td>
+                    <td><input id="WorkHoursJG" type="text" name="WorkHours" onkeyup="num(this)" /> </td>
                 </tr>
                 <tr>
                     <td>是否休息</td>
@@ -1399,6 +1462,16 @@
                         <option value="0">半天休</option>
                         <option value="1">全天休</option>                      
                         </select> </td>
+                </tr>
+                <tr>
+                    <td>合格数量</td>
+                    <td>
+                        <input id="Slt_hegeJG" type="text" name="Slt_hege" onkeyup="num(this)" />
+                    </td>
+                    <td>不合格数量</td>
+                    <td><input id="Slt_hegenoJG" type="text" name="Slt_hegeNo" onkeyup="num(this)" /> </td>
+                    <td>废品数量</td>
+                    <td><input id="Slt_FeipinJG" type="text" name="Slt_Feipin" onkeyup="num(this)" /> </td>
                 </tr>
             </table> 
         }
