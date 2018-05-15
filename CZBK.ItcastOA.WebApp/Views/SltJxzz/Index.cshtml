@@ -247,11 +247,11 @@
                 }
                 addTotal = "<table><tr style='border:1px solid black'><td colspan='2' style='text-align:center;'>合计</td>"
                     + "<td style='text-align:center '>" + totalIint + "</td><td style='text-align:center '>" + totalSlt_kg + "</td>"
-                    + "<td style='text-align:center '>" + totalSlt_hege + "</td><td style='text-align:center '>" + totalSlt_hegeNo + "</td>"
-                    + "<td style='text-align:center '>" + totalSlt_Feipin + "</td><td style='text-align:center '>" + totalThisHaveTime + "</td>"
-                    + "<td style='text-align:center '>" + totalHaveTime + "</td><td style='text-align:center '>" + totalWage_slt + "</td>"
-                    + "<td style='text-align:center '>" + totalHoursWage + "</td><td style='text-align:center '>" + totalWorkHours + "</td>"
-                    + "<td style='text-align:center '>" + totalSumHoursWage + "</td><td style='text-align:center '>" + totalRestYesOrNo + "</td><td></td><td></td></tr>"
+                    + "<td style='text-align:center '>" + totalThisHaveTime + "</td><td style='text-align:center '>" + totalHaveTime + "</td>"
+                    + "<td style='text-align:center '>" + totalWage_slt + "</td><td style='text-align:center '>" + totalHoursWage + "</td>"
+                    + "<td style='text-align:center '>" + totalWorkHours + "</td><td style='text-align:center '>" + totalSumHoursWage + "</td>"
+                    + "<td style='text-align:center '>" + totalRestYesOrNo + "</td><td style='text-align:center '>" + totalSlt_hege + "</td>"
+                    + "<td style='text-align:center '>" + totalSlt_hegeNo + "</td><td style='text-align:center '>" + totalSlt_Feipin + "</td><td></td><td></td></tr>"
                     + "<tr><td colspan='3'>监察部签字:</td><td colspan='3'>车间主任签字:</td><td colspan='3'>检查员:</td><td colspan='3'>统计员:</td><td colspan='3'>制表人:</td></tr>"
                 + "<tr><td colspan='15' style='font-weight:bold'>注：次月5日前监察部召集相关人员对上个月工作进行综合评价，评分分五个等级：优、良、合格、较差、差。</td></tr></table>";
             }
@@ -357,22 +357,24 @@
                                     else
                                     { return value }
                                 }
-                            }, {
-                                field: 'StupTime', title: '计划开始日期', align: 'center',
-                                formatter: function (value, row, index) {
-                                    if (value != null)
-                                    { return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d"); }
-                                    else
-                                    { return value }
-                                }
-                            },
+                            }, 
                     { field: 'UPslt_ID', title: '操作者', align: 'center' },
                       { field: 'Job_Name', title: '工种', align: 'center' },
+                      { field: 'Seb_number_ID', title: '设备编号', align: 'center' },
                       { field: 'UpBumen_id', title: '用工部门', align: 'center' },
                       { field: 'ImgNumber', title: '零件图号', align: 'center' },
                       { field: 'ImgName_ID', title: '零件名称', align: 'center' },
                       { field: 'Iint', title: '数量', align: 'center' },
                       { field: 'Slt_kg', title: '重量', align: 'center' },
+                      {
+                          field: 'StupTime', title: '计划开始日期', align: 'center',
+                          formatter: function (value, row, index) {
+                              if (value != null)
+                              { return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d"); }
+                              else
+                              { return value }
+                          }
+                      },
                       { field: 'ThisHaveTime', title: '计划工时', align: 'center' },
                       { field: 'HaveTime', title: '实际工时', align: 'center' },
                       { field: 'Slt_BFB', title: '完工程度', align: 'center' },
@@ -385,10 +387,6 @@
                               { return value }
                           }
                       },
-                      { field: 'Slt_hege', title: '合格数量', align: 'center' },
-                      { field: 'Slt_hegeNo', title: '不合格数量', align: 'center' },
-                      { field: 'Slt_Feipin', title: '废品数量', align: 'center' },
-                      { field: 'Seb_number_ID', title: '设备编号', align: 'center' },
                       { field: 'Wage_slt', title: '工资', align: 'center' },
                       { field: 'HoursWage', title: '加工单价', align: 'center' },
                       { field: 'WorkHours', title: '工作时间', align: 'center' },
@@ -412,6 +410,9 @@
                               else { return value }
                           }
                       },
+                      { field: 'Slt_hege', title: '合格数量', align: 'center' },
+                      { field: 'Slt_hegeNo', title: '不合格数量', align: 'center' },
+                      { field: 'Slt_Feipin', title: '废品数量', align: 'center' },
                       { field: 'AllPinJia', title: '综合评价', align: 'center' },
                       { field: 'BAK', title: '备注', align: 'center' }]]});
         }
@@ -426,16 +427,16 @@
                      { field: 'Job_Name', title: '工种', align: 'center' },
                      { field: 'Iint', title: '数量', align: 'center' },
                      { field: 'Slt_kg', title: '重量', align: 'center' },
-                     { field: 'Slt_hege', title: '合格数量', align: 'center' },
-                     { field: 'Slt_hegeNo', title: '不合格数量', align: 'center' },
-                     { field: 'Slt_Feipin', title: '废品数量', align: 'center' },
                      { field: 'ThisHaveTime', title: '计划工时', align: 'center' },
                      { field: 'HaveTime', title: '实际工时', align: 'center' },
                      { field: 'Wage_slt', title: '工资', align: 'center' },
                      { field: 'HoursWage', title: '加工单价', align: 'center' },
                      { field: 'WorkHours', title: '工作时间', align: 'center' },
                      { field: 'SumHoursWage', title: '合计金额', align: 'center' },
-                     { field: 'RestYesOrNo', title: '休息几天', align: 'center'},
+                     { field: 'RestYesOrNo', title: '休息几天', align: 'center' },
+                     { field: 'Slt_hege', title: '合格数量', align: 'center' },
+                     { field: 'Slt_hegeNo', title: '不合格数量', align: 'center' },
+                     { field: 'Slt_Feipin', title: '废品数量', align: 'center' },
                      { field: 'AllPinJia', title: '综合评价', align: 'center' },
                      { field: 'BAK', title: '备注', align: 'center' }]]});
         }
@@ -1041,14 +1042,14 @@
                 $('#adddiv').dialog('close');
                 $('#tt').datagrid('reload');
                 if (data.state == true) {
-                    $("#ImgName_IDSel").combobox("reload");
+                    $("#ImgName_IDSel").combobox("reload", "/SltJxzz/GetImgName_ID");
                 }
         }
         function afterEditAddJG(data) {
                 $('#adddivJG').dialog('close');
                 $('#tt').datagrid('reload');
                 if (data.state == true) {
-                    $("#ImgName_IDJGSel").combobox("reload");
+                    $("#ImgName_IDJGSel").combobox("reload", "/SltJxzz/GetImgName_ID");
                 }
         }
         //数字验证
