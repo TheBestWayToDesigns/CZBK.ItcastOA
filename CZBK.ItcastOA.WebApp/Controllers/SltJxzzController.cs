@@ -43,7 +43,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 25;
             int  toalcount=0;
             int totalcount2 = 0;
-            IQueryable<T_jxzztjb> Tdata = T_jxzztjbService.LoadPageEntities(pageIndex, pageSize, out toalcount, x => x.del_f ==true,x=>x.Addtime,false).DefaultIfEmpty();
+            IQueryable<T_jxzztjb> Tdata = T_jxzztjbService.LoadPageEntities(pageIndex, pageSize, out toalcount, x => x.del_f ==true,x=>x.Wtime,false).DefaultIfEmpty();
             List<jsxtCls> tList = new List<jsxtCls>();
             if(Tdata.ToList()!=null&& Tdata.ToList()[0] != null)
             {
@@ -78,7 +78,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     tList.Add(jc);
                 }
             }
-            IQueryable<T_jgzztjb> Tdata2 = T_jgzztjbService.LoadPageEntities(pageIndex, pageSize, out totalcount2, x => x.del_f == true, x => x.Addtime, false).DefaultIfEmpty();
+            IQueryable<T_jgzztjb> Tdata2 = T_jgzztjbService.LoadPageEntities(pageIndex, pageSize, out totalcount2, x => x.del_f == true, x => x.Wtime, false).DefaultIfEmpty();
             if (Tdata2.ToList() != null && Tdata2.ToList()[0] != null)
             {
                 foreach (var a in Tdata2)
@@ -222,6 +222,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             tjjb.Addtime = DateTime.Now;
             tjjb.del_f = true;
             bool state = false;
+            long ImgId = 0;
             if (tjjb.ImgName_ID == 0)
             {
                 var Imgstr_name = Request["ImgName_ID"];
@@ -229,6 +230,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 if (temp != null)
                 {
                     tjjb.ImgName_ID = temp.ID;
+                    ImgId = temp.ID;
                 }
                 else
                 {
@@ -237,6 +239,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     sb.Ttext = Imgstr_name;
                     var rtmp = Seb_NumberService.AddEntity(sb);
                     tjjb.ImgName_ID = rtmp.ID;
+                    ImgId = rtmp.ID;
                     state = true;
                 }
             }
@@ -246,7 +249,25 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             else
             {
-                T_jgzztjbService.AddEntity(tjjb);
+                if(Request["PersonGroupYorN"] == "true")
+                {
+                    var personidAry = Request["GroupPersonsID"].Split(',');
+                    foreach(var a in personidAry)
+                    {
+                        if (a.Trim().Length > 0)
+                        {
+                            tjjb.UPslt_ID = Convert.ToInt64(a);
+                            T_jgzztjbService.AddEntity(tjjb);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                }else
+                {
+                    T_jgzztjbService.AddEntity(tjjb);
+                }
             }
             return Json(new { ret = "ok",state = state }, JsonRequestBehavior.AllowGet);
         }
@@ -489,6 +510,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                                 tList.Add(cje);
                             }
                         }
+                        tList = tList.OrderBy(x => x.WorkTime).ToList();
                         return Json(tList, JsonRequestBehavior.AllowGet);
                     }
                     #endregion

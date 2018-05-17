@@ -195,6 +195,31 @@
                    $("#InfoExcelMsg").combobox("reload", "/SltJxzz/GetInfoExcelMsg?bloID=" + newValue);
                 }
             });
+            $("#PersonGroupYorN").click(function () {
+                $("#PersonGroupYorN").val() == "false" ? $("#PersonGroupYorN").val("true") : $("#PersonGroupYorN").val("false");
+                if ($("#PersonGroupYorN").val() == "true") {
+                    $("#GroupPersons").val("");
+                    $("#GroupPersonsID").val("");
+                    $("#AddIntoGroup").show();
+                    $("#GroupPersonsLabel").show();
+                } else {
+                    $("#GroupPersons").val("");
+                    $("#GroupPersonsID").val("");
+                    $("#AddIntoGroup").hide();
+                    $("#GroupPersonsLabel").hide();
+                }
+            })
+            $("#AddIntoGroup").click(function () {
+                var sltczz = $("#sltczzJG").combobox("getValue");
+                if (sltczz.trim().length <= 0) {
+                    $.messager.alert("提示", "请选择操作者！");
+                    return;
+                } else {
+                    var sltczzStr = $("#sltczzJG").combobox("getText");
+                    $("#GroupPersons").val($("#GroupPersons").val()+sltczzStr + "-");
+                    $("#GroupPersonsID").val($("#GroupPersonsID").val() + sltczz + ",");
+                }
+            })
             $("#InfoExcelBtnDiv").hide();
             //选择人员后显示工资 工种及工时
             //$("#UserIDForAddPerson").combobox({
@@ -588,9 +613,14 @@
             });
         }
         //添加结构车间日报表
-        function AdddataInfoJG() {
+        function AdddataInfoJG(someInt) {
             ResetJGForm();
             $("#adddivJG").css("display", "block");
+            if (someInt == 1) {
+                $("#PersonGroupYorNText").hide();
+            } else {
+                $("#PersonGroupYorNText").show();
+            }
             $('#adddivJG').dialog({
                 title: "添加信息",
                 width: $(this).width() * 0.8,
@@ -598,6 +628,7 @@
                 collapsible: true,
                 resizable: true,
                 modal: true,
+                closable:false,
                 buttons: [{
                     text: '确定',
                     iconCls: 'icon-ok',
@@ -632,15 +663,33 @@
                             $.messager.alert("提示", "请选择操作者！");
                             return;
                         }
+                        if ($("#PersonGroupYorN").val() == "true") {
+                            if ($("#GroupPersonsID").val().trim().length <= 0) {
+                                $.messager.alert("提示", "请选择操作者并添加进组！");
+                                return;
+                            }
+                        }
                         $("#bollFormJG").submit();//提交表单
                     }
                 }, {
                     text: '取消',
                     handler: function () {
+                        hiddenInput();
                         $('#adddivJG').dialog('close');
                     }
                 }]
             });
+        }
+        //隐藏分组问题文本框
+        function hiddenInput() {
+            if ($("#PersonGroupYorN").val() == "true") {
+                $("input[name='PersonGroupYorN']").removeAttr('checked');
+                $("#PersonGroupYorN").val("false");
+                $("#GroupPersons").val("");
+                $("#GroupPersonsID").val("");
+                $("#AddIntoGroup").hide();
+                $("#GroupPersonsLabel").hide();
+            }
         }
         function afterAddPersonInfo(data) {
             if (data.ret == "ok") {
@@ -1005,7 +1054,7 @@
                     $("#sltczzJG").combobox("setValue", serverData.UPslt_ID)
                     $("#RestYesOrNoJG").combobox("setValue", serverData.RestYesOrNo)
                 })
-                AdddataInfoJG();
+                AdddataInfoJG(1);
             }
         }
         //删除日报表
@@ -1051,6 +1100,7 @@
                 if (data.state == true) {
                     $("#ImgName_IDJGSel").combobox("reload", "/SltJxzz/GetImgName_ID");
                 }
+                hiddenInput();
         }
         //数字验证
         function num(obj) {
@@ -1150,7 +1200,7 @@
             $("#ShiJiFinishTimeJG").datebox("setValue", "")
             $("#ThisHaveTimeJG").val("")
             $("#HaveTimeJG").val("")
-            $("#WorkHoursJG").val("")
+            $("#WorkHoursJG").val("10")
             $("#sltczzJG").combobox("setValue", "")
             $("#RestYesOrNoJG").combobox("setValue", -1)
             $("#itGongzhongJG").val("")
@@ -1221,7 +1271,7 @@
             部门列表：<input class="easyui-combobox" id="InfoExcelMsg"
                    valueField="ID"
                    textField="Name"
-                   panelHeight="auto"
+                   panelHeight="200px"
                    style="width:100px" />
             <label id="yearMonthDay">统计日期：<input  type="text" class="easyui-datebox" id="excelYMD"></label>
             <label id="yearMonth">统计月份：<input onclick="setmonth(this)"  id="excelYM"/></label>
@@ -1389,14 +1439,21 @@
                 </tr>
                 <tr>
                     <td>操作者</td>
+                    <td><label id="PersonGroupYorNText"><input type="checkbox" id="PersonGroupYorN" name="PersonGroupYorN" value="false">添加操作者组</label></td>
                     <td>
                         <input class="easyui-combobox " id="sltczzJG"
                                name="UPslt_ID"
                                url="/SltJxzz/GetPersonListJG"
                                valueField="ID"
                                textField="Name"
-                               panelHeight="200px" style="width:100px" />
+                               panelHeight="200px" style="width:100px" /><input type="button" id="AddIntoGroup" value="添加进组" hidden="hidden"/>
                     </td>
+                    <td>
+                        <label id="GroupPersonsLabel"  hidden="hidden">组内成员 <textarea id="GroupPersons" readonly style="width:173px;height:80px;resize:none;"></textarea></label>
+                        <input name="GroupPersonsID" id="GroupPersonsID" type="hidden" />
+                    </td>
+                </tr>
+                <tr>
                     <td>工种</td>
                     <td>
                         <input id="itGongzhongJG" name="itGongzhong" type="text" readonly />

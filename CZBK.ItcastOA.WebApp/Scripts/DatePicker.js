@@ -232,7 +232,7 @@ Calendar.language = {
  */
 function Calendar(inputObj, dateFormatStyle, beginDate, endDate, lang, type) {
     this.beginDate = "1900-01-01".toDate();
-    this.endDate = "2020-01-01".toDate();
+    this.endDate = "2050-01-01".toDate();
     this.lang = 0; //default language
     this.type = "d";
     this.dateFormatStyle = "yyyy-MM-dd";
