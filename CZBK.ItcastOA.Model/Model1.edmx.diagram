@@ -137,6 +137,11 @@
         <AssociationConnector Association="OAModel.FK_T_jgzztjb_User_Person_slt" />
         <AssociationConnector Association="OAModel.FK_T_jgzztjb_Seb_Number" />
         <EntityTypeShape EntityType="OAModel.T_CSC_Card" Width="1.5" PointX="3.375" PointY="11.75" />
+        <EntityTypeShape EntityType="OAModel.T_SCCJ" Width="1.5" PointX="35.6250005" PointY="8.52245076497396" />
+        <AssociationConnector Association="OAModel.FK_T_SCCJ_BumenInfoSet" />
+        <AssociationConnector Association="OAModel.FK_T_SCCJ_T_ChanPinGG" />
+        <AssociationConnector Association="OAModel.FK_T_SCCJ_T_ChanPinJB" />
+        <AssociationConnector Association="OAModel.FK_T_SCCJ_T_ChanPinName" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

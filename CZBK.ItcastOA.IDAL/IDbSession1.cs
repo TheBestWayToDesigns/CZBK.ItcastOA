@@ -72,6 +72,8 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IT_jxzztjbDal T_jxzztjbDal{get;set;}
 	
+		IT_SCCJDal T_SCCJDal{get;set;}
+	
 		IT_SczzDanjuDal T_SczzDanjuDal{get;set;}
 	
 		IT_SczzItemDal T_SczzItemDal{get;set;}

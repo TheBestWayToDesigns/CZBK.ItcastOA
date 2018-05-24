@@ -161,6 +161,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class T_SCCJDal :BaseDal<T_SCCJ>,IT_SCCJDal
+    {
+
+    }
+		
 	public partial class T_SczzDanjuDal :BaseDal<T_SczzDanju>,IT_SczzDanjuDal
     {
 

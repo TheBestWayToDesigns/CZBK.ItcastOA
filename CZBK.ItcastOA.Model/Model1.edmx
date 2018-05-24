@@ -410,6 +410,24 @@
           <Property Name="WorkHours" Type="decimal" Precision="18" Scale="2" />
           <Property Name="del_f" Type="bit" />
         </EntityType>
+        <EntityType Name="T_SCCJ">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Wtime" Type="datetime" Nullable="false" />
+          <Property Name="BuMenid" Type="int" Nullable="false" />
+          <Property Name="ProductNameId" Type="bigint" Nullable="false" />
+          <Property Name="ProductGGId" Type="bigint" Nullable="false" />
+          <Property Name="ProductJB" Type="bigint" Nullable="false" />
+          <Property Name="Class" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Groups" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CiPinNum" Type="int" Nullable="false" />
+          <Property Name="HeGePinNum" Type="int" Nullable="false" />
+          <Property Name="YiDengPinNum" Type="int" Nullable="false" />
+          <Property Name="YouDengPinNum" Type="int" Nullable="false" />
+          <Property Name="Del_f" Type="smallint" Nullable="false" />
+        </EntityType>
         <EntityType Name="T_SczzDanju">
           <Key>
             <PropertyRef Name="ID" />
@@ -1284,6 +1302,54 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_T_SCCJ_BumenInfoSet">
+          <End Role="BumenInfoSet" Type="Self.BumenInfoSet" Multiplicity="1" />
+          <End Role="T_SCCJ" Type="Self.T_SCCJ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BumenInfoSet">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_SCCJ">
+              <PropertyRef Name="BuMenid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_SCCJ_T_ChanPinGG">
+          <End Role="T_ChanPinName" Type="Self.T_ChanPinName" Multiplicity="1" />
+          <End Role="T_SCCJ" Type="Self.T_SCCJ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_SCCJ">
+              <PropertyRef Name="ProductGGId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_SCCJ_T_ChanPinJB">
+          <End Role="T_ChanPinName" Type="Self.T_ChanPinName" Multiplicity="1" />
+          <End Role="T_SCCJ" Type="Self.T_SCCJ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_SCCJ">
+              <PropertyRef Name="ProductJB" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_SCCJ_T_ChanPinName">
+          <End Role="T_ChanPinName" Type="Self.T_ChanPinName" Multiplicity="1" />
+          <End Role="T_SCCJ" Type="Self.T_SCCJ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_SCCJ">
+              <PropertyRef Name="ProductNameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_T_SczzItem_UserInfo">
           <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="0..1" />
           <End Role="T_SczzItem" Type="Self.T_SczzItem" Multiplicity="*" />
@@ -1800,6 +1866,7 @@
           <EntitySet Name="T_jgzztjb" EntityType="Self.T_jgzztjb" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_JieKuanBill" EntityType="Self.T_JieKuanBill" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_jxzztjb" EntityType="Self.T_jxzztjb" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_SCCJ" EntityType="Self.T_SCCJ" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_SczzDanju" EntityType="Self.T_SczzDanju" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_SczzItem" EntityType="Self.T_SczzItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_ShengChanZhiZhaoTopName" EntityType="Self.T_ShengChanZhiZhaoTopName" Schema="dbo" store:Type="Tables" />
@@ -2005,6 +2072,22 @@
           <AssociationSet Name="FK_T_jxzztjb_User_Person_slt" Association="Self.FK_T_jxzztjb_User_Person_slt">
             <End Role="User_Person_slt" EntitySet="User_Person_slt" />
             <End Role="T_jxzztjb" EntitySet="T_jxzztjb" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_SCCJ_BumenInfoSet" Association="Self.FK_T_SCCJ_BumenInfoSet">
+            <End Role="BumenInfoSet" EntitySet="BumenInfoSet" />
+            <End Role="T_SCCJ" EntitySet="T_SCCJ" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_SCCJ_T_ChanPinGG" Association="Self.FK_T_SCCJ_T_ChanPinGG">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="T_SCCJ" EntitySet="T_SCCJ" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_SCCJ_T_ChanPinJB" Association="Self.FK_T_SCCJ_T_ChanPinJB">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="T_SCCJ" EntitySet="T_SCCJ" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_SCCJ_T_ChanPinName" Association="Self.FK_T_SCCJ_T_ChanPinName">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="T_SCCJ" EntitySet="T_SCCJ" />
           </AssociationSet>
           <AssociationSet Name="FK_T_SczzItem_UserInfo" Association="Self.FK_T_SczzItem_UserInfo">
             <End Role="UserInfo" EntitySet="UserInfo" />
@@ -2556,6 +2639,23 @@
             <End Role="T_jgzztjb" EntitySet="T_jgzztjb" />
           </AssociationSet>
           <EntitySet Name="T_CSC_Card" EntityType="OAModel.T_CSC_Card" />
+          <EntitySet Name="T_SCCJ" EntityType="OAModel.T_SCCJ" />
+          <AssociationSet Name="FK_T_SCCJ_BumenInfoSet" Association="OAModel.FK_T_SCCJ_BumenInfoSet">
+            <End Role="BumenInfoSet" EntitySet="BumenInfoSet" />
+            <End Role="T_SCCJ" EntitySet="T_SCCJ" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_SCCJ_T_ChanPinGG" Association="OAModel.FK_T_SCCJ_T_ChanPinGG">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="T_SCCJ" EntitySet="T_SCCJ" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_SCCJ_T_ChanPinJB" Association="OAModel.FK_T_SCCJ_T_ChanPinJB">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="T_SCCJ" EntitySet="T_SCCJ" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_SCCJ_T_ChanPinName" Association="OAModel.FK_T_SCCJ_T_ChanPinName">
+            <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
+            <End Role="T_SCCJ" EntitySet="T_SCCJ" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ActionInfo">
           <Key>
@@ -2654,6 +2754,7 @@
           <NavigationProperty Name="ScheduleTypes" Relationship="OAModel.FK_ScheduleType_Bumeninfo" FromRole="BumenInfoSet" ToRole="ScheduleType" />
           <NavigationProperty Name="T_jxzztjb" Relationship="OAModel.FK_T_jxzztjb_BumenInfoSet" FromRole="BumenInfoSet" ToRole="T_jxzztjb" />
           <NavigationProperty Name="T_jgzztjb" Relationship="OAModel.FK_T_jgzztjb_BumenInfoSet" FromRole="BumenInfoSet" ToRole="T_jgzztjb" />
+          <NavigationProperty Name="T_SCCJ" Relationship="OAModel.FK_T_SCCJ_BumenInfoSet" FromRole="BumenInfoSet" ToRole="T_SCCJ" />
         </EntityType>
         <EntityType Name="YXB_Kh_list">
           <Key>
@@ -3096,6 +3197,9 @@
           <NavigationProperty Name="YXB_Baojia2" Relationship="OAModel.FK_YXB_Baojia_xinghao" FromRole="T_ChanPinName" ToRole="YXB_Baojia" />
           <NavigationProperty Name="YXB_WinCanPin" Relationship="OAModel.FK_YXB_WinCanPin_name" FromRole="T_ChanPinName" ToRole="YXB_WinCanPin" />
           <NavigationProperty Name="YXB_WinCanPin1" Relationship="OAModel.FK_YXB_WinCanPin_xinghao" FromRole="T_ChanPinName" ToRole="YXB_WinCanPin" />
+          <NavigationProperty Name="T_SCCJ" Relationship="OAModel.FK_T_SCCJ_T_ChanPinGG" FromRole="T_ChanPinName" ToRole="T_SCCJ" />
+          <NavigationProperty Name="T_SCCJ1" Relationship="OAModel.FK_T_SCCJ_T_ChanPinJB" FromRole="T_ChanPinName" ToRole="T_SCCJ" />
+          <NavigationProperty Name="T_SCCJ2" Relationship="OAModel.FK_T_SCCJ_T_ChanPinName" FromRole="T_ChanPinName" ToRole="T_SCCJ" />
         </EntityType>
         <Association Name="FK_T_ChanPinName_T_ChanPinName">
           <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
@@ -4333,6 +4437,76 @@
           <Property Name="sunint" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="del" Type="Int32" />
         </EntityType>
+        <EntityType Name="T_SCCJ">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="Wtime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="BuMenid" Type="Int32" Nullable="false" />
+          <Property Name="ProductNameId" Type="Int64" Nullable="false" />
+          <Property Name="ProductGGId" Type="Int64" Nullable="false" />
+          <Property Name="ProductJB" Type="Int64" Nullable="false" />
+          <Property Name="Class" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Groups" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CiPinNum" Type="Int32" Nullable="false" />
+          <Property Name="HeGePinNum" Type="Int32" Nullable="false" />
+          <Property Name="YiDengPinNum" Type="Int32" Nullable="false" />
+          <Property Name="YouDengPinNum" Type="Int32" Nullable="false" />
+          <Property Name="Del_f" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="BumenInfoSet" Relationship="OAModel.FK_T_SCCJ_BumenInfoSet" FromRole="T_SCCJ" ToRole="BumenInfoSet" />
+          <NavigationProperty Name="T_ChanPinName" Relationship="OAModel.FK_T_SCCJ_T_ChanPinGG" FromRole="T_SCCJ" ToRole="T_ChanPinName" />
+          <NavigationProperty Name="T_ChanPinName1" Relationship="OAModel.FK_T_SCCJ_T_ChanPinJB" FromRole="T_SCCJ" ToRole="T_ChanPinName" />
+          <NavigationProperty Name="T_ChanPinName2" Relationship="OAModel.FK_T_SCCJ_T_ChanPinName" FromRole="T_SCCJ" ToRole="T_ChanPinName" />
+        </EntityType>
+        <Association Name="FK_T_SCCJ_BumenInfoSet">
+          <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="1" />
+          <End Type="OAModel.T_SCCJ" Role="T_SCCJ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BumenInfoSet">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_SCCJ">
+              <PropertyRef Name="BuMenid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_SCCJ_T_ChanPinGG">
+          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
+          <End Type="OAModel.T_SCCJ" Role="T_SCCJ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_SCCJ">
+              <PropertyRef Name="ProductGGId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_SCCJ_T_ChanPinJB">
+          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
+          <End Type="OAModel.T_SCCJ" Role="T_SCCJ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_SCCJ">
+              <PropertyRef Name="ProductJB" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_SCCJ_T_ChanPinName">
+          <End Type="OAModel.T_ChanPinName" Role="T_ChanPinName" Multiplicity="1" />
+          <End Type="OAModel.T_SCCJ" Role="T_SCCJ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_ChanPinName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_SCCJ">
+              <PropertyRef Name="ProductNameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5144,6 +5318,25 @@
                 <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
                 <ScalarProperty Name="CardName" ColumnName="CardName" />
                 <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_SCCJ">
+            <EntityTypeMapping TypeName="OAModel.T_SCCJ">
+              <MappingFragment StoreEntitySet="T_SCCJ">
+                <ScalarProperty Name="Del_f" ColumnName="Del_f" />
+                <ScalarProperty Name="YouDengPinNum" ColumnName="YouDengPinNum" />
+                <ScalarProperty Name="YiDengPinNum" ColumnName="YiDengPinNum" />
+                <ScalarProperty Name="HeGePinNum" ColumnName="HeGePinNum" />
+                <ScalarProperty Name="CiPinNum" ColumnName="CiPinNum" />
+                <ScalarProperty Name="Groups" ColumnName="Groups" />
+                <ScalarProperty Name="Class" ColumnName="Class" />
+                <ScalarProperty Name="ProductJB" ColumnName="ProductJB" />
+                <ScalarProperty Name="ProductGGId" ColumnName="ProductGGId" />
+                <ScalarProperty Name="ProductNameId" ColumnName="ProductNameId" />
+                <ScalarProperty Name="BuMenid" ColumnName="BuMenid" />
+                <ScalarProperty Name="Wtime" ColumnName="Wtime" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

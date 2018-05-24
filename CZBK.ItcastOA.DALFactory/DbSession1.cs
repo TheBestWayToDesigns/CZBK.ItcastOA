@@ -465,6 +465,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _T_jxzztjbDal = value; }
         }
 	
+		private IT_SCCJDal _T_SCCJDal;
+        public IT_SCCJDal T_SCCJDal
+        {
+            get
+            {
+                if(_T_SCCJDal == null)
+                {
+                   // _T_SCCJDal = new T_SCCJDal();
+				    _T_SCCJDal =AbstractFactory.CreateT_SCCJDal();
+                }
+                return _T_SCCJDal;
+            }
+            set { _T_SCCJDal = value; }
+        }
+	
 		private IT_SczzDanjuDal _T_SczzDanjuDal;
         public IT_SczzDanjuDal T_SczzDanjuDal
         {
