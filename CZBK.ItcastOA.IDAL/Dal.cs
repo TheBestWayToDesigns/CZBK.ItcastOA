@@ -160,6 +160,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IT_SCCJDal :IBaseDal<T_SCCJ>
+    {
+      
+    }
+	
 	public partial interface IT_SczzDanjuDal :IBaseDal<T_SczzDanju>
     {
       

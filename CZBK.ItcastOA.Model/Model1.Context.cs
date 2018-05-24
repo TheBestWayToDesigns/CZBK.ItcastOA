@@ -82,6 +82,7 @@ namespace CZBK.ItcastOA.Model
         public DbSet<User_Person_slt> User_Person_slt { get; set; }
         public DbSet<T_jgzztjb> T_jgzztjb { get; set; }
         public DbSet<T_CSC_Card> T_CSC_Card { get; set; }
+        public DbSet<T_SCCJ> T_SCCJ { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

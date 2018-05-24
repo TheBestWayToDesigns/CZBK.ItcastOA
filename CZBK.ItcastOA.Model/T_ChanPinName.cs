@@ -21,6 +21,9 @@ namespace CZBK.ItcastOA.Model
             this.YXB_Baojia2 = new HashSet<YXB_Baojia>();
             this.YXB_WinCanPin = new HashSet<YXB_WinCanPin>();
             this.YXB_WinCanPin1 = new HashSet<YXB_WinCanPin>();
+            this.T_SCCJ = new HashSet<T_SCCJ>();
+            this.T_SCCJ1 = new HashSet<T_SCCJ>();
+            this.T_SCCJ2 = new HashSet<T_SCCJ>();
         }
     
         public long ID { get; set; }
@@ -37,5 +40,8 @@ namespace CZBK.ItcastOA.Model
         public virtual ICollection<YXB_Baojia> YXB_Baojia2 { get; set; }
         public virtual ICollection<YXB_WinCanPin> YXB_WinCanPin { get; set; }
         public virtual ICollection<YXB_WinCanPin> YXB_WinCanPin1 { get; set; }
+        public virtual ICollection<T_SCCJ> T_SCCJ { get; set; }
+        public virtual ICollection<T_SCCJ> T_SCCJ1 { get; set; }
+        public virtual ICollection<T_SCCJ> T_SCCJ2 { get; set; }
     }
 }

@@ -211,6 +211,7 @@
     <Compile Include="Controllers\ActionInfoController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BillPrintController.cs" />
+    <Compile Include="Controllers\CSCController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\EverDayWorkController.cs" />
     <Compile Include="Controllers\GeRenController.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="Controllers\NewChanPinController.cs" />
     <Compile Include="Controllers\OldOaController.cs" />
     <Compile Include="Controllers\RoleInfoController.cs" />
+    <Compile Include="Controllers\SCCJController.cs" />
     <Compile Include="Controllers\SczzAdminController.cs" />
     <Compile Include="Controllers\ShareFileOrNotice.cs" />
     <Compile Include="Controllers\ShengchanzhizaoController.cs" />
@@ -1303,7 +1305,6 @@
     <Content Include="Views\RoleInfo\ShowEditInfo.cshtml" />
     <Content Include="Views\UserInfo\Zhgl.cshtml" />
     <Content Include="Views\AllData\Index.cshtml" />
-    <Content Include="Views\psave\Index.cshtml" />
     <Content Include="Views\HrefInfo\GetMap.cshtml" />
     <Content Include="Views\Login\index.cshtml" />
     <Content Include="Views\Home\index.cshtml" />
@@ -1311,6 +1312,8 @@
     <Content Include="Scripts\jQuery.1.10.2\jquery-1.10.2.min.map" />
     <Content Include="Views\OldOa\Index.cshtml" />
     <Content Include="Views\SltJxzz\Index.cshtml" />
+    <Content Include="Views\CSC\Index.cshtml" />
+    <Content Include="Views\SCCJ\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

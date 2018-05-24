@@ -135,6 +135,15 @@
     <property name="T_BoolItemService" ref="T_BoolItemService" />
     <property name="T_jgzztjbService" ref="T_jgzztjbService" />
   </object>
+  <object type="CZBK.ItcastOA.WebApp.Controllers.CSCController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="T_CSC_CardService" ref="T_CSC_CardService" />
+  </object>
+  <object type="CZBK.ItcastOA.WebApp.Controllers.SCCJController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="T_SCCJService" ref="T_SCCJService" />
+    <property name="T_ChanPinNameService" ref="T_ChanPinNameService" />
+    <property name="BumenInfoSetService" ref="BumenInfoSetService" />
+    <property name="YXB_WinCanPinService" ref="YXB_WinCanPinService" />
+  </object>
 
 
 

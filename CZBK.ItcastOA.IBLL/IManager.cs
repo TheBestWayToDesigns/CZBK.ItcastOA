@@ -160,6 +160,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IT_SCCJService : IBaseService<T_SCCJ>
+    {
+       
+    }   
+	
 	public partial interface IT_SczzDanjuService : IBaseService<T_SczzDanju>
     {
        

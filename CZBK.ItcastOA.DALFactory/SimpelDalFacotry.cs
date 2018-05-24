@@ -406,6 +406,19 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IT_jxzztjbDal;
         }
 		
+	    public static IT_SCCJDal CreateT_SCCJDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".T_SCCJDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IT_SCCJDal;
+        }
+		
 	    public static IT_SczzDanjuDal CreateT_SczzDanjuDal()
         {
 

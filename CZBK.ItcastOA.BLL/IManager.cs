@@ -251,6 +251,14 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class T_SCCJService :BaseService<T_SCCJ>,IT_SCCJService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.T_SCCJDal;
+        }
+    }   
+	
 	public partial class T_SczzDanjuService :BaseService<T_SczzDanju>,IT_SczzDanjuService
     {
         public override void SetCurretnDal()

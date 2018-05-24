@@ -1,0 +1,193 @@
+﻿@{
+    Layout = null;
+}
+@using CZBK.ItcastOA.Model
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>采石场磅秤信息</title>
+    <link href="~/Content/themes/icon.css" rel="stylesheet" />
+    <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
+    <script src="~/Scripts/jquery.easyui.min.js"></script>
+    <script src="~/Scripts/easyui-lang-zh_CN.js"></script>
+    <script src="~/Scripts/datapattern.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/MyAjaxForm.js"></script>
+    <script src="~/Scripts/MyNewJS.js"></script>
+    <script src="~/Scripts/jquery.jqprint-0.3.js"></script>
+    <script src="~/Scripts/DatePicker.js"></script>
+    <script type="text/javascript">
+        $.fn.extend({
+
+            resizeDataGrid: function (heightMargin, widthMargin, minHeight, minWidth) {
+
+                var height = $("#dgdiv").height() - heightMargin;
+                var width = $("#dgdiv").width() - widthMargin;
+                height = height < minHeight ? minHeight : height;
+                width = width < minWidth ? minWidth : width;
+                $(this).datagrid('resize', {
+                    height: height,
+                    width: width
+                });
+            }
+        });
+
+
+        // 当窗口大小发生变化时，调整DataGrid的大小211434
+        $(function () {
+            loadinfo();
+            $("#toCalculate").click(function () {
+                loadinfo();
+            })
+        });
+        //清空datagrid数据
+        function cleanDatagrid() {
+            var item = $('#tt').datagrid('getRows');
+            if (item) {
+                for (var i = item.length - 1; i >= 0; i--) {
+                    var index = $('#tt').datagrid('getRowIndex', item[i]);
+                    $('#tt').datagrid('deleteRow', index);
+                }
+            }
+        }
+        //调用加载磅秤信息
+        function loadinfo() {
+            var pars = { TruckWeight: $("#TruckWeight").val() };
+            loadData(pars);
+        }
+        //加载磅秤信息页面
+        function loadData(pars) {
+            $("#TTdiv").css("display", "block");
+            $('#tt').datagrid({
+                url: '/CSC/GetCSCInfo',
+                title: '采石场磅秤数据',
+                height: $("#dgdiv").height() - 20,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                //onClickCell: onClickCell,
+                //onAfterEdit: onAfterEdit,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[
+                    { field: 'ck', checkbox: true, title: '', width: 30 },
+                    { field: 'ID', title: '编号', align: 'center' },
+                    {
+                        field: 'AddTime', title: '创建时间', align: 'center',
+                        formatter: function (value, row, index) {
+                            return ChangeDateFormat(value);
+                        }
+                    },
+                    { field: 'CardName', title: '称重编号', align: 'center' },
+                    { field: 'CardNumber', title: '卡号', align: 'center' },
+                    {
+                        field: 'CdTime', title: '称重时间', align: 'center',
+                        formatter: function (value, row, index) {
+                            return ChangeDateFormat(value);
+                        }
+                    },
+                    { field: 'sunint', title: '重量', align: 'center' },
+                    {
+                        field: 'Del', title: '编辑栏', align: 'center',
+                        formatter: function (value, row, index) {
+                            return "<a href='#' class='l-btn' style='margin:0px 5px;padding:2px 8px ' onclick='delfiletype()' >删除</a>";
+                        }
+                    },
+                ]],
+                toolbar: "#TruckWeightDiv",
+                onLoadSuccess: function () {
+
+                }
+            });
+        }
+        function toExcelInfo() {
+            if ($("#excelYM").val().trim().length <= 0) {
+                $.messager.alert("请先选择计算月份！");
+                return;
+            }
+            var serchTime = $("#excelYM").val();
+            cleanDatagrid();
+            $('#tt').datagrid({
+                url: '/CSC/SumInfo',
+                title: '磅秤统计数据',
+                height: $("#dgdiv").height() - 20,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                //onClickCell: onClickCell,
+                //onAfterEdit: onAfterEdit,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: { excelYM: serchTime, TruckWeight: $("#TruckWeight").val() },//往后台传递参数
+                columns: [[
+                    { field: 'ck', checkbox: true, title: '', width: 30 },
+                   { field: 'Textname', title: '数据名称', align: 'center' },
+                     { field: 'WeightSum', title: '合计重量', align: 'center' }]],
+                toolbar: "#TruckWeightDiv",
+                onLoadSuccess: function () {
+
+                }
+            });
+        }
+        //数字验证
+        function num(obj) {
+            obj.value = obj.value.replace(/[^\d.]/g, ""); //清除"数字"和"."以外的字符
+            obj.value = obj.value.replace(/^\./g, ""); //验证第一个字符是数字
+            obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个, 清除多余的
+            obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); //只能输入两个小数
+        }
+        //将序列化成json格式后日期(毫秒数)转成日期格式
+        function ChangeDateFormat(cellval) {
+            var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+            var hour = date.getHours()< 10 ? "0" +date.getHours():date.getHours();
+            var minutes = date.getMinutes()<10?"0"+date.getMinutes():date.getMinutes();
+            var seconds = date.getSeconds()<10?"0"+date.getSeconds():date.getSeconds();
+            return date.getFullYear() + "-" + month + "-" + currentDate + " " + hour + ":" + minutes + ":" + seconds;
+        }
+        function ChangeDateFormat2(cellval) {
+            var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+            var hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+            var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+            var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            return  hour + ":" + minutes + ":" + seconds;
+        }
+    </script>
+</head>
+<body class="easyui-layout">
+    <div data-options="region:'center',title:'数据报表'" id="dgdiv">
+        <div id="TTdiv">
+            <table id="tt" title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit">
+                <!--插入表格数据-->
+            </table>
+        </div>
+    </div>
+    <div id="TruckWeightDiv">
+        卡车皮重：
+        <input type="text" id="TruckWeight" value="0" onkeyup="num(this)"/>
+        <input type="button" id="toCalculate" value="计算"/>
+        <div id="TJtypeDiv">
+            <label id="yearMonth">统计月份：<input onclick="setmonth(this)" id="excelYM" /></label>
+            <input type="button" value="计算" onclick="toExcelInfo()" />
+        </div>
+    </div>
+</body>
+</html>
+
+
