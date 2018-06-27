@@ -54,6 +54,38 @@
                         text: '确定',
                         iconCls: 'icon-ok',
                         handler: function () {
+                            if ($("#Wtime").datebox("getValue") == undefined || ($("#Wtime").datebox("getValue")).trim().length <= 0) {
+                                $.messager.alert("提示","请选择日期时间");
+                                return;
+                            }
+                            if ($("#BuMenid").combobox("getValue") == undefined || ($("#BuMenid").combobox("getValue")).trim().length <= 0) {
+                                $.messager.alert("提示", "请选择部门");
+                                return;
+                            }
+                            if ($("#ProductNameId").combobox("getValue") == undefined || ($("#ProductNameId").combobox("getValue")).trim().length <= 0) {
+                                $.messager.alert("提示", "请选择产品名称");
+                                return;
+                            }
+                            if ($("#ProductJB").combobox("getValue")==undefined||($("#ProductJB").combobox("getValue")).trim().length <= 0) {
+                                $.messager.alert("提示", "请选择产品级别");
+                                return;
+                            }
+                            if (($("#CiPinNum").val()).trim().length <= 0) {
+                                $.messager.alert("提示", "请填写次品数量");
+                                return;
+                            }
+                            if (($("#HeGePinNum").val()).trim().length <= 0) {
+                                $.messager.alert("提示", "请填写合格品数量");
+                                return;
+                            }
+                            if (($("#YiDengPinNum").val()).trim().length <= 0) {
+                                $.messager.alert("提示", "请填写一等品数量");
+                                return;
+                            }
+                            if (($("#YouDengPinNum").val()).trim().length <= 0) {
+                                $.messager.alert("提示", "请填写优等品数量");
+                                return;
+                            }
                             $("#AddBbInfofrom").submit();//提交表单
                         }
                     },
@@ -61,6 +93,7 @@
                         text: '取消',
                         handler: function () {
                             $('#AddBbInfoDIV').dialog('close');
+                            afterEsc();
                         }
                     }]
                 });
@@ -68,11 +101,26 @@
 
             $('#ProductNameId').combobox({
                 onChange: function (newValue, oldValue) {
-                    $("#ProductGGId").combobox("setValue", "");
+                    $('#ProductGGId').combobox('loadData', {});
+                    $("#ProductGGId").combobox("clear");
                     $("#ProductGGId").combobox("reload", "/SCCJ/GetBCPXHList?id=" + newValue);
                 }
             });
         });
+
+        function afterEsc() {
+            $('#AddBbInfoDIV').dialog('close');
+            $("#Wtime").datebox("setValue", "");
+            $("#BuMenid").combobox("setValue", "");
+            $("#ProductNameId").combobox("setValue", "");
+            $("#ProductGGId").combobox("setValue", "");
+            $("#ProductJB").combobox("setValue", "");
+            $("#CiPinNum").val("");
+            $("#HeGePinNum").val("");
+            $("#YiDengPinNum").val("");
+            $("#YouDengPinNum").val("");
+            $("#idval").val("");
+        }
         function afterAddBbInfo() {
             $('#AddBbInfoDIV').dialog('close');
             $("#Wtime").datebox("setValue","");
@@ -111,6 +159,9 @@
                 $("#BuMenid").combobox("setValue", rt.BuMenid);
                 $("#ProductNameId").combobox("setValue", rt.ProductNameId);
                 $("#ProductGGId").combobox("setValue", rt.ProductGGId);
+                if (rt.ProductGGId == 533) {
+                    $("#ProductGGId").combobox("setText", "无型号");
+                }
                 $("#ProductJB").combobox("setValue", rt.ProductJB);
                 $("#Class").combobox("setValue", rt.Class);
                 $("#Groups").combobox("setValue", rt.Groups);
@@ -229,7 +280,7 @@
         {<table id="Upfiletab">
             <tr>
                 <td>时间</td>
-                <td><input type="text" class="easyui-datebox" name="Wtime" id="Wtime" /><input type="text" id="idval" name="ID" hidden/></td>
+                <td><input type="text" class="easyui-datebox" name="Wtime" id="Wtime"/><input type="text" id="idval" name="ID" hidden/></td>
             </tr>
              <tr>
                  <td>部门</td>
@@ -273,7 +324,7 @@
                             valueField="ID"
                             textField="MyTexts"
                             panelHeight="200px"
-                            style="width:100px" />
+                            style="width:100px;height:50px" />
                  </td>
              </tr>
              <tr>

@@ -49,6 +49,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //添加单据数据
         public ActionResult AddorEditSccjInfo(T_SCCJ tsccj)
         {
+            tsccj.ProductGGId = tsccj.ProductGGId == 0 ? 533 : tsccj.ProductGGId;
             if (tsccj.ID > 0)//修改
             {
                 if (T_SCCJService.EditEntity(tsccj))
