@@ -153,6 +153,64 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                        };
             return Json(rtmp, JsonRequestBehavior.AllowGet);
         }
+        //按月统计
+        public ActionResult TongJiByMonth()
+        {
+            int bmID = Convert.ToInt32(Request["bmID"]);
+            DateTime dtStart = Convert.ToDateTime(Request["monthExcel"]);
+            DateTime dtEnd = dtStart.AddMonths(1).AddDays(-1 * (dtStart.Day));
+            var temp = T_SCCJService.LoadEntities(x => x.BuMenid == bmID && x.Wtime >= dtStart && x.Wtime <= dtEnd && x.Del_f == 0).DefaultIfEmpty().ToList();
+            if (temp != null && temp[0] != null)
+            {
+                temp = temp.OrderBy(x => x.Wtime).ToList();
+            }
+            var rtmp = from a in temp
+                       select new
+                       {
+                           ID = a.ID,
+                           Wtime = a.Wtime,
+                           BuMenid = a.BumenInfoSet.Name,
+                           ProductNameId = a.T_ChanPinName2.MyTexts,
+                           ProductGGId = a.T_ChanPinName.MyTexts,
+                           ProductJB = a.T_ChanPinName1.MyTexts,
+                           Class = a.Class,
+                           Groups = a.Groups,
+                           CiPinNum = a.CiPinNum,
+                           HeGePinNum = a.HeGePinNum,
+                           YiDengPinNum = a.YiDengPinNum,
+                           YouDengPinNum = a.YouDengPinNum,
+                       };
+            return Json(rtmp, JsonRequestBehavior.AllowGet);
+        }
+        //按年统计
+        public ActionResult TongJiByYear()
+        {
+            int bmID = Convert.ToInt32(Request["bmID"]);
+            DateTime dtStart = Convert.ToDateTime(Request["yearExcel"]);
+            DateTime dtEnd = dtStart.AddYears(1);
+            var temp = T_SCCJService.LoadEntities(x => x.BuMenid == bmID && x.Wtime >= dtStart && x.Wtime <= dtEnd && x.Del_f == 0).DefaultIfEmpty().ToList();
+            if (temp != null && temp[0] != null)
+            {
+                temp = temp.OrderBy(x => x.Wtime).ToList();
+            }
+            var rtmp = from a in temp
+                       select new
+                       {
+                           ID = a.ID,
+                           Wtime = a.Wtime,
+                           BuMenid = a.BumenInfoSet.Name,
+                           ProductNameId = a.T_ChanPinName2.MyTexts,
+                           ProductGGId = a.T_ChanPinName.MyTexts,
+                           ProductJB = a.T_ChanPinName1.MyTexts,
+                           Class = a.Class,
+                           Groups = a.Groups,
+                           CiPinNum = a.CiPinNum,
+                           HeGePinNum = a.HeGePinNum,
+                           YiDengPinNum = a.YiDengPinNum,
+                           YouDengPinNum = a.YouDengPinNum,
+                       };
+            return Json(rtmp, JsonRequestBehavior.AllowGet);
+        }
     }
     public class editInfo
     {

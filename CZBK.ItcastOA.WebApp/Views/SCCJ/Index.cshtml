@@ -32,13 +32,56 @@
                 });
             }
         });
-
+        //清空datagrid数据
+        function cleanDatagrid() {
+            var item = $('#tt').datagrid('getRows');
+            if (item) {
+                for (var i = item.length - 1; i >= 0; i--) {
+                    var index = $('#tt').datagrid('getRowIndex', item[i]);
+                    $('#tt').datagrid('deleteRow', index);
+                }
+            }
+        }
 
         // 当窗口大小发生变化时，调整DataGrid的大小211434
         $(function () {
-            loadData();
+              loadData();
 
-            $('#AddBbInfoDIV').css("display","none");
+              $('#AddBbInfoDIV').css("display", "none"); 
+              $("#TJTypeDIV").css("display", "none");
+              $("#tjYear").hide();
+              $("#tjMonth").hide();
+
+              $("#divBtn a").click(function () {
+                var ClickA = $(this).attr("id");
+                if (ClickA == "DayExcelModel")
+                {
+                    $("#TJTypeDIV").css("display", "none");
+                    $("#AddBtnDIV").css("display", "block");
+                    loadData();
+                }
+                else if (ClickA == "TongJiModel")
+                {
+                    $("#AddBtnDIV").css("display", "none");
+                    $("#TJTypeDIV").css("display", "block");
+                    loadTongjiInfo();
+                }
+            })
+
+            $('input[type=radio][name=TJtype]').change(function () {
+                $("#excelYM").val("");
+                $("#excelYear").val("");
+                if (this.value == 'month') {
+                    $("#tjYear").hide();
+                    $("#tjMonth").show();
+                }
+                else if (this.value == 'year') {
+                    $("#tjMonth").hide();
+                    $("#tjYear").show();
+                    var date = new Date;
+                    $("#excelYear").val(date.getFullYear());
+                }
+            });
 
             $("#AddBtn").click(function () {
                 $("#idval").val("");
@@ -186,6 +229,7 @@
         //加载磅秤信息页面
         function loadData(pars) {
             $("#TTdiv").css("display", "block");
+            $('#AddBtnDIV').css("display", "block");
             $('#tt').datagrid({
                 url: '/SCCJ/GetSccjInfo',
                 title: '水工公司生产车间产品日报表',
@@ -229,8 +273,129 @@
                         }
                     },
                 ]],
-                toolbar: "#AddBtnDIV"
+                toolbar: "#AddBtnDIV",
+                onLoadSuccess: function () {
+                    var rows = $("#tt").datagrid("getRows");
+                    for (var a = 0; a < rows.length - 1; a++) {
+                        if (rows[a].ID == undefined) {
+                            $("#tt").datagrid("deleteRow", a);
+                        }
+                    }
+                }
             });
+        }
+        //加载磅秤信息页面
+        function loadTongjiInfo(pars) {
+            $("#TTdiv").css("display", "block");
+            $('#tt').datagrid({
+                url: '/SCCJ/GetSccjInfo',
+                title: '水工公司生产车间产品日报表',
+                height: $("#dgdiv").height() - 20,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                //onClickCell: onClickCell,
+                //onAfterEdit: onAfterEdit,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[
+                    { field: 'ck', checkbox: true, title: '', width: 30 },
+                    { field: 'ID', title: '编号', align: 'center' },
+                    {
+                        field: 'Wtime', title: '时间', align: 'center',
+                        formatter: function (value, row, index) {
+                            if (value.indexOf('：') != -1) {
+                                return value;
+                            }
+                            return ChangeDateFormat2(value);
+                        }
+                    },
+                    { field: 'BuMenid', title: '部门', align: 'center' },
+                    { field: 'ProductNameId', title: '产品名称', align: 'center' },
+                    { field: 'ProductGGId', title: '产品规格', align: 'center' },
+                    { field: 'ProductJB', title: '产品级别', align: 'center' },
+                    { field: 'Class', title: '班次', align: 'center' },
+                    { field: 'Groups', title: '分组', align: 'center' },
+                    { field: 'CiPinNum', title: '次品', align: 'center' },
+                    { field: 'HeGePinNum', title: '合格品', align: 'center' },
+                    { field: 'YiDengPinNum', title: '一等品', align: 'center' },
+                    { field: 'YouDengPinNum', title: '优等品', align: 'center' }
+                ]],
+                toolbar: "#TJTypeDIV",
+                onLoadSuccess: function () {
+                    var rows = $("#tt").datagrid("getRows");
+                    for (var a = 0; a < rows.length - 1; a++) {
+                        if (rows[a].ID == undefined) {
+                            $("#tt").datagrid("deleteRow", a);
+                        }
+                    }
+                }
+            });
+        }
+        function toTj(value) {
+            if (($("#InfoExcelMsg").combobox("getValue")).trim().length<=0) {
+                $.messager.alert("提示", "请选择部门");
+                return;
+            }
+            else if (value == "month") {
+                if (($("#excelYM").val()).trim().length <= 0) {
+                    $.messager.alert("提示", "请选择日期");
+                    return;
+                }
+                var bmID = $("#InfoExcelMsg").combobox("getValue");
+                var serchTime = $("#excelYM").val();
+                $("#tt").datagrid("options").url = "/SCCJ/TongJiByMonth";
+                $("#tt").datagrid("options").queryParams = { monthExcel: serchTime, bmID: bmID };
+                $("#tt").datagrid("options").onLoadSuccess = compute;
+                $("#tt").datagrid("options").showFooter = true;
+                $("#tt").datagrid("options").title = "月统计表";
+            } else if (value == "year") {
+                if (($("#excelYear").val()).trim().length <= 0) {
+                    $.messager.alert("提示", "请填写年份");
+                    return;
+                }
+                var bmID = $("#InfoExcelMsg").combobox("getValue");
+                var serchTime = $("#excelYear").val()+"-1-1";
+                $("#tt").datagrid("options").url = "/SCCJ/TongJiByYear";
+                $("#tt").datagrid("options").queryParams = { yearExcel: serchTime, bmID: bmID };
+                $("#tt").datagrid("options").onLoadSuccess = compute; 
+                $("#tt").datagrid("options").showFooter = true;
+                $("#tt").datagrid("options").title = "年统计表";
+            }
+            cleanDatagrid();
+            $('#tt').datagrid('reload');
+        }
+        function compute() {//计算函数
+            var rows = $('#tt').datagrid('getRows')//获取当前的数据行
+            var SumNum = 0//计算listprice的总和
+            , cipinNum = 0//统计unitcost的总和
+            ,HeGePinNum = 0
+            ,YiDengPinNum=0
+            ,YouDengPinNum=0;
+            for (var i = 0; i < rows.length; i++) {
+                SumNum += rows[i]['CiPinNum'];
+                SumNum += rows[i]['HeGePinNum'];
+                SumNum += rows[i]['YiDengPinNum'];
+                SumNum += rows[i]['YouDengPinNum'];
+                cipinNum += rows[i]['CiPinNum'];
+                HeGePinNum += rows[i]['HeGePinNum'];
+                YiDengPinNum += rows[i]['YiDengPinNum'];
+                YouDengPinNum += rows[i]['YouDengPinNum'];
+            }
+            //新增一行显示统计信息
+            var cipinLv = ((cipinNum / SumNum) * 100).toFixed(2).toString() + "%";
+            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">次品总量：</b>', BuMenid: cipinNum });
+            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">合格品总量：</b>', BuMenid: HeGePinNum });
+            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">一等品总量：</b>', BuMenid: YiDengPinNum });
+            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">优等品总量：</b>', BuMenid: YouDengPinNum });
+            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">产品总量：</b>', BuMenid: SumNum });
+            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">次品率：</b>', BuMenid: cipinLv });
         }
         //数字验证
         function num(obj) {
@@ -262,6 +427,10 @@
     </script>
 </head>
 <body class="easyui-layout">
+    <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink " style="width:150px; padding:8px;">
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="DayExcelModel" style="width:98%;margin:10px auto">日报记录</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="TongJiModel" style="width:98%;margin:10px auto">统计模块</a>
+    </div>
     <div data-options="region:'center',title:'数据报表'" id="dgdiv">
         <div id="TTdiv">
             <table id="tt" title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit">
@@ -273,6 +442,19 @@
         <div style="margin-bottom:5px">
             <a href="#" class="easyui-linkbutton" id="AddBtn" iconCls="icon-add" plain="true">添加日报</a>
         </div>
+    </div>
+    <div id="TJTypeDIV" style="padding:5px;height:auto;width:auto;display:flex;flex-direction:row; flex-wrap:nowrap;align-items:center;">
+        <div style="margin-bottom:5px;width:auto;height:auto">
+            <input type="radio" name="TJtype" id="TjByMonth" value="month"/>按月统计
+            <input type="radio" name="TJtype" id="TjByYear" value="year"/>按年统计
+        部门列表：<input class="easyui-combobox" id="InfoExcelMsg"
+                    url="/SCCJ/GetBuMenList"
+            valueField="ID"
+            textField="Name"
+            panelHeight="200px"
+            style="width:100px" />
+        <label id="tjMonth">统计月份：<input onclick="setmonth(this)" id="excelYM" /><input type="button" value="月统计" onclick="toTj('month')"/></label>
+        <label id="tjYear">统计年份：<input type="text" id="excelYear" onkeyup="num(this)"/><input type="button" value="年统计" onclick="toTj('year')"/></label></div>
     </div>
     <!---------------添加日报表--------------------->
     <div id="AddBbInfoDIV" style="height:100%; width:100%;">
