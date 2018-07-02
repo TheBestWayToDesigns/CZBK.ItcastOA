@@ -298,8 +298,16 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             sfon.UploadFileTime = DateTime.Now;
             sfon.TypeID = 1;
             sfon.ModelList = Request["STUstrName"];
-            var sn = ShareFileOrNoticeService.AddEntity(sfon);
-            return Json(new { ret = "ok"}, JsonRequestBehavior.AllowGet);
+            ShareFileOrNotice sn = ShareFileOrNoticeService.AddEntity(sfon);
+            return Json(new { ret = "ok" ,temp=sn}, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult getNewFileInfo()
+        {
+            var temp = ShareFileOrNoticeService.LoadEntities(x => x.ShareUser == LoginUser.ID).DefaultIfEmpty().OrderByDescending(x=>x.UploadFileTime).ToList();
+            STUBuMen sm = new STUBuMen();
+            sm.ID = temp[0].ID;
+            sm.Name = temp[0].ShareToUser;
+            return Json(sm, JsonRequestBehavior.AllowGet);
         }
         //补充上传共享文件
         public ActionResult AddUploadFile()

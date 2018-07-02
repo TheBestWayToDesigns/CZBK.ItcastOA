@@ -211,6 +211,51 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                        };
             return Json(rtmp, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult TongJiByDay()
+        {
+            int bmID = Convert.ToInt32(Request["bmID"]);
+            DateTime dt= Convert.ToDateTime(Request["dayExcel"]);
+            var temp = T_SCCJService.LoadEntities(x => x.BuMenid == bmID && x.Wtime == dt && x.Del_f == 0).DefaultIfEmpty().ToList();
+            if (temp != null && temp[0] != null)
+            {
+                temp = temp.OrderBy(x => x.Wtime).ToList();
+            }
+            var rtmp = from a in temp
+                       select new
+                       {
+                           ID = a.ID,
+                           Wtime = a.Wtime,
+                           BuMenid = a.BumenInfoSet.Name,
+                           ProductNameId = a.T_ChanPinName2.MyTexts,
+                           ProductGGId = a.T_ChanPinName.MyTexts,
+                           ProductJB = a.T_ChanPinName1.MyTexts,
+                           Class = a.Class,
+                           Groups = a.Groups,
+                           CiPinNum = a.CiPinNum,
+                           HeGePinNum = a.HeGePinNum,
+                           YiDengPinNum = a.YiDengPinNum,
+                           YouDengPinNum = a.YouDengPinNum,
+                       };
+            return Json(rtmp, JsonRequestBehavior.AllowGet);
+        }
+        //导出表
+        [ValidateInput(false)]
+        public void GetExcelTable()
+        {
+            string excelHtml = Request["OFtable"];
+            string name = DateTime.Now.ToString();
+            Response.Buffer = true;
+            //输出的应用类型 
+            Response.ContentType = "application/vnd.ms-excel";
+            //设定编码方式，若输出的excel有乱码，可优先从编码方面解决
+            Response.Charset = "utf-8";
+            Response.ContentEncoding = System.Text.Encoding.UTF8;
+            //filenames是自定义的文件名
+            Response.AppendHeader("Content-Disposition", "attachment;filename=" + name + ".xls");
+            //content是步骤1的html，注意是string类型
+            Response.Write(excelHtml);
+            Response.End();
+        }
     }
     public class editInfo
     {

@@ -51,6 +51,7 @@
               $("#TJTypeDIV").css("display", "none");
               $("#tjYear").hide();
               $("#tjMonth").hide();
+              $("#tjDay").hide();
 
               $("#divBtn a").click(function () {
                 var ClickA = $(this).attr("id");
@@ -73,13 +74,19 @@
                 $("#excelYear").val("");
                 if (this.value == 'month') {
                     $("#tjYear").hide();
+                    $("#tjDay").hide();
                     $("#tjMonth").show();
                 }
                 else if (this.value == 'year') {
                     $("#tjMonth").hide();
                     $("#tjYear").show();
+                    $("#tjDay").hide();
                     var date = new Date;
                     $("#excelYear").val(date.getFullYear());
+                } else if (this.value == 'day') {
+                    $("#tjMonth").hide();
+                    $("#tjYear").hide();
+                    $("#tjDay").show();
                 }
             });
 
@@ -150,6 +157,78 @@
                 }
             });
         });
+        function compute() {//计算函数
+            var rows = $('#tt').datagrid('getRows')//获取当前的数据行
+            var SumNum = 0//计算listprice的总和
+            , cipinNum = 0//统计unitcost的总和
+            , HeGePinNum = 0
+            , YiDengPinNum = 0
+            , YouDengPinNum = 0;
+            for (var i = 0; i < rows.length; i++) {
+                SumNum += rows[i]['CiPinNum'];
+                SumNum += rows[i]['HeGePinNum'];
+                SumNum += rows[i]['YiDengPinNum'];
+                SumNum += rows[i]['YouDengPinNum'];
+                cipinNum += rows[i]['CiPinNum'];
+                HeGePinNum += rows[i]['HeGePinNum'];
+                YiDengPinNum += rows[i]['YiDengPinNum'];
+                YouDengPinNum += rows[i]['YouDengPinNum'];
+            }
+            //新增一行显示统计信息
+            var cipinLv = ((cipinNum / SumNum) * 100).toFixed(2).toString() + "%";
+            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">次品总量：</b>', BuMenid: cipinNum });
+            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">合格品总量：</b>', BuMenid: HeGePinNum });
+            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">一等品总量：</b>', BuMenid: YiDengPinNum });
+            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">优等品总量：</b>', BuMenid: YouDengPinNum });
+            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">产品总量：</b>', BuMenid: SumNum });
+            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">次品率：</b>', BuMenid: cipinLv });
+        }
+        //导出表
+        function toExcel(type) {
+            var colCount = 14;//($("#tt").datagrid("options").columns)[0].length;
+            var addTotal = "";
+            var htmlData = $(".datagrid-view2").html();
+            htmlData = htmlData.substring(0, htmlData.length - 20);
+            var title = '';
+            if (type == 'day') {
+                title = '水工公司生产车间产品完成日报表';
+            }
+            else if (type == 'month') {
+                title = '水工公司生产车间产品月报表';
+            } else if (type == 'year') {
+                title = '水工公司生产车间产品年报表';
+            }
+            var rows = $('#tt').datagrid('getRows')//获取当前的数据行
+            var SumNum = 0//计算listprice的总和
+            , cipinNum = 0//统计unitcost的总和
+            , HeGePinNum = 0
+            , YiDengPinNum = 0
+            , YouDengPinNum = 0;
+            for (var i = 0; i < rows.length; i++) {
+                SumNum += rows[i]['CiPinNum'];
+                SumNum += rows[i]['HeGePinNum'];
+                SumNum += rows[i]['YiDengPinNum'];
+                SumNum += rows[i]['YouDengPinNum'];
+                cipinNum += rows[i]['CiPinNum'];
+                HeGePinNum += rows[i]['HeGePinNum'];
+                YiDengPinNum += rows[i]['YiDengPinNum'];
+                YouDengPinNum += rows[i]['YouDengPinNum'];
+            }
+            //新增一行显示统计信息
+            var cipinLv = ((cipinNum / SumNum) * 100).toFixed(2).toString() + "%";
+            var addTotal = "<tfoot><tr style='border:0.5pt solid black'><td colspan='7'>总累计次品率:" + cipinLv + "</td><td colspan='7'>累计产品完成率:</td></tr>"
+                                + "<tr  style='border-top:0.5pt solid black;border-left:0.5pt solid black;border-right:0.5pt solid black;'><td colspan='14'>产生原因:</td></tr>"
+                                + "<tr  style='border-left:0.5pt solid black;border-right:0.5pt solid black;'><td colspan='14'></td></tr>"
+                                + "<tr  style='border-bottom:0.5pt solid black;border-left:0.5pt solid black;border-right:0.5pt solid black;'><td colspan='14'></td></tr>"
+                                + "<tr><td colspan='10'>部门负责人:</td><td colspan='4'>制表人:</td></tr></tfoot></table></div></div>";
+            var tableHead = "<html><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />" +
+        "<style type='text/css'>tbody tr td{text-align:center;border:solid .5pt Black;} </style>" +
+        "<body><table >";
+            var Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr>"
+                + "<tr><td colspan='13' style='text-align:center'>年&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;日</td><td>单位:根</td></tr></thead>";
+            $("#OFtable").val(tableHead + Theard + htmlData + addTotal + "</table></body></html>"); //获取并拼接代码
+            $("#ExcelForm").submit();
+        }
 
         function afterEsc() {
             $('#AddBbInfoDIV').dialog('close');
@@ -248,8 +327,6 @@
                 pageList: [15, 25, 35],
                 queryParams: pars,//往后台传递参数
                 columns: [[
-                    { field: 'ck', checkbox: true, title: '', width: 30 },
-                    { field: 'ID', title: '编号', align: 'center' },
                     {
                         field: 'Wtime', title: '时间', align: 'center',
                         formatter: function (value, row, index) {
@@ -304,46 +381,67 @@
                 pageNumber: 1,//当前页，默认的
                 pageList: [15, 25, 35],
                 queryParams: pars,//往后台传递参数
-                columns: [[
-                    { field: 'ck', checkbox: true, title: '', width: 30 },
-                    { field: 'ID', title: '编号', align: 'center' },
-                    {
-                        field: 'Wtime', title: '时间', align: 'center',
-                        formatter: function (value, row, index) {
-                            if (value.indexOf('：') != -1) {
-                                return value;
-                            }
-                            return ChangeDateFormat2(value);
-                        }
-                    },
-                    { field: 'BuMenid', title: '部门', align: 'center' },
-                    { field: 'ProductNameId', title: '产品名称', align: 'center' },
-                    { field: 'ProductGGId', title: '产品规格', align: 'center' },
-                    { field: 'ProductJB', title: '产品级别', align: 'center' },
-                    { field: 'Class', title: '班次', align: 'center' },
-                    { field: 'Groups', title: '分组', align: 'center' },
+                columns: [[{ field: 'BuMenid', title: '部门', align: 'center',rowspan:3 },
+                    { field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3 },
+                    { field: 'ProductJB', title: '级别', align: 'center', rowspan: 3 },
+                    { title: '当日', align: 'center', colspan: 2 },
+                    { field: 'Class', title: '累计实际产量', align: 'center', rowspan: 3 },
+                    { title: '正品', align: 'center', colspan: 2 },
+                    { title: '次品', align: 'center', colspan: 2 },
+                    { title: '质量完成情况', align: 'center', colspan: 4 }], [
+                    { field: 'BuMenid', title: '最大产量', align: 'center', rowspan: 2 },
+                    { field: 'ProductNameId', title: '实际产量', align: 'center', rowspan: 2 },
+                    { field: 'ProductGGId', title: '产量', align: 'center', rowspan: 2 },
+                    { field: 'ProductJB', title: '累计', align: 'center', rowspan: 2 },
+                    { field: 'Class', title: '产量', align: 'center', rowspan: 2 },
+                    { field: 'Groups', title: '累计', align: 'center', rowspan: 2 },
+                    { title: '甲班', align: 'center', colspan: 2 },
+                    { title: '乙班', align: 'center', colspan: 2 }], [
+                    { field: 'Groups', title: '正品', align: 'center'},
+                    { field: 'CiPinNum', title: '次品', align: 'center'},
+                    { field: 'Groups', title: '正品', align: 'center' },
                     { field: 'CiPinNum', title: '次品', align: 'center' },
-                    { field: 'HeGePinNum', title: '合格品', align: 'center' },
-                    { field: 'YiDengPinNum', title: '一等品', align: 'center' },
-                    { field: 'YouDengPinNum', title: '优等品', align: 'center' }
-                ]],
-                toolbar: "#TJTypeDIV",
-                onLoadSuccess: function () {
-                    var rows = $("#tt").datagrid("getRows");
-                    for (var a = 0; a < rows.length - 1; a++) {
-                        if (rows[a].ID == undefined) {
-                            $("#tt").datagrid("deleteRow", a);
-                        }
-                    }
-                }
+                    ]],
+                toolbar: "#TJTypeDIV"
             });
         }
         function toTj(value) {
             if (($("#InfoExcelMsg").combobox("getValue")).trim().length<=0) {
                 $.messager.alert("提示", "请选择部门");
                 return;
-            }
-            else if (value == "month") {
+            } else if (value == 'day') {
+                if (($("#excelYMD").datebox("getValue")).trim().length <= 0) {
+                    $.messager.alert("提示", "请选择日期");
+                    return;
+                }
+                var bmID = $("#InfoExcelMsg").combobox("getValue");
+                var serchTime = $("#excelYMD").datebox("getValue");
+                $("#tt").datagrid("options").url = "/SCCJ/TongJiByDay";
+                $("#tt").datagrid("options").queryParams = { dayExcel: serchTime, bmID: bmID };
+                $("#tt").datagrid("options").showFooter = true;
+                $("#tt").datagrid("options").title = "年统计表";
+                $("#tt").datagrid("options").columns = [[{ field: 'BuMenid', title: '部门', align: 'center', rowspan: 3 },
+                    { field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3 },
+                    { field: 'ProductJB', title: '级别', align: 'center', rowspan: 3 },
+                    { title: 'MaxChanLiang', align:'center',title: '最大产量'},
+                    { field: 'Class', title: '当日产量', align: 'center' },
+                    { title: '各班完成情况', align: 'center', colspan: 2 },
+                    { title: '甲班长、边庆善', align: 'center' },
+                    { title: '乙班长、黄正江', align: 'center'}], [
+                    { field: 'BuMenid', title: '计划', align: 'center' },
+                    { field: 'ProductNameId', title: '正常', align: 'center' },
+                    { field: 'ProductGGId', title: '甲班质量', align: 'center'},
+                    { field: 'ProductJB', title: '乙班质量', align: 'center'},
+                    { field: 'Class', title: '当日完成量', align: 'center' },
+                    { field: 'Groups', title: '当日完成量', align: 'center' }],[
+                    { title: 'Groups', align: 'center' },
+                    { title: 'Groups', align: 'center' }], [
+                    { field: 'Groups', title: '次品/根', align: 'center' },
+                    { field: 'Groups', title: '次品/根', align: 'center' },
+                    { field: 'Groups', title: '日记', align: 'center' },
+                    { field: 'Groups', title: '日记', align: 'center' },
+                    ]];
+            }else if (value == "month") {
                 if (($("#excelYM").val()).trim().length <= 0) {
                     $.messager.alert("提示", "请选择日期");
                     return;
@@ -352,9 +450,29 @@
                 var serchTime = $("#excelYM").val();
                 $("#tt").datagrid("options").url = "/SCCJ/TongJiByMonth";
                 $("#tt").datagrid("options").queryParams = { monthExcel: serchTime, bmID: bmID };
-                $("#tt").datagrid("options").onLoadSuccess = compute;
                 $("#tt").datagrid("options").showFooter = true;
                 $("#tt").datagrid("options").title = "月统计表";
+                $("#tt").datagrid("options").columns= [[{ field: 'BuMenid', title: '部门', align: 'center',rowspan:3 },
+                    { field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3 },
+                    { field: 'ProductJB', title: '级别', align: 'center', rowspan: 3 },
+                    { title: '当日', align: 'center', colspan: 2 },
+                    { field: 'Class', title: '累计实际产量', align: 'center', rowspan: 3 },
+                    { title: '正品', align: 'center', colspan: 2 },
+                    { title: '次品', align: 'center', colspan: 2 },
+                    { title: '质量完成情况', align: 'center', colspan: 4 }], [
+                    { field: 'BuMenid', title: '最大产量', align: 'center', rowspan: 2 },
+                    { field: 'ProductNameId', title: '实际产量', align: 'center', rowspan: 2 },
+                    { field: 'ProductGGId', title: '产量', align: 'center', rowspan: 2 },
+                    { field: 'ProductJB', title: '累计', align: 'center', rowspan: 2 },
+                    { field: 'Class', title: '产量', align: 'center', rowspan: 2 },
+                    { field: 'Groups', title: '累计', align: 'center', rowspan: 2 },
+                    { title: '甲班', align: 'center', colspan: 2 },
+                    { title: '乙班', align: 'center', colspan: 2 }], [
+                    { field: 'Groups', title: '正品', align: 'center'},
+                    { field: 'CiPinNum', title: '次品', align: 'center'},
+                    { field: 'Groups', title: '正品', align: 'center' },
+                    { field: 'CiPinNum', title: '次品', align: 'center' },
+                    ]];
             } else if (value == "year") {
                 if (($("#excelYear").val()).trim().length <= 0) {
                     $.messager.alert("提示", "请填写年份");
@@ -364,38 +482,32 @@
                 var serchTime = $("#excelYear").val()+"-1-1";
                 $("#tt").datagrid("options").url = "/SCCJ/TongJiByYear";
                 $("#tt").datagrid("options").queryParams = { yearExcel: serchTime, bmID: bmID };
-                $("#tt").datagrid("options").onLoadSuccess = compute; 
                 $("#tt").datagrid("options").showFooter = true;
                 $("#tt").datagrid("options").title = "年统计表";
-            }
+                $("#tt").datagrid("options").columns= [[{ field: 'BuMenid', title: '部门', align: 'center',rowspan:3 },
+                    { field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3 },
+                    { field: 'ProductJB', title: '级别', align: 'center', rowspan: 3 },
+                    { title: '当日', align: 'center', colspan: 2 },
+                    { field: 'Class', title: '累计实际产量', align: 'center', rowspan: 3 },
+                    { title: '正品', align: 'center', colspan: 2 },
+                    { title: '次品', align: 'center', colspan: 2 },
+                    { title: '质量完成情况', align: 'center', colspan: 4 }], [
+                    { field: 'BuMenid', title: '最大产量', align: 'center', rowspan: 2 },
+                    { field: 'ProductNameId', title: '实际产量', align: 'center', rowspan: 2 },
+                    { field: 'ProductGGId', title: '产量', align: 'center', rowspan: 2 },
+                    { field: 'ProductJB', title: '累计', align: 'center', rowspan: 2 },
+                    { field: 'Class', title: '产量', align: 'center', rowspan: 2 },
+                    { field: 'Groups', title: '累计', align: 'center', rowspan: 2 },
+                    { title: '甲班', align: 'center', colspan: 2 },
+                    { title: '乙班', align: 'center', colspan: 2 }], [
+                    { field: 'Groups', title: '正品', align: 'center'},
+                    { field: 'CiPinNum', title: '次品', align: 'center'},
+                    { field: 'Groups', title: '正品', align: 'center' },
+                    { field: 'CiPinNum', title: '次品', align: 'center' },
+                    ]];
+            } 
             cleanDatagrid();
             $('#tt').datagrid('reload');
-        }
-        function compute() {//计算函数
-            var rows = $('#tt').datagrid('getRows')//获取当前的数据行
-            var SumNum = 0//计算listprice的总和
-            , cipinNum = 0//统计unitcost的总和
-            ,HeGePinNum = 0
-            ,YiDengPinNum=0
-            ,YouDengPinNum=0;
-            for (var i = 0; i < rows.length; i++) {
-                SumNum += rows[i]['CiPinNum'];
-                SumNum += rows[i]['HeGePinNum'];
-                SumNum += rows[i]['YiDengPinNum'];
-                SumNum += rows[i]['YouDengPinNum'];
-                cipinNum += rows[i]['CiPinNum'];
-                HeGePinNum += rows[i]['HeGePinNum'];
-                YiDengPinNum += rows[i]['YiDengPinNum'];
-                YouDengPinNum += rows[i]['YouDengPinNum'];
-            }
-            //新增一行显示统计信息
-            var cipinLv = ((cipinNum / SumNum) * 100).toFixed(2).toString() + "%";
-            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">次品总量：</b>', BuMenid: cipinNum });
-            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">合格品总量：</b>', BuMenid: HeGePinNum });
-            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">一等品总量：</b>', BuMenid: YiDengPinNum });
-            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">优等品总量：</b>', BuMenid: YouDengPinNum });
-            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">产品总量：</b>', BuMenid: SumNum });
-            $('#tt').datagrid('appendRow', { Wtime: '<b style="color:red;">次品率：</b>', BuMenid: cipinLv });
         }
         //数字验证
         function num(obj) {
@@ -435,9 +547,15 @@
         <div id="TTdiv">
             <table id="tt" title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit">
                 <!--插入表格数据-->
+                <thead data-options="frozen:true ">
+                    <tr>
+                        <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
+                        <th data-options="field:'ID', width: 40">编号</th>
+                    </tr>
+                </thead>
             </table>
         </div>
-    </div>
+    </div>0
     <div id="AddBtnDIV" style="padding:5px;height:auto">
         <div style="margin-bottom:5px">
             <a href="#" class="easyui-linkbutton" id="AddBtn" iconCls="icon-add" plain="true">添加日报</a>
@@ -445,6 +563,7 @@
     </div>
     <div id="TJTypeDIV" style="padding:5px;height:auto;width:auto;display:flex;flex-direction:row; flex-wrap:nowrap;align-items:center;">
         <div style="margin-bottom:5px;width:auto;height:auto">
+            <input type="radio" name="TJtype" id="TjByDay" value="day" />按日统计
             <input type="radio" name="TJtype" id="TjByMonth" value="month"/>按月统计
             <input type="radio" name="TJtype" id="TjByYear" value="year"/>按年统计
         部门列表：<input class="easyui-combobox" id="InfoExcelMsg"
@@ -453,8 +572,13 @@
             textField="Name"
             panelHeight="200px"
             style="width:100px" />
-        <label id="tjMonth">统计月份：<input onclick="setmonth(this)" id="excelYM" /><input type="button" value="月统计" onclick="toTj('month')"/></label>
-        <label id="tjYear">统计年份：<input type="text" id="excelYear" onkeyup="num(this)"/><input type="button" value="年统计" onclick="toTj('year')"/></label></div>
+        <label id="tjDay">统计月份：<input type="text" class="easyui-datebox" id="excelYMD" /><input type="button" value="日统计" onclick="toTj('day')" /><input type="button" value="导出日统计表" onclick="toExcel('day')" /></label>
+        <label id="tjMonth">统计月份：<input onclick="setmonth(this)" id="excelYM" /><input type="button" value="月统计" onclick="toTj('month')"/><input type="button" value="导出月统计表" onclick="toExcel('month')" /></label>
+        <label id="tjYear">统计年份：<input type="text" id="excelYear" onkeyup="num(this)"/><input type="button" value="年统计" onclick="toTj('year')"/><input type="button" value="导出年统计表" onclick="toExcel('year')" /></label></div>
+        <form id="ExcelForm" action="/SCCJ/GetExcelTable" method="post">
+            <input id="Action" name="Action" type="hidden" value="outexcel" />
+            <input id="OFtable" name="OFtable" type="hidden" />
+        </form>
     </div>
     <!---------------添加日报表--------------------->
     <div id="AddBbInfoDIV" style="height:100%; width:100%;">
@@ -518,19 +642,10 @@
                      </select>
                  </td>
              </tr>
-             <tr>
-                 <td>分组</td>
-                 <td>
-                     <select class="easyui-combobox" name="Groups" id="Groups">
-                         <option value="南跨">南跨</option>
-                         <option value="北跨">北跨</option>
-                     </select>
-                 </td>
-             </tr>
             <tr><td>次品</td><td><input  type="text" id="CiPinNum" name="CiPinNum" onkeyup="num(this)"/></td></tr>
              <tr><td>合格品</td><td><input type="text" id="HeGePinNum" name="HeGePinNum" onkeyup="num(this)" /></td></tr>
-             <tr><td>一等品</td><td><input type="text" id="YiDengPinNum" name="YiDengPinNum" onkeyup="num(this)" /></td></tr>
-             <tr><td>优等品</td><td><input type="text" id="YouDengPinNum" name="YouDengPinNum" onkeyup="num(this)" /></td></tr>
+             <tr><td>一等品</td><td><input type="text" id="YiDengPinNum" name="YiDengPinNum" value="0" onkeyup="num(this)" /></td></tr>
+             <tr><td>优等品</td><td><input type="text" id="YouDengPinNum" name="YouDengPinNum" value="0" onkeyup="num(this)" /></td></tr>
         </table>
             <table>
                 <tbody id="Selebody"></tbody>
