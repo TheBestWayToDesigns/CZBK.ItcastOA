@@ -317,7 +317,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var temp = ShareFileOrNoticeService.LoadEntities(x => x.ID == sfid).FirstOrDefault();
             if(temp != null)
             {
-                temp.FileURL += sfurl;
+                temp.FileURL += ","+sfurl;
             }
             ShareFileOrNoticeService.EditEntity(temp);
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
