@@ -420,12 +420,16 @@
           <Property Name="ProductNameId" Type="bigint" Nullable="false" />
           <Property Name="ProductGGId" Type="bigint" Nullable="false" />
           <Property Name="ProductJB" Type="bigint" Nullable="false" />
-          <Property Name="Class" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Groups" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="CiPinNum" Type="int" Nullable="false" />
-          <Property Name="HeGePinNum" Type="int" Nullable="false" />
-          <Property Name="YiDengPinNum" Type="int" Nullable="false" />
-          <Property Name="YouDengPinNum" Type="int" Nullable="false" />
+          <Property Name="JiaYouDengPinNum" Type="int" />
+          <Property Name="JiaYiDengPinNum" Type="int" Nullable="false" />
+          <Property Name="JiaHeGePinNum" Type="int" Nullable="false" />
+          <Property Name="JiaCiPinNum" Type="int" Nullable="false" />
+          <Property Name="JiaFeiPinNum" Type="int" />
+          <Property Name="YiYouDengPinNum" Type="int" />
+          <Property Name="YiYiDengPinNum" Type="int" Nullable="false" />
+          <Property Name="YiHeGePinNum" Type="int" Nullable="false" />
+          <Property Name="YiCiPinNum" Type="int" Nullable="false" />
+          <Property Name="YiFeiPinNum" Type="int" />
           <Property Name="Del_f" Type="smallint" Nullable="false" />
         </EntityType>
         <EntityType Name="T_SczzDanju">
@@ -4447,17 +4451,21 @@
           <Property Name="ProductNameId" Type="Int64" Nullable="false" />
           <Property Name="ProductGGId" Type="Int64" Nullable="false" />
           <Property Name="ProductJB" Type="Int64" Nullable="false" />
-          <Property Name="Class" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Groups" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CiPinNum" Type="Int32" Nullable="false" />
-          <Property Name="HeGePinNum" Type="Int32" Nullable="false" />
-          <Property Name="YiDengPinNum" Type="Int32" Nullable="false" />
-          <Property Name="YouDengPinNum" Type="Int32" Nullable="false" />
           <Property Name="Del_f" Type="Int16" Nullable="false" />
           <NavigationProperty Name="BumenInfoSet" Relationship="OAModel.FK_T_SCCJ_BumenInfoSet" FromRole="T_SCCJ" ToRole="BumenInfoSet" />
           <NavigationProperty Name="T_ChanPinName" Relationship="OAModel.FK_T_SCCJ_T_ChanPinGG" FromRole="T_SCCJ" ToRole="T_ChanPinName" />
           <NavigationProperty Name="T_ChanPinName1" Relationship="OAModel.FK_T_SCCJ_T_ChanPinJB" FromRole="T_SCCJ" ToRole="T_ChanPinName" />
           <NavigationProperty Name="T_ChanPinName2" Relationship="OAModel.FK_T_SCCJ_T_ChanPinName" FromRole="T_SCCJ" ToRole="T_ChanPinName" />
+          <Property Name="JiaYouDengPinNum" Type="Int32" />
+          <Property Name="JiaYiDengPinNum" Type="Int32" Nullable="false" />
+          <Property Name="JiaHeGePinNum" Type="Int32" Nullable="false" />
+          <Property Name="JiaCiPinNum" Type="Int32" Nullable="false" />
+          <Property Name="JiaFeiPinNum" Type="Int32" />
+          <Property Name="YiYouDengPinNum" Type="Int32" />
+          <Property Name="YiYiDengPinNum" Type="Int32" Nullable="false" />
+          <Property Name="YiHeGePinNum" Type="Int32" Nullable="false" />
+          <Property Name="YiCiPinNum" Type="Int32" Nullable="false" />
+          <Property Name="YiFeiPinNum" Type="Int32" />
         </EntityType>
         <Association Name="FK_T_SCCJ_BumenInfoSet">
           <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="1" />
@@ -5325,13 +5333,17 @@
           <EntitySetMapping Name="T_SCCJ">
             <EntityTypeMapping TypeName="OAModel.T_SCCJ">
               <MappingFragment StoreEntitySet="T_SCCJ">
+                <ScalarProperty Name="YiFeiPinNum" ColumnName="YiFeiPinNum" />
+                <ScalarProperty Name="YiCiPinNum" ColumnName="YiCiPinNum" />
+                <ScalarProperty Name="YiHeGePinNum" ColumnName="YiHeGePinNum" />
+                <ScalarProperty Name="YiYiDengPinNum" ColumnName="YiYiDengPinNum" />
+                <ScalarProperty Name="YiYouDengPinNum" ColumnName="YiYouDengPinNum" />
+                <ScalarProperty Name="JiaFeiPinNum" ColumnName="JiaFeiPinNum" />
+                <ScalarProperty Name="JiaCiPinNum" ColumnName="JiaCiPinNum" />
+                <ScalarProperty Name="JiaHeGePinNum" ColumnName="JiaHeGePinNum" />
+                <ScalarProperty Name="JiaYiDengPinNum" ColumnName="JiaYiDengPinNum" />
+                <ScalarProperty Name="JiaYouDengPinNum" ColumnName="JiaYouDengPinNum" />
                 <ScalarProperty Name="Del_f" ColumnName="Del_f" />
-                <ScalarProperty Name="YouDengPinNum" ColumnName="YouDengPinNum" />
-                <ScalarProperty Name="YiDengPinNum" ColumnName="YiDengPinNum" />
-                <ScalarProperty Name="HeGePinNum" ColumnName="HeGePinNum" />
-                <ScalarProperty Name="CiPinNum" ColumnName="CiPinNum" />
-                <ScalarProperty Name="Groups" ColumnName="Groups" />
-                <ScalarProperty Name="Class" ColumnName="Class" />
                 <ScalarProperty Name="ProductJB" ColumnName="ProductJB" />
                 <ScalarProperty Name="ProductGGId" ColumnName="ProductGGId" />
                 <ScalarProperty Name="ProductNameId" ColumnName="ProductNameId" />

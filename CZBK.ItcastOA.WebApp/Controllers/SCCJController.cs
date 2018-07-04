@@ -37,12 +37,16 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            ProductNameId = a.T_ChanPinName2.MyTexts,
                            ProductGGId = a.T_ChanPinName.MyTexts,
                            ProductJB = a.T_ChanPinName1.MyTexts,
-                           Class = a.Class,
-                           Groups = a.Groups,
-                           CiPinNum = a.CiPinNum,
-                           HeGePinNum = a.HeGePinNum,
-                           YiDengPinNum = a.YiDengPinNum,
-                           YouDengPinNum = a.YouDengPinNum,
+                           JiaCiPinNum = a.JiaCiPinNum,
+                           JiaHeGePinNum = a.JiaHeGePinNum,
+                           JiaYiDengPinNum = a.JiaYiDengPinNum,
+                           JiaYouDengPinNum = a.JiaYouDengPinNum,
+                           JiaFeiPinNum = a.JiaFeiPinNum,
+                           YiCiPinNum = a.YiCiPinNum,
+                           YiHeGePinNum = a.YiHeGePinNum,
+                           YiYiDengPinNum = a.YiYiDengPinNum,
+                           YiYouDengPinNum = a.YiYouDengPinNum,
+                           YiFeiPinNum=a.YiFeiPinNum
                        };
             return Json(new { rows = rtmp, total = toalcount }, JsonRequestBehavior.AllowGet);
         }
@@ -79,12 +83,16 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             ei.ProductNameId = temp.ProductNameId;
             ei.ProductGGId = temp.ProductGGId;
             ei.ProductJB = temp.ProductJB;
-            ei.Class = temp.Class;
-            ei.Groups = temp.Groups;
-            ei.CiPinNum = temp.CiPinNum;
-            ei.HeGePinNum = temp.HeGePinNum;
-            ei.YiDengPinNum = temp.YiDengPinNum;
-            ei.YouDengPinNum = temp.YouDengPinNum;
+            ei.JiaCiPinNum = temp.JiaCiPinNum;
+            ei.JiaHeGePinNum = temp.JiaHeGePinNum;
+            ei.JiaYiDengPinNum = temp.JiaYiDengPinNum;
+            ei.JiaYouDengPinNum = temp.JiaYouDengPinNum;
+            ei.JiaFeiPinNum = temp.JiaFeiPinNum;
+            ei.YiCiPinNum = temp.YiCiPinNum;
+            ei.YiHeGePinNum = temp.YiHeGePinNum;
+            ei.YiYiDengPinNum = temp.YiYiDengPinNum;
+            ei.YiYouDengPinNum = temp.YiYouDengPinNum;
+            ei.YiFeiPinNum = temp.YiFeiPinNum;
             return Json(ei, JsonRequestBehavior.AllowGet);
         }
         //删除单据数据
@@ -173,12 +181,14 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            ProductNameId = a.T_ChanPinName2.MyTexts,
                            ProductGGId = a.T_ChanPinName.MyTexts,
                            ProductJB = a.T_ChanPinName1.MyTexts,
-                           Class = a.Class,
-                           Groups = a.Groups,
-                           CiPinNum = a.CiPinNum,
-                           HeGePinNum = a.HeGePinNum,
-                           YiDengPinNum = a.YiDengPinNum,
-                           YouDengPinNum = a.YouDengPinNum,
+                           JiaCiPinNum = a.JiaCiPinNum,
+                           JiaHeGePinNum = a.JiaHeGePinNum,
+                           JiaYiDengPinNum = a.JiaYiDengPinNum,
+                           JiaYouDengPinNum = a.JiaYouDengPinNum,
+                           YiCiPinNum = a.YiCiPinNum,
+                           YiHeGePinNum = a.YiHeGePinNum,
+                           YiYiDengPinNum = a.YiYiDengPinNum,
+                           YiYouDengPinNum = a.YiYouDengPinNum
                        };
             return Json(rtmp, JsonRequestBehavior.AllowGet);
         }
@@ -202,12 +212,14 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            ProductNameId = a.T_ChanPinName2.MyTexts,
                            ProductGGId = a.T_ChanPinName.MyTexts,
                            ProductJB = a.T_ChanPinName1.MyTexts,
-                           Class = a.Class,
-                           Groups = a.Groups,
-                           CiPinNum = a.CiPinNum,
-                           HeGePinNum = a.HeGePinNum,
-                           YiDengPinNum = a.YiDengPinNum,
-                           YouDengPinNum = a.YouDengPinNum,
+                           JiaCiPinNum = a.JiaCiPinNum,
+                           JiaHeGePinNum = a.JiaHeGePinNum,
+                           JiaYiDengPinNum = a.JiaYiDengPinNum,
+                           JiaYouDengPinNum = a.JiaYouDengPinNum,
+                           YiCiPinNum = a.YiCiPinNum,
+                           YiHeGePinNum = a.YiHeGePinNum,
+                           YiYiDengPinNum = a.YiYiDengPinNum,
+                           YiYouDengPinNum = a.YiYouDengPinNum
                        };
             return Json(rtmp, JsonRequestBehavior.AllowGet);
         }
@@ -215,10 +227,18 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         {
             int bmID = Convert.ToInt32(Request["bmID"]);
             DateTime dt= Convert.ToDateTime(Request["dayExcel"]);
+            DateTime dtStr = new DateTime(dt.Year, dt.Month, 1);
             var temp = T_SCCJService.LoadEntities(x => x.BuMenid == bmID && x.Wtime == dt && x.Del_f == 0).DefaultIfEmpty().ToList();
+            var temp2 = T_SCCJService.LoadEntities(x => x.BuMenid == bmID &&x.Wtime>=dtStr&& x.Wtime<=dt && x.Del_f == 0).DefaultIfEmpty().ToList();
             if (temp != null && temp[0] != null)
             {
-                temp = temp.OrderBy(x => x.Wtime).ToList();
+                var groupData = temp.GroupBy(x => new { x.ProductNameId, x.ProductGGId, x.ProductJB }).ToList();
+                var groupDataAll = temp2.GroupBy(x=>new { x.ProductNameId, x.ProductGGId, x.ProductJB }).ToList();
+                List<DayTJclass> ldt = new List<DayTJclass>();
+                foreach(var a in groupData)
+                {
+                    
+                }
             }
             var rtmp = from a in temp
                        select new
@@ -229,12 +249,14 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            ProductNameId = a.T_ChanPinName2.MyTexts,
                            ProductGGId = a.T_ChanPinName.MyTexts,
                            ProductJB = a.T_ChanPinName1.MyTexts,
-                           Class = a.Class,
-                           Groups = a.Groups,
-                           CiPinNum = a.CiPinNum,
-                           HeGePinNum = a.HeGePinNum,
-                           YiDengPinNum = a.YiDengPinNum,
-                           YouDengPinNum = a.YouDengPinNum,
+                           JiaCiPinNum = a.JiaCiPinNum,
+                           JiaHeGePinNum = a.JiaHeGePinNum,
+                           JiaYiDengPinNum = a.JiaYiDengPinNum,
+                           JiaYouDengPinNum = a.JiaYouDengPinNum,
+                           YiCiPinNum = a.YiCiPinNum,
+                           YiHeGePinNum = a.YiHeGePinNum,
+                           YiYiDengPinNum = a.YiYiDengPinNum,
+                           YiYouDengPinNum = a.YiYouDengPinNum
                        };
             return Json(rtmp, JsonRequestBehavior.AllowGet);
         }
@@ -270,7 +292,49 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public int CiPinNum { get; set; }
         public int HeGePinNum { get; set; }
         public int YiDengPinNum { get; set; }
-        public int YouDengPinNum { get; set; }
+        public int? YouDengPinNum { get; set; }
+        public int? FeiPinNum { get; set; }
+        public int? JiaCiPinNum { get; set; }
+        public int? JiaHeGePinNum { get; set; }
+        public int? JiaYiDengPinNum { get; set; }
+        public int? JiaYouDengPinNum  { get; set; }
+        public int? JiaFeiPinNum { get; set; }
+        public int? YiCiPinNum  { get; set; }
+        public int? YiHeGePinNum { get; set; }
+        public int? YiYiDengPinNum { get; set; }
+        public int? YiYouDengPinNum { get; set; }
+        public int? YiFeiPinNum { get; set; }
         public short Del_f { get; set; }
+    }
+    public class DayTJclass
+    {
+       public long ProductGGId { get; set; }
+       public long ProductJB { get; set; }
+       public int YSDayNum { get; set; }
+       public int YSMonthNum { get; set; }
+       public int JiaBanDayNum { get; set; }
+       public int JiaBanMonthNum { get; set; }
+       public int YiBanDayNum { get; set; }
+       public int YiBanMonthNum { get; set; }
+       public int JiaYouDayNum  { get; set; }
+       public int JiaYouMonthNum  { get; set; }
+       public int JiaYiDayNum  { get; set; }
+       public int JiaYiMonthNum  { get; set; }
+       public int JiaHeDayNum  { get; set; }
+       public int JiaHeMonthNum  { get; set; }
+       public int JiaCiDayNum  { get; set; }
+       public int JiaCiMonthNum  { get; set; }
+       public int JiaFeiDayNum  { get; set; }
+       public int JiaFeiMonthNum  { get; set; }
+       public int YiYouDayNum  { get; set; }
+       public int YiYouMonthNum  { get; set; }
+       public int YiYiDayNum  { get; set; }
+       public int YiYiMonthNum  { get; set; }
+       public int YiHeDayNum  { get; set; }
+       public int YiHeMonthNum  { get; set; }
+       public int YiCiDayNum  { get; set; }
+       public int YiCiMonthNum  { get; set; }
+       public int YiFeiDayNum  { get; set; }
+       public int YiFeiMonthNum { get; set; }
     }
 }

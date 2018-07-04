@@ -20,13 +20,17 @@ namespace CZBK.ItcastOA.Model
         public long ProductNameId { get; set; }
         public long ProductGGId { get; set; }
         public long ProductJB { get; set; }
-        public string Class { get; set; }
-        public string Groups { get; set; }
-        public int CiPinNum { get; set; }
-        public int HeGePinNum { get; set; }
-        public int YiDengPinNum { get; set; }
-        public int YouDengPinNum { get; set; }
         public short Del_f { get; set; }
+        public Nullable<int> JiaYouDengPinNum { get; set; }
+        public int JiaYiDengPinNum { get; set; }
+        public int JiaHeGePinNum { get; set; }
+        public int JiaCiPinNum { get; set; }
+        public Nullable<int> JiaFeiPinNum { get; set; }
+        public Nullable<int> YiYouDengPinNum { get; set; }
+        public int YiYiDengPinNum { get; set; }
+        public int YiHeGePinNum { get; set; }
+        public int YiCiPinNum { get; set; }
+        public Nullable<int> YiFeiPinNum { get; set; }
     
         public virtual BumenInfoSet BumenInfoSet { get; set; }
         public virtual T_ChanPinName T_ChanPinName { get; set; }
