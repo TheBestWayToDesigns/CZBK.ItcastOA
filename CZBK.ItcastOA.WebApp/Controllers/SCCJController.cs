@@ -161,67 +161,94 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                        };
             return Json(rtmp, JsonRequestBehavior.AllowGet);
         }
-        //按月统计
+        //按日统计产品完成
         public ActionResult TongJiByMonth()
         {
             int bmID = Convert.ToInt32(Request["bmID"]);
-            DateTime dtStart = Convert.ToDateTime(Request["monthExcel"]);
-            DateTime dtEnd = dtStart.AddMonths(1).AddDays(-1 * (dtStart.Day));
-            var temp = T_SCCJService.LoadEntities(x => x.BuMenid == bmID && x.Wtime >= dtStart && x.Wtime <= dtEnd && x.Del_f == 0).DefaultIfEmpty().ToList();
+            DateTime dt = Convert.ToDateTime(Request["monthExcel"]);
+            DateTime dtStr = new DateTime(dt.Year, dt.Month, 1);
+            var temp = T_SCCJService.LoadEntities(x => x.BuMenid == bmID && x.Wtime == dt && x.Del_f == 0).DefaultIfEmpty().ToList();
+            var temp2 = T_SCCJService.LoadEntities(x => x.BuMenid == bmID && x.Wtime >= dtStr && x.Wtime <= dt && x.Del_f == 0).DefaultIfEmpty().ToList();
             if (temp != null && temp[0] != null)
             {
-                temp = temp.OrderBy(x => x.Wtime).ToList();
+                var groupData = temp.GroupBy(x => x.ProductNameId).ToList();
+                List<MonthAnfYearTJclass> lmaf = new List<MonthAnfYearTJclass>();
+                foreach (var a in groupData)
+                {
+                    var s = a.DefaultIfEmpty();
+                    foreach (var b in s)
+                    {
+                        MonthAnfYearTJclass may = new MonthAnfYearTJclass();
+                        may.BuMenid = b.BumenInfoSet.Name;
+                        may.ProductGGId = b.T_ChanPinName2.MyTexts + "——" + b.T_ChanPinName.MyTexts;
+                        may.ProductJB = b.T_ChanPinName1.MyTexts;
+                        may.TrueCLNum = b.JiaCiPinNum + b.JiaFeiPinNum + b.JiaHeGePinNum + b.JiaYiDengPinNum + b.JiaYouDengPinNum + b.YiCiPinNum + b.YiFeiPinNum + b.YiHeGePinNum + b.YiYiDengPinNum + b.YiYouDengPinNum;
+                        var data = temp2.Where(x => x.ProductNameId == b.ProductNameId && x.ProductGGId == b.ProductGGId && x.ProductJB == b.ProductJB).ToList();
+                        may.SumTrueCL= data.Sum(x => x.JiaCiPinNum) + data.Sum(x => x.JiaFeiPinNum) + data.Sum(x => x.JiaHeGePinNum) + data.Sum(x => x.JiaYiDengPinNum) + data.Sum(x => x.JiaYouDengPinNum) + data.Sum(x => x.YiCiPinNum) + data.Sum(x => x.YiFeiPinNum) + data.Sum(x => x.YiHeGePinNum) + data.Sum(x => x.YiYiDengPinNum) + data.Sum(x => x.YiYouDengPinNum);
+                        may.ZhengPinDayNum = b.JiaYouDengPinNum + b.JiaYiDengPinNum + b.JiaHeGePinNum + b.YiYiDengPinNum + b.YiYouDengPinNum + b.YiHeGePinNum;
+                        may.ZhengPinMonthNum = data.Sum(x => x.JiaYouDengPinNum) + data.Sum(x => x.JiaYiDengPinNum) + data.Sum(x => x.JiaHeGePinNum) + data.Sum(x => x.YiYouDengPinNum) + data.Sum(x => x.YiYiDengPinNum) + data.Sum(x => x.YiHeGePinNum);
+                        may.CiPinDayNum = b.JiaCiPinNum + b.YiCiPinNum;
+                        may.CiPinMonthNum = data.Sum(x => x.JiaCiPinNum) + data.Sum(x => x.YiCiPinNum);
+                        may.JiaZhengPinNum = b.JiaHeGePinNum+b.JiaYiDengPinNum+b.JiaYouDengPinNum;
+                        may.JiaCiPinNum = b.JiaCiPinNum;
+                        may.YiZhengPinNum = b.YiHeGePinNum + b.YiYiDengPinNum + b.YiYouDengPinNum;
+                        may.YiCiPinNum = b.YiCiPinNum;
+                        if (may.SumTrueCL==0&&may.TrueCLNum == 0 && may.ZhengPinDayNum == 0 && may.ZhengPinMonthNum == 0 && may.CiPinDayNum == 0 && may.CiPinMonthNum == 0 && may.JiaZhengPinNum == 0 && may.JiaCiPinNum == 0 && may.YiZhengPinNum == 0 && may.YiCiPinNum == 0)
+                        {
+                            continue;
+                        }else
+                        {
+                            lmaf.Add(may);
+                        }
+                    }
+                }
+                return Json(lmaf, JsonRequestBehavior.AllowGet);
             }
-            var rtmp = from a in temp
-                       select new
-                       {
-                           ID = a.ID,
-                           Wtime = a.Wtime,
-                           BuMenid = a.BumenInfoSet.Name,
-                           ProductNameId = a.T_ChanPinName2.MyTexts,
-                           ProductGGId = a.T_ChanPinName.MyTexts,
-                           ProductJB = a.T_ChanPinName1.MyTexts,
-                           JiaCiPinNum = a.JiaCiPinNum,
-                           JiaHeGePinNum = a.JiaHeGePinNum,
-                           JiaYiDengPinNum = a.JiaYiDengPinNum,
-                           JiaYouDengPinNum = a.JiaYouDengPinNum,
-                           YiCiPinNum = a.YiCiPinNum,
-                           YiHeGePinNum = a.YiHeGePinNum,
-                           YiYiDengPinNum = a.YiYiDengPinNum,
-                           YiYouDengPinNum = a.YiYouDengPinNum
-                       };
-            return Json(rtmp, JsonRequestBehavior.AllowGet);
+            return Json(null, JsonRequestBehavior.AllowGet);
         }
         //按年统计
         public ActionResult TongJiByYear()
         {
             int bmID = Convert.ToInt32(Request["bmID"]);
-            DateTime dtStart = Convert.ToDateTime(Request["yearExcel"]);
-            DateTime dtEnd = dtStart.AddYears(1);
-            var temp = T_SCCJService.LoadEntities(x => x.BuMenid == bmID && x.Wtime >= dtStart && x.Wtime <= dtEnd && x.Del_f == 0).DefaultIfEmpty().ToList();
+            DateTime dtStr = Convert.ToDateTime(Request["yearExcel"]);
+            DateTime dtEnd = dtStr.AddYears(1).AddDays(-1);
+            var temp2 = T_SCCJService.LoadEntities(x => x.BuMenid == bmID && x.Wtime >= dtStr && x.Wtime <= dtEnd && x.Del_f == 0).DefaultIfEmpty().ToList();
+            DateTime dt = temp2.Max(x => x.Wtime);
+            var temp = T_SCCJService.LoadEntities(x => x.BuMenid == bmID && x.Wtime == dt && x.Del_f == 0).DefaultIfEmpty().ToList();
             if (temp != null && temp[0] != null)
             {
-                temp = temp.OrderBy(x => x.Wtime).ToList();
+                var groupData = temp.GroupBy(x => x.ProductNameId).ToList();
+                List<MonthAnfYearTJclass> lmaf = new List<MonthAnfYearTJclass>();
+                foreach (var a in groupData)
+                {
+                    var s = a.DefaultIfEmpty();
+                    foreach (var b in s)
+                    {
+                        MonthAnfYearTJclass may = new MonthAnfYearTJclass();
+                        may.BuMenid = b.BumenInfoSet.Name;
+                        may.ProductGGId = b.T_ChanPinName2.MyTexts + "——" + b.T_ChanPinName.MyTexts;
+                        may.ProductJB = b.T_ChanPinName1.MyTexts;
+                        var data = temp2.Where(x => x.ProductNameId == b.ProductNameId && x.ProductGGId == b.ProductGGId && x.ProductJB == b.ProductJB).ToList();
+                        may.SumTrueCL = data.Sum(x => x.JiaCiPinNum) + data.Sum(x => x.JiaFeiPinNum) + data.Sum(x => x.JiaHeGePinNum) + data.Sum(x => x.JiaYiDengPinNum) + data.Sum(x => x.JiaYouDengPinNum) + data.Sum(x => x.YiCiPinNum) + data.Sum(x => x.YiFeiPinNum) + data.Sum(x => x.YiHeGePinNum) + data.Sum(x => x.YiYiDengPinNum) + data.Sum(x => x.YiYouDengPinNum);
+                        may.ZhengPinMonthNum = data.Sum(x => x.JiaYouDengPinNum) + data.Sum(x => x.JiaYiDengPinNum) + data.Sum(x => x.JiaHeGePinNum) + data.Sum(x => x.YiYouDengPinNum) + data.Sum(x => x.YiYiDengPinNum) + data.Sum(x => x.YiHeGePinNum);
+                        may.CiPinMonthNum = data.Sum(x => x.JiaCiPinNum) + data.Sum(x => x.YiCiPinNum);
+                        may.JiaZhengPinNum = data.Sum(x => x.JiaHeGePinNum) + data.Sum(x => x.JiaYiDengPinNum) + data.Sum(x => x.JiaYouDengPinNum);
+                        may.JiaCiPinNum = data.Sum(x => x.JiaCiPinNum);
+                        may.YiZhengPinNum = data.Sum(x => x.YiHeGePinNum) + data.Sum(x => x.YiYiDengPinNum) + data.Sum(x => x.YiYouDengPinNum);
+                        may.YiCiPinNum = data.Sum(x => x.YiCiPinNum);
+                        if (may.SumTrueCL == 0 && may.ZhengPinMonthNum == 0 && may.CiPinMonthNum == 0 && may.JiaZhengPinNum == 0 && may.JiaCiPinNum == 0 && may.YiZhengPinNum == 0 && may.YiCiPinNum == 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            lmaf.Add(may);
+                        }
+                    }
+                }
+                return Json(lmaf, JsonRequestBehavior.AllowGet);
             }
-            var rtmp = from a in temp
-                       select new
-                       {
-                           ID = a.ID,
-                           Wtime = a.Wtime,
-                           BuMenid = a.BumenInfoSet.Name,
-                           ProductNameId = a.T_ChanPinName2.MyTexts,
-                           ProductGGId = a.T_ChanPinName.MyTexts,
-                           ProductJB = a.T_ChanPinName1.MyTexts,
-                           JiaCiPinNum = a.JiaCiPinNum,
-                           JiaHeGePinNum = a.JiaHeGePinNum,
-                           JiaYiDengPinNum = a.JiaYiDengPinNum,
-                           JiaYouDengPinNum = a.JiaYouDengPinNum,
-                           YiCiPinNum = a.YiCiPinNum,
-                           YiHeGePinNum = a.YiHeGePinNum,
-                           YiYiDengPinNum = a.YiYiDengPinNum,
-                           YiYouDengPinNum = a.YiYouDengPinNum
-                       };
-            return Json(rtmp, JsonRequestBehavior.AllowGet);
+            return Json(null, JsonRequestBehavior.AllowGet);
         }
         public ActionResult TongJiByDay()
         {
@@ -232,33 +259,49 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var temp2 = T_SCCJService.LoadEntities(x => x.BuMenid == bmID &&x.Wtime>=dtStr&& x.Wtime<=dt && x.Del_f == 0).DefaultIfEmpty().ToList();
             if (temp != null && temp[0] != null)
             {
-                var groupData = temp.GroupBy(x => new { x.ProductNameId, x.ProductGGId, x.ProductJB }).ToList();
-                var groupDataAll = temp2.GroupBy(x=>new { x.ProductNameId, x.ProductGGId, x.ProductJB }).ToList();
+                var groupData = temp.GroupBy(x => x.ProductNameId).ToList();
                 List<DayTJclass> ldt = new List<DayTJclass>();
                 foreach(var a in groupData)
                 {
-                    
+                    var s = a.DefaultIfEmpty();
+                    foreach(var b in s)
+                    {
+                         DayTJclass dtj = new DayTJclass();
+                        dtj.ProductGGId = b.T_ChanPinName2.MyTexts + "——" + b.T_ChanPinName.MyTexts;
+                        dtj.ProductJB = b.T_ChanPinName1.MyTexts;
+                        dtj.YSDayNum = b.JiaCiPinNum + b.JiaFeiPinNum + b.JiaHeGePinNum + b.JiaYiDengPinNum + b.JiaYouDengPinNum + b.YiCiPinNum + b.YiFeiPinNum + b.YiHeGePinNum + b.YiYiDengPinNum + b.YiYouDengPinNum;
+                        var data = temp2.Where(x => x.ProductNameId == b.ProductNameId && x.ProductGGId == b.ProductGGId && x.ProductJB == b.ProductJB).ToList();
+                        dtj.YSMonthNum = data.Sum(x=>x.JiaCiPinNum)+data.Sum(x=>x.JiaFeiPinNum)+data.Sum(x=>x.JiaHeGePinNum)+data.Sum(x=>x.JiaYiDengPinNum)+data.Sum(x=>x.JiaYouDengPinNum)+ data.Sum(x => x.YiCiPinNum) + data.Sum(x => x.YiFeiPinNum) + data.Sum(x => x.YiHeGePinNum) + data.Sum(x => x.YiYiDengPinNum) + data.Sum(x => x.YiYouDengPinNum);
+                        dtj.JiaBanDayNum = b.JiaCiPinNum + b.JiaFeiPinNum + b.JiaHeGePinNum + b.JiaYiDengPinNum + b.JiaYouDengPinNum;
+                        dtj.JiaBanMonthNum = data.Sum(x => x.JiaCiPinNum) + data.Sum(x => x.JiaFeiPinNum) + data.Sum(x => x.JiaHeGePinNum) + data.Sum(x => x.JiaYiDengPinNum) + data.Sum(x => x.JiaYouDengPinNum);
+                        dtj.YiBanDayNum = b.YiCiPinNum + b.YiFeiPinNum + b.YiHeGePinNum + b.YiYiDengPinNum + b.YiYouDengPinNum;
+                        dtj.YiBanMonthNum = data.Sum(x => x.YiCiPinNum) + data.Sum(x => x.YiFeiPinNum) + data.Sum(x => x.YiHeGePinNum) + data.Sum(x => x.YiYiDengPinNum) + data.Sum(x => x.YiYouDengPinNum);
+                        dtj.JiaYouDayNum = b.JiaYouDengPinNum;
+                        dtj.JiaYouMonthNum = data.Sum(x => x.JiaYouDengPinNum);
+                        dtj.JiaYiDayNum = b.JiaYiDengPinNum;
+                        dtj.JiaYiMonthNum = data.Sum(x => x.JiaYiDengPinNum);
+                        dtj.JiaHeDayNum = b.JiaHeGePinNum;
+                        dtj.JiaHeMonthNum = data.Sum(x => x.JiaHeGePinNum);
+                        dtj.JiaCiDayNum = b.JiaCiPinNum;
+                        dtj.JiaCiMonthNum = data.Sum(x => x.JiaCiPinNum);
+                        dtj.JiaFeiDayNum = b.JiaFeiPinNum;
+                        dtj.JiaFeiMonthNum = data.Sum(x => x.JiaFeiPinNum);
+                        dtj.YiYouDayNum = b.YiYouDengPinNum;
+                        dtj.YiYouMonthNum = data.Sum(x => x.YiYouDengPinNum);
+                        dtj.YiYiDayNum = b.YiYiDengPinNum;
+                        dtj.YiYiMonthNum = data.Sum(x => x.YiYiDengPinNum);
+                        dtj.YiHeDayNum = b.YiHeGePinNum;
+                        dtj.YiHeMonthNum = data.Sum(x => x.YiHeGePinNum);
+                        dtj.YiCiDayNum = b.YiCiPinNum;
+                        dtj.YiCiMonthNum = data.Sum(x => x.YiCiPinNum);
+                        dtj.YiFeiDayNum = b.YiFeiPinNum;
+                        dtj.YiFeiMonthNum = data.Sum(x => x.YiFeiPinNum);
+                        ldt.Add(dtj);
+                    }
                 }
+                return Json(ldt, JsonRequestBehavior.AllowGet);
             }
-            var rtmp = from a in temp
-                       select new
-                       {
-                           ID = a.ID,
-                           Wtime = a.Wtime,
-                           BuMenid = a.BumenInfoSet.Name,
-                           ProductNameId = a.T_ChanPinName2.MyTexts,
-                           ProductGGId = a.T_ChanPinName.MyTexts,
-                           ProductJB = a.T_ChanPinName1.MyTexts,
-                           JiaCiPinNum = a.JiaCiPinNum,
-                           JiaHeGePinNum = a.JiaHeGePinNum,
-                           JiaYiDengPinNum = a.JiaYiDengPinNum,
-                           JiaYouDengPinNum = a.JiaYouDengPinNum,
-                           YiCiPinNum = a.YiCiPinNum,
-                           YiHeGePinNum = a.YiHeGePinNum,
-                           YiYiDengPinNum = a.YiYiDengPinNum,
-                           YiYouDengPinNum = a.YiYouDengPinNum
-                       };
-            return Json(rtmp, JsonRequestBehavior.AllowGet);
+            return Json(null, JsonRequestBehavior.AllowGet);
         }
         //导出表
         [ValidateInput(false)]
@@ -308,33 +351,50 @@ namespace CZBK.ItcastOA.WebApp.Controllers
     }
     public class DayTJclass
     {
-       public long ProductGGId { get; set; }
-       public long ProductJB { get; set; }
-       public int YSDayNum { get; set; }
-       public int YSMonthNum { get; set; }
-       public int JiaBanDayNum { get; set; }
-       public int JiaBanMonthNum { get; set; }
-       public int YiBanDayNum { get; set; }
-       public int YiBanMonthNum { get; set; }
-       public int JiaYouDayNum  { get; set; }
-       public int JiaYouMonthNum  { get; set; }
-       public int JiaYiDayNum  { get; set; }
-       public int JiaYiMonthNum  { get; set; }
-       public int JiaHeDayNum  { get; set; }
-       public int JiaHeMonthNum  { get; set; }
-       public int JiaCiDayNum  { get; set; }
-       public int JiaCiMonthNum  { get; set; }
-       public int JiaFeiDayNum  { get; set; }
-       public int JiaFeiMonthNum  { get; set; }
-       public int YiYouDayNum  { get; set; }
-       public int YiYouMonthNum  { get; set; }
-       public int YiYiDayNum  { get; set; }
-       public int YiYiMonthNum  { get; set; }
-       public int YiHeDayNum  { get; set; }
-       public int YiHeMonthNum  { get; set; }
-       public int YiCiDayNum  { get; set; }
-       public int YiCiMonthNum  { get; set; }
-       public int YiFeiDayNum  { get; set; }
-       public int YiFeiMonthNum { get; set; }
+       public string ProductGGId { get; set; }
+       public string ProductJB { get; set; }
+       public int? YSDayNum { get; set; }
+       public int? YSMonthNum { get; set; }
+       public int? JiaBanDayNum { get; set; }
+       public int? JiaBanMonthNum { get; set; }
+       public int? YiBanDayNum { get; set; }
+       public int? YiBanMonthNum { get; set; }
+       public int? JiaYouDayNum  { get; set; }
+       public int? JiaYouMonthNum  { get; set; }
+       public int? JiaYiDayNum  { get; set; }
+       public int? JiaYiMonthNum  { get; set; }
+       public int? JiaHeDayNum  { get; set; }
+       public int? JiaHeMonthNum  { get; set; }
+       public int? JiaCiDayNum  { get; set; }
+       public int? JiaCiMonthNum  { get; set; }
+       public int? JiaFeiDayNum  { get; set; }
+       public int? JiaFeiMonthNum  { get; set; }
+       public int? YiYouDayNum  { get; set; }
+       public int? YiYouMonthNum  { get; set; }
+       public int? YiYiDayNum  { get; set; }
+       public int? YiYiMonthNum  { get; set; }
+       public int? YiHeDayNum  { get; set; }
+       public int? YiHeMonthNum  { get; set; }
+       public int? YiCiDayNum  { get; set; }
+       public int? YiCiMonthNum  { get; set; }
+       public int? YiFeiDayNum  { get; set; }
+       public int? YiFeiMonthNum { get; set; }
+    }
+    public class MonthAnfYearTJclass
+    {
+        public string BuMenid{ get; set; }
+        public string ProductGGId{ get; set; }
+        public string ProductJB{ get; set; }
+        public int? SumTrueCL { get; set; }
+        public int? MaxCLNum { get; set; }
+        public int? TrueCLNum { get; set; }
+        public int? ZhengPinDayNum { get; set; }
+        public int? ZhengPinMonthNum { get; set; }
+        public int? CiPinDayNum { get; set; }
+        public int? CiPinMonthNum { get; set; }
+        public int? JiaZhengPinNum { get; set; }
+        public int? JiaCiPinNum { get; set; }
+        public int? YiZhengPinNum { get; set; }
+        public int? YiCiPinNum { get; set; }
     }
 }

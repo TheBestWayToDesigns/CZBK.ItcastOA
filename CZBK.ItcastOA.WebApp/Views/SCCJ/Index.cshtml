@@ -70,24 +70,31 @@
             })
 
             $('input[type=radio][name=TJtype]').change(function () {
-                $("#excelYM").val("");
                 $("#excelYear").val("");
                 if (this.value == 'month') {
                     $("#tjYear").hide();
                     $("#tjDay").hide();
+                    $("#tjDayWin").hide();
                     $("#tjMonth").show();
                 }
                 else if (this.value == 'year') {
                     $("#tjMonth").hide();
                     $("#tjYear").show();
                     $("#tjDay").hide();
+                    $("#tjDayWin").hide();
                     var date = new Date;
                     $("#excelYear").val(date.getFullYear());
                 } else if (this.value == 'day') {
                     $("#tjMonth").hide();
                     $("#tjYear").hide();
                     $("#tjDay").show();
-                }
+                    $("#tjDayWin").hide();
+                } /*else if (this.value == 'dayWin') {
+                    $("#tjMonth").hide();
+                    $("#tjYear").hide();
+                    $("#tjDay").hide();
+                    $("#tjDayWin").show();
+                }*/
             });
 
             $("#AddBtn").click(function () {
@@ -215,49 +222,139 @@
             htmlData = htmlData.substring(0, htmlData.length - 20);
             var title = '';
             var rows = $('#tt').datagrid('getRows')//获取当前的数据行
-            var SumNum = 0//计算listprice的总和
-            , cipinNum = 0//统计unitcost的总和
-            , HeGePinNum = 0
-            , YiDengPinNum = 0
-            , YouDengPinNum = 0;
-            for (var i = 0; i < rows.length; i++) {
-                SumNum += rows[i]['CiPinNum'];
-                SumNum += rows[i]['HeGePinNum'];
-                SumNum += rows[i]['YiDengPinNum'];
-                SumNum += rows[i]['YouDengPinNum'];
-                cipinNum += rows[i]['CiPinNum'];
-                HeGePinNum += rows[i]['HeGePinNum'];
-                YiDengPinNum += rows[i]['YiDengPinNum'];
-                YouDengPinNum += rows[i]['YouDengPinNum'];
-            }
             var thead = "";
             if (type == 'day') {
-                title = $("#BuMenid").combobox("getText") + '生产日报表';
+                var YSDayNum = 0,
+                YSMonthNum = 0,
+                JiaBanDayNum = 0,
+                JiaBanMonthNum = 0,
+                YiBanDayNum = 0,
+                YiBanMonthNum = 0,
+                JiaYouDayNum = 0,
+                JiaYouMonthNum = 0,
+                JiaYiDayNum = 0,
+                JiaYiMonthNum = 0,
+                JiaHeDayNum = 0,
+                JiaHeMonthNum = 0,
+                JiaCiDayNum = 0,
+                JiaCiMonthNum = 0,
+                JiaFeiDayNum = 0,
+                JiaFeiMonthNum = 0,
+                YiYouDayNum = 0,
+                YiYouMonthNum = 0,
+                YiYiDayNum = 0,
+                YiYiMonthNum = 0,
+                YiHeDayNum = 0,
+                YiHeMonthNum = 0,
+                YiCiDayNum = 0,
+                YiCiMonthNum = 0,
+                YiFeiDayNum = 0,
+                YiFeiMonthNum = 0;
+                for (var i = 0; i < rows.length; i++) {
+                    YSDayNum += rows[i]['YSDayNum'];
+                    YSMonthNum += rows[i]['YSMonthNum'];
+                    JiaBanDayNum += rows[i]['JiaBanDayNum'];
+                    JiaBanMonthNum += rows[i]['JiaBanMonthNum'];
+                    YiBanDayNum += rows[i]['YiBanDayNum'];
+                    YiBanMonthNum += rows[i]['YiBanMonthNum'];
+                    JiaYouDayNum += rows[i]['JiaYouDayNum'];
+                    JiaYouMonthNum += rows[i]['JiaYouMonthNum'];
+                    JiaYiDayNum += rows[i]['JiaYiDayNum'];
+                    JiaYiMonthNum += rows[i]['JiaYiMonthNum'];
+                    JiaHeDayNum += rows[i]['JiaHeDayNum'];
+                    JiaHeMonthNum += rows[i]['JiaHeMonthNum'];
+                    JiaCiDayNum += rows[i]['JiaCiDayNum'];
+                    JiaCiMonthNum += rows[i]['JiaCiMonthNum'];
+                    JiaFeiDayNum += rows[i]['JiaFeiDayNum'];
+                    JiaFeiMonthNum += rows[i]['JiaFeiMonthNum'];
+                    YiYouDayNum += rows[i]['YiYouDayNum'];
+                    YiYouMonthNum += rows[i]['YiYouMonthNum'];
+                    YiYiDayNum += rows[i]['YiYiDayNum'];
+                    YiYiMonthNum += rows[i]['YiYiMonthNum'];
+                    YiHeDayNum += rows[i]['YiHeDayNum'];
+                    YiHeMonthNum += rows[i]['YiHeMonthNum'];
+                    YiCiDayNum += rows[i]['YiCiDayNum'];
+                    YiCiMonthNum += rows[i]['YiCiMonthNum'];
+                    YiFeiDayNum += rows[i]['YiFeiDayNum'];
+                    YiFeiMonthNum += rows[i]['YiFeiMonthNum'];
+                }
+                title = $("#InfoExcelMsg").combobox("getText") + '生产日报表';
                 colCount = 28;
+                var time = $("#excelYMD").datebox("getValue");
+                time = time.replace(/-/g, '.');
                 Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr>"
-               + "<tr><td colspan='24' style='text-align:center'></td><td>" + $("#Wtime").datebox("getValue") + "</td></tr></thead>";
-            }else {
+               + "<tr><td colspan='24' style='text-align:center'></td><td>" + time + "</td></tr></thead>";
+                addTotal = "<tfoot><tr style='border:0.5pt solid black'><td>合计</td><td></td>"
+                                    + "<td style='text-align:center'>" + checkNum(YSDayNum) + "</td><td style='text-align:center'>" + checkNum(YSMonthNum) + "</td>"
+                                    + "<td style='text-align:center'>" + checkNum(JiaBanDayNum) + "</td><td style='text-align:center'>" + checkNum(JiaBanMonthNum) + "</td>"
+                                    + "<td style='text-align:center'>" + checkNum(YiBanDayNum) + "</td><td style='text-align:center'>" + checkNum(YiBanMonthNum) + "</td>"
+                                    + "<td style='text-align:center'>" + checkNum(JiaYouDayNum) + "</td><td style='text-align:center'>" + checkNum(JiaYouMonthNum) + "</td>"
+                                    + "<td style='text-align:center'>" + checkNum(JiaYiDayNum) + "</td><td style='text-align:center'>" + checkNum(JiaYiMonthNum) + "</td>"
+                                    + "<td style='text-align:center'>" + checkNum(JiaHeDayNum) + "</td><td style='text-align:center'>" + checkNum(JiaHeMonthNum) + "</td>"
+                                    + "<td style='text-align:center'>" + checkNum(JiaCiDayNum) + "</td><td style='text-align:center'>" + checkNum(JiaCiMonthNum) + "</td>"
+                                    + "<td style='text-align:center'>" + checkNum(JiaFeiDayNum) + "</td><td style='text-align:center'>" + checkNum(JiaFeiMonthNum) + "</td>"
+                                    + "<td style='text-align:center'>" + checkNum(YiYouDayNum) + "</td><td style='text-align:center'>" + checkNum(YiYouMonthNum) + "</td>"
+                                    + "<td style='text-align:center'>" + checkNum(YiYiDayNum) + "</td><td style='text-align:center'>" + checkNum(YiYiMonthNum) + "</td>"
+                                    + "<td style='text-align:center'>" + checkNum(YiHeDayNum) + "</td><td style='text-align:center'>" + checkNum(YiHeMonthNum) + "</td>"
+                                    + "<td style='text-align:center'>" + checkNum(YiCiDayNum) + "</td><td style='text-align:center'>" + checkNum(YiCiMonthNum) + "</td>"
+                                    + "<td style='text-align:center'>" + checkNum(YiFeiDayNum) + "</td><td style='text-align:center'>" + checkNum(YiFeiMonthNum) + "</tr>"
+                                    + "</tfoot></table></div></div>";
+            }/* else if (type == 'dayWin') {
+                title =  '水工公司生产车间产品完成日报表';
+                colCount = 9;
+                var time = $("#excelYMD").datebox("getValue");
+                var ary = time.split('/');
+                Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr>"
+               + "<tr><td colspan='24' style='text-align:center'></td><td>" + ary[0] + "年" + ary[1] + "月" + ary[2] + "日" + "</td></tr></thead>";
+                addTotal = "<tfoot><tr><td style=' font-family:黑体; font-size:35px;text-align:center ' rowspan='2'>备注; </td><td>1、甲班;</td></tr>"
+                                   + "<tr><td>1、乙班;</td></tr></table></div></div>";
+            } */else {
+                var SumNum = 0//计算listprice的总和
+                , cipinNum = 0//统计unitcost的总和
+                , maxChanLiangNum = 0;
+                for (var i = 0; i < rows.length; i++) {
+                    SumNum += rows[i]['SumTrueCL'];
+                    cipinNum += rows[i]['CiPinMonthNum'];
+                    maxChanLiangNum += rows[i]['MaxCLNum'];
+                }
                 //新增一行显示统计信息
                 var cipinLv = ((cipinNum / SumNum) * 100).toFixed(2).toString() + "%";
-                var addTotal = "<tfoot><tr style='border:0.5pt solid black'><td colspan='7'>总累计次品率:" + cipinLv + "</td><td colspan='7'>累计产品完成率:</td></tr>"
+                var timeStr = "";
+                if (type == 'month') {
+                    var time = $("#excelYM").datebox("getValue");
+                    var ary = time.split('-');
+                    timeStr = ary[0] + "年" + ary[1] + "月" + ary[2] + "日";
+                    title = '水工公司生产车间产品日报表';
+                    addTotal = "<tfoot><tr style='border:0.5pt solid black'><td colspan='7'>总累计次品率:" + cipinLv + "</td><td colspan='7'>累计产品完成率:</td></tr>"
                                     + "<tr  style='border-top:0.5pt solid black;border-left:0.5pt solid black;border-right:0.5pt solid black;'><td colspan='14'>产生原因:</td></tr>"
                                     + "<tr  style='border-left:0.5pt solid black;border-right:0.5pt solid black;'><td colspan='14'></td></tr>"
                                     + "<tr  style='border-bottom:0.5pt solid black;border-left:0.5pt solid black;border-right:0.5pt solid black;'><td colspan='14'></td></tr>"
                                     + "<tr><td colspan='10'>部门负责人:</td><td colspan='4'>制表人:</td></tr></tfoot></table></div></div>";
-                colCount = 14;
-                Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr>"
-               + "<tr><td colspan='13' style='text-align:center'>年&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;日</td><td>单位:根</td></tr></thead>";
-                if (type == 'month') {
-                    title = '水工公司生产车间产品月报表';
-                } else if (type == 'year') {
+                    colCount = 14;
+                    Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr>"
+               + "<tr><td colspan='13' style='text-align:center'>" + timeStr + "</td><td>单位:根</td></tr></thead>";
+                } else {
+                    timeStr = $("#excelYear").val() + "年";
                     title = '水工公司生产车间产品年报表';
+                    addTotal = "<tfoot><tr style='border:0.5pt solid black'><td colspan='6'>总累计次品率:" + cipinLv + "</td><td colspan='6'>累计产品完成率:</td></tr>"
+                                    + "<tr  style='border-top:0.5pt solid black;border-left:0.5pt solid black;border-right:0.5pt solid black;'><td colspan='12'>产生原因:</td></tr>"
+                                    + "<tr  style='border-left:0.5pt solid black;border-right:0.5pt solid black;'><td colspan='12'></td></tr>"
+                                    + "<tr  style='border-bottom:0.5pt solid black;border-left:0.5pt solid black;border-right:0.5pt solid black;'><td colspan='12'></td></tr>"
+                                    + "<tr><td colspan='8'>部门负责人:</td><td colspan='4'>制表人:</td></tr></tfoot></table></div></div>";
+                    colCount = 13;
+                    Theard = "<thead><tr><td colspan='12' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr>"
+               + "<tr><td colspan='11' style='text-align:center'>" + timeStr + "</td><td>单位:根</td></tr></thead>";
                 }
+                
             }
             var tableHead = "<html><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />" +
         "<style type='text/css'>tbody tr td{text-align:center;border:solid .5pt Black;} </style>" +
         "<body><table >";
             $("#OFtable").val(tableHead + Theard + htmlData + addTotal + "</table></body></html>"); //获取并拼接代码
             $("#ExcelForm").submit();
+        }
+        function checkNum(value){
+            return value == 0 ? '' : value;
         }
 
         function afterEsc() {
@@ -268,32 +365,26 @@
             $("#ProductGGId").combobox("setValue", "");
             $("#ProductJB").combobox("setValue", "");
             $("#JiaCiPinNum").val("0");
-            $("#JiaHeGePinNum").val("");
-            $("#JiaYiDengPinNum").val("");
+            $("#JiaHeGePinNum").val("0");
+            $("#JiaYiDengPinNum").val("0");
             $("#JiaYouDengPinNum").val("0");
             $("#JiaFeiPinNum").val("0");
             $("#YiCiPinNum").val("0");
-            $("#YiHeGePinNum").val("");
-            $("#YiYiDengPinNum").val("");
+            $("#YiHeGePinNum").val("0");
+            $("#YiYiDengPinNum").val("0");
             $("#YiYouDengPinNum").val("0");
             $("#YiFeiPinNum").val("0");
             $("#idval").val("");
         }
         function afterAddBbInfo() {
-            $('#AddBbInfoDIV').dialog('close');
-            $("#Wtime").datebox("setValue","");
-            $("#BuMenid").combobox("setValue", "");
-            $("#ProductNameId").combobox("setValue", "");
-            $("#ProductGGId").combobox("setValue", "");
-            $("#ProductJB").combobox("setValue", "");
             $("#JiaCiPinNum").val("0");
-            $("#JiaHeGePinNum").val("");
-            $("#JiaYiDengPinNum").val("");
+            $("#JiaHeGePinNum").val("0");
+            $("#JiaYiDengPinNum").val("0");
             $("#JiaYouDengPinNum").val("0");
             $("#JiaFeiPinNum").val("0");
             $("#YiCiPinNum").val("0");
-            $("#YiHeGePinNum").val("");
-            $("#YiYiDengPinNum").val("");
+            $("#YiHeGePinNum").val("0");
+            $("#YiYiDengPinNum").val("0");
             $("#YiYouDengPinNum").val("0");
             $("#YiFeiPinNum").val("0");
             $("#idval").val("");
@@ -372,7 +463,8 @@
                 pageNumber: 1,//当前页，默认的
                 pageList: [15, 25, 35],
                 queryParams: pars,//往后台传递参数
-                columns: [[
+                columns: [[{ field: 'ck', checkbox: true, align: 'left', width: 30, rowspan: 2 },
+                    { field: 'ID', title: '编号', rowspan: 2 },
                     {
                         field: 'Wtime', title: '时间', align: 'center',
                         formatter: function (value, row, index) {
@@ -417,67 +509,21 @@
         function loadTongjiInfo(pars) {
             $("#TTdiv").css("display", "block");
             $('#tt').datagrid({
-                url: '/SCCJ/GetSccjInfo',
                 title: '水工公司生产车间产品日报表',
                 height: $("#dgdiv").height() - 20,
                 fitColumns: true, //列自适应
                 nowrap: true,
-                rownumbers: true,
+                rownumbers: false,
                 //onClickCell: onClickCell,
                 //onAfterEdit: onAfterEdit,
                 idField: 'ID',//主键列的列明
                 loadMsg: '正在加载权限的信息...',
-                pagination: true,//是否有分页
+                pagination: false,//是否有分页
                 singleSelect: true,//是否单行选择
-                pageSize: 25,//页大小，一页多少条数据
-                pageNumber: 1,//当前页，默认的
-                pageList: [15, 25, 35],
                 queryParams: pars,//往后台传递参数
-                columns:[[ { field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3 },
-                    { field: 'ProductJB', title: '级别', align: 'center', rowspan: 3 },
-                    { title: '', align: 'center', colspan: 2 },
-                    { title: '各班完成情况', align: 'center', colspan: 4 },
-                    { title: '甲班产品质量', align: 'center', colspan: 10 },
-                    { title: '乙班产品质量', align: 'center', colspan: 10 }], [
-                    { title: '验收', align: 'center', colspan: 2 },
-                    { title: '甲班', align: 'center', colspan: 2 },
-                    { title: '乙班', align: 'center', colspan: 2 },
-                    { title: '优等品', align: 'center', colspan: 2 },
-                    { title: '一等品', align: 'center', colspan: 2 },
-                    { title: '合格品', align: 'center', colspan: 2 },
-                    { title: '次品', align: 'center', colspan: 2 },
-                    { title: '废品', align: 'center', colspan: 2 },
-                    { title: '优等品', align: 'center', colspan: 2 },
-                    { title: '一等品', align: 'center', colspan: 2 },
-                    { title: '合格品', align: 'center', colspan: 2 },
-                    { title: '次品', align: 'center', colspan: 2 },
-                    { title: '废品', align: 'center', colspan: 2 }], [
-                    { field: 'YSDayNum', title: '日记', align: 'center'},
-                    { field: 'YSMonthNum', title: '累计', align: 'center'},
-                    { field: 'JiaBanDayNum', title: '日记', align: 'center' },
-                    { field: 'JiaBanMonthNum', title: '累计', align: 'center' },
-                    { field: 'YiBanDayNum', title: '日记', align: 'center' },
-                    { field: 'YiBanMonthNum', title: '累计', align: 'center' },
-                    { field: 'JiaYouDayNum', title: '日', align: 'center' },
-                    { field: 'JiaYouMonthNum', title: '累', align: 'center' },
-                    { field: 'JiaYiDayNum', title: '日', align: 'center' },
-                    { field: 'JiaYiMonthNum', title: '累', align: 'center' },
-                    { field: 'JiaHeDayNum', title: '日', align: 'center' },
-                    { field: 'JiaHeMonthNum', title: '累', align: 'center' },
-                    { field: 'JiaCiDayNum', title: '日', align: 'center' },
-                    { field: 'JiaCiMonthNum', title: '累', align: 'center' },
-                    { field: 'JiaFeiDayNum', title: '日', align: 'center' },
-                    { field: 'JiaFeiMonthNum', title: '累', align: 'center' },
-                    { field: 'YiYouDayNum', title: '日', align: 'center' },
-                    { field: 'YiYouMonthNum', title: '累', align: 'center' },
-                    { field: 'YiYiDayNum', title: '日', align: 'center' },
-                    { field: 'YiYiMonthNum', title: '累', align: 'center' },
-                    { field: 'YiHeDayNum', title: '日', align: 'center' },
-                    { field: 'YiHeMonthNum', title: '累', align: 'center' },
-                    { field: 'YiCiDayNum', title: '日', align: 'center' },
-                    { field: 'YiCiMonthNum', title: '累', align: 'center' },
-                    { field: 'YiFeiDayNum', title: '日', align: 'center' },
-                    { field: 'YiFeiMonthNum', title: '累', align: 'center' }]],
+                columns: [[]],
+                onLoadSuccess:function(res){
+                },
                 toolbar: "#TJTypeDIV"
             });
         }
@@ -485,7 +531,7 @@
             if (($("#InfoExcelMsg").combobox("getValue")).trim().length<=0) {
                 $.messager.alert("提示", "请选择部门");
                 return;
-            } else if (value == 'day') {
+            }else if (value == 'day') {
                 if (($("#excelYMD").datebox("getValue")).trim().length <= 0) {
                     $.messager.alert("提示", "请选择日期");
                     return;
@@ -497,7 +543,7 @@
                 $("#tt").datagrid("options").showFooter = true;
                 $("#tt").datagrid("options").title = "年统计表";
                 $("#tt").datagrid({columns :[[ { field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3 },
-                    { field: 'ProductJB', title: '级别', align: 'center', rowspan: 3 },
+                    { field: 'ProductJB', title: '级别', align: 'center', rowspan: 3, formatter: function (value, row, index) { return value == "无级别" ? '' : value } },
                     { title: '', align: 'center', colspan: 2 },
                     { title: '各班完成情况', align: 'center', colspan: 4 },
                     { title: '甲班产品质量', align: 'center', colspan: 10 },
@@ -515,63 +561,97 @@
                     { title: '合格品', align: 'center', colspan: 2 },
                     { title: '次品', align: 'center', colspan: 2 },
                     { title: '废品', align: 'center', colspan: 2 }], [
-                    { field: 'YSDayNum', title: '日记', align: 'center'},
-                    { field: 'YSMonthNum', title: '累计', align: 'center'},
-                    { field: 'JiaBanDayNum', title: '日记', align: 'center' },
-                    { field: 'JiaBanMonthNum', title: '累计', align: 'center' },
-                    { field: 'YiBanDayNum', title: '日记', align: 'center' },
-                    { field: 'YiBanMonthNum', title: '累计', align: 'center' },
-                    { field: 'JiaYouDayNum', title: '日', align: 'center' },
-                    { field: 'JiaYouMonthNum', title: '累', align: 'center' },
-                    { field: 'JiaYiDayNum', title: '日', align: 'center' },
-                    { field: 'JiaYiMonthNum', title: '累', align: 'center' },
-                    { field: 'JiaHeDayNum', title: '日', align: 'center' },
-                    { field: 'JiaHeMonthNum', title: '累', align: 'center' },
-                    { field: 'JiaCiDayNum', title: '日', align: 'center' },
-                    { field: 'JiaCiMonthNum', title: '累', align: 'center' },
-                    { field: 'JiaFeiDayNum', title: '日', align: 'center' },
-                    { field: 'JiaFeiMonthNum', title: '累', align: 'center' },
-                    { field: 'YiYouDayNum', title: '日', align: 'center' },
-                    { field: 'YiYouMonthNum', title: '累', align: 'center' },
-                    { field: 'YiYiDayNum', title: '日', align: 'center' },
-                    { field: 'YiYiMonthNum', title: '累', align: 'center' },
-                    { field: 'YiHeDayNum', title: '日', align: 'center' },
-                    { field: 'YiHeMonthNum', title: '累', align: 'center' },
-                    { field: 'YiCiDayNum', title: '日', align: 'center' },
-                    { field: 'YiCiMonthNum', title: '累', align: 'center' },
-                    { field: 'YiFeiDayNum', title: '日', align: 'center' },
-                    { field: 'YiFeiMonthNum', title: '累', align: 'center' }]]});
-            }else if (value == "month") {
-                if (($("#excelYM").val()).trim().length <= 0) {
+                    { field: 'YSDayNum', title: '日记', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'YSMonthNum', title: '累计', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'JiaBanDayNum', title: '日记', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'JiaBanMonthNum', title: '累计', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'YiBanDayNum', title: '日记', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'YiBanMonthNum', title: '累计', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'JiaYouDayNum', title: '日', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'JiaYouMonthNum', title: '累', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'JiaYiDayNum', title: '日', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value }, styler: function (value, row, index) { return 'background-color:silver' } },
+                    { field: 'JiaYiMonthNum', title: '累', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'JiaHeDayNum', title: '日', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value }, styler: function (value, row, index) { return 'background-color:silver' } },
+                    { field: 'JiaHeMonthNum', title: '累', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'JiaCiDayNum', title: '日', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value }, styler: function (value, row, index) { return 'background-color:silver' } },
+                    { field: 'JiaCiMonthNum', title: '累', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'JiaFeiDayNum', title: '日', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'JiaFeiMonthNum', title: '累', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'YiYouDayNum', title: '日', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'YiYouMonthNum', title: '累', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'YiYiDayNum', title: '日', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value }, styler: function (value, row, index) { return 'background-color:silver' } },
+                    { field: 'YiYiMonthNum', title: '累', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'YiHeDayNum', title: '日', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value }, styler: function (value, row, index) { return 'background-color:silver' } },
+                    { field: 'YiHeMonthNum', title: '累', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'YiCiDayNum', title: '日', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value }, styler: function (value, row, index) { return 'background-color:silver' } },
+                    { field: 'YiCiMonthNum', title: '累', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'YiFeiDayNum', title: '日', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'YiFeiMonthNum', title: '累', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } }]]
+                });
+            } /*else if (value == 'dayWin') {
+                if (($("#excelYMDWin").datebox("getValue")).trim().length <= 0) {
                     $.messager.alert("提示", "请选择日期");
                     return;
                 }
                 var bmID = $("#InfoExcelMsg").combobox("getValue");
-                var serchTime = $("#excelYM").val();
+                var serchTime = $("#excelYMD").datebox("getValue");
+                $("#tt").datagrid("options").url = "/SCCJ/TongJiByDayWin";
+                $("#tt").datagrid("options").queryParams = { dayExcel: serchTime, bmID: bmID };
+                $("#tt").datagrid("options").showFooter = true;
+                $("#tt").datagrid("options").title = "年统计表";
+                $("#tt").datagrid({
+                    columns: [[{ field: 'BuMenid', title: '部门', align: 'center', rowspan: 3 },
+                        { field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3 },
+                        { field: 'ProductJB', title: '级别', align: 'center', rowspan: 3, formatter: function (value, row, index) { return value == "无级别" ? '' : value } },
+                        { title: '最大产量', align: 'center' },
+                        { title: '当日产量', align: 'center'},
+                        { title: '各班完成情况', align: 'center', colspan: 2 },
+                        { title: '甲班长、边庆善', align: 'center' },
+                        { title: '乙班长、黄正江', align: 'center' }], [
+                        { title: '计划', align: 'center' },
+                        { title: '正常', align: 'center' },
+                        { title: '甲班质量', align: 'center' },
+                        { title: '乙班质量', align: 'center' },
+                        { title: '当日完成量', align: 'center' },
+                        { title: '当日完成量', align: 'center' }], [
+                        { field: 'MaxCLNum', title: '日记', align: 'center' },
+                        { field: 'NormalCLNum', title: '日记', align: 'center' },
+                        { field: 'JiaZhiLiang', title: '次品/根', align: 'center' },
+                        { field: 'YiZhiLiang', title: '次品/根', align: 'center' },
+                        { field: 'JiaDayFinishNum', title: '日记', align: 'center' },
+                        { field: 'YiDayFinishNum', title: '日记', align: 'center' }]]
+                });
+            } */else if (value == "month") {
+                if (($("#excelYM").datebox("getValue")).trim().length <= 0) {
+                    $.messager.alert("提示", "请选择日期");
+                    return;
+                }
+                var bmID = $("#InfoExcelMsg").combobox("getValue");
+                var serchTime = $("#excelYM").datebox("getValue");
                 $("#tt").datagrid("options").url = "/SCCJ/TongJiByMonth";
                 $("#tt").datagrid("options").queryParams = { monthExcel: serchTime, bmID: bmID };
                 $("#tt").datagrid("options").showFooter = true;
-                $("#tt").datagrid("options").title = "月统计表";
+                $("#tt").datagrid("options").title = "水工公司生产车间产品日报表";
                 $("#tt").datagrid({columns : [[{ field: 'BuMenid', title: '部门', align: 'center', rowspan: 3 },
                     { field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3 },
-                    { field: 'ProductJB', title: '级别', align: 'center', rowspan: 3 },
+                    { field: 'ProductJB', title: '级别', align: 'center', rowspan: 3, formatter: function (value, row, index) { return value == "无级别" ? '' : value } },
                     { title: '当日', align: 'center', colspan: 2 },
-                    { field: 'Class', title: '累计实际产量', align: 'center', rowspan: 3 },
+                    { field: 'SumTrueCL', title: '累计实际产量', align: 'center', rowspan: 3, formatter: function (value, row, index) { return value == 0 ? '' : value } },
                     { title: '正品', align: 'center', colspan: 2 },
                     { title: '次品', align: 'center', colspan: 2 },
                     { title: '质量完成情况', align: 'center', colspan: 4 }], [
-                    { field: 'BuMenid', title: '最大产量', align: 'center', rowspan: 2 },
-                    { field: 'ProductNameId', title: '实际产量', align: 'center', rowspan: 2 },
-                    { field: 'ProductGGId', title: '产量', align: 'center', rowspan: 2 },
-                    { field: 'ProductJB', title: '累计', align: 'center', rowspan: 2 },
-                    { field: 'Class', title: '产量', align: 'center', rowspan: 2 },
-                    { field: 'Groups', title: '累计', align: 'center', rowspan: 2 },
+                    { field: 'MaxCLNum', title: '最大产量', align: 'center', rowspan: 2, formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'TrueCLNum', title: '实际产量', align: 'center', rowspan: 2, formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'ZhengPinDayNum', title: '产量', align: 'center', rowspan: 2, formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'ZhengPinMonthNum', title: '累计', align: 'center', rowspan: 2, formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'CiPinDayNum', title: '产量', align: 'center', rowspan: 2, formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'CiPinMonthNum', title: '累计', align: 'center', rowspan: 2, formatter: function (value, row, index) { return value == 0 ? '' : value } },
                     { title: '甲班', align: 'center', colspan: 2 },
                     { title: '乙班', align: 'center', colspan: 2 }], [
-                    { field: 'Groups', title: '正品', align: 'center' },
-                    { field: 'CiPinNum', title: '次品', align: 'center' },
-                    { field: 'Groups', title: '正品', align: 'center' },
-                    { field: 'CiPinNum', title: '次品', align: 'center' },
+                    { field: 'JiaZhengPinNum', title: '正品', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'JiaCiPinNum', title: '次品', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'YiZhengPinNum', title: '正品', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                    { field: 'YiCiPinNum', title: '次品', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
                     ]]});
             } else if (value == "year") {
                 if (($("#excelYear").val()).trim().length <= 0) {
@@ -583,28 +663,28 @@
                 $("#tt").datagrid("options").url = "/SCCJ/TongJiByYear";
                 $("#tt").datagrid("options").queryParams = { yearExcel: serchTime, bmID: bmID };
                 $("#tt").datagrid("options").showFooter = true;
-                $("#tt").datagrid("options").title = "年统计表";
-                $("#tt").datagrid({columns: [[{ field: 'BuMenid', title: '部门', align: 'center',rowspan:3 },
-                    { field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3 },
-                    { field: 'ProductJB', title: '级别', align: 'center', rowspan: 3 },
-                    { title: '当日', align: 'center', colspan: 2 },
-                    { field: 'Class', title: '累计实际产量', align: 'center', rowspan: 3 },
-                    { title: '正品', align: 'center', colspan: 2 },
-                    { title: '次品', align: 'center', colspan: 2 },
-                    { title: '质量完成情况', align: 'center', colspan: 4 }], [
-                    { field: 'BuMenid', title: '最大产量', align: 'center', rowspan: 2 },
-                    { field: 'ProductNameId', title: '实际产量', align: 'center', rowspan: 2 },
-                    { field: 'ProductGGId', title: '产量', align: 'center', rowspan: 2 },
-                    { field: 'ProductJB', title: '累计', align: 'center', rowspan: 2 },
-                    { field: 'Class', title: '产量', align: 'center', rowspan: 2 },
-                    { field: 'Groups', title: '累计', align: 'center', rowspan: 2 },
-                    { title: '甲班', align: 'center', colspan: 2 },
-                    { title: '乙班', align: 'center', colspan: 2 }], [
-                    { field: 'Groups', title: '正品', align: 'center'},
-                    { field: 'CiPinNum', title: '次品', align: 'center'},
-                    { field: 'Groups', title: '正品', align: 'center' },
-                    { field: 'CiPinNum', title: '次品', align: 'center' },
-                    ]]});
+                $("#tt").datagrid("options").title = "水工公司生产车间产品年报表";
+                $("#tt").datagrid({
+                    columns: [[{ field: 'BuMenid', title: '部门', align: 'center', rowspan: 3 },
+                        { field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3 },
+                        { field: 'ProductJB', title: '级别', align: 'center', rowspan: 3, formatter: function (value, row, index) { return value == "无级别" ? '' : value } },
+                        { title: '当年', align: 'center', colspan: 2 },
+                        { field: 'SumTrueCL', title: '累计实际产量', align: 'center', rowspan: 3, formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                        { title: '正品', align: 'center' },
+                        { title: '次品', align: 'center' },
+                        { title: '质量完成情况', align: 'center', colspan: 4 }], [
+                        { field: 'MaxCLNum', title: '最大产量', align: 'center', rowspan: 2, formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                        { field: 'TrueCLNum', title: '实际产量', align: 'center', rowspan: 2, formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                        { field: 'ZhengPinMonthNum', title: '累计', align: 'center', rowspan: 2, formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                        { field: 'CiPinMonthNum', title: '累计', align: 'center', rowspan: 2, formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                        { title: '甲班', align: 'center', colspan: 2 },
+                        { title: '乙班', align: 'center', colspan: 2 }], [
+                        { field: 'JiaZhengPinNum', title: '年累计正品', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                        { field: 'JiaCiPinNum', title: '年累计次品', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                        { field: 'YiZhengPinNum', title: '年累计正品', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                        { field: 'YiCiPinNum', title: '年累计次品', align: 'center', formatter: function (value, row, index) { return value == 0 ? '' : value } },
+                        ]]
+                });
             } 
             cleanDatagrid();
             $('#tt').datagrid('reload');
@@ -646,13 +726,6 @@
     <div data-options="region:'center',title:'数据报表'" id="dgdiv">
         <div id="TTdiv">
             <table id="tt" title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit">
-                <!--插入表格数据-->
-                <thead data-options="frozen:true ">
-                    <tr>
-                        <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
-                        <th data-options="field:'ID', width: 40">编号</th>
-                    </tr>
-                </thead>
             </table>
         </div>
     </div>
@@ -663,8 +736,9 @@
     </div>
     <div id="TJTypeDIV" style="padding:5px;height:auto;width:auto;display:flex;flex-direction:row; flex-wrap:nowrap;align-items:center;">
         <div style="margin-bottom:5px;width:auto;height:auto">
-            <input type="radio" name="TJtype" id="TjByDay" value="day" />按日统计
-            <input type="radio" name="TJtype" id="TjByMonth" value="month"/>按月统计
+            <input type="radio" name="TJtype" id="TjByDay" value="day" />按日统计生产日报表
+            <!--<input type="radio" name="TJtype" id="TjByDayWin" value="dayWin" />按日统计产品日报表-->
+            <input type="radio" name="TJtype" id="TjByMonth" value="month"/>按日统计产品日报表
             <input type="radio" name="TJtype" id="TjByYear" value="year"/>按年统计
         部门列表：<input class="easyui-combobox" id="InfoExcelMsg"
                     url="/SCCJ/GetBuMenList"
@@ -672,8 +746,9 @@
             textField="Name"
             panelHeight="200px"
             style="width:100px" />
-        <label id="tjDay">统计月份：<input type="text" class="easyui-datebox" id="excelYMD" /><input type="button" value="日统计" onclick="toTj('day')" /><input type="button" value="导出日统计表" onclick="toExcel('day')" /></label>
-        <label id="tjMonth">统计月份：<input onclick="setmonth(this)" id="excelYM" /><input type="button" value="月统计" onclick="toTj('month')"/><input type="button" value="导出月统计表" onclick="toExcel('month')" /></label>
+            <!--<label id="tjDayWin">统计日期：<input type="text" class="easyui-datebox" id="excelYMDWin" /><input type="button" value="日统计" onclick="toTj('dayWin')" /><input type="button" value="导出产品日统计表" onclick="toExcel('dayWin')" /></label>-->
+        <label id="tjDay">统计日期：<input type="text" class="easyui-datebox" id="excelYMD" /><input type="button" value="日统计" onclick="toTj('day')" /><input type="button" value="导出生产日统计表" onclick="toExcel('day')" /></label>
+        <label id="tjMonth">统计日期：<input type="text" class="easyui-datebox" id="excelYM" /><input type="button" value="日统计" onclick="toTj('month')"/><input type="button" value="导出产品日统计表" onclick="toExcel('month')" /></label>
         <label id="tjYear">统计年份：<input type="text" id="excelYear" onkeyup="num(this)"/><input type="button" value="年统计" onclick="toTj('year')"/><input type="button" value="导出年统计表" onclick="toExcel('year')" /></label></div>
         <form id="ExcelForm" action="/SCCJ/GetExcelTable" method="post">
             <input id="Action" name="Action" type="hidden" value="outexcel" />
@@ -739,8 +814,8 @@
                  <td>乙班</td>
                  <td> </td>
              </tr>
-             <tr><td>一等品</td><td><input type="text" id="JiaYiDengPinNum" name="JiaYiDengPinNum" onkeyup="num(this)" /></td><td>一等品</td><td><input type="text" id="YiYiDengPinNum" name="YiYiDengPinNum" onkeyup="num(this)" /></td></tr>
-             <tr><td>合格品</td><td><input type="text" id="JiaHeGePinNum" name="JiaHeGePinNum" onkeyup="num(this)" /></td><td>合格品</td><td><input type="text" id="YiHeGePinNum" name="YiHeGePinNum" onkeyup="num(this)" /></td></tr>
+             <tr><td>一等品</td><td><input type="text" id="JiaYiDengPinNum" name="JiaYiDengPinNum" value="0" onkeyup="num(this)" /></td><td>一等品</td><td><input type="text" id="YiYiDengPinNum" name="YiYiDengPinNum" onkeyup="num(this)" value="0" /></td></tr>
+             <tr><td>合格品</td><td><input type="text" id="JiaHeGePinNum" name="JiaHeGePinNum" value="0"onkeyup="num(this)" /></td><td>合格品</td><td><input type="text" id="YiHeGePinNum" name="YiHeGePinNum" onkeyup="num(this)" value="0"/></td></tr>
             <tr><td>次品</td><td><input type="text" id="JiaCiPinNum" name="JiaCiPinNum" value="0" onkeyup="num(this)" /></td><td>次品</td><td><input  type="text" id="YiCiPinNum" name="YiCiPinNum" value="0" onkeyup="num(this)"/></td></tr>
              <tr><td>优等品</td><td><input type="text" id="JiaYouDengPinNum" name="JiaYouDengPinNum" value="0" onkeyup="num(this)" /></td><td>优等品</td><td><input type="text" id="YiYouDengPinNum" name="YiYouDengPinNum" value="0" onkeyup="num(this)" /></td></tr>
              <tr><td>废品</td><td><input type="text" id="JiaFeiPinNum" name="JiaFeiPinNum" onkeyup="num(this)" value="0" /></td><td>废品</td><td><input type="text" id="YiFeiPinNum" name="YiFeiPinNum" onkeyup="num(this)" value="0" /></td></tr>
