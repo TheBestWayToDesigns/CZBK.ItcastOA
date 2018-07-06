@@ -32,6 +32,11 @@
                 });
             }
         });
+
+        var txt = "";
+        var ary = ['silver', 'white'];
+        var color = "";
+
         //清空datagrid数据
         function cleanDatagrid() {
             var item = $('#tt').datagrid('getRows');
@@ -283,20 +288,20 @@
                 var time = $("#excelYMD").datebox("getValue");
                 time = time.replace(/-/g, '.');
                 Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr>"
-               + "<tr><td colspan='24' style='text-align:center'></td><td>" + time + "</td></tr></thead>";
-                addTotal = "<tfoot><tr style='border:0.5pt solid black'><td>合计</td><td></td>"
+               + "<tr><td colspan='24' style='text-align:center'></td><td colspan='4'>" + time + "</td></tr></thead>";
+                addTotal = "<tfoot><tr style='border:0.5pt solid black;'><td style='text-align:center'>合计</td><td></td>"
                                     + "<td style='text-align:center'>" + checkNum(YSDayNum) + "</td><td style='text-align:center'>" + checkNum(YSMonthNum) + "</td>"
                                     + "<td style='text-align:center'>" + checkNum(JiaBanDayNum) + "</td><td style='text-align:center'>" + checkNum(JiaBanMonthNum) + "</td>"
                                     + "<td style='text-align:center'>" + checkNum(YiBanDayNum) + "</td><td style='text-align:center'>" + checkNum(YiBanMonthNum) + "</td>"
                                     + "<td style='text-align:center'>" + checkNum(JiaYouDayNum) + "</td><td style='text-align:center'>" + checkNum(JiaYouMonthNum) + "</td>"
-                                    + "<td style='text-align:center'>" + checkNum(JiaYiDayNum) + "</td><td style='text-align:center'>" + checkNum(JiaYiMonthNum) + "</td>"
-                                    + "<td style='text-align:center'>" + checkNum(JiaHeDayNum) + "</td><td style='text-align:center'>" + checkNum(JiaHeMonthNum) + "</td>"
-                                    + "<td style='text-align:center'>" + checkNum(JiaCiDayNum) + "</td><td style='text-align:center'>" + checkNum(JiaCiMonthNum) + "</td>"
+                                    + "<td style='text-align:center;background:silver'>" + checkNum(JiaYiDayNum) + "</td><td style='text-align:center'>" + checkNum(JiaYiMonthNum) + "</td>"
+                                    + "<td style='text-align:center;background:silver'>" + checkNum(JiaHeDayNum) + "</td><td style='text-align:center'>" + checkNum(JiaHeMonthNum) + "</td>"
+                                    + "<td style='text-align:center;background:silver'>" + checkNum(JiaCiDayNum) + "</td><td style='text-align:center'>" + checkNum(JiaCiMonthNum) + "</td>"
                                     + "<td style='text-align:center'>" + checkNum(JiaFeiDayNum) + "</td><td style='text-align:center'>" + checkNum(JiaFeiMonthNum) + "</td>"
                                     + "<td style='text-align:center'>" + checkNum(YiYouDayNum) + "</td><td style='text-align:center'>" + checkNum(YiYouMonthNum) + "</td>"
-                                    + "<td style='text-align:center'>" + checkNum(YiYiDayNum) + "</td><td style='text-align:center'>" + checkNum(YiYiMonthNum) + "</td>"
-                                    + "<td style='text-align:center'>" + checkNum(YiHeDayNum) + "</td><td style='text-align:center'>" + checkNum(YiHeMonthNum) + "</td>"
-                                    + "<td style='text-align:center'>" + checkNum(YiCiDayNum) + "</td><td style='text-align:center'>" + checkNum(YiCiMonthNum) + "</td>"
+                                    + "<td style='text-align:center;background:silver'>" + checkNum(YiYiDayNum) + "</td><td style='text-align:center'>" + checkNum(YiYiMonthNum) + "</td>"
+                                    + "<td style='text-align:center;background:silver'>" + checkNum(YiHeDayNum) + "</td><td style='text-align:center'>" + checkNum(YiHeMonthNum) + "</td>"
+                                    + "<td style='text-align:center;background:silver'>" + checkNum(YiCiDayNum) + "</td><td style='text-align:center'>" + checkNum(YiCiMonthNum) + "</td>"
                                     + "<td style='text-align:center'>" + checkNum(YiFeiDayNum) + "</td><td style='text-align:center'>" + checkNum(YiFeiMonthNum) + "</tr>"
                                     + "</tfoot></table></div></div>";
             }/* else if (type == 'dayWin') {
@@ -332,7 +337,7 @@
                                     + "<tr><td colspan='10'>部门负责人:</td><td colspan='4'>制表人:</td></tr></tfoot></table></div></div>";
                     colCount = 14;
                     Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr>"
-               + "<tr><td colspan='13' style='text-align:center'>" + timeStr + "</td><td>单位:根</td></tr></thead>";
+               + "<tr><td colspan='12' style='text-align:center'>" + timeStr + "</td><td colspan='2' style='text-align:right'>单位:根</td></tr></thead>";
                 } else {
                     timeStr = $("#excelYear").val() + "年";
                     title = '水工公司生产车间产品年报表';
@@ -495,14 +500,14 @@
                     { field: 'YiFeiPinNum', title: '废品', align: 'center' }
                 ]],
                 toolbar: "#AddBtnDIV",
-                onLoadSuccess: function () {
+                /*onLoadSuccess: function () {
                     var rows = $("#tt").datagrid("getRows");
                     for (var a = 0; a < rows.length - 1; a++) {
                         if (rows[a].ID == undefined) {
                             $("#tt").datagrid("deleteRow", a);
                         }
                     }
-                }
+                }*/
             });
         }
         //加载磅秤信息页面
@@ -522,8 +527,6 @@
                 singleSelect: true,//是否单行选择
                 queryParams: pars,//往后台传递参数
                 columns: [[]],
-                onLoadSuccess:function(res){
-                },
                 toolbar: "#TJTypeDIV"
             });
         }
@@ -542,7 +545,8 @@
                 $("#tt").datagrid("options").queryParams = { dayExcel: serchTime, bmID: bmID };
                 $("#tt").datagrid("options").showFooter = true;
                 $("#tt").datagrid("options").title = "年统计表";
-                $("#tt").datagrid({columns :[[ { field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3 },
+                $("#tt").datagrid({
+                    columns: [[{ field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3, formatter: function (value, row, index) { return SplitProductGG(value) }, styler: function (value, row, index) { return 'background-color:' + CheckPductName(value) } },
                     { field: 'ProductJB', title: '级别', align: 'center', rowspan: 3, formatter: function (value, row, index) { return value == "无级别" ? '' : value } },
                     { title: '', align: 'center', colspan: 2 },
                     { title: '各班完成情况', align: 'center', colspan: 4 },
@@ -633,7 +637,7 @@
                 $("#tt").datagrid("options").showFooter = true;
                 $("#tt").datagrid("options").title = "水工公司生产车间产品日报表";
                 $("#tt").datagrid({columns : [[{ field: 'BuMenid', title: '部门', align: 'center', rowspan: 3 },
-                    { field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3 },
+                    { field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3, formatter: function (value, row, index) { return SplitProductGG(value) }, styler: function (value, row, index) { return 'background-color:' + CheckPductName(value) } },
                     { field: 'ProductJB', title: '级别', align: 'center', rowspan: 3, formatter: function (value, row, index) { return value == "无级别" ? '' : value } },
                     { title: '当日', align: 'center', colspan: 2 },
                     { field: 'SumTrueCL', title: '累计实际产量', align: 'center', rowspan: 3, formatter: function (value, row, index) { return value == 0 ? '' : value } },
@@ -666,7 +670,7 @@
                 $("#tt").datagrid("options").title = "水工公司生产车间产品年报表";
                 $("#tt").datagrid({
                     columns: [[{ field: 'BuMenid', title: '部门', align: 'center', rowspan: 3 },
-                        { field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3 },
+                        { field: 'ProductGGId', title: '规格', align: 'center', rowspan: 3, formatter: function (value, row, index) { return SplitProductGG(value)}, styler: function (value, row, index) { return 'background-color:' + CheckPductName(value) } },
                         { field: 'ProductJB', title: '级别', align: 'center', rowspan: 3, formatter: function (value, row, index) { return value == "无级别" ? '' : value } },
                         { title: '当年', align: 'center', colspan: 2 },
                         { field: 'SumTrueCL', title: '累计实际产量', align: 'center', rowspan: 3, formatter: function (value, row, index) { return value == 0 ? '' : value } },
@@ -688,6 +692,21 @@
             } 
             cleanDatagrid();
             $('#tt').datagrid('reload');
+        }
+        
+        function SplitProductGG(value) {
+            var ay = value.split('——');
+            return ay[0] + "——" + ay[1];
+        }
+
+        function CheckPductName(value) {
+            var ay = value.split('——');
+            if (ay[2] == 0) {
+                return 'yellow';
+            }
+            if (ay[2] == 1) {
+                return 'silver';
+            }
         }
         //数字验证
         function num(obj) {

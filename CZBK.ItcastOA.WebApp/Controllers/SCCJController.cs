@@ -173,14 +173,21 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             {
                 var groupData = temp.GroupBy(x => x.ProductNameId).ToList();
                 List<MonthAnfYearTJclass> lmaf = new List<MonthAnfYearTJclass>();
+                int num = 0;
+                long id = 0;
                 foreach (var a in groupData)
                 {
                     var s = a.DefaultIfEmpty();
                     foreach (var b in s)
                     {
+                        if (b.ProductNameId != id)
+                        {
+                            id = b.ProductNameId;
+                            num = num == 0 ? 1 : 0;
+                        }
                         MonthAnfYearTJclass may = new MonthAnfYearTJclass();
                         may.BuMenid = b.BumenInfoSet.Name;
-                        may.ProductGGId = b.T_ChanPinName2.MyTexts + "——" + b.T_ChanPinName.MyTexts;
+                        may.ProductGGId = b.T_ChanPinName2.MyTexts + "——" + b.T_ChanPinName.MyTexts + "——" +num;
                         may.ProductJB = b.T_ChanPinName1.MyTexts;
                         may.TrueCLNum = b.JiaCiPinNum + b.JiaFeiPinNum + b.JiaHeGePinNum + b.JiaYiDengPinNum + b.JiaYouDengPinNum + b.YiCiPinNum + b.YiFeiPinNum + b.YiHeGePinNum + b.YiYiDengPinNum + b.YiYouDengPinNum;
                         var data = temp2.Where(x => x.ProductNameId == b.ProductNameId && x.ProductGGId == b.ProductGGId && x.ProductJB == b.ProductJB).ToList();
@@ -219,14 +226,21 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             {
                 var groupData = temp.GroupBy(x => x.ProductNameId).ToList();
                 List<MonthAnfYearTJclass> lmaf = new List<MonthAnfYearTJclass>();
+                int num = 0;
+                long id = 0;
                 foreach (var a in groupData)
                 {
                     var s = a.DefaultIfEmpty();
                     foreach (var b in s)
                     {
+                        if (b.ProductNameId != id)
+                        {
+                            id = b.ProductNameId;
+                            num = num == 0 ? 1 : 0;
+                        }
                         MonthAnfYearTJclass may = new MonthAnfYearTJclass();
                         may.BuMenid = b.BumenInfoSet.Name;
-                        may.ProductGGId = b.T_ChanPinName2.MyTexts + "——" + b.T_ChanPinName.MyTexts;
+                        may.ProductGGId = b.T_ChanPinName2.MyTexts + "——" + b.T_ChanPinName.MyTexts + "——" + num;
                         may.ProductJB = b.T_ChanPinName1.MyTexts;
                         var data = temp2.Where(x => x.ProductNameId == b.ProductNameId && x.ProductGGId == b.ProductGGId && x.ProductJB == b.ProductJB).ToList();
                         may.SumTrueCL = data.Sum(x => x.JiaCiPinNum) + data.Sum(x => x.JiaFeiPinNum) + data.Sum(x => x.JiaHeGePinNum) + data.Sum(x => x.JiaYiDengPinNum) + data.Sum(x => x.JiaYouDengPinNum) + data.Sum(x => x.YiCiPinNum) + data.Sum(x => x.YiFeiPinNum) + data.Sum(x => x.YiHeGePinNum) + data.Sum(x => x.YiYiDengPinNum) + data.Sum(x => x.YiYouDengPinNum);
@@ -261,13 +275,20 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             {
                 var groupData = temp.GroupBy(x => x.ProductNameId).ToList();
                 List<DayTJclass> ldt = new List<DayTJclass>();
-                foreach(var a in groupData)
+                int num = 0;
+                long id = 0;
+                foreach (var a in groupData)
                 {
                     var s = a.DefaultIfEmpty();
-                    foreach(var b in s)
+                    foreach (var b in s)
                     {
-                         DayTJclass dtj = new DayTJclass();
-                        dtj.ProductGGId = b.T_ChanPinName2.MyTexts + "——" + b.T_ChanPinName.MyTexts;
+                        if (b.ProductNameId != id)
+                        {
+                            id = b.ProductNameId;
+                            num = num == 0 ? 1 : 0;
+                        }
+                        DayTJclass dtj = new DayTJclass();
+                        dtj.ProductGGId = b.T_ChanPinName2.MyTexts + "——" + b.T_ChanPinName.MyTexts + "——" + num;
                         dtj.ProductJB = b.T_ChanPinName1.MyTexts;
                         dtj.YSDayNum = b.JiaCiPinNum + b.JiaFeiPinNum + b.JiaHeGePinNum + b.JiaYiDengPinNum + b.JiaYouDengPinNum + b.YiCiPinNum + b.YiFeiPinNum + b.YiHeGePinNum + b.YiYiDengPinNum + b.YiYouDengPinNum;
                         var data = temp2.Where(x => x.ProductNameId == b.ProductNameId && x.ProductGGId == b.ProductGGId && x.ProductJB == b.ProductJB).ToList();
