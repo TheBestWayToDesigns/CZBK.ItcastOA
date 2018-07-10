@@ -234,6 +234,19 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             return Json(new { ret = "no", msg = "无数据，联系管理员" }, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult getEditUserQX()
+        {
+            int uid = Convert.ToInt32(Request["uid"]);
+            var temp = WXXBaoJiaQuanXianService.LoadEntities(x => x.UserID == uid).FirstOrDefault();
+            if (temp != null)
+            {
+                STUBuMen sbm = new STUBuMen();
+                sbm.ID = temp.ID;
+                sbm.Name = temp.CanSeeNum;
+                return Json(sbm, JsonRequestBehavior.AllowGet);
+            }
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
         //添加人员权限
         public ActionResult addUserQX()
         {

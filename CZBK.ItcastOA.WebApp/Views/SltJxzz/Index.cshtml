@@ -238,11 +238,24 @@
         });
         function toDownloadExcel() {
             var colCount = ($("#tt").datagrid("options").columns)[0].length;
+            var colCountS = colCount - 3;
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
             var addTotal = "";
+            var title = "";
+            var theadStr = "";
             if ($("#tt").datagrid("options").title == "个人日统计表") {
-                addTotal = "<table><tr><td colspan='4'>监察部签字:</td><td colspan='4'>车间主任签字:</td><td colspan='4'>检查员:</td><td colspan='4'>统计员:</td><td colspan='4'>制表人:</td></tr></table>";
+                var dateAry = ($("#excelYMD").datebox("getText")).split('-');
+                title = dateAry[0]+"年"+dateAry[1]+"月"+dateAry[2]+"日个人日统计表";
+                theadStr = "<tr><td colspan='" + colCountS + "'></td><td  colspan='3' style='text-align:center;'>" + year + "年" + month + "月" + day + "日</td></tr>";
+                addTotal = "<table><tr></tr><tr><td colspan='4'>监察部签字:</td><td colspan='4'>车间主任签字:</td><td colspan='4'>检查员:</td><td colspan='4'>统计员:</td><td colspan='4'>制表人:</td></tr></table>";
             }
             else if ($("#tt").datagrid("options").title == "个人月统计表") {
+                var dateAry = ($("#excelYM").val()).split('-');
+                title = "个人" + dateAry[1] + "月统计表";
+                theadStr = "<tr><td colspan='" + colCountS + "'></td><td  colspan='3' style='text-align:center;'>" + year + "年" + month + "月" + day + "日</td></tr>";
                 var rows = $('#tt').datagrid('getRows')//获取当前的数据行
                 var totalIint = 0;
                 var totalSlt_kg = 0;
@@ -270,17 +283,21 @@
                     totalSumHoursWage += rows[i]['SumHoursWage'];
                     totalRestYesOrNo += rows[i]['RestYesOrNo'];
                 }
-                addTotal = "<table><tr style='border:1px solid black'><td colspan='2' style='text-align:center;'>合计</td>"
+                addTotal = "<table><tr style='border:1px solid black'><td colspan='3' style='text-align:center;'>合计</td>"
                     + "<td style='text-align:center '>" + totalIint + "</td><td style='text-align:center '>" + totalSlt_kg + "</td>"
                     + "<td style='text-align:center '>" + totalThisHaveTime + "</td><td style='text-align:center '>" + totalHaveTime + "</td>"
                     + "<td style='text-align:center '>" + totalWage_slt + "</td><td style='text-align:center '>" + totalHoursWage + "</td>"
                     + "<td style='text-align:center '>" + totalWorkHours + "</td><td style='text-align:center '>" + totalSumHoursWage + "</td>"
                     + "<td style='text-align:center '>" + totalRestYesOrNo + "</td><td style='text-align:center '>" + totalSlt_hege + "</td>"
                     + "<td style='text-align:center '>" + totalSlt_hegeNo + "</td><td style='text-align:center '>" + totalSlt_Feipin + "</td><td></td><td></td></tr>"
+                    +"<tr></tr>"
                     + "<tr><td colspan='3'>监察部签字:</td><td colspan='3'>车间主任签字:</td><td colspan='3'>检查员:</td><td colspan='3'>统计员:</td><td colspan='3'>制表人:</td></tr>"
-                + "<tr><td colspan='15' style='font-weight:bold'>注：次月5日前监察部召集相关人员对上个月工作进行综合评价，评分分五个等级：优、良、合格、较差、差。</td></tr></table>";
+                + /*"<tr><td colspan='15' style='font-weight:bold'>注：次月5日前监察部召集相关人员对上个月工作进行综合评价，评分分五个等级：优、良、合格、较差、差。</td></tr>*/"</table>";
             }
             else if ($("#tt").datagrid("options").title == "车间月统计表") {
+                var dateAry = ($("#excelYM").val()).split('-');
+                title = dateAry[1] + "月车间月统计表";
+                theadStr = "<tr><td colspan='" + colCountS + "'></td><td  colspan='3' style='text-align:center;'>" + year + "年" + month + "月" + day + "日</td></tr>";
                 var rows = $('#tt').datagrid('getRows')//获取当前的数据行
                 var totalWorkHours = 0;
                 var totalSumMoney = 0;
@@ -288,10 +305,14 @@
                     totalWorkHours += rows[i]['WorkHours'];
                     totalSumMoney += rows[i]['SumMoney'];
                 }
-                addTotal = "<table><tr style='border:1px solid black'><td colspan='6' style='text-align:center;'>合计</td><td style='text-align:center '>" + totalWorkHours + "</td><td style='text-align:center '>" + totalSumMoney + "</td></tr>"
+                addTotal = "<table><tr style='border:1px solid black'><td colspan='7' style='text-align:center;'>合计</td><td style='text-align:center '>" + totalWorkHours + "</td><td style='text-align:center '>" + totalSumMoney + "</td></tr>"
+                    +"<tr></tr>"
                     + "<tr><td colspan='2'>监察部签字:</td><td colspan='2'>车间主任签字:</td><td colspan='2'>检查员:</td><td colspan='2'>统计员:</td><td colspan='2'>制表人:</td></tr></table>";
             }
             else if ($("#tt").datagrid("options").title == "公司月统计表") {
+                var dateAry = ($("#excelYM").val()).split('-');
+                title = "公司" + dateAry[1] + "月统计表";
+                theadStr = "<tr><td colspan='" + colCountS + "'></td><td  colspan='3' style='text-align:center;'>" + year + "年" + month + "月" + day + "日</td></tr>";
                 var rows = $('#tt').datagrid('getRows')//获取当前的数据行
                 var totalSumHours = 0;
                 var totalSumMoney = 0;
@@ -299,10 +320,14 @@
                     totalSumHours += rows[i]['SumHours'];
                     totalSumMoney += rows[i]['SumMoney'];
                 }
-                addTotal = "<table><tr style='border:1px solid black'><td style='text-align:center;'>合计</td><td style='text-align:center '>" + totalSumHours + "</td><td style='text-align:center '>" + totalSumMoney + "</td><td></td></tr>"
+                addTotal = "<table><tr style='border:1px solid black'><td colspan='2' style='text-align:center;'>合计</td><td style='text-align:center '>" + totalSumHours + "</td><td style='text-align:center '>" + totalSumMoney + "</td><td></td></tr>"
+                    +"<tr></tr>"
                     + "<tr><td>主管副总签字:</td><td>加工部门领导签字:</td><td>制表:</td></tr></table>";
             }
             else if ($("#tt").datagrid("options").title == "轨枕设备月统计表") {
+                var dateAry = ($("#excelYM").val()).split('-');
+                title = "轨枕设备" + dateAry[1] + "月统计表";
+                theadStr = "<tr><td colspan='" + colCountS + "'></td><td colspan='3' style='text-align:center;'>" + year + "年" + month + "月" + day + "日</td></tr>";
                 var rows = $('#tt').datagrid('getRows')//获取当前的数据行
                 var totalSumHours = 0;
                 var totalSumMoney = 0;
@@ -310,14 +335,15 @@
                     totalSumHours += rows[i]['SumHours'];
                     totalSumMoney += rows[i]['SumMoney'];
                 }
-                addTotal = "<table><tr style='border:1px solid black'><td style='text-align:center;'>合计</td><td style='text-align:center '>" + totalSumHours + "</td><td style='text-align:center '>" + totalSumMoney + "</td></tr>"
-                    + "<tr><td>主管副总签字:</td><td>机械制造领导签字:</td><td>用工部门领导签字:</td><td>制表:王莉雁</td></tr></table>";
+                addTotal = "<table><tr style='border:1px solid black'><td colspan='2' style='text-align:center;'>合计</td><td style='text-align:center '>" + totalSumHours + "</td><td style='text-align:center '>" + totalSumMoney + "</td></tr>"
+                    +"<tr></tr>"
+                    + "<tr><td>主管副总签字:</td><td>机械制造领导签字:</td><td>用工部门领导签字:</td><td>制表:</td></tr></table>";
             }
             var htmlData = $(".datagrid-view2").html();
             var tableHead = "<html><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />" +
         "<style type='text/css'>tbody tr td{text-align:center;border:solid .5pt Black;} </style>" +
         "<body><table >";
-            var Theard = "<thead><tr><td colspan='"+colCount+"' style=' font-family:黑体; font-size:25px;text-align:center '>" + $("#InfoExcelMsg").combobox("getText") + $("#InfoExcelType").combobox("getText") + "</td></tr></thead>";
+            var Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + $("#InfoExcelMsg").combobox("getText") + title + "</td></tr>"+theadStr+"</thead>";
             $("#OFtable").val(tableHead + Theard + htmlData + addTotal+"</table></body></html>"); //获取并拼接代码
             $("#ExcelForm").submit();
         }
@@ -374,6 +400,14 @@
                 queryParams: { bolID: 9, excelDate: serchTime, bmID: bmID },
                 title:"个人日统计表",
                 columns: [[
+                    {
+                        field: 'index', title: '序号', align: 'center', formatter: function (val, row, index) {
+                            var options = $("#tt").datagrid('getPager').data("pagination").options;
+                            var currentPage = options.pageNumber;
+                            var pageSize = options.pageSize;
+                            return (pageSize * (currentPage - 1)) + (index + 1);
+                        }
+                    },
                             {
                                 field: 'Wtime', title: '单据时间',
                                 formatter: function (value, row, index) {
@@ -447,7 +481,14 @@
             var serchTime = $("#excelYM").val();
             $("#tt").datagrid("options").queryParams = { bolID: 10, monthExcel: serchTime, bmID: bmID };
             $("#tt").datagrid("options").title = "个人月统计表";
-            $("#tt").datagrid({columns : [[
+            $("#tt").datagrid({
+                columns: [[
+                    {field:'index',title:'序号', align: 'center',formatter:function(val,row,index){
+                        var options = $("#tt").datagrid('getPager').data("pagination").options; 
+                        var currentPage = options.pageNumber;
+                        var pageSize = options.pageSize;
+                        return (pageSize * (currentPage -1))+(index+1);
+                    }},
                    { field: 'UPslt_ID', title: '操作者', align: 'center' },
                      { field: 'Job_Name', title: '工种', align: 'center' },
                      { field: 'Iint', title: '数量', align: 'center' },
@@ -471,7 +512,16 @@
             var bmID = $("#InfoExcelMsg").combobox("getValue");
             $("#tt").datagrid("options").queryParams = { bolID: 11, monthExcel: serchTime, bmID: bmID };
             $("#tt").datagrid("options").title = "车间月统计表";
-            $("#tt").datagrid({columns : [[
+            $("#tt").datagrid({
+                columns: [[
+                        {
+                            field: 'index', title: '序号', align: 'center', formatter: function (val, row, index) {
+                                var options = $("#tt").datagrid('getPager').data("pagination").options;
+                                var currentPage = options.pageNumber;
+                                var pageSize = options.pageSize;
+                                return (pageSize * (currentPage - 1)) + (index + 1);
+                            }
+                        },
                       {
                           field: 'WorkTime', title: '日期', align: 'center',
                           formatter: function (value, row, index) {
@@ -494,7 +544,16 @@
             var serchTime = $("#excelYM").val();
             $("#tt").datagrid("options").queryParams = { bolID: 12, monthExcel: serchTime };
             $("#tt").datagrid("options").title = "公司月统计表";
-            $("#tt").datagrid({columns : [[
+            $("#tt").datagrid({
+                columns: [[
+                        {
+                            field: 'index', title: '序号', align: 'center', formatter: function (val, row, index) {
+                                var options = $("#tt").datagrid('getPager').data("pagination").options;
+                                var currentPage = options.pageNumber;
+                                var pageSize = options.pageSize;
+                                return (pageSize * (currentPage - 1)) + (index + 1);
+                            }
+                        },
                       { field: 'UpBumen', title: '用工部门', align: 'center' },
                       { field: 'SumHours', title: '工作时间/小时', align: 'center' },
                       { field: 'SumMoney', title: '金额合计', align: 'center' },
@@ -506,7 +565,16 @@
             var bmID = $("#InfoExcelMsg").combobox("getValue");
             $("#tt").datagrid("options").queryParams = { bolID: 13, monthExcel: serchTime,bmID:bmID};
             $("#tt").datagrid("options").title = "轨枕设备月统计表";
-            $("#tt").datagrid({columns : [[
+            $("#tt").datagrid({
+                columns: [[
+                        {
+                            field: 'index', title: '序号', align: 'center', formatter: function (val, row, index) {
+                                var options = $("#tt").datagrid('getPager').data("pagination").options;
+                                var currentPage = options.pageNumber;
+                                var pageSize = options.pageSize;
+                                return (pageSize * (currentPage - 1)) + (index + 1);
+                            }
+                        },
                       { field: 'UpBumen', title: '工作项目', align: 'center' },
                       { field: 'SumHours', title: '工时', align: 'center' },
                       { field: 'SumMoney', title: '金额', align: 'center' }]]});
