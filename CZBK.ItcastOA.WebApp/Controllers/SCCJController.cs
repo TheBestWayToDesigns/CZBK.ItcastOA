@@ -342,6 +342,48 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             Response.Write(excelHtml);
             Response.End();
         }
+
+        public ActionResult BuChongSpaceInfo()
+        {
+            var dtEnd = Convert.ToDateTime(Request["buChongEndDateTime"]);
+            var dtStart = Convert.ToDateTime(Request["buChongStartDateTime"]);
+            for(DateTime dt = dtStart; dt < dtEnd; dt = dt.AddDays(1))
+            {
+                var dtAdd = dt.AddDays(1);
+                var temp = T_SCCJService.LoadEntities(x => x.Wtime == dt).DefaultIfEmpty().ToList();
+                var temp1 = T_SCCJService.LoadEntities(x => x.Wtime == dtAdd).DefaultIfEmpty().ToList();
+                foreach(var a in temp)
+                {
+                    if (temp1 != null && temp1[0] != null)
+                    {
+                        var data = temp1.Where(x => x.ProductNameId == a.ProductNameId && x.ProductGGId == a.ProductGGId && x.ProductJB == a.ProductJB).FirstOrDefault();
+                        if (data != null)
+                        {
+                            continue;
+                        }
+                    }
+                    T_SCCJ tsc = new T_SCCJ();
+                    tsc.Wtime = dtAdd;
+                    tsc.BuMenid = a.BuMenid;
+                    tsc.ProductNameId = a.ProductNameId;
+                    tsc.ProductGGId = a.ProductGGId;
+                    tsc.ProductJB = a.ProductJB;
+                    tsc.JiaYouDengPinNum = 0;
+                    tsc.JiaYiDengPinNum = 0;
+                    tsc.JiaHeGePinNum = 0;
+                    tsc.JiaCiPinNum = 0;
+                    tsc.JiaFeiPinNum = 0;
+                    tsc.YiYouDengPinNum = 0;
+                    tsc.YiYiDengPinNum = 0;
+                    tsc.YiHeGePinNum = 0;
+                    tsc.YiCiPinNum = 0;
+                    tsc.YiFeiPinNum = 0;
+                    tsc.Del_f = 0;
+                    T_SCCJService.AddEntity(tsc);
+                }
+            }
+            return Json("ok", JsonRequestBehavior.AllowGet);
+        }
     }
     public class editInfo
     {

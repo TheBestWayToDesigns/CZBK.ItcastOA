@@ -265,6 +265,16 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IYSGPinfoDal :IBaseDal<YSGPinfo>
+    {
+      
+    }
+	
+	public partial interface IYSGPtopDal :IBaseDal<YSGPtop>
+    {
+      
+    }
+	
 	public partial interface IYXB_BaojiaDal :IBaseDal<YXB_Baojia>
     {
       

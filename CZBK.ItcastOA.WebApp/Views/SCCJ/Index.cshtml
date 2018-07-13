@@ -735,6 +735,22 @@
             var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
             return date.getFullYear() + "-" + month + "-" + currentDate;
         }
+        function toAddSpaceInfo() {
+            if (($("#buChongStartDateTime").datebox("getValue")).trim().length <= 0) {
+                $.messager.alert("请填写起始时间");
+                return;
+            }
+            if (($("#buChongEndDateTime").datebox("getValue")).trim().length <= 0) {
+                $.messager.alert("请填写截止时间");
+                return;
+            }
+            $.post("/SCCJ/BuChongSpaceInfo", { buChongStartDateTime: $("#buChongStartDateTime").datebox("getValue"), buChongEndDateTime: $("#buChongEndDateTime").datebox("getValue") }, function (rt) {
+                if (rt == "ok") {
+                    $.messager.alert("提示","填充空白数据成功！")
+                }
+                $('#tt').datagrid('reload');
+            })
+        }
     </script>
 </head>
 <body class="easyui-layout">
@@ -751,6 +767,7 @@
     <div id="AddBtnDIV" style="padding:5px;height:auto">
         <div style="margin-bottom:5px">
             <a href="#" class="easyui-linkbutton" id="AddBtn" iconCls="icon-add" plain="true">添加日报</a>
+            <label>起始日期:<input type="text" class="easyui-datebox" id="buChongStartDateTime" />截止时间:<input type="text" class="easyui-datebox" id="buChongEndDateTime" /><input type="button" value="添加空白数据" onclick="toAddSpaceInfo()" /></label>
         </div>
     </div>
     <div id="TJTypeDIV" style="padding:5px;height:auto;width:auto;display:flex;flex-direction:row; flex-wrap:nowrap;align-items:center;">

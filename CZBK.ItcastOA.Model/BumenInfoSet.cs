@@ -22,6 +22,7 @@ namespace CZBK.ItcastOA.Model
             this.T_jxzztjb = new HashSet<T_jxzztjb>();
             this.T_jgzztjb = new HashSet<T_jgzztjb>();
             this.T_SCCJ = new HashSet<T_SCCJ>();
+            this.YSGPtops = new HashSet<YSGPtop>();
         }
     
         public int ID { get; set; }
@@ -37,5 +38,6 @@ namespace CZBK.ItcastOA.Model
         public virtual ICollection<T_jxzztjb> T_jxzztjb { get; set; }
         public virtual ICollection<T_jgzztjb> T_jgzztjb { get; set; }
         public virtual ICollection<T_SCCJ> T_SCCJ { get; set; }
+        public virtual ICollection<YSGPtop> YSGPtops { get; set; }
     }
 }

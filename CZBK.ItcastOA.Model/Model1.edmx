@@ -690,6 +690,34 @@
           <Property Name="DEL" Type="smallint" />
           <Property Name="SeeUserInfoList" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="YSGPinfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TopID" Type="bigint" Nullable="false" />
+          <Property Name="WorkAddress" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="WorkInfo" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="WorkTrueStartTime" Type="datetime" Nullable="false" />
+          <Property Name="WorkTrueEndTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="YSGPtop">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GPtime" Type="datetime" Nullable="false" />
+          <Property Name="PGbumen" Type="int" Nullable="false" />
+          <Property Name="PGperson" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="StartTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
+          <Property Name="WorkTime" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="PGpersonAllWages" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="SettlementAmount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Del_f" Type="smallint" Nullable="false" />
+          <Property Name="AddUser" Type="int" Nullable="false" />
+          <Property Name="AddTime" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="YXB_Baojia">
           <Key>
             <PropertyRef Name="id" />
@@ -1684,6 +1712,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_YSGPinfo_YSGPtop">
+          <End Role="YSGPtop" Type="Self.YSGPtop" Multiplicity="1" />
+          <End Role="YSGPinfo" Type="Self.YSGPinfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="YSGPtop">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YSGPinfo">
+              <PropertyRef Name="TopID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YSGPtop_BumenInfoSet">
+          <End Role="BumenInfoSet" Type="Self.BumenInfoSet" Multiplicity="1" />
+          <End Role="YSGPtop" Type="Self.YSGPtop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BumenInfoSet">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YSGPtop">
+              <PropertyRef Name="PGbumen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YSGPtop_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="YSGPtop" Type="Self.YSGPtop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YSGPtop">
+              <PropertyRef Name="AddUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_YXB_Baojia_CanPinDengji">
           <End Role="T_ChanPinName" Type="Self.T_ChanPinName" Multiplicity="0..1" />
           <End Role="YXB_Baojia" Type="Self.YXB_Baojia" Multiplicity="*" />
@@ -1893,6 +1957,8 @@
           <EntitySet Name="WXXUserInfo" EntityType="Self.WXXUserInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YJ_ScheduleAction" EntityType="Self.YJ_ScheduleAction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YJ_ScheduleDay" EntityType="Self.YJ_ScheduleDay" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="YSGPinfo" EntityType="Self.YSGPinfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="YSGPtop" EntityType="Self.YSGPtop" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YXB_Baojia" EntityType="Self.YXB_Baojia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YXB_BaoJiaEidtMoney" EntityType="Self.YXB_BaoJiaEidtMoney" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YXB_Kh_list" EntityType="Self.YXB_Kh_list" Schema="dbo" store:Type="Tables" />
@@ -2200,6 +2266,18 @@
           <AssociationSet Name="FK_YJ_ScheduleDay_yjuserid_userinfo" Association="Self.FK_YJ_ScheduleDay_yjuserid_userinfo">
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="YJ_ScheduleDay" EntitySet="YJ_ScheduleDay" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YSGPinfo_YSGPtop" Association="Self.FK_YSGPinfo_YSGPtop">
+            <End Role="YSGPtop" EntitySet="YSGPtop" />
+            <End Role="YSGPinfo" EntitySet="YSGPinfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YSGPtop_BumenInfoSet" Association="Self.FK_YSGPtop_BumenInfoSet">
+            <End Role="BumenInfoSet" EntitySet="BumenInfoSet" />
+            <End Role="YSGPtop" EntitySet="YSGPtop" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YSGPtop_UserInfo" Association="Self.FK_YSGPtop_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="YSGPtop" EntitySet="YSGPtop" />
           </AssociationSet>
           <AssociationSet Name="FK_YXB_Baojia_CanPinDengji" Association="Self.FK_YXB_Baojia_CanPinDengji">
             <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
@@ -2660,6 +2738,20 @@
             <End Role="T_ChanPinName" EntitySet="T_ChanPinName" />
             <End Role="T_SCCJ" EntitySet="T_SCCJ" />
           </AssociationSet>
+          <EntitySet Name="YSGPinfoes" EntityType="OAModel.YSGPinfo" />
+          <EntitySet Name="YSGPtops" EntityType="OAModel.YSGPtop" />
+          <AssociationSet Name="FK_YSGPtop_BumenInfoSet" Association="OAModel.FK_YSGPtop_BumenInfoSet">
+            <End Role="BumenInfoSet" EntitySet="BumenInfoSet" />
+            <End Role="YSGPtop" EntitySet="YSGPtops" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YSGPinfo_YSGPtop" Association="OAModel.FK_YSGPinfo_YSGPtop">
+            <End Role="YSGPtop" EntitySet="YSGPtops" />
+            <End Role="YSGPinfo" EntitySet="YSGPinfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_YSGPtop_UserInfo" Association="OAModel.FK_YSGPtop_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="YSGPtop" EntitySet="YSGPtops" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ActionInfo">
           <Key>
@@ -2759,6 +2851,7 @@
           <NavigationProperty Name="T_jxzztjb" Relationship="OAModel.FK_T_jxzztjb_BumenInfoSet" FromRole="BumenInfoSet" ToRole="T_jxzztjb" />
           <NavigationProperty Name="T_jgzztjb" Relationship="OAModel.FK_T_jgzztjb_BumenInfoSet" FromRole="BumenInfoSet" ToRole="T_jgzztjb" />
           <NavigationProperty Name="T_SCCJ" Relationship="OAModel.FK_T_SCCJ_BumenInfoSet" FromRole="BumenInfoSet" ToRole="T_SCCJ" />
+          <NavigationProperty Name="YSGPtops" Relationship="OAModel.FK_YSGPtop_BumenInfoSet" FromRole="BumenInfoSet" ToRole="YSGPtop" />
         </EntityType>
         <EntityType Name="YXB_Kh_list">
           <Key>
@@ -3017,6 +3110,7 @@
           <NavigationProperty Name="WXXScoreUsers1" Relationship="OAModel.FK_WXXScoreUser_UserInfo1" FromRole="UserInfo" ToRole="WXXScoreUser" />
           <NavigationProperty Name="T_YXbj_master" Relationship="OAModel.FK_T_YXbj_master_UserInfo" FromRole="UserInfo" ToRole="T_YXbj_master" />
           <NavigationProperty Name="User_Person_slt" Relationship="OAModel.FK_User_Person_slt_UserInfo" FromRole="UserInfo" ToRole="User_Person_slt" />
+          <NavigationProperty Name="YSGPtops" Relationship="OAModel.FK_YSGPtop_UserInfo" FromRole="UserInfo" ToRole="YSGPtop" />
         </EntityType>
         <Association Name="FK_Bumen">
           <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="0..1" />
@@ -4515,6 +4609,74 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="YSGPinfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TopID" Type="Int64" Nullable="false" />
+          <Property Name="WorkAddress" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="WorkInfo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="WorkTrueStartTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="WorkTrueEndTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="YSGPtop" Relationship="OAModel.FK_YSGPinfo_YSGPtop" FromRole="YSGPinfo" ToRole="YSGPtop" />
+        </EntityType>
+        <EntityType Name="YSGPtop">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GPtime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PGbumen" Type="Int32" Nullable="false" />
+          <Property Name="PGperson" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StartTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="WorkTime" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="PGpersonAllWages" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="SettlementAmount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Del_f" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="BumenInfoSet" Relationship="OAModel.FK_YSGPtop_BumenInfoSet" FromRole="YSGPtop" ToRole="BumenInfoSet" />
+          <NavigationProperty Name="YSGPinfoes" Relationship="OAModel.FK_YSGPinfo_YSGPtop" FromRole="YSGPtop" ToRole="YSGPinfo" />
+          <Property Name="AddUser" Type="Int32" Nullable="false" />
+          <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="UserInfo" Relationship="OAModel.FK_YSGPtop_UserInfo" FromRole="YSGPtop" ToRole="UserInfo" />
+        </EntityType>
+        <Association Name="FK_YSGPtop_BumenInfoSet">
+          <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="1" />
+          <End Type="OAModel.YSGPtop" Role="YSGPtop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BumenInfoSet">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YSGPtop">
+              <PropertyRef Name="PGbumen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YSGPinfo_YSGPtop">
+          <End Type="OAModel.YSGPtop" Role="YSGPtop" Multiplicity="1" />
+          <End Type="OAModel.YSGPinfo" Role="YSGPinfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="YSGPtop">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YSGPinfo">
+              <PropertyRef Name="TopID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_YSGPtop_UserInfo">
+          <End Type="OAModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+          <End Type="OAModel.YSGPtop" Role="YSGPtop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YSGPtop">
+              <PropertyRef Name="AddUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5349,6 +5511,36 @@
                 <ScalarProperty Name="ProductNameId" ColumnName="ProductNameId" />
                 <ScalarProperty Name="BuMenid" ColumnName="BuMenid" />
                 <ScalarProperty Name="Wtime" ColumnName="Wtime" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="YSGPinfoes">
+            <EntityTypeMapping TypeName="OAModel.YSGPinfo">
+              <MappingFragment StoreEntitySet="YSGPinfo">
+                <ScalarProperty Name="WorkTrueEndTime" ColumnName="WorkTrueEndTime" />
+                <ScalarProperty Name="WorkTrueStartTime" ColumnName="WorkTrueStartTime" />
+                <ScalarProperty Name="WorkInfo" ColumnName="WorkInfo" />
+                <ScalarProperty Name="WorkAddress" ColumnName="WorkAddress" />
+                <ScalarProperty Name="TopID" ColumnName="TopID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="YSGPtops">
+            <EntityTypeMapping TypeName="OAModel.YSGPtop">
+              <MappingFragment StoreEntitySet="YSGPtop">
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="AddUser" ColumnName="AddUser" />
+                <ScalarProperty Name="Del_f" ColumnName="Del_f" />
+                <ScalarProperty Name="SettlementAmount" ColumnName="SettlementAmount" />
+                <ScalarProperty Name="PGpersonAllWages" ColumnName="PGpersonAllWages" />
+                <ScalarProperty Name="WorkTime" ColumnName="WorkTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="PGperson" ColumnName="PGperson" />
+                <ScalarProperty Name="PGbumen" ColumnName="PGbumen" />
+                <ScalarProperty Name="GPtime" ColumnName="GPtime" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

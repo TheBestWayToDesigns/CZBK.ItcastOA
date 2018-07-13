@@ -780,6 +780,36 @@ namespace CZBK.ItcastOA.DALFactory
             set { _YJ_ScheduleDayDal = value; }
         }
 	
+		private IYSGPinfoDal _YSGPinfoDal;
+        public IYSGPinfoDal YSGPinfoDal
+        {
+            get
+            {
+                if(_YSGPinfoDal == null)
+                {
+                   // _YSGPinfoDal = new YSGPinfoDal();
+				    _YSGPinfoDal =AbstractFactory.CreateYSGPinfoDal();
+                }
+                return _YSGPinfoDal;
+            }
+            set { _YSGPinfoDal = value; }
+        }
+	
+		private IYSGPtopDal _YSGPtopDal;
+        public IYSGPtopDal YSGPtopDal
+        {
+            get
+            {
+                if(_YSGPtopDal == null)
+                {
+                   // _YSGPtopDal = new YSGPtopDal();
+				    _YSGPtopDal =AbstractFactory.CreateYSGPtopDal();
+                }
+                return _YSGPtopDal;
+            }
+            set { _YSGPtopDal = value; }
+        }
+	
 		private IYXB_BaojiaDal _YXB_BaojiaDal;
         public IYXB_BaojiaDal YXB_BaojiaDal
         {

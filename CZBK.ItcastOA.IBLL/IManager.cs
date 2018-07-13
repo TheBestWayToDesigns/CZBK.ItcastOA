@@ -265,6 +265,16 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IYSGPinfoService : IBaseService<YSGPinfo>
+    {
+       
+    }   
+	
+	public partial interface IYSGPtopService : IBaseService<YSGPtop>
+    {
+       
+    }   
+	
 	public partial interface IYXB_BaojiaService : IBaseService<YXB_Baojia>
     {
        

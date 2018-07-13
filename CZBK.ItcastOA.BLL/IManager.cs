@@ -419,6 +419,22 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class YSGPinfoService :BaseService<YSGPinfo>,IYSGPinfoService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.YSGPinfoDal;
+        }
+    }   
+	
+	public partial class YSGPtopService :BaseService<YSGPtop>,IYSGPtopService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.YSGPtopDal;
+        }
+    }   
+	
 	public partial class YXB_BaojiaService :BaseService<YXB_Baojia>,IYXB_BaojiaService
     {
         public override void SetCurretnDal()

@@ -266,6 +266,16 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class YSGPinfoDal :BaseDal<YSGPinfo>,IYSGPinfoDal
+    {
+
+    }
+		
+	public partial class YSGPtopDal :BaseDal<YSGPtop>,IYSGPtopDal
+    {
+
+    }
+		
 	public partial class YXB_BaojiaDal :BaseDal<YXB_Baojia>,IYXB_BaojiaDal
     {
 
