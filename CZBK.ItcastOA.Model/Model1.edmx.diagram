@@ -142,11 +142,14 @@
         <AssociationConnector Association="OAModel.FK_T_SCCJ_T_ChanPinGG" />
         <AssociationConnector Association="OAModel.FK_T_SCCJ_T_ChanPinJB" />
         <AssociationConnector Association="OAModel.FK_T_SCCJ_T_ChanPinName" />
-        <EntityTypeShape EntityType="OAModel.YSGPinfo" Width="1.5" PointX="16.25" PointY="23.05438232421875" />
         <EntityTypeShape EntityType="OAModel.YSGPtop" Width="1.5" PointX="14" PointY="22.592397054036461" />
         <AssociationConnector Association="OAModel.FK_YSGPtop_BumenInfoSet" />
-        <AssociationConnector Association="OAModel.FK_YSGPinfo_YSGPtop" />
         <AssociationConnector Association="OAModel.FK_YSGPtop_UserInfo" />
+        <AssociationConnector Association="OAModel.FK_YSGPtop_UserInfo1" />
+        <AssociationConnector Association="OAModel.FK_YSGPtop_UserInfo2" />
+        <AssociationConnector Association="OAModel.FK_YSGPtop_BumenInfoSet2" />
+        <EntityTypeShape EntityType="OAModel.YSGPmoney" Width="1.5" PointX="20.125" PointY="33.050587972005204" />
+        <AssociationConnector Association="OAModel.FK_YSGPmoney_UserInfo" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

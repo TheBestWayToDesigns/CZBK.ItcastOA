@@ -780,19 +780,19 @@ namespace CZBK.ItcastOA.DALFactory
             set { _YJ_ScheduleDayDal = value; }
         }
 	
-		private IYSGPinfoDal _YSGPinfoDal;
-        public IYSGPinfoDal YSGPinfoDal
+		private IYSGPmoneyDal _YSGPmoneyDal;
+        public IYSGPmoneyDal YSGPmoneyDal
         {
             get
             {
-                if(_YSGPinfoDal == null)
+                if(_YSGPmoneyDal == null)
                 {
-                   // _YSGPinfoDal = new YSGPinfoDal();
-				    _YSGPinfoDal =AbstractFactory.CreateYSGPinfoDal();
+                   // _YSGPmoneyDal = new YSGPmoneyDal();
+				    _YSGPmoneyDal =AbstractFactory.CreateYSGPmoneyDal();
                 }
-                return _YSGPinfoDal;
+                return _YSGPmoneyDal;
             }
-            set { _YSGPinfoDal = value; }
+            set { _YSGPmoneyDal = value; }
         }
 	
 		private IYSGPtopDal _YSGPtopDal;

@@ -14,11 +14,6 @@ namespace CZBK.ItcastOA.Model
     
     public partial class YSGPtop
     {
-        public YSGPtop()
-        {
-            this.YSGPinfoes = new HashSet<YSGPinfo>();
-        }
-    
         public long ID { get; set; }
         public System.DateTime GPtime { get; set; }
         public int PGbumen { get; set; }
@@ -31,9 +26,18 @@ namespace CZBK.ItcastOA.Model
         public short Del_f { get; set; }
         public int AddUser { get; set; }
         public System.DateTime AddTime { get; set; }
+        public string WorkInfo { get; set; }
+        public short GPState { get; set; }
+        public Nullable<int> YGQueRenPerson { get; set; }
+        public Nullable<System.DateTime> YGBuMenQRTime { get; set; }
+        public Nullable<int> PGQueRenPerson { get; set; }
+        public Nullable<System.DateTime> PGBuMenQRTime { get; set; }
+        public int WorkAddress { get; set; }
     
         public virtual BumenInfoSet BumenInfoSet { get; set; }
-        public virtual ICollection<YSGPinfo> YSGPinfoes { get; set; }
         public virtual UserInfo UserInfo { get; set; }
+        public virtual UserInfo UserInfo1 { get; set; }
+        public virtual UserInfo UserInfo2 { get; set; }
+        public virtual BumenInfoSet BumenInfoSet1 { get; set; }
     }
 }

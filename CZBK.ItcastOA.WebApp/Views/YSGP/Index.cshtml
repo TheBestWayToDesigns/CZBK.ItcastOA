@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>水工公司生产车间产品日报表</title>
+    <title>工票信息</title>
     <link href="~/Content/themes/icon.css" rel="stylesheet" />
     <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.7.1.min.js"></script>
@@ -47,7 +47,15 @@
 
         // 当窗口大小发生变化时，调整DataGrid的大小211434
         $(function () {
-              loadData();
+            loadData();
+
+            $('#serchBuMen').combobox({
+                onChange: function (newValue, oldValue) {
+                    $('#serchPerson').combobox('loadData', {});
+                    $("#serchPerson").combobox("clear");
+                    $("#serchPerson").combobox("reload", "/YSGP/GetPersonList?BMID=" + newValue);
+                }
+            });
         });
 
         //清空datagrid数据
@@ -60,14 +68,40 @@
                 }
             }
         }
+        //导出表
+        function toExcel() {
+            //($("#tt").datagrid("options").columns)[0].length;
+            var addTotal = "</table></div></div>";
+            var htmlData = $(".datagrid-view2").html();
+            htmlData = htmlData.substring(0, htmlData.length - 136);
+            var rows = $('#tt').datagrid('getRows')//获取当前的数据行
+            var timeAll = 0,
+                moneyAll = 0,
+                jsMoneyAll = 0;
+            for (var i = 0; i < rows.length; i++) {
+                timeAll += rows[i]['WorkTime'];
+                moneyAll += rows[i]['PGpersonAllWages'];
+                jsMoneyAll += rows[i]['SettlementAmount'];
+            }
+            var title =  '工票统计明细';
+            var colCount = 9;
+            var tableHead = "<html><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />" +
+                                       "<style type='text/css'>tbody tr td{text-align:center;border:solid .5pt Black;} </style>" +
+                                       "<body><table >";
+            var Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr></thead>";
+            var addTotal = "<tfoot><tr><td style=' font-family:黑体; font-size:35px;text-align:center;border:solid .5pt Black; ' colspan='5';>合计</td>"
+                + "<td style='text-align:center;border:solid .5pt Black;'>" + timeAll + "</td><td style='text-align:center;border:solid .5pt Black;'></td><td style='text-align:center;border:solid .5pt Black;'>" + moneyAll + "</td><td style='text-align:center;border:solid .5pt Black;'>" + jsMoneyAll + "</td></tr></tfoot></table></div></div>";
+            $("#OFtable").val(tableHead + Theard + htmlData + addTotal + "</table></body></html>"); //获取并拼接代码
+            $("#ExcelForm").submit();
+        }
         //加载磅秤信息页面
         function loadData(pars) {
             $('#tt').datagrid({
                 url: '/YSGP/GetAllGPtopInfo',
-                title: '水工公司生产车间产品日报表',
+                title: '工票信息',
                 height: $("#dgdiv").height() - 20,
-                fitColumns: true, //列自适应
-                nowrap: true,
+                fitColumns: false, //列自适应
+                nowrap: false,
                 rownumbers: true,
                 //onClickCell: onClickCell,
                 //onAfterEdit: onAfterEdit,
@@ -79,8 +113,7 @@
                 pageNumber: 1,//当前页，默认的
                 pageList: [15, 25, 35],
                 queryParams: pars,//往后台传递参数
-                columns: [[{ field: 'ck', checkbox: true, align: 'left', width: 30, rowspan: 2 },
-                    { field: 'ID', title: '编号', rowspan: 2 },
+                columns: [[
                     {
                         field: 'GPtime', title: '时间', align: 'center',
                         formatter: function (value, row, index) {
@@ -102,18 +135,15 @@
                         }
                     },
                     { field: 'WorkTime', title: '用工工时(小时)', align: 'center' },
+                    { field: 'WorkAddress', title: '工作地点', align: 'center' },
+                    { field: 'gpInfo', title: '工作详情', align: 'center',width:200},
                     { field: 'PGpersonAllWages', title: '派工人员工资总额(元)', align: 'center' },
                     { field: 'SettlementAmount', title: '结算金额(元)', align: 'center' },
-                    {
-                         field: 'Del', title: '工作详情', align: 'center', rowspan: 2,
-                         formatter: function (value, row, index) {
-                             return "<a href='javascript:seeWorkInfo()' class='l-btn' style='margin:0px 5px;padding:2px 8px '>查看</a>";
-                         }
-                    }
-                ]]
+                ]],
+                toolbar: "#SerchTypeDIV",
             });
         }
-        function seeWorkInfo() {
+        /*function seeWorkInfo() {
             var row = $('#tt').datagrid('getSelected');
             var topid = row.ID;
             $.post("/YSGP/GetAllGPInfo", { topID: topid }, function (res) {
@@ -140,7 +170,7 @@
                     }
                 }]
             });
-        }
+        }*/
         //数字验证
         function num(obj) {
             obj.value = obj.value.replace(/[^\d.]/g, ""); //清除"数字"和"."以外的字符
@@ -177,32 +207,72 @@
             var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
             return hour + ":" + minutes;
         }
-        function toAddSpaceInfo() {
-            if (($("#buChongStartDateTime").datebox("getValue")).trim().length <= 0) {
-                $.messager.alert("请填写起始时间");
+        function toSerch() {
+            var pars = {};
+            if (($("#startDate").datebox("getValue")).trim().length <= 0 && ($("#endDate").datebox("getValue")).trim().length > 0) {
+                $.messager.alert("提示","请选择开始时间");
                 return;
             }
-            if (($("#buChongEndDateTime").datebox("getValue")).trim().length <= 0) {
-                $.messager.alert("请填写截止时间");
+            if(($("#startDate").datebox("getValue")).trim().length>0&&($("#endDate").datebox("getValue")).trim().length<=0){
+                $.messager.alert("提示","请选择结束时间");
                 return;
             }
-            $.post("/SCCJ/BuChongSpaceInfo", { buChongStartDateTime: $("#buChongStartDateTime").datebox("getValue"), buChongEndDateTime: $("#buChongEndDateTime").datebox("getValue") }, function (rt) {
-                alert(rt)
-                $('#tt').datagrid('reload');
-            })
+            if ($("#serchBuMen").combobox("getValue") == undefined) {
+                pars = {};
+            }
+            if ($("#serchBuMen").combobox("getValue")!=undefined&& $("#serchPerson").combobox("getValue")==undefined) {
+                pars = { BMID: $("#serchBuMen").combobox("getValue") };
+            }
+            if ($("#serchBuMen").combobox("getValue")!=undefined && $("#serchPerson").combobox("getValue")!=undefined) {
+                pars = { BMID: $("#serchBuMen").combobox("getValue"), uid: $("#serchPerson").combobox("getValue") };
+            }
+            if (($("#startDate").datebox("getValue")).trim().length > 0 && ($("#endDate").datebox("getValue")).trim().length > 0) {
+                pars["startDate"] =  $("#startDate").datebox("getValue");
+                pars["endDate"] =$("#endDate").datebox("getValue") ;
+            }
+            loadData(pars);
         }
     </script>
 </head>
 <body class="easyui-layout">
-    <div data-options="region:'center',title:'数据报表'" id="dgdiv">
+    <div data-options="region:'center',title:'报表'" id="dgdiv">
         <div id="TTdiv">
-            <table id="tt" title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit"></table>
+            <table id="tt" title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit">
+                <thead data-options="frozen:true ">
+                    <tr>
+                        <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
+                        <th data-options="field:'ID', width: 40,align: 'center'">编号</th>
+                        <!--<th data-options="align: 'center',formatter:function(value,row,index){return '<a href=\'javascript:seeWorkInfo()\' class=\'l-btn\' style=\'margin:0px 5px;padding:2px 8px \'>查看</a>\'}'">编辑栏</th>-->
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div id="SerchTypeDIV" style="padding:5px;height:auto;width:auto;display:flex;flex-direction:row; flex-wrap:nowrap;align-items:center;">
+        <div style="margin-bottom:5px;width:auto;height:auto">
+            部门列表：<input class="easyui-combobox" id="serchBuMen"
+                        url="/YSGP/GetBuMenList"
+                        valueField="ID"
+                        textField="Name"
+                        panelHeight="200px"
+                        style="width:100px" />
+            人员列表：<input class="easyui-combobox" id="serchPerson"
+                        valueField="ID"
+                        textField="Name"
+                        panelHeight="200px"
+                        style="width:100px" />
+            从：<input type="text" class="easyui-datebox" id="startDate"/>
+            到：<input type="text" class="easyui-datebox" id="endDate" />
+            <input type="button" value="查询" onclick="toSerch()" />
+            <input type="button" value="导出汇总表" onclick="toExcel()" />
+            <form id="ExcelForm" action="/YSGP/GetExcelTable" method="post">
+                <input id="Action" name="Action" type="hidden" value="outexcel" />
+                <input id="OFtable" name="OFtable" type="hidden" />
+            </form>
         </div>
     </div>
     <div id="workInfoDiv">
-        <table id="workInfoTable">
-            
-        </table>
+         <table id="workInfoTable"></table>
     </div>
 </body>
 </html>

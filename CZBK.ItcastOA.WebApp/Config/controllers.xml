@@ -145,11 +145,13 @@
     <property name="YXB_WinCanPinService" ref="YXB_WinCanPinService" />
   </object>
   <object type="CZBK.ItcastOA.WebApp.Controllers.YSGPController, CZBK.ItcastOA.WebApp" singleton="false" >
-    <property name="YSGPinfoService" ref="YSGPinfoService" />
     <property name="YSGPtopService" ref="YSGPtopService" />
     <property name="BumenInfoSetService" ref="BumenInfoSetService" />
     <property name="UserInfoService" ref="UserInfoService" />
+    <property name="T_BoolItemService" ref="T_BoolItemService" />
+    <property name="YSGPmoneyService" ref="YSGPmoneyService" />
   </object>
+
 
 
 

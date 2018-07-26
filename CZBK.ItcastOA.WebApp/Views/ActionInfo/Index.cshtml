@@ -241,8 +241,8 @@
             $("#setRoleDiv").css("display", "block");
             $('#setRoleDiv').dialog({
                 title: "为权限分配角色信息",
-                width: 300,
-                height: 400,
+                width: 500,
+                height: 500,
                 collapsible: true,
                 resizable: true,
                 modal: true,
@@ -352,6 +352,15 @@
                     });
                 }
             });
+        }
+        function changeFrameHeight() {
+            var ifm = document.getElementById("setRoleFrame");
+            ifm.height = document.documentElement.clientHeight;
+
+        }
+
+        window.onresize = function () {
+            changeFrameHeight();
         }
 
         //将序列化成json格式后日期(毫秒数)转成日期格式
@@ -472,7 +481,7 @@
     <!---------------修改用户信息结束--------------------->
 
     <div id="setRoleDiv" style="background-color:aqua;">
-        <iframe id="setRoleFrame" scrolling="no" frameborder="0"   ></iframe>
+        <iframe id="setRoleFrame" scrolling="no" frameborder="0"  onload="changeFrameHeight()"  ></iframe>
     </div>
     <div id="setBool" style="background-color:aqua;">
             <input type="hidden" name="ID" id="ID" />

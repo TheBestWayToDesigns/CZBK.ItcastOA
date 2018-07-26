@@ -56,6 +56,9 @@ namespace CZBK.ItcastOA.Model
             this.T_YXbj_master = new HashSet<T_YXbj_master>();
             this.User_Person_slt = new HashSet<User_Person_slt>();
             this.YSGPtops = new HashSet<YSGPtop>();
+            this.YSGPtops1 = new HashSet<YSGPtop>();
+            this.YSGPtops2 = new HashSet<YSGPtop>();
+            this.YSGPmoneys = new HashSet<YSGPmoney>();
         }
     
         public int ID { get; set; }
@@ -158,5 +161,11 @@ namespace CZBK.ItcastOA.Model
         public virtual ICollection<User_Person_slt> User_Person_slt { get; set; }
         [JsonIgnore]
         public virtual ICollection<YSGPtop> YSGPtops { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<YSGPtop> YSGPtops1 { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<YSGPtop> YSGPtops2 { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<YSGPmoney> YSGPmoneys { get; set; }
     }
 }

@@ -679,17 +679,17 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IYJ_ScheduleDayDal;
         }
 		
-	    public static IYSGPinfoDal CreateYSGPinfoDal()
+	    public static IYSGPmoneyDal CreateYSGPmoneyDal()
         {
 
-            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".YSGPinfoDal";
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".YSGPmoneyDal";
 
 
             //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
             var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
 
 
-            return obj as IYSGPinfoDal;
+            return obj as IYSGPmoneyDal;
         }
 		
 	    public static IYSGPtopDal CreateYSGPtopDal()

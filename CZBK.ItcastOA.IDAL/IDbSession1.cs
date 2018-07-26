@@ -114,7 +114,7 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IYJ_ScheduleDayDal YJ_ScheduleDayDal{get;set;}
 	
-		IYSGPinfoDal YSGPinfoDal{get;set;}
+		IYSGPmoneyDal YSGPmoneyDal{get;set;}
 	
 		IYSGPtopDal YSGPtopDal{get;set;}
 	

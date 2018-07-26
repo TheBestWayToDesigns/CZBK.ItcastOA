@@ -266,7 +266,7 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
-	public partial class YSGPinfoDal :BaseDal<YSGPinfo>,IYSGPinfoDal
+	public partial class YSGPmoneyDal :BaseDal<YSGPmoney>,IYSGPmoneyDal
     {
 
     }

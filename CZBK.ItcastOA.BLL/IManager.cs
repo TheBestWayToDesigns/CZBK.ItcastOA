@@ -419,11 +419,11 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
-	public partial class YSGPinfoService :BaseService<YSGPinfo>,IYSGPinfoService
+	public partial class YSGPmoneyService :BaseService<YSGPmoney>,IYSGPmoneyService
     {
         public override void SetCurretnDal()
         {
-            CurrentDal = this.GetCurrentDbSession.YSGPinfoDal;
+            CurrentDal = this.GetCurrentDbSession.YSGPmoneyDal;
         }
     }   
 	

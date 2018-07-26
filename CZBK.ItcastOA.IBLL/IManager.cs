@@ -265,7 +265,7 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
-	public partial interface IYSGPinfoService : IBaseService<YSGPinfo>
+	public partial interface IYSGPmoneyService : IBaseService<YSGPmoney>
     {
        
     }   

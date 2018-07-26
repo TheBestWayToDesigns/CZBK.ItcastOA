@@ -265,7 +265,7 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
-	public partial interface IYSGPinfoDal :IBaseDal<YSGPinfo>
+	public partial interface IYSGPmoneyDal :IBaseDal<YSGPmoney>
     {
       
     }
