@@ -364,7 +364,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //获取工作地点部门
         public ActionResult GetWorkbumen()
         {
-            var temp = BumenInfoSetService.LoadEntities(x => x.DelFlag == 0&&x.Renark=="1").DefaultIfEmpty().ToList();
+            var temp = BumenInfoSetService.LoadEntities(x => x.DelFlag == 0&&x.Gushu==1).DefaultIfEmpty().ToList();
             var rtmp = from a in temp
                        select new
                        {
