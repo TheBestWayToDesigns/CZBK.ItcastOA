@@ -110,7 +110,8 @@
                  tableHead = "<html><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />" +
                                            "<style type='text/css'>tbody tr td{text-align:center;border:solid .5pt Black;} </style>" +
                                            "<body><table >";
-                 Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr></thead>";
+                 Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr>"
+                                + "<tr><td colspan='" + colCount + "'></td></tr></thead>";
                  var monthTimeMoneySum = 0, PersonMouthMoney = 0;
                  for (var i = 0; i < rows.length; i++) {
                      timeAll += rows[i]['mouthSumTime'];
