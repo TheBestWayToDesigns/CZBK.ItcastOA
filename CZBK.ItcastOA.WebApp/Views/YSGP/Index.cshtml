@@ -49,11 +49,24 @@
         $(function () {
             loadData();
 
+            $("#bmLabel").css("display", "none");
+            
             $('#serchBuMen').combobox({
                 onChange: function (newValue, oldValue) {
                     $('#serchPerson').combobox('loadData', {});
                     $("#serchPerson").combobox("clear");
                     $("#serchPerson").combobox("reload", "/YSGP/GetPersonList?BMID=" + newValue);
+                }
+            });
+
+            $('#serchType').combobox({
+                onChange: function (newValue, oldValue) {
+                    if (newValue == 1) {
+                        $("#serchBuMen").combobox("reload", "/YSGP/GetBuMenList");
+                    } else {
+                        $('#serchBuMen').combobox('loadData', {});
+                        $("#serchBuMen").combobox("clear");
+                    }
                 }
             });
         });
@@ -73,25 +86,38 @@
             //($("#tt").datagrid("options").columns)[0].length;
             var addTotal = "</table></div></div>";
             var htmlData = $(".datagrid-view2").html();
-            htmlData = htmlData.substring(0, htmlData.length - 136);
+            htmlData = htmlData.substring(0, htmlData.length - 28);
             var rows = $('#tt').datagrid('getRows')//获取当前的数据行
-            var timeAll = 0,
-                moneyAll = 0,
-                jsMoneyAll = 0;
-            for (var i = 0; i < rows.length; i++) {
-                timeAll += rows[i]['WorkTime'];
-                moneyAll += rows[i]['PGpersonAllWages'];
-                jsMoneyAll += rows[i]['SettlementAmount'];
+            var timeAll = 0;
+            var title = $("#tt").datagrid("options").title;
+            var colCount=0 ,tableHead="" ,Theard="" ,addTotal="";
+            if ($("#serchType").combobox("getValue") == 0) {
+                 colCount = 4;
+                 tableHead = "<html><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />" +
+                                           "<style type='text/css'>tbody tr td{text-align:center;border:solid .5pt Black;} </style>" +
+                                           "<body><table >";
+                 Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr></thead>";
+                 for (var i = 0; i < rows.length; i++) {
+                     timeAll += rows[i]['mouthSumTime'];
+                 }
+                 addTotal = "<tr><td style=' font-family:黑体; font-size:35px;text-align:center;border:solid .5pt Black; ' colspan='2';>合计</td>"
+                    + "<td style='text-align:center;border:solid .5pt Black;'>" + timeAll + "</td><td style='text-align:center;border:solid .5pt Black;'></td></tr></tbody></table></div></div>";
+            } else {
+                 colCount = 7;
+                 tableHead = "<html><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />" +
+                                           "<style type='text/css'>tbody tr td{text-align:center;border:solid .5pt Black;} </style>" +
+                                           "<body><table >";
+                 Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr></thead>";
+                 var monthTimeMoneySum = 0, PersonMouthMoney = 0;
+                 for (var i = 0; i < rows.length; i++) {
+                     timeAll += rows[i]['mouthSumTime'];
+                     PersonMouthMoney += rows[i]['PersonMouthMoney'];
+                     monthTimeMoneySum += rows[i]['monthTimeMoneySum'];
+                 }
+                 addTotal = "<tr><td style=' font-family:黑体; font-size:35px;text-align:center;border:solid .5pt Black; ' colspan='3';>合计</td>"
+                    + "<td style='text-align:center;border:solid .5pt Black;'>" + PersonMouthMoney + "</td><td style='text-align:center;border:solid .5pt Black;'>" + timeAll + "</td> <td style='text-align:center;border:solid .5pt Black;'>" + monthTimeMoneySum + "</td><td style='text-align:center;border:solid .5pt Black;'></td></tr></tbody></table></div></div>";
             }
-            var title =  '工票统计明细';
-            var colCount = 9;
-            var tableHead = "<html><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />" +
-                                       "<style type='text/css'>tbody tr td{text-align:center;border:solid .5pt Black;} </style>" +
-                                       "<body><table >";
-            var Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr></thead>";
-            var addTotal = "<tfoot><tr><td style=' font-family:黑体; font-size:35px;text-align:center;border:solid .5pt Black; ' colspan='5';>合计</td>"
-                + "<td style='text-align:center;border:solid .5pt Black;'>" + timeAll + "</td><td style='text-align:center;border:solid .5pt Black;'></td><td style='text-align:center;border:solid .5pt Black;'>" + moneyAll + "</td><td style='text-align:center;border:solid .5pt Black;'>" + jsMoneyAll + "</td></tr></tfoot></table></div></div>";
-            $("#OFtable").val(tableHead + Theard + htmlData + addTotal + "</table></body></html>"); //获取并拼接代码
+             $("#OFtable").val(tableHead + Theard + htmlData + addTotal + "</table></body></html>"); //获取并拼接代码
             $("#ExcelForm").submit();
         }
         //加载磅秤信息页面
@@ -112,7 +138,6 @@
                 pageSize: 25,//页大小，一页多少条数据
                 pageNumber: 1,//当前页，默认的
                 pageList: [15, 25, 35],
-                queryParams: pars,//往后台传递参数
                 columns: [[
                     {
                         field: 'GPtime', title: '时间', align: 'center',
@@ -208,7 +233,10 @@
             return hour + ":" + minutes;
         }
         function toSerch() {
-            var pars = {};
+            if (!($("#serchType").combobox("getValue") >=0 )){
+                $.messager.alert("提示","请选择统计方式");
+                return;
+            }
             if (($("#startDate").datebox("getValue")).trim().length <= 0 && ($("#endDate").datebox("getValue")).trim().length > 0) {
                 $.messager.alert("提示","请选择开始时间");
                 return;
@@ -217,20 +245,54 @@
                 $.messager.alert("提示","请选择结束时间");
                 return;
             }
-            if ($("#serchBuMen").combobox("getValue") == undefined) {
-                pars = {};
+            if ($("#serchType").combobox("getValue") == 0) {
+                $("#tt").datagrid("options").url = "/YSGP/TongJiYGBM";
+                $("#tt").datagrid("options").queryParams = { startTime: $("#startDate").datebox("getValue"), endTime: $("#endDate").datebox("getValue") };
+                $("#tt").datagrid("options").showFooter = true;
+                var sdate = new Date($("#startDate").datebox("getValue"));
+                $("#tt").datagrid("options").title = "车间部门"+(sdate.getMonth()+1)+"月使用工时汇总表";
+                $("#tt").datagrid({
+                    columns: [[{
+                        field: 'index', title: '序号', align: 'center', formatter: function (val, row, index) {
+                            var options = $("#tt").datagrid('getPager').data("pagination").options;
+                            var currentPage = options.pageNumber;
+                            var pageSize = options.pageSize;
+                            return (pageSize * (currentPage - 1)) + (index + 1);
+                        }
+                    },{ field: 'BuMenid', title: '用工部门', align: 'center' },
+                        { field: 'mouthSumTime', title: '月总工时', align: 'center' },
+                        { field: 'remark', title: '备注', align: 'center', width: 100}
+                        ]]
+                });
+            } else {
+                if (!($("#serchBuMen").combobox("getValue") )>0 ) {
+                    $.messager.alert("提示", "请选择结部门");
+                    return;
+                }
+                $("#tt").datagrid("options").url = "/YSGP/TongJiPGBM";
+                $("#tt").datagrid("options").queryParams = { startTime: $("#startDate").datebox("getValue"), endTime: $("#endDate").datebox("getValue"), BMID: $("#serchBuMen").combobox("getValue") };
+                $("#tt").datagrid("options").showFooter = true;
+                var sdate = new Date($("#startDate").datebox("getValue"));
+                $("#tt").datagrid("options").title = $("#serchBuMen").combobox("getText") + (sdate.getMonth() + 1)+ "月员工工时汇总";
+                $("#tt").datagrid({
+                    columns: [[{
+                        field: 'index', title: '序号', align: 'center', formatter: function (val, row, index) {
+                            var options = $("#tt").datagrid('getPager').data("pagination").options;
+                            var currentPage = options.pageNumber;
+                            var pageSize = options.pageSize;
+                            return (pageSize * (currentPage - 1)) + (index + 1);
+                        }
+                    },{ field: 'BuMenid', title: '派工部门', align: 'center' },
+                        { field: 'PersonName', title: '姓名', align: 'center' },
+                        { field: 'PersonMouthMoney', title: '月工资', align: 'center' },
+                        { field: 'mouthSumTime', title: '月总工时', align: 'center' },
+                        { field: 'monthTimeMoneySum', title: '月计时工资总额', align: 'center' },
+                        { field: 'remark', title: '备注', align: 'center', width: 100 }
+                        ]]
+                });
             }
-            if ($("#serchBuMen").combobox("getValue")!=undefined&& $("#serchPerson").combobox("getValue")==undefined) {
-                pars = { BMID: $("#serchBuMen").combobox("getValue") };
-            }
-            if ($("#serchBuMen").combobox("getValue")!=undefined && $("#serchPerson").combobox("getValue")!=undefined) {
-                pars = { BMID: $("#serchBuMen").combobox("getValue"), uid: $("#serchPerson").combobox("getValue") };
-            }
-            if (($("#startDate").datebox("getValue")).trim().length > 0 && ($("#endDate").datebox("getValue")).trim().length > 0) {
-                pars["startDate"] =  $("#startDate").datebox("getValue");
-                pars["endDate"] =$("#endDate").datebox("getValue") ;
-            }
-            loadData(pars);
+            cleanDatagrid();
+            $('#tt').datagrid('reload');
         }
     </script>
 </head>
@@ -248,19 +310,19 @@
             </table>
         </div>
     </div>
-    <div id="SerchTypeDIV" style="padding:5px;height:auto;width:auto;display:flex;flex-direction:row; flex-wrap:nowrap;align-items:center;">
-        <div style="margin-bottom:5px;width:auto;height:auto">
-            部门列表：<input class="easyui-combobox" id="serchBuMen"
-                        url="/YSGP/GetBuMenList"
-                        valueField="ID"
-                        textField="Name"
-                        panelHeight="200px"
-                        style="width:100px" />
-            人员列表：<input class="easyui-combobox" id="serchPerson"
-                        valueField="ID"
-                        textField="Name"
-                        panelHeight="200px"
-                        style="width:100px" />
+    <div id="SerchTypeDIV" style="padding:5px;height:auto;width:auto;display:flex;flex-direction:row; flex-wrap:nowrap;align-items:center;display:flex;flex-direction:row;">
+        <div style="margin-bottom:5px;width:auto;height:auto;">
+            统计方式：<input class="easyui-combobox" id="serchType"
+                               url="/YSGP/GetSerchType"
+                               valueField="ID"
+                               textField="Name"
+                               panelHeight="200px"
+                               style="width:100px" />
+                部门列表：<input class="easyui-combobox" id="serchBuMen"
+                            valueField="ID"
+                            textField="Name"
+                            panelHeight="200px"
+                            style="width:100px">
             从：<input type="text" class="easyui-datebox" id="startDate"/>
             到：<input type="text" class="easyui-datebox" id="endDate" />
             <input type="button" value="查询" onclick="toSerch()" />

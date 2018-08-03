@@ -719,6 +719,7 @@
           <Property Name="AddUser" Type="int" Nullable="false" />
           <Property Name="AddTime" Type="datetime" Nullable="false" />
           <Property Name="GPState" Type="smallint" Nullable="false" />
+          <Property Name="pingjiaState" Type="smallint" />
           <Property Name="YGQueRenPerson" Type="int" />
           <Property Name="YGBuMenQRTime" Type="datetime" />
           <Property Name="PGQueRenPerson" Type="int" />
@@ -4708,6 +4709,7 @@
           <NavigationProperty Name="UserInfo2" Relationship="OAModel.FK_YSGPtop_UserInfo2" FromRole="YSGPtop" ToRole="UserInfo" />
           <Property Name="WorkAddress" Type="Int32" Nullable="false" />
           <NavigationProperty Name="BumenInfoSet1" Relationship="OAModel.FK_YSGPtop_BumenInfoSet2" FromRole="YSGPtop" ToRole="BumenInfoSet" />
+          <Property Name="pingjiaState" Type="Int16" />
         </EntityType>
         <Association Name="FK_YSGPtop_BumenInfoSet">
           <End Type="OAModel.BumenInfoSet" Role="BumenInfoSet" Multiplicity="1" />
@@ -5634,6 +5636,7 @@
           <EntitySetMapping Name="YSGPtops">
             <EntityTypeMapping TypeName="OAModel.YSGPtop">
               <MappingFragment StoreEntitySet="YSGPtop">
+                <ScalarProperty Name="pingjiaState" ColumnName="pingjiaState" />
                 <ScalarProperty Name="WorkAddress" ColumnName="WorkAddress" />
                 <ScalarProperty Name="PGBuMenQRTime" ColumnName="PGBuMenQRTime" />
                 <ScalarProperty Name="PGQueRenPerson" ColumnName="PGQueRenPerson" />

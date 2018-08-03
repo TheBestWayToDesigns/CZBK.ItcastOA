@@ -33,6 +33,7 @@ namespace CZBK.ItcastOA.Model
         public Nullable<int> PGQueRenPerson { get; set; }
         public Nullable<System.DateTime> PGBuMenQRTime { get; set; }
         public int WorkAddress { get; set; }
+        public Nullable<short> pingjiaState { get; set; }
     
         public virtual BumenInfoSet BumenInfoSet { get; set; }
         public virtual UserInfo UserInfo { get; set; }
