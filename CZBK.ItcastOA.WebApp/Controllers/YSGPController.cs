@@ -604,11 +604,13 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     YGTJ yg = new YGTJ();
                     yg.BuMenid = a.Name;
                     yg.mouthSumTime = 0;
+                    yg.monthTimeMoneySum = 0;
                     var rtmp = temp.Where(x => x.WorkAddress == a.ID).DefaultIfEmpty().ToList();
                     if(rtmp != null && rtmp[0] != null){
                         foreach(var b in rtmp)
                         {
                             yg.mouthSumTime += b.WorkTime;
+                            yg.monthTimeMoneySum += b.SettlementAmount;
                         }
                     }
                     temp1.Add(yg);
@@ -695,6 +697,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
     {
         public string BuMenid { get; set; }
         public decimal mouthSumTime { get; set; }
+        public decimal monthTimeMoneySum { get; set; }
     }
     public class PGTJ
     {

@@ -92,16 +92,19 @@
             var title = $("#tt").datagrid("options").title;
             var colCount=0 ,tableHead="" ,Theard="" ,addTotal="";
             if ($("#serchType").combobox("getValue") == 0) {
-                 colCount = 4;
+                 colCount = 5;
                  tableHead = "<html><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />" +
                                            "<style type='text/css'>tbody tr td{text-align:center;border:solid .5pt Black;} </style>" +
                                            "<body><table >";
-                 Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr></thead>";
+                 Theard = "<thead><tr><td colspan='" + colCount + "' style=' font-family:黑体; font-size:25px;text-align:center '>" + title + "</td></tr>"
+                                + "<tr><td colspan='" + (parseInt(colCount) - parseInt(1)) + "'></td><td style='text-align:right'>单位：小时</td></tr></thead>";
+                 var monthTimeMoneySum =0;
                  for (var i = 0; i < rows.length; i++) {
                      timeAll += rows[i]['mouthSumTime'];
+                     monthTimeMoneySum += rows[i]['monthTimeMoneySum'];
                  }
                  addTotal = "<tr><td style=' font-family:黑体; font-size:35px;text-align:center;border:solid .5pt Black; ' colspan='2';>合计</td>"
-                    + "<td style='text-align:center;border:solid .5pt Black;'>" + timeAll + "</td><td style='text-align:center;border:solid .5pt Black;'></td></tr></tbody></table></div></div>";
+                    + "<td style='text-align:center;border:solid .5pt Black;'>" + timeAll + "</td><td style='text-align:center;border:solid .5pt Black;'>" + monthTimeMoneySum + "</td><td style='text-align:center;border:solid .5pt Black;'></td></tr></tbody></table></div></div>";
             } else {
                  colCount = 7;
                  tableHead = "<html><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />" +
@@ -250,7 +253,7 @@
                 $("#tt").datagrid("options").queryParams = { startTime: $("#startDate").datebox("getValue"), endTime: $("#endDate").datebox("getValue") };
                 $("#tt").datagrid("options").showFooter = true;
                 var sdate = new Date($("#startDate").datebox("getValue"));
-                $("#tt").datagrid("options").title = "车间部门"+(sdate.getMonth()+1)+"月使用工时汇总表";
+                $("#tt").datagrid("options").title = (sdate.getMonth()+1).toString()+"月生产部门用工工时汇总表";
                 $("#tt").datagrid({
                     columns: [[{
                         field: 'index', title: '序号', align: 'center', formatter: function (val, row, index) {
@@ -261,6 +264,7 @@
                         }
                     },{ field: 'BuMenid', title: '用工部门', align: 'center' },
                         { field: 'mouthSumTime', title: '月总工时', align: 'center' },
+                        { field: 'monthTimeMoneySum', title: '月用工工时结算总额(元)', align: 'center' },
                         { field: 'remark', title: '备注', align: 'center', width: 100}
                         ]]
                 });
@@ -273,7 +277,7 @@
                 $("#tt").datagrid("options").queryParams = { startTime: $("#startDate").datebox("getValue"), endTime: $("#endDate").datebox("getValue"), BMID: $("#serchBuMen").combobox("getValue") };
                 $("#tt").datagrid("options").showFooter = true;
                 var sdate = new Date($("#startDate").datebox("getValue"));
-                $("#tt").datagrid("options").title = $("#serchBuMen").combobox("getText") + (sdate.getMonth() + 1)+ "月员工工时汇总";
+                $("#tt").datagrid("options").title = (sdate.getMonth() + 1) + "月" + $("#serchBuMen").combobox("getText") + "派工工时汇总表";
                 $("#tt").datagrid({
                     columns: [[{
                         field: 'index', title: '序号', align: 'center', formatter: function (val, row, index) {
@@ -286,7 +290,7 @@
                         { field: 'PersonName', title: '姓名', align: 'center' },
                         { field: 'PersonMouthMoney', title: '月工资', align: 'center' },
                         { field: 'mouthSumTime', title: '月总工时', align: 'center' },
-                        { field: 'monthTimeMoneySum', title: '月计时工资总额', align: 'center' },
+                        { field: 'monthTimeMoneySum', title: '月计时工资总额(元)', align: 'center' },
                         { field: 'remark', title: '备注', align: 'center', width: 100 }
                         ]]
                 });
